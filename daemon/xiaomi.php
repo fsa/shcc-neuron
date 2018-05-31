@@ -1,6 +1,6 @@
 <?php
 
-require '../htdocs/common.php';
+require 'autoloader.php';
 $xiaomi=new Xiaomi\SocketServer();
 do {
     $pkt=$xiaomi->getPacket();

@@ -6,7 +6,7 @@ class SocketServer {
     
     private $stream;
 
-    public function __construct($ip="224.0.0.50", $port=9898) {
+    public function __construct(string $ip="224.0.0.50", int $port=9898) {
         $this->stream=stream_socket_server("udp://0.0.0.0:".$port,$errno,$errstr,STREAM_SERVER_BIND);
         
         if (!$this->stream) {
@@ -24,7 +24,7 @@ class SocketServer {
         }
     }
 
-    public function getPacket() {
+    public function getPacket(): XiaomiPacket {
         $pkt=stream_socket_recvfrom($this->stream,1024,0,$peer);
         return new XiaomiPacket($pkt,$peer);
     }
