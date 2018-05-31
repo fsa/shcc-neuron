@@ -28,5 +28,8 @@ class SocketServer {
         $pkt=stream_socket_recvfrom($this->stream,1024,0,$peer);
         return new XiaomiPacket($pkt,$peer);
     }
-
+    
+    public function sendMessage($message,$address) {
+        stream_socket_sendto($this->stream,$message,0,$address);
+    }
 }

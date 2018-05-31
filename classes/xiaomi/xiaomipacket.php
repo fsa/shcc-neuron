@@ -15,7 +15,7 @@ class XiaomiPacket {
         $this->peer->port=parse_url($peer,PHP_URL_PORT);
     }
 
-    public function getAllData(): \stdClass {
+    public function get(): \stdClass {
         return $this->pkt;
     }
 
@@ -33,6 +33,10 @@ class XiaomiPacket {
 
     public function getShortId(): string {
         return $this->pkt->short_id;
+    }
+    
+    public function getToken(): string {
+        return isset($this->pkt->token)?$this->pkt->token:'';
     }
 
     public function getData(): array {
