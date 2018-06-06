@@ -107,6 +107,8 @@ class GenericDevice {
         }
         return ($duration==0)?'sudden':'smooth';
     }
+    
+    #TODO get_prop
 
     public function actionSetCtAbx(int $ct_value,int $duratin=0) {
         return $this->sendCommand('set_ct_abx',[$ct_value,$this->getEffect($duratin),$duratin]);
@@ -168,8 +170,40 @@ class GenericDevice {
         return $this->sendCommand('stop_cf');
     }
     
-    public function actionSetScene(string $class,array $params) {
+    public function actionSetScene(array $params) {
         return $this->sendCommand("set_scene",$params);
+    }
+    
+    public function actionCronAdd(int $type, int $value) {
+        return $this->sendCommand('cron_add',[$type,$value]);
+    }
+    
+    #TODO cron_get
+    
+    public function actionCronDel(int $type) {
+        return $this->sendCommand('cron_del',[$type]);
+    }
+    
+    public function actionSetAdjust(string $action, string $prop) {
+        return $this->sendCommand('set_adjust',[$action,$prop]);
+    }
+    
+    public function actionSetMusic(string $host='', int $port=0) {
+        if($host=='') {
+            return $this->sendCommand('set_music',[0]);           
+        } else {
+            return $this->sendCommand('set_music',[1,$host,$port]);
+        }
+    }
+    
+    public function actionSetName(string $name) {
+        return $this->sendCommand('set_name',[$name]);
+    }
+    
+    #TODO bg_set_XXXX bg_toggle - background light
+
+    public function actionDevToggle() {
+        return $this->sendCommand('dev_toggle');
     }
     
     private function sendCommand(string $method,array $params=[]) {
