@@ -9,6 +9,7 @@ $xiaomiTemper=new \Xiaomi\Devices\TemperatureHumiditySensor();
 $xiaomiMotion=new Xiaomi\Devices\MotionSensor();
 
 $xiaomi=new Xiaomi\SocketServer();
+$xiaomi->run();
 do {
     $pkt=$xiaomi->getPacket();
     switch ($pkt->getSid()) {
@@ -16,7 +17,7 @@ do {
             $xiaomiGateway->update($pkt);
             var_dump($xiaomiGateway);
             #$message=$xiaomiGateway->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
-            #$message=$xiaomiGateway->prepareCommand(['rgb'=>'off']);
+            #$message=$xiaomiGateway->prepareCommand(['rgb'=>0]);
             #$xiaomi->sendMessage($message,'172.17.23.10:9898');
             break;
         case "158d0001f50bba":
