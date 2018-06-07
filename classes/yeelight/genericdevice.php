@@ -4,8 +4,6 @@ namespace Yeelight;
 
 class GenericDevice {
 
-    const MIN_EFFECT_DURATION=30;
-
     private $location;
     private $id;
     private $model;
@@ -107,7 +105,7 @@ class GenericDevice {
         }
         return ($duration==0)?'sudden':'smooth';
     }
-    
+
     #TODO get_prop
 
     public function actionSetCtAbx(int $ct_value,int $duratin=0) {
@@ -144,8 +142,8 @@ class GenericDevice {
     public function actionSetDefault() {
         return $this->sendCommand('set_default');
     }
-    
-    public function actionStartCF(int $count, int $action, string $flow_expression) {
+
+    public function actionStartCF(int $count,int $action,string $flow_expression) {
         return $this->sendCommand('start_cf',[$count,$action,$flow_expression]);
     }
 
@@ -158,8 +156,8 @@ class GenericDevice {
      * @return string
      * @throws Exception
      */
-    public function changingState(int $duration, int $mode,string $value, int $brightness): string {
-        if($mode<>1 and $mode<>2 and $mode<>7) {
+    public function changingState(int $duration,int $mode,string $value,int $brightness): string {
+        if ($mode<>1 and $mode<>2 and $mode<>7) {
             throw new Exception('Mode error: 1-color, 2-color temperature, 7-sleep');
         }
         $dig_value=($mode==1)?hexdec($value):(int) $value;
@@ -169,43 +167,43 @@ class GenericDevice {
     public function actionStopCF() {
         return $this->sendCommand('stop_cf');
     }
-    
+
     public function actionSetScene(array $params) {
         return $this->sendCommand("set_scene",$params);
     }
-    
-    public function actionCronAdd(int $type, int $value) {
+
+    public function actionCronAdd(int $type,int $value) {
         return $this->sendCommand('cron_add',[$type,$value]);
     }
-    
+
     #TODO cron_get
-    
+
     public function actionCronDel(int $type) {
         return $this->sendCommand('cron_del',[$type]);
     }
-    
-    public function actionSetAdjust(string $action, string $prop) {
+
+    public function actionSetAdjust(string $action,string $prop) {
         return $this->sendCommand('set_adjust',[$action,$prop]);
     }
-    
-    public function actionSetMusic(string $host='', int $port=0) {
-        if($host=='') {
-            return $this->sendCommand('set_music',[0]);           
+
+    public function actionSetMusic(string $host='',int $port=0) {
+        if ($host=='') {
+            return $this->sendCommand('set_music',[0]);
         } else {
             return $this->sendCommand('set_music',[1,$host,$port]);
         }
     }
-    
+
     public function actionSetName(string $name) {
         return $this->sendCommand('set_name',[$name]);
     }
-    
+
     #TODO bg_set_XXXX bg_toggle - background light
 
     public function actionDevToggle() {
         return $this->sendCommand('dev_toggle');
     }
-    
+
     private function sendCommand(string $method,array $params=[]) {
         $id=$this->message_id++;
         $cmd=[
