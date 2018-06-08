@@ -1,21 +1,20 @@
 <?php
 
 require 'autoloader.php';
-
-$lamp1=new Yeelight\GenericDevice();
-$lamp2=new Yeelight\GenericDevice();
+$bulbs=[];
 $yeelight=new Yeelight\SocketServer();
 $yeelight->run();
 $yeelight->sendDiscover();
 do {
     $pkt=$yeelight->getPacket();
     $p=$pkt->getParams();
-    if($p['id']=='0x0000000005383a0a') {
-        $lamp1->updateState($p);
-        file_put_contents('lamp1',serialize($lamp1));
+    if (isset($p['id'])) {
+        $id=$p['id'];
+        if (!isset($bulbs[$id])) {
+            $bulbs[$id]=new Yeelight\GenericDevice();
+        }
+        $bulbs[$id]->updateState($p);
+        file_put_contents('objects/'.$id.'.yeelight',serialize($bulbs[$id]));
     }
-    if($p['id']=='0x0000000005438b97') {
-        $lamp2->updateState($p);        
-        file_put_contents('lamp2',serialize($lamp2));
-    }
+    var_dump(date('c'),$pkt);
 } while (1);

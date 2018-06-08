@@ -18,11 +18,10 @@ class GenericDevice {
     private $sat;
     private $name;
     private $socket;
-    private $persistent;
     private $message_id=1;
 
-    public function __construct($persistent=false) {
-        $this->persistent=$persistent;
+    public function __construct() {
+        
     }
 
     public function __sleep() {
@@ -30,11 +29,7 @@ class GenericDevice {
     }
 
     public function __destruct() {
-        $this->closeSocket();
-    }
-
-    public function setPersistent(bool $value) {
-        $this->persistent=$value;
+        $this->disconnect();
     }
 
     public function updateState($params) {
@@ -108,23 +103,27 @@ class GenericDevice {
 
     #TODO get_prop
 
-    public function actionSetCtAbx(int $ct_value,int $duratin=0) {
+    public function sendGetProp(array $params): int {
+        return $this->sendCommand('get_prop',$params);
+    }
+
+    public function sendSetCtAbx(int $ct_value,int $duratin=0): int {
         return $this->sendCommand('set_ct_abx',[$ct_value,$this->getEffect($duratin),$duratin]);
     }
 
-    public function actionSetRGB(string $rgb,int $duratin=0) {
+    public function sendSetRGB(string $rgb,int $duratin=0): int {
         return $this->sendCommand('set_rgb',[hexdec($rgb),$this->getEffect($duratin),$duratin]);
     }
 
-    public function actionSetHSV(int $hue,int $sat,int $duratin=0) {
+    public function sendSetHSV(int $hue,int $sat,int $duratin=0): int {
         return $this->sendCommand('set_hsv',[$hue,$sat,$this->getEffect($duratin),$duratin]);
     }
 
-    public function actionSetBright(int $bright,int $duratin=0) {
+    public function sendSetBright(int $bright,int $duratin=0): int {
         return $this->sendCommand('set_bright',[$bright,$this->getEffect($duratin),$duratin]);
     }
 
-    public function actionSetPower(bool $on,int $duratin=0,$mode=0) {
+    public function sendSetPower(bool $on,int $duratin=0,$mode=0): int {
         $param=[];
         $param[]=$on?'on':'off';
         $param[]=$this->getEffect($duratin);
@@ -135,15 +134,15 @@ class GenericDevice {
         return $this->sendCommand('set_power',$param);
     }
 
-    public function actionToggle() {
+    public function sendToggle(): int {
         return $this->sendCommand('toggle');
     }
 
-    public function actionSetDefault() {
+    public function sendSetDefault(): int {
         return $this->sendCommand('set_default');
     }
 
-    public function actionStartCF(int $count,int $action,string $flow_expression) {
+    public function sendStartCF(int $count,int $action,string $flow_expression): int {
         return $this->sendCommand('start_cf',[$count,$action,$flow_expression]);
     }
 
@@ -164,29 +163,31 @@ class GenericDevice {
         return "$duration,$mode,$dig_value,$brightness";
     }
 
-    public function actionStopCF() {
+    public function sendStopCF(): int {
         return $this->sendCommand('stop_cf');
     }
 
-    public function actionSetScene(array $params) {
+    public function sendSetScene(array $params): int {
         return $this->sendCommand("set_scene",$params);
     }
 
-    public function actionCronAdd(int $type,int $value) {
+    public function sendCronAdd(int $type,int $value): int {
         return $this->sendCommand('cron_add',[$type,$value]);
     }
 
-    #TODO cron_get
+    public function sendCronGet(int $type): int {
+        return $this->sendCommand('cron_get',[$type]);
+    }
 
-    public function actionCronDel(int $type) {
+    public function sendCronDel(int $type): int {
         return $this->sendCommand('cron_del',[$type]);
     }
 
-    public function actionSetAdjust(string $action,string $prop) {
+    public function sendSetAdjust(string $action,string $prop): int {
         return $this->sendCommand('set_adjust',[$action,$prop]);
     }
 
-    public function actionSetMusic(string $host='',int $port=0) {
+    public function sendSetMusic(string $host='',int $port=0): int {
         if ($host=='') {
             return $this->sendCommand('set_music',[0]);
         } else {
@@ -194,17 +195,17 @@ class GenericDevice {
         }
     }
 
-    public function actionSetName(string $name) {
+    public function sendSetName(string $name): int {
         return $this->sendCommand('set_name',[$name]);
     }
 
     #TODO bg_set_XXXX bg_toggle - background light
 
-    public function actionDevToggle() {
+    public function sendDevToggle(): int {
         return $this->sendCommand('dev_toggle');
     }
 
-    private function sendCommand(string $method,array $params=[]) {
+    private function sendCommand(string $method,array $params=[]): int {
         $id=$this->message_id++;
         $cmd=[
             'id'=>$id,
@@ -214,21 +215,17 @@ class GenericDevice {
         $cmd=json_encode($cmd)."\r\n";
         $socket=$this->getSocket();
         stream_socket_sendto($socket,$cmd);
-        # TODO: 3 ответа от start_cf
-        $result=stream_socket_recvfrom($this->socket,1024);
-        $result.=stream_socket_recvfrom($this->socket,1024);
-        if (!$this->persistent) {
-            fclose($this->socket);
-            $this->socket=null;
-        }
-        return $result;
+        return $id;
     }
 
-    public function closeSocket() {
+    public function getResponse(): string {
+        return stream_get_contents($this->socket);
+    }
+
+    public function disconnect() {
         if (!is_null($this->socket)) {
             fclose($this->socket);
             $this->socket=null;
         }
     }
-
 }
