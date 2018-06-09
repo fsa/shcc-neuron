@@ -11,9 +11,9 @@ $mem=new Shm();
 
 $devices=$mem->getVar(2);
 var_dump($devices);
-$devices['f0b4299a72d0']->setKey('td1ufnw4y0js7zfs');
-$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
+$devices['f0b4299a72d0']->setKey(\Settings::get('xiaomi')->devices_keys->f0b4299a72d0);
+#$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
 $devices['f0b4299a72d0']->sendMessage($message);
 sleep(3);
-$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>0]);
+#$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
 $devices['f0b4299a72d0']->sendMessage($message);
