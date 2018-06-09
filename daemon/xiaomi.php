@@ -2,39 +2,38 @@
 
 require 'autoloader.php';
 
-$xiaomiGateway=new \Xiaomi\Devices\XiaomiGateway();
-$xiaomiGateway->setKey('td1ufnw4y0js7zfs');
-$aquaraTemper=new \Xiaomi\Devices\TemperatureHumiditySensor();
-$xiaomiTemper=new \Xiaomi\Devices\TemperatureHumiditySensor();
-$xiaomiMotion=new Xiaomi\Devices\MotionSensor();
-
+$devices=[];
+$mem=new Shm();
 $xiaomi=new Xiaomi\SocketServer();
 $xiaomi->run();
 do {
     $pkt=$xiaomi->getPacket();
-    switch ($pkt->getSid()) {
-        case "f0b4299a72d0":
-            $xiaomiGateway->update($pkt);
-            var_dump($xiaomiGateway);
-            #$message=$xiaomiGateway->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
-            #$message=$xiaomiGateway->prepareCommand(['rgb'=>0]);
-            #$xiaomi->sendMessage($message,'172.17.23.10:9898');
-            break;
-        case "158d0001f50bba":
-            $aquaraTemper->update($pkt);
-            var_dump($aquaraTemper);
-            break;
-        case "158d00010e3a1a":
-            $xiaomiTemper->update($pkt);
-            var_dump($xiaomiTemper);
-            break;
-        case "158d00015a89a8":
-            $xiaomiMotion->update($pkt);
-            var_dump($xiaomiMotion);
-            break;
-        default:
-        #    var_dump($pkt->getData());
-            $filename='log/'.$pkt->getSid().'.log';
-            file_put_contents($filename,date('c').PHP_EOL.print_r($pkt,true),FILE_APPEND);
+    $sid=$pkt->getSid();
+    if(is_null($sid)) {
+        continue;
+    }
+    if (!isset($devices[$sid])) {
+        switch ($pkt->getModel()) {
+            case "gateway":
+                $devices[$sid]=new Xiaomi\Devices\XiaomiGateway;
+                break;
+            case "weather.v1":
+            case "senshor_ht":
+                $devices[$sid]=new Xiaomi\Devices\TemperatureHumiditySensor;
+                break;
+            case "motion":
+                $devices[$sid]=new Xiaomi\Devices\MotionSensor;
+                break;
+#            case "magnet":
+#                $devices[$sid]=new Xiaomi\Devices\MagnetSensor;
+#                break;
+            default:
+                $filename='xiaomi/'.$pkt->getSid().'.log';
+                file_put_contents($filename,date('c').PHP_EOL.print_r($pkt,true),FILE_APPEND);
+        }
+    }
+    if(isset($devices[$sid])) {
+        $devices[$sid]->update($pkt);
+        $mem->setVar(2,$devices);
     }
 } while (1);

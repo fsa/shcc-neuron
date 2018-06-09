@@ -8,8 +8,8 @@ class SocketServer {
     private $ip;
     private $port;
 
-    public function __construct(string $ip="224.0.0.50", int $port=9898) {
-        $this->ip=$ip;
+    public function __construct(string $ip=Devices\XiaomiGateway::MULTICAST_ADDRESS, int $port=Devices\XiaomiGateway::MULTICAST_PORT) {
+        $this->ip=$ip;        
         $this->port=$port;
     }
     

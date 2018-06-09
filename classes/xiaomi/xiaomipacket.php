@@ -27,8 +27,11 @@ class XiaomiPacket {
         return $this->pkt->model;
     }
 
-    public function getSid(): string {
-        return $this->pkt->sid;
+    public function getSid() {
+        if(isset($this->pkt->sid)) {
+            return $this->pkt->sid;
+        }
+        return null;
     }
 
     public function getShortId(): string {

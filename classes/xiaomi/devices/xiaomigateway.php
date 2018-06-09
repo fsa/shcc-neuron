@@ -7,6 +7,9 @@
 namespace Xiaomi\Devices;
 
 class XiaomiGateway extends AbstractDevice {
+    
+    const MULTICAST_ADDRESS='224.0.0.50';
+    const MULTICAST_PORT=9898;
 
     private $ip;
     private $bright;
@@ -14,6 +17,12 @@ class XiaomiGateway extends AbstractDevice {
     private $token;
     private $key;
     private $illumination;
+    
+    private $stream;
+    
+    public function __sleep() {
+        return ['ip','bright','rgb','token','key','illumination','sid','model','voltage','updated'];
+    }
 
     public function update(\Xiaomi\XiaomiPacket $pkt) {
         $token=$pkt->getToken();
@@ -22,13 +31,13 @@ class XiaomiGateway extends AbstractDevice {
         }
         parent::update($pkt);
     }
-    
+
     public function setKey($key) {
         $this->key=$key;
     }
 
     public function prepareCommand(array $cmd_data) {
-        if(is_null($this->token)) {
+        if (is_null($this->token)) {
             return false;
         }
         $cmd_data['key']=$this->makeSignature();
@@ -39,7 +48,7 @@ class XiaomiGateway extends AbstractDevice {
         $data['data']=json_encode($cmd_data);
         return json_encode($data);
     }
-    
+
     protected function updateParam($param,$value) {
         switch ($param) {
             case "illumination":
@@ -50,6 +59,8 @@ class XiaomiGateway extends AbstractDevice {
                 break;
             case "ip":
                 $this->ip=$value;
+                break;
+            case "proto_version":
                 break;
             default:
                 echo "$param => $value\n";
@@ -70,7 +81,6 @@ class XiaomiGateway extends AbstractDevice {
         $this->bright=hexdec($parts[0]);
         $this->rgb=$parts[1].$parts[2].$parts[3];
     }
-    
 
     private function makeSignature() {
         $iv=hex2bin('17996d093d28ddb3ba695a2e6f58562e');
@@ -78,4 +88,37 @@ class XiaomiGateway extends AbstractDevice {
         return bin2hex($bin_data);
     }
 
+    public function getStream() {
+        if(!is_null($this->stream)) {
+            return $this->stream;
+        }
+        $this->stream=stream_socket_server("udp://0.0.0.0:".self::MULTICAST_PORT,$errno,$errstr,STREAM_SERVER_BIND);
+
+        if (!$this->stream) {
+            throw new Exception("$errstr ($errno)");
+        }
+        $socket=socket_import_stream($this->stream);
+        if (!$socket) {
+            throw new Exception('Unable to import stream.');
+        }
+        if (!socket_set_option($socket,SOL_SOCKET,SO_REUSEADDR,1)) {
+            throw new Exception('Unable to enable SO_REUSEADDR');
+        }
+        if (!socket_set_option($socket,IPPROTO_IP,MCAST_JOIN_GROUP,['group'=>self::MULTICAST_ADDRESS,'interface'=>0])) {
+            throw new Exception('Unable to join multicast group');
+        }
+        return $this->stream;
+    }
+    
+    public function closeStream() {
+        if(!is_null($this->stream)) {
+            fclose($this->stream);
+            $this->stream=null;
+        }
+    }
+    
+    public function sendMessage($message) {
+        $stream=$this->getStream();
+        stream_socket_sendto($stream,$message,0,$this->ip.':'.self::MULTICAST_PORT);
+    }
 }
