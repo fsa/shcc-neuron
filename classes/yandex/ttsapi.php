@@ -17,7 +17,6 @@ class TtsApi {
 
     const YANDEX_TTS_API_URL='https://tts.voicetech.yandex.net/generate';
     const CHMOD=0750;
-    const COMMAND='mpg123';
 
     private $params;
 
@@ -69,17 +68,16 @@ class TtsApi {
         file_put_contents($filename,file_get_contents($this->getUrl($text)));
     }
 
-    public function say($text) {
+    public function getVoiceFile($text) {
         $filename=__DIR__.'/../../sound/cache/yandex/'.$this->params['speaker'].'/'.md5($text).'_'.'_'.$this->params['emotion'].'.mp3';
         if (!file_exists($filename)) {
             $this->requestApi($filename,$text);
         }
         $realpath=realpath($filename);
-        if($realpath) {
-            system(self::COMMAND.' '.$realpath);
-        } else {
+        if(!$realpath) {
             throw new Exception('Не найден файл для воспроизведения');
         }
+        return $realpath;
     }
 
 }
