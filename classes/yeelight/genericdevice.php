@@ -18,6 +18,7 @@ class GenericDevice {
     private $sat;
     private $name;
     private $socket;
+    private $updated;
     private $message_id=1;
 
     public function __construct() {
@@ -25,7 +26,7 @@ class GenericDevice {
     }
 
     public function __sleep() {
-        return array('location','id','model','fw_ver','support','power','bright','color_mode','ct','rgb','hue','sat','name');
+        return array('location','id','model','fw_ver','support','power','bright','color_mode','ct','rgb','hue','sat','name','updated');
     }
 
     public function __destruct() {
@@ -77,6 +78,7 @@ class GenericDevice {
                 default:
             }
         }
+        $this->updated=date('Y-m-d H:i:sP');
     }
 
     private function getSocket() {
@@ -228,4 +230,31 @@ class GenericDevice {
             $this->socket=null;
         }
     }
+
+    public function getLastUpdate() {
+        return $this->updated;
+    }
+    
+    public function getDeviceId() {
+        return $this->id;
+    }
+
+    public function getDeviceName() {
+        switch ($this->model) {
+            case "mono":
+                return "Лампа";
+            case "color":
+                return "RGB-лампа";
+            case "stripe":
+                return "Светодиодная лента";
+            case "ceiling":
+                return "Потолочный светильник";
+            case "bslamp":
+            case "bslamp1":
+                return "Прикроватный светильник";
+            default:
+                return $this->model;
+        }
+    }
+
 }
