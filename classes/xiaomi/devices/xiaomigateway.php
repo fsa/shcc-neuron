@@ -68,8 +68,11 @@ class XiaomiGateway extends AbstractDevice {
     }
 
     private function setIllumination($value) {
+        $last=$this->illumination;
         $this->illumination=$value;
-        $this->actions['illumination']=$value;
+        if($last!=$this->illumination) {
+            $this->actions['illumination']=$value;
+        }
     }
 
     private function setRgb($value) {
