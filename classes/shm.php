@@ -14,7 +14,7 @@ class Shm {
     }
     
     public function getVar(int $var_key) {
-        return shm_get_var($this->shm,$var_key);
+        return @shm_get_var($this->shm,$var_key);
     }
 
     public function setVar(int $var_key, &$variable) {

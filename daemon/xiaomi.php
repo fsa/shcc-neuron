@@ -2,8 +2,13 @@
 
 require 'autoloader.php';
 
-$devices=[];
+const XIAOMI_SHM_CODE=2;
+
 $mem=new Shm();
+$devices=$mem->getVar(XIAOMI_SHM_CODE);
+if($devices===false) {
+    $devices=[];
+}
 $xiaomi=new Xiaomi\SocketServer();
 $xiaomi->run();
 do {
@@ -23,7 +28,7 @@ do {
     }
     if (isset($devices[$sid])) {
         $devices[$sid]->update($pkt);
-        $mem->setVar(2,$devices);
+        $mem->setVar(XIAOMI_SHM_CODE,$devices);
         $actions=$devices[$sid]->getActions();
         if(!is_null($actions)) {
             #file_put_contents('http://127.0.0.1:81/action/?module=xiaomi&sid='.$sid,$actions);
