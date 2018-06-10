@@ -20,12 +20,19 @@ class MagnetSensor extends AbstractDevice {
         }
     }
 
-    protected function setStatus(string $value) {
+    private function setStatus(string $value) {
         $last=$this->status;
         $this->status=$value;
         if($last!=$value) {
             $this->actions['status']=$value;
         }
     }
+    
+    public function getStatus() {
+        return $this->status;
+    }
 
+    public function getDeviceName() {
+        return "Xiaomi Smart Door and Windows Sensor";
+    }
 }

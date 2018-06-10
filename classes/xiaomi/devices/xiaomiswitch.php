@@ -18,4 +18,8 @@ class XiaomiSwitch extends AbstractDevice {
         }
     }
 
+    public function getDeviceName() {
+        return "Xiaomi Smart Wireless Switch";
+    }
+
 }

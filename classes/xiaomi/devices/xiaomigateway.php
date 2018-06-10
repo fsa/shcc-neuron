@@ -137,4 +137,21 @@ class XiaomiGateway extends AbstractDevice {
         $stream=$this->getStream();
         stream_socket_sendto($stream,$message,0,$this->ip.':'.self::MULTICAST_PORT);
     }
+    
+    public function getBright() {
+        return $this->bright;
+    }
+    
+    public function getRGB() {
+        return $this->rgb;
+    }
+    
+    public function getIllumination() {
+        return $this->illumination;
+    }
+
+    public function getDeviceName() {
+        return "Xiaomi Mi Smart Multifunctional Gateway";
+    }
+
 }

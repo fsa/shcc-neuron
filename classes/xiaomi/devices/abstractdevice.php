@@ -37,15 +37,25 @@ abstract class AbstractDevice {
             $this->actions['voltage']=$this->voltage;
         }
     }
-    
+
     public function getActions() {
-        if(sizeof($this->actions)<2) {
+        if (sizeof($this->actions)<2) {
             return null;
         }
         $actions=json_encode($this->actions);
         $this->actions=[];
         return $actions;
     }
+    
+    public function getDeviceId() {
+        return $this->sid;
+    }
+
+    public function getLastUpdate() {
+        return $this->updated;
+    }
 
     abstract protected function updateParam($param,$value);
+
+    abstract public function getDeviceName();
 }

@@ -15,5 +15,5 @@ $devices['f0b4299a72d0']->setKey(\Settings::get('xiaomi')->devices_keys->f0b4299
 $message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
 $devices['f0b4299a72d0']->sendMessage($message);
 sleep(3);
-$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>0]);
+$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec("00FFFFFF")]);
 $devices['f0b4299a72d0']->sendMessage($message);

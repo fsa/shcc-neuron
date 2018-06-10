@@ -27,9 +27,17 @@ class MotionSensor extends AbstractDevice {
         }
     }
     
-    protected function setLastMotion(int $value) {
+    private function setLastMotion(int $value) {
         $this->lastMotion=$value;
         $this->actions['motion']=$value;
+    }
+    
+    public function getLastMotion() {
+        return $this->lastMotion;
+    }
+
+    public function getDeviceName() {
+        return "Xiaomi Smart IR Human Body Sensor";
     }
 
 }

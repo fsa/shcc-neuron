@@ -9,7 +9,11 @@ class XiaomiPacket {
 
     public function __construct(string $pkt,string $peer) {
         $this->pkt=json_decode($pkt);
-        $this->pkt->data=json_decode($this->pkt->data,true);
+        if(isset($this->pkt->data)) {
+            $this->pkt->data=json_decode($this->pkt->data,true);
+        } else {
+            var_dump($pkt);
+        }
         $this->peer=new \stdClass;
         $this->peer->host=parse_url($peer,PHP_URL_HOST);
         $this->peer->port=parse_url($peer,PHP_URL_PORT);

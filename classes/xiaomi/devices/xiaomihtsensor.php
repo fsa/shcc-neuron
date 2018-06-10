@@ -23,7 +23,8 @@ class XiaomiHTSensor extends AbstractDevice {
                 echo "$param => $value\n";
         }
     }
-    public function setTemperature($value) {
+
+    private function setTemperature($value) {
         $last=$this->temperature;
         $this->temperature=$value/100;
         if ($this->temperature!=$last) {
@@ -31,11 +32,24 @@ class XiaomiHTSensor extends AbstractDevice {
         }
     }
 
-    public function setHumidity($value) {
+    private function setHumidity($value) {
         $last=$this->humidity;
         $this->humidity=$value/100;
         if ($this->humidity!=$last) {
             $this->actions['humidity']=$this->humidity;
         }
     }
+
+    public function getTemperature() {
+        return $this->temperature;
+    }
+
+    public function getHumidity() {
+        return $this->humidity;
+    }
+
+    public function getDeviceName() {
+        return "Xiaomi Mi Smart Temperature and Humidity Sensor";
+    }
+
 }
