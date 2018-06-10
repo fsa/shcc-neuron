@@ -69,17 +69,30 @@ class XiaomiGateway extends AbstractDevice {
 
     private function setIllumination($value) {
         $this->illumination=$value;
+        $this->actions['illumination']=$value;
     }
 
     private function setRgb($value) {
-        $parts=str_split(dechex($value),2);
+        $hex=dechex($value);
+        if(strlen($hex)==7) {
+            $hex='0'.$hex;
+        }
+        $parts=str_split($hex,2);
         if (sizeof($parts)!=4) {
             $this->bright=0;
-            $this->rgb="000000";
+            $this->rgb="FFFFFF";
             return;
         }
+        $last_bright=$this->bright;
+        $last_rgb=$this->rgb;
         $this->bright=hexdec($parts[0]);
         $this->rgb=$parts[1].$parts[2].$parts[3];
+        if($last_bright!=$this->bright) {
+            $this->actions['bright']=$this->bright;
+        }
+        if($last_rgb!=$this->rgb) {
+            $this->actions['rgb']=$this->rgb;
+        }
     }
 
     private function makeSignature() {

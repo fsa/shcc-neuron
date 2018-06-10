@@ -7,9 +7,8 @@
 namespace Xiaomi\Devices;
 
 class MagnetSensor extends AbstractDevice {
-    
+
     private $status;
-    private $lastActivity;
 
     protected function updateParam($param,$value) {
         switch ($param) {
@@ -20,10 +19,13 @@ class MagnetSensor extends AbstractDevice {
                 echo "$param => $value\n";
         }
     }
-    
+
     protected function setStatus(string $value) {
-        $this->lastActivity=date('c');
+        $last=$this->status;
         $this->status=$value;
+        if($last!=$value) {
+            $this->actions['status']=$value;
+        }
     }
 
 }

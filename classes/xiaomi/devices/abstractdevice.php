@@ -8,12 +8,14 @@ abstract class AbstractDevice {
     protected $model;
     protected $voltage;
     protected $updated;
+    protected $actions;
 
     public function __construct() {
-        
+        $this->actions=[];
     }
 
     public function update(\Xiaomi\XiaomiPacket $pkt) {
+        $this->actions['cmd']=$pkt->getCmd();
         $this->sid=$pkt->getSid();
         $this->model=$pkt->getModel();
         foreach ($pkt->getData() as $param=> $value) {
@@ -29,12 +31,20 @@ abstract class AbstractDevice {
     }
 
     protected function setVoltage($value) {
-        #$last=$this->voltage;
+        $last=$this->voltage;
         $this->voltage=$value/1000;
-        /* TODO событие изменения напряжения
-          if($this->voltage!=$last) {
-
-          } */
+        if ($this->voltage!=$last) {
+            $this->actions['voltage']=$this->voltage;
+        }
+    }
+    
+    public function getActions() {
+        if(sizeof($this->actions)<2) {
+            return null;
+        }
+        $actions=json_encode($this->actions);
+        $this->actions=[];
+        return $actions;
     }
 
     abstract protected function updateParam($param,$value);

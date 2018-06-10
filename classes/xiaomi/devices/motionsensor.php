@@ -29,6 +29,7 @@ class MotionSensor extends AbstractDevice {
     
     protected function setLastMotion(int $value) {
         $this->lastMotion=$value;
+        $this->actions['motion']=$value;
     }
 
 }

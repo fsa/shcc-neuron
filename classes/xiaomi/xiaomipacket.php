@@ -28,7 +28,7 @@ class XiaomiPacket {
     }
 
     public function getSid() {
-        if(isset($this->pkt->sid)) {
+        if (isset($this->pkt->sid)) {
             return $this->pkt->sid;
         }
         return null;
@@ -37,7 +37,7 @@ class XiaomiPacket {
     public function getShortId(): string {
         return $this->pkt->short_id;
     }
-    
+
     public function getToken(): string {
         return isset($this->pkt->token)?$this->pkt->token:'';
     }
@@ -48,6 +48,37 @@ class XiaomiPacket {
 
     public function getPeer(): \stdClass {
         return $this->peer;
+    }
+
+    public function getDeviceObject() {
+        switch ($this->pkt->model) {
+            case "gateway":
+                return new Devices\XiaomiGateway;
+            case "weather.v1":
+                return new Devices\AqaraWeatherSensor;
+            case "sensor_ht":
+                return new Devices\XiaomiHTSensor;
+            case "motion":
+                return new Devices\MotionSensor;
+            case "magnet":
+                return new Devices\MagnetSensor;
+#            case "switch":
+#                return new Devices\Switch;
+#            case "sensor_wleak.aq1":
+#                return new Devices\AqaraWleakSensor;
+#            case "sensor_switch.aq2":
+#                return new Devices\AqaraSwitchSensor2;
+#            case "sensor_switch.aq3":
+#                return new Devices\AqaraSwitchSensor3;
+#            case "86sw1":
+#                return new Devices\AqaraWleakSensor;
+#            case "86sw2":
+#                return new Devices\AqaraWleakSensor;
+#            case "sensor_wleak.aq1":
+#                return new Devices\AqaraWleakSensor;
+            default:
+                return null;
+        }
     }
 
 }

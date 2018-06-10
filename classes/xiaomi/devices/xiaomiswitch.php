@@ -10,13 +10,8 @@ class XiaomiSwitch extends AbstractDevice {
 
     protected function updateParam($param,$value) {
         switch ($param) {
-            case "click0":
-                break;
-            case "double_click":
-                break;
-            case "long_click_press":
-                break;
-            case "long_click_release":
+            case "status":
+                $this->actions['status']=$value;
                 break;
             default:
                 echo "$param => $value\n";
