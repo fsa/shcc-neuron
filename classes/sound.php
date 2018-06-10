@@ -3,7 +3,8 @@
 class Sound {
 
     const COMMAND='mpg123';
-    const SOUND='dingdong.mp3';
+    const SOUND='notification.mp3';
+    #const SOUND='dingdong.mp3';
 
     private static $_instance;
     private $tts_provider;
