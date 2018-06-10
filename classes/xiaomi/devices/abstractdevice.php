@@ -25,7 +25,7 @@ abstract class AbstractDevice {
                     $this->updateParam($param,$value);
             }
         }
-        $this->updated=date('c');
+        $this->updated=date('Y-m-d H:i:sP');
     }
 
     protected function setVoltage($value) {
