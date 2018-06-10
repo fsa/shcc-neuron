@@ -1,0 +1,20 @@
+{
+    "site_title": "PHP MajorDomo",
+    "pdo": {
+        "dsn": "mysql:host=localhost;dbname=phpmd;charset=utf8",
+        "username": "phpmd",
+        "password": "phpmd",
+        "init": [
+            "SET TIME_ZONE=\"Asia/Yekaterinburg\""
+        ]
+    },
+    "yandex": {
+        "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+    },
+    "xiaomi": {
+        "devices_keys": {
+            "f0b4299a72d0": "aaaaaaaaaaaaaaaa"
+        }
+    },
+    "timezone": "Asia/Yekaterinburg"
+}
