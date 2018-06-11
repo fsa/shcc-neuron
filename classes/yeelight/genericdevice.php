@@ -20,6 +20,7 @@ class GenericDevice {
     private $socket;
     private $updated;
     private $message_id=1;
+    private $actions;
 
     public function __construct() {
         
@@ -52,25 +53,25 @@ class GenericDevice {
                     $this->support=explode(' ',$value);
                     break;
                 case "power":
-                    $this->power=$value;
+                    $this->setPower($value);
                     break;
                 case "bright":
-                    $this->bright=$value;
+                    $this->setBright($value);
                     break;
                 case "color_mode":
-                    $this->color_mode=$value;
+                    $this->setColorMode($value);
                     break;
                 case "ct":
-                    $this->ct=$value;
+                    $this->setCt($value);
                     break;
                 case "rgb":
-                    $this->rgb=dechex($value);
+                    $this->setRGB(dechex($value));
                     break;
                 case "hue":
-                    $this->hue=$value;
+                    $this->setHue($value);
                     break;
                 case "sat":
-                    $this->sat=$value;
+                    $this->setSat($value);
                     break;
                 case "name":
                     $this->name=$value;
@@ -79,6 +80,71 @@ class GenericDevice {
             }
         }
         $this->updated=date('Y-m-d H:i:sP');
+    }
+
+    private function setPower($value) {
+        if ($this->power==$value) {
+            return;
+        }
+        $this->power=$value;
+        $this->actions['power']=$value;
+    }
+
+    private function setBright($value) {
+        if ($this->bright==$value) {
+            return;
+        }
+        $this->bright=$value;
+        $this->actions['bright']=$value;
+    }
+
+    private function setColorMode($value) {
+        if ($this->color_mode==$value) {
+            return;
+        }
+        $this->color_mode=$value;
+        $this->actions['color_mode']=$value;
+    }
+
+    private function setCt($value) {
+        if ($this->ct==$value) {
+            return;
+        }
+        $this->ct=$value;
+        $this->actions['ct']=$value;
+    }
+
+    private function setRGB($value) {
+        if ($this->rgb==$value) {
+            return;
+        }
+        $this->rgb=$value;
+        $this->actions['rgb']=$value;
+    }
+
+    private function setHue($value) {
+        if ($this->hue==$value) {
+            return;
+        }
+        $this->hue=$value;
+        $this->actions['hue']=$value;
+    }
+
+    private function setSat($value) {
+        if ($this->sat==$value) {
+            return;
+        }
+        $this->sat=$value;
+        $this->actions['sat']=$value;
+    }
+
+    public function getActions() {
+        if (sizeof($this->actions)==0) {
+            return null;
+        }
+        $actions=json_encode($this->actions);
+        $this->actions=[];
+        return $actions;
     }
 
     private function getSocket() {
@@ -234,7 +300,7 @@ class GenericDevice {
     public function getLastUpdate() {
         return $this->updated;
     }
-    
+
     public function getDeviceId() {
         return $this->id;
     }

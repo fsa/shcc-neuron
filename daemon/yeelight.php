@@ -6,7 +6,7 @@ const YEELIGHT_SHM_CODE=1;
 
 $mem=new Shm();
 $bulbs=$mem->getVar(YEELIGHT_SHM_CODE);
-if ($devices===false) {
+if ($bulbs===false) {
     $bulbs=[];
 }
 $yeelight=new Yeelight\SocketServer();
@@ -23,7 +23,10 @@ do {
         }
         $bulbs[$id]->updateState($p);
         $shm->setVar(YEELIGHT_SHM_CODE,$bulbs);
-        #file_put_contents('yeelight/'.$id.'.yeelight',serialize($bulbs[$id]));
+        $actions=$bulbs[$id]->getActions();
+        if(!is_null($actions)) {
+            #file_put_contents('http://127.0.0.1:81/action/?module=yeelight&id='.$id,$actions);
+            echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
+        }
     }
-    var_dump(date('c'),$pkt);
 } while (1);
