@@ -3,14 +3,17 @@
 class MemoryStorage {
 
     const PROJ='a';
-    const MEM_SIZE=65536;
     const CHMOD=0600;
 
     private $shm;
 
     public function __construct() {
+        $memsize=\Settings::get('memory_storage');
+        if(is_null($memsize)) {
+            $memsize=524288; # 512KB
+        }
         $file=ftok(__FILE__,self::PROJ);
-        $this->shm=shm_attach($file,self::MEM_SIZE,self::CHMOD);
+        $this->shm=shm_attach($file,$memsize,self::CHMOD);
         
     }
     
