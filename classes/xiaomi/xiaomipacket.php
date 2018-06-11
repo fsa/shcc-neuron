@@ -66,8 +66,8 @@ class XiaomiPacket {
                 return new Devices\MotionSensor;
             case "magnet":
                 return new Devices\MagnetSensor;
-#            case "switch":
-#                return new Devices\Switch;
+            case "switch":
+                return new Devices\XiaomiSwitch;
 #            case "sensor_wleak.aq1":
 #                return new Devices\AqaraWleakSensor;
 #            case "sensor_switch.aq2":
