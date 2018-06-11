@@ -1,9 +1,9 @@
 <?php
 
 require_once '../common.php';
-$mem=new Shm();
-$yeelight=$mem->getVar(1);
-$xiaomi=$mem->getVar(2);
+$mem=new MemoryStorage();
+$yeelight=$mem->getArray('yeelight');
+$xiaomi=$mem->getArray('xiaomi');
 ?>
 <style>
     table {
@@ -30,8 +30,8 @@ foreach ($xiaomi as $dev) {
     <tr>
         <td><?=$dev->getDeviceId()?></td>
         <td><?=$dev->getDeviceName()?></td>
-        <td></td>
-        <td><?=$dev->getLastUpdate()?></td>
+        <td><?=$dev?></td>
+        <td><?=date('Y-m-d H:i:sP',$dev->getLastUpdate())?></td>
     </tr>
 <?php
 }
@@ -51,8 +51,8 @@ foreach ($yeelight as $dev) {
     <tr>
         <td><?=$dev->getDeviceId()?></td>
         <td><?=$dev->getDeviceName()?></td>
-        <td></td>
-        <td><?=$dev->getLastUpdate()?></td>
+        <td><?=$dev?></td>
+        <td><?=date('Y-m-d H:i:sP',$dev->getLastUpdate())?></td>
     </tr>
 <?php
 }

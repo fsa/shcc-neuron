@@ -154,4 +154,7 @@ class XiaomiGateway extends AbstractDevice {
         return "Xiaomi Mi Smart Multifunctional Gateway";
     }
 
+    public function __toString() {
+        return sprintf('Шлюз');
+    }
 }

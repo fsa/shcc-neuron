@@ -26,18 +26,26 @@ class MotionSensor extends AbstractDevice {
                 echo "$param => $value\n";
         }
     }
-    
+
     private function setLastMotion(int $value) {
-        $this->lastMotion=$value;
+        $this->lastMotion=$value==0?0:time()-$value;
         $this->actions['motion']=$value;
     }
-    
+
     public function getLastMotion() {
         return $this->lastMotion;
     }
 
     public function getDeviceName() {
         return "Xiaomi Smart IR Human Body Sensor";
+    }
+
+    public function __toString() {
+        if ($this->lastMotion==0) {
+            return 'Зафиксировано движение';
+        } else {
+            return 'Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion);
+        }
     }
 
 }

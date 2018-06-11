@@ -22,4 +22,7 @@ class XiaomiSwitch extends AbstractDevice {
         return "Xiaomi Smart Wireless Switch";
     }
 
+    public function __toString() {
+        return "Была онлайн ".date('d.m.Y H:i:s',$this->updated);
+    }
 }

@@ -35,4 +35,14 @@ class MagnetSensor extends AbstractDevice {
     public function getDeviceName() {
         return "Xiaomi Smart Door and Windows Sensor";
     }
+    
+    public function __toString() {
+        switch ($this->status) {
+            case "open":
+                return "Открыто";
+            case "close":
+                return "Закрыто";
+        }
+        return "Статус ".$this->status;
+    }
 }

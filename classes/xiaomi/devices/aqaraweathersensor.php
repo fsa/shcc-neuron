@@ -69,5 +69,9 @@ class AqaraWeatherSensor extends AbstractDevice {
     public function getDeviceName() {
         return "Aqara Temperature Humidity Sensor";
     }
+    
+    public function __toString() {
+        return sprintf('Температура воздуха %+d &deg;C, относительная влажность %d%%, атмосферное давление %d мм.рт.ст.',round($this->temperature),round($this->humidity),round($this->pressure));
+    }
 
 }

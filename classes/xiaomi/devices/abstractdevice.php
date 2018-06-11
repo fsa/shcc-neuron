@@ -12,6 +12,7 @@ abstract class AbstractDevice {
 
     public function __construct() {
         $this->actions=[];
+        $this->updated=time();
     }
 
     public function update(\Xiaomi\XiaomiPacket $pkt) {
@@ -27,7 +28,7 @@ abstract class AbstractDevice {
                     $this->updateParam($param,$value);
             }
         }
-        $this->updated=date('Y-m-d H:i:sP');
+        $this->updated=time();
     }
 
     protected function setVoltage($value) {
@@ -51,11 +52,13 @@ abstract class AbstractDevice {
         return $this->sid;
     }
 
-    public function getLastUpdate() {
+    public function getLastUpdate(): int {
         return $this->updated;
     }
 
     abstract protected function updateParam($param,$value);
 
     abstract public function getDeviceName();
+    
+    abstract public function __toString();
 }

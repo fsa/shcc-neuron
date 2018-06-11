@@ -79,7 +79,7 @@ class GenericDevice {
                 default:
             }
         }
-        $this->updated=date('Y-m-d H:i:sP');
+        $this->updated=time();
     }
 
     private function setPower($value) {
@@ -375,4 +375,7 @@ class GenericDevice {
         }
     }
 
+    public function __toString() {
+        return $this->power=="on"?"Включена":"Выключена";
+    }
 }
