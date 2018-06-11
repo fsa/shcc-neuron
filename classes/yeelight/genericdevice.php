@@ -179,16 +179,32 @@ class GenericDevice {
         return $this->sendCommand('set_ct_abx',[$ct_value,$this->getEffect($duratin),$duratin]);
     }
 
+    public function sendBgSetCtAbx(int $ct_value,int $duratin=0): int {
+        return $this->sendCommand('bg_set_ct_abx',[$ct_value,$this->getEffect($duratin),$duratin]);
+    }
+
     public function sendSetRGB(string $rgb,int $duratin=0): int {
         return $this->sendCommand('set_rgb',[hexdec($rgb),$this->getEffect($duratin),$duratin]);
+    }
+
+    public function sendBgSetRGB(string $rgb,int $duratin=0): int {
+        return $this->sendCommand('bg_set_rgb',[hexdec($rgb),$this->getEffect($duratin),$duratin]);
     }
 
     public function sendSetHSV(int $hue,int $sat,int $duratin=0): int {
         return $this->sendCommand('set_hsv',[$hue,$sat,$this->getEffect($duratin),$duratin]);
     }
 
+    public function sendBgSetHSV(int $hue,int $sat,int $duratin=0): int {
+        return $this->sendCommand('bg_set_hsv',[$hue,$sat,$this->getEffect($duratin),$duratin]);
+    }
+
     public function sendSetBright(int $bright,int $duratin=0): int {
         return $this->sendCommand('set_bright',[$bright,$this->getEffect($duratin),$duratin]);
+    }
+
+    public function sendBgSetBright(int $bright,int $duratin=0): int {
+        return $this->sendCommand('bg_set_bright',[$bright,$this->getEffect($duratin),$duratin]);
     }
 
     public function sendSetPower(bool $on,int $duratin=0,$mode=0): int {
@@ -202,18 +218,40 @@ class GenericDevice {
         return $this->sendCommand('set_power',$param);
     }
 
+    public function sendBgSetPower(bool $on,int $duratin=0,$mode=0): int {
+        $param=[];
+        $param[]=$on?'on':'off';
+        $param[]=$this->getEffect($duratin);
+        $param[]=$duratin;
+        if ($mode!=0) {
+            $param[]=$mode;
+        }
+        return $this->sendCommand('bg_set_power',$param);
+    }
+
     public function sendToggle(): int {
         return $this->sendCommand('toggle');
+    }
+
+    public function sendBgToggle(): int {
+        return $this->sendCommand('bg_toggle');
     }
 
     public function sendSetDefault(): int {
         return $this->sendCommand('set_default');
     }
 
+    public function sendBgSetDefault(): int {
+        return $this->sendCommand('bg_set_default');
+    }
+
     public function sendStartCF(int $count,int $action,string $flow_expression): int {
         return $this->sendCommand('start_cf',[$count,$action,$flow_expression]);
     }
 
+    public function sendBgStartCF(int $count,int $action,string $flow_expression): int {
+        return $this->sendCommand('bg_start_cf',[$count,$action,$flow_expression]);
+    }
     /**
      * flow_expression helper
      * @param int $duration
@@ -235,8 +273,16 @@ class GenericDevice {
         return $this->sendCommand('stop_cf');
     }
 
+    public function sendBgStopCF(): int {
+        return $this->sendCommand('bg_stop_cf');
+    }
+
     public function sendSetScene(array $params): int {
         return $this->sendCommand("set_scene",$params);
+    }
+
+    public function sendBgSetScene(array $params): int {
+        return $this->sendCommand("bg_set_scene",$params);
     }
 
     public function sendCronAdd(int $type,int $value): int {
@@ -253,6 +299,10 @@ class GenericDevice {
 
     public function sendSetAdjust(string $action,string $prop): int {
         return $this->sendCommand('set_adjust',[$action,$prop]);
+    }
+
+    public function sendBgSetAdjust(string $action,string $prop): int {
+        return $this->sendCommand('bg_set_adjust',[$action,$prop]);
     }
 
     public function sendSetMusic(string $host='',int $port=0): int {
@@ -307,6 +357,8 @@ class GenericDevice {
 
     public function getDeviceName() {
         switch ($this->model) {
+            case "lamp":
+                return "Настольная лампа";
             case "mono":
                 return "Лампа";
             case "color":
