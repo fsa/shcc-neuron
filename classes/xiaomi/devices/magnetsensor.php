@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Датчик движения Xiaomi
+ * Датчик двери/окна Xiaomi
  */
 
 namespace Xiaomi\Devices;

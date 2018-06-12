@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Датчики температуры, влажности и давления Xiaomi и Aqara
+ * Датчик температуры и влажности Xiaomi
  */
 
 namespace Xiaomi\Devices;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Датчики температуры, влажности и давления Xiaomi и Aqara
+ * Беспроводная кнопка
  */
 
 namespace Xiaomi\Devices;
