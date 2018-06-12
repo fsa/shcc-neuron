@@ -41,8 +41,10 @@ class MagnetSensor extends AbstractDevice {
         switch ($this->status) {
             case "open":
                 $result.="Открыто";
+                break;
             case "close":
                 $result.="Закрыто";
+                break;
             default:
                 $result.="Статус ".$this->status;
         }
