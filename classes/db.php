@@ -12,14 +12,14 @@ class DB {
         
     }
 
-    public static function getInstance(): PDOStatement {
+    public static function getInstance(): PDO {
         if (self::$_instance) {
             return self::$_instance;
         }
         $config=\Settings::get('pdo');
-        self::$_instance=new PDO($config['dsn'],$config['username'],$config['password']);
+        self::$_instance=new PDO($config->dsn,$config->username,$config->password);
         self::$_instance->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-        foreach ($config['init'] AS $query) {
+        foreach ($config->init AS $query) {
             self::$_instance->query($query);
         }
         return self::$_instance;

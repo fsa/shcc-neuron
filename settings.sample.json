@@ -1,5 +1,7 @@
 {
     "site_title": "PHP MajorDomo",
+    "url": "http://127.0.0.1",
+    "daemon-ip": "127.0.0.1",
     "pdo": {
         "dsn": "mysql:host=localhost;dbname=phpmd;charset=utf8",
         "username": "phpmd",

@@ -19,7 +19,8 @@ do {
         $mem->setVar('yeelight',$bulbs);
         $actions=$bulbs[$id]->getActions();
         if(!is_null($actions)) {
-            #file_put_contents('http://127.0.0.1:81/action/?module=yeelight&id='.$id,$actions);
+            $data=['module'=>'yeelight','uid'=>$id,'data'=>$actions];
+            file_get_contents(\Settings::get('url').'/action/?'.http_build_query($data));
             echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
         }
     }

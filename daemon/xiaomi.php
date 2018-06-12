@@ -26,7 +26,8 @@ do {
         $mem->setVar('xiaomi',$devices);
         $actions=$devices[$sid]->getActions();
         if (!is_null($actions)) {
-            #file_put_contents('http://127.0.0.1:81/action/?module=xiaomi&sid='.$sid,$actions);
+            $data=['module'=>'xiaomi','uid'=>$sid,'data'=>$actions];
+            file_get_contents(\Settings::get('url').'/action/?'.http_build_query($data));
             echo date('c').' '.$sid.'=>'.$actions.PHP_EOL;
         }
     }
