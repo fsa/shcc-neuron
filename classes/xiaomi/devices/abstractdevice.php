@@ -55,6 +55,10 @@ abstract class AbstractDevice {
     public function getLastUpdate(): int {
         return $this->updated;
     }
+    
+    public function getVoltage() {
+        return $this->voltage;
+    }
 
     abstract protected function updateParam($param,$value);
 
