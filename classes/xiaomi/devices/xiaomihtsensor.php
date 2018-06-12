@@ -53,7 +53,7 @@ class XiaomiHTSensor extends AbstractDevice {
     }
     
     public function __toString() {
-        return sprintf('Температура воздуха %+d &deg;C, относительная влажность %d%%.',round($this->temperature),round($this->humidity));
+        return sprintf('Температура воздуха %+d &deg;C, относительная влажность %d%%. Батарея CR2032: %.3f В.',round($this->temperature),round($this->humidity),$this->voltage);
     }
 
 }

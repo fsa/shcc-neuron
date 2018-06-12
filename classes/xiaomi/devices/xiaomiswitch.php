@@ -23,6 +23,6 @@ class XiaomiSwitch extends AbstractDevice {
     }
 
     public function __toString() {
-        return "Была онлайн ".date('d.m.Y H:i:s',$this->updated);
+        return "Была онлайн ".date('d.m.Y H:i:s',$this->updated).'. '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
     }
 }

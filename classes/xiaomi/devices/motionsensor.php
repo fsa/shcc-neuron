@@ -42,10 +42,11 @@ class MotionSensor extends AbstractDevice {
 
     public function __toString() {
         if ($this->lastMotion==0) {
-            return 'Зафиксировано движение';
+            $result='Зафиксировано движение.';
         } else {
-            return 'Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion);
+            $result='Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion).'.';
         }
+        return $result.' '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
     }
 
 }
