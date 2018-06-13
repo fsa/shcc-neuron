@@ -31,15 +31,23 @@ CREATE TABLE devices (
   CONSTRAINT `devices_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Типы измеряемых параметров, сохраняемых в истории
+CREATE TABLE measures (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `unit` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Датчики устройств
 CREATE TABLE device_sensors (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_id` int(10) UNSIGNED NOT NULL,
   `property` varchar(64) NOT NULL,
-  `property_name` text NOT NULL,
-  `unit` varchar(64) NOT NULL,
+  `measure_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `device_sensor_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`)
+  CONSTRAINT `device_sensor_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`),
+  CONSTRAINT `device_sensor_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- История показаний датчиков устройств
@@ -47,10 +55,12 @@ CREATE TABLE device_sensor_history (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_sensor_id` int(10) UNSIGNED NOT NULL,
   `place_id` int(10) UNSIGNED NOT NULL,
-  `value` decimal(7,2) NOT NULL,
+  `measure_id` int(10) UNSIGNED NOT NULL,
+  `value` float NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `device_sensor_history_device_sensors_ibfk_1` FOREIGN KEY (`device_sensor_id`) REFERENCES `device_sensors` (`id`),
-  CONSTRAINT `device_sensor_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
+  CONSTRAINT `device_sensor_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
+  CONSTRAINT `device_sensor_history_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
