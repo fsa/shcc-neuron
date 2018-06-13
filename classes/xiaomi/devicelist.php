@@ -25,7 +25,7 @@ class DeviceList {
         $result->name=$device->getDeviceName();
         $result->status_description=$device;
         $result->voltage=$device->getVoltage();
-        $result->updated=date('Y-m-d H:i:sP',$device->getLastUpdate());
+        $result->updated=date('d.m.Y H:i:s',$device->getLastUpdate());
         return $result;
     }
 

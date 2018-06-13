@@ -25,11 +25,10 @@ $stmt=DB::prepare('SELECT m.id, m.property, d.place_id, m.measure_id FROM meters
 $stmt->execute([$module,$uid]);
 $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
 $stmt->closeCursor();
-foreach ($sensors as $sensor) {
+$stmt=DB::prepare('INSERT INTO meter_history (meter_id,place_id,measure_id,value) VALUES (?,?,?,?)');foreach ($sensors as $sensor) {
     if(isset($data->{$sensor->property})) {
-        $stmt=DB::prepare('INSERT INTO meter_history (meter_id,place_id,measure_id,value) VALUES (?,?,?,?)');
         $stmt->execute([$sensor->id,$sensor->place_id,$sensor->measure_id,$data->{$sensor->property}]);
-        $stmt->closeCursor();
     }
 }
+$stmt->closeCursor();
 #TODO открывать пользовтельский файл или код для обработки событий от модуля

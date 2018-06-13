@@ -24,7 +24,7 @@ class DeviceList {
         $result->id=$device->getDeviceId();
         $result->name=$device->getDeviceName();
         $result->status_description=$device;
-        $result->updated=date('Y-m-d H:i:sP',$device->getLastUpdate());
+        $result->updated=date('d.m.Y H:i:s',$device->getLastUpdate());
         return $result;
     }
 
