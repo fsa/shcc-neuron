@@ -356,7 +356,7 @@ class GenericDevice {
     }
 
     public function getDeviceId() {
-        return $this->id;
+        return $this->model.'_'.$this->id;
     }
 
     public function getDeviceName() {
