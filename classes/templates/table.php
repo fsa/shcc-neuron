@@ -13,7 +13,7 @@ class Table{
 <?php
         if (!is_null($this->caption)) {
 ?>
-            <caption>Xiaomi</caption>
+            <caption><?=$this->caption?></caption>
 <?php
         }
 ?>
