@@ -48,6 +48,10 @@ abstract class AbstractDevice {
         return $actions;
     }
     
+    public function getModuleName() {
+        return 'xiaomi';
+    }
+    
     public function getDeviceId() {
         return $this->sid;
     }

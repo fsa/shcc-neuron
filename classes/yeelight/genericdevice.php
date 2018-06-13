@@ -350,6 +350,10 @@ class GenericDevice {
     public function getLastUpdate() {
         return $this->updated;
     }
+    
+    public function getModuleName() {
+        return 'yeelight';
+    }
 
     public function getDeviceId() {
         return $this->id;
