@@ -21,13 +21,13 @@ $data=json_decode($json);
 if(is_null($data)){
     die('Wrong JSON data');
 }
-$stmt=DB::prepare('SELECT s.id, s.property, d.place_id, s.measure_id FROM device_sensors s LEFT JOIN devices d ON s.device_id=d.id WHERE d.module=? AND d.uid=?');
+$stmt=DB::prepare('SELECT m.id, m.property, d.place_id, m.measure_id FROM meters m LEFT JOIN devices d ON m.device_id=d.id WHERE d.module=? AND d.uid=?');
 $stmt->execute([$module,$uid]);
 $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
 $stmt->closeCursor();
 foreach ($sensors as $sensor) {
     if(isset($data->{$sensor->property})) {
-        $stmt=DB::prepare('INSERT INTO device_sensor_history (device_sensor_id,place_id,measure_id,value) VALUES (?,?,?,?)');
+        $stmt=DB::prepare('INSERT INTO meter_history (meter_id,place_id,measure_id,value) VALUES (?,?,?,?)');
         $stmt->execute([$sensor->id,$sensor->place_id,$sensor->measure_id,$data->{$sensor->property}]);
         $stmt->closeCursor();
     }
