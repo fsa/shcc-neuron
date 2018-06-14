@@ -30,7 +30,7 @@ class Daemon {
             if (!is_null($actions)) {
                 $data=['module'=>'yeelight','uid'=>$id,'data'=>$actions];
                 file_get_contents(\Settings::get('url').'/action/?'.http_build_query($data));
-                echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
+                #echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
             }
         }
     }
