@@ -30,6 +30,10 @@ class AqaraWeatherSensor extends AbstractDevice {
     }
 
     private function setTemperature($value) {
+        if($value<-5000) {
+            # Aqara bug: Temperature -100 deg.C.
+            return;
+        }
         $last=$this->temperature;
         $this->temperature=$value/100;
         if ($this->temperature!=$last) {
@@ -38,6 +42,10 @@ class AqaraWeatherSensor extends AbstractDevice {
     }
 
     private function setHumidity($value) {
+        if($value<0 or $value>10000) {
+            # Aqara bug: Humidity 654.36%
+            return;
+        }
         $last=$this->humidity;
         $this->humidity=$value/100;
         if ($this->humidity!=$last) {
