@@ -24,6 +24,7 @@ CREATE TABLE `modules` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `namespace` varchar(64) NOT NULL,
+  `daemon_disabled` tinyint(1) NOT NULL DEFAULT 0,
   `disabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE (`name`)
