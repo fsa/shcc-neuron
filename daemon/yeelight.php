@@ -1,6 +1,7 @@
 <?php
-
-require 'autoloader.php';
+$daemon_name='yeelight';
+require_once 'autoloader.php';
+require_once './_daemonize.php';
 
 $mem=new MemoryStorage();
 $bulbs=$mem->getArray('yeelight');
@@ -21,7 +22,7 @@ do {
         if(!is_null($actions)) {
             $data=['module'=>'yeelight','uid'=>$id,'data'=>$actions];
             file_get_contents(\Settings::get('url').'/action/?'.http_build_query($data));
-            echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
+            #echo date('c').' '.$id.'=>'.$actions.PHP_EOL;
         }
     }
 } while (1);

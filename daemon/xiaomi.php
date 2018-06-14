@@ -1,6 +1,7 @@
 <?php
-
-require 'autoloader.php';
+$daemon_name='xiaomi';
+require_once 'autoloader.php';
+require_once './_daemonize.php';
 
 $mem=new MemoryStorage();
 $devices=$mem->getArray('xiaomi');
@@ -28,7 +29,7 @@ do {
         if (!is_null($actions)) {
             $data=['module'=>'xiaomi','uid'=>$sid,'data'=>$actions];
             file_get_contents(\Settings::get('url').'/action/?'.http_build_query($data));
-            echo date('c').' '.$sid.'=>'.$actions.PHP_EOL;
+            #echo date('c').' '.$sid.'=>'.$actions.PHP_EOL;
         }
     }
 } while (1);
