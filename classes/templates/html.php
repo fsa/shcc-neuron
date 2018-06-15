@@ -17,6 +17,12 @@ class HTML {
 <?=$this->header?>
 </head>
 <body>
+    <p>
+        <a href="/">Главная страница</a> |
+        <a href="/devices/">Обнаруженные устройства</a> |
+        <a href="/charts/">Графики</a>
+    </p>
+<hr>
 <?php
     }
 
