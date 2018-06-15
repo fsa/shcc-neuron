@@ -1,11 +1,11 @@
 <?php
-if (!sizeof($argv)==3) {
-    die('Usage: '.$argv[0].' name namespace');
+if (!sizeof($argv)==2) {
+    die('Usage: '.$argv[0].' daemon-class');
 }
 require_once 'autoloader.php';
-$daemon_name=$argv[1];
-$daemon_class=$argv[2].'\\Daemon';
-$daemon=new $daemon_class;
+$daemon_class=$argv[1];
+$daemon=new $daemon_class(\Settings::get('url').'/action/');
+$daemon_name=$daemon->getName();
 $baseDir=dirname(__FILE__);
 $pid_file=$baseDir.'/pid/'.$daemon_name.'.pid';
 if (isDaemonActive($pid_file)) {
