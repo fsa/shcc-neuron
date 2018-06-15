@@ -38,7 +38,7 @@ function stop() {
     $dir=__DIR__.'/pid/';
     $files=scandir($dir);
     foreach ($files as $pidfile) {
-        if(substr($pidfile,-4,4)!='.pid') {
+        if (substr($pidfile,-4,4)!='.pid') {
             continue;
         }
         $name=substr($pidfile,0,-4);
@@ -47,10 +47,9 @@ function stop() {
         if (posix_kill($pid,SIGKILL)) {
             pcntl_signal_dispatch();
             echo "Daemon $pid stopped.".PHP_EOL;
-        } else {
-            if (!unlink($dir.$pidfile)) {
-                echo "Error deleting PID file ".$pidfile;
-            }
+        }
+        if (!unlink($dir.$pidfile)) {
+            echo "Error deleting PID file ".$pidfile;
         }
     }
 }
