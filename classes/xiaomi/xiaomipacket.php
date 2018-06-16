@@ -12,7 +12,7 @@ class XiaomiPacket {
         if (is_null($this->pkt) or !isset($this->pkt->cmd)) {
             var_dump($pkt);
         }
-        if (!isset($this->sid)) {
+        if (!isset($this->pkt->sid)) {
             $this->pkt->sid=null;
         }
         if (isset($this->pkt->data)) {
