@@ -9,10 +9,16 @@ class XiaomiPacket {
 
     public function __construct(string $pkt,string $peer) {
         $this->pkt=json_decode($pkt);
-        if(isset($this->pkt->data)) {
+        if (is_null($this->pkt) or !isset($this->pkt->cmd)) {
+            var_dump($pkt);
+        }
+        if (!isset($this->sid)) {
+            $this->pkt->sid=null;
+        }
+        if (isset($this->pkt->data)) {
             $this->pkt->data=json_decode($this->pkt->data,true);
         } else {
-            var_dump($pkt);
+            $this->pkt->data=null;
         }
         $this->peer=new \stdClass;
         $this->peer->host=parse_url($peer,PHP_URL_HOST);
@@ -32,10 +38,7 @@ class XiaomiPacket {
     }
 
     public function getSid() {
-        if (isset($this->pkt->sid)) {
-            return $this->pkt->sid;
-        }
-        return null;
+        return $this->pkt->sid;
     }
 
     public function getShortId(): string {

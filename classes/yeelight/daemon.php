@@ -2,7 +2,7 @@
 
 namespace Yeelight;
 
-class Daemon {
+class Daemon implements \SmartHome\Daemon {
     
     const DAEMON_NAME='yeelight';
 
