@@ -7,9 +7,11 @@ HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader('Атмосферное давление');
 ?>
 <script>
+var date=new Date();
+date.setDate(date.getDate()-2);
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 3, from: '2018-06-16'}
+        params: {place: 2, measure: 3, from: date.toJSON()}
         }];
 var title = 'Атмосферное давление';
 var units = 'мм.рт.ст.';

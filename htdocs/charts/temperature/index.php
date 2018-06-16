@@ -7,12 +7,15 @@ HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader('Температура');
 ?>
 <script>
+var date=new Date();
+date.setDate(date.getDate()-2);
+
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 1, from: '2018-06-16'}
+        params: {place: 2, measure: 1, from: date.toJSON()}
         },{
         name: 'Кухня',
-        params: {place: 3, measure: 1, from: '2018-06-16'}
+        params: {place: 3, measure: 1, from: date.toJSON()}
         }];
 var title = 'Температура';
 var units = '\u00B0C';

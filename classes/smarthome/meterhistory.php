@@ -71,13 +71,10 @@ class MeterHistory {
         } else {
             $period='';
         }
-        $stmt=\DB::prepare('SELECT UNIX_TIMESTAMP(timestamp),value FROM meter_history WHERE '.join(' AND ',$where).$period);
+        $stmt=\DB::prepare('SELECT UNIX_TIMESTAMP(timestamp)*1000,value FROM meter_history WHERE '.join(' AND ',$where).$period);
         $stmt->execute($params);
-        $rows=[];
-        while($row=$stmt->fetch(\PDO::FETCH_NUM)) {
-            $rows[]="[$row[0]000, $row[1]]";
-        }
-        return '['.join(',',$rows).']';
+        $rows=$stmt->fetchAll(\PDO::FETCH_NUM);
+        return json_encode($rows,JSON_NUMERIC_CHECK);
     }
 
     /**

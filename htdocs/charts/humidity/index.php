@@ -7,12 +7,14 @@ HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader('Относительная влажность');
 ?>
 <script>
+var date=new Date();
+date.setDate(date.getDate()-2);
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 2, from: '2018-06-16'}
+        params: {place: 2, measure: 2, from: date.toJSON()}
         },{
         name: 'Кухня',
-        params: {place: 3, measure: 2, from: '2018-06-16'}
+        params: {place: 3, measure: 2, from: date.toJSON()}
         }];
 var title = 'Относительная влажность';
 var units = '%';
@@ -56,21 +58,21 @@ function createChart() {
         text: period
         },
         xAxis: {
-        type: 'datetime',
-                crosshair: {
-                enabled: true,
-                        color: '#00572b'
-                }
+            type: 'datetime',
+            crosshair: {
+            enabled: true,
+                    color: '#00572b'
+            }
         },
         yAxis: {
-        title: {
-        text: title
-        },
-                labels: {
+            title: {
+                text: title
+            },
+            labels: {
                 formatter: function () {
-                return this.value + ' ' + units;
+                    return this.value + ' ' + units;
                 }
-                }
+            }
         },
         tooltip: {
         split: true,
