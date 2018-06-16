@@ -1,8 +1,6 @@
 <?php
+
 require_once '../../common.php';
-$stmt=DB::prepare('SELECT CONCAT("[",UNIX_TIMESTAMP(timestamp),"000, ",value,"]") FROM meter_history WHERE place_id=2 AND measure_id=3');
-$stmt->execute();
-$data=$stmt->fetchAll(PDO::FETCH_COLUMN);
 HTML::addHeader('<script src="/libs/jquery/jquery.min.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/highcharts.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
@@ -11,13 +9,14 @@ HTML::showPageHeader('Атмосферное давление');
 <script>
 var series = [{
         name: 'Комната',
-        data: [<?=join(',',$data)?>],
-    }];
+        params: {place: 2, measure: 3, from: '2018-06-16'}
+        }];
 var title = 'Атмосферное давление';
 var units = 'мм.рт.ст.';
 var period = 'За период с по';
-var chart;
-$(document).ready(function () {
+var seriesOptions=[], seriesCounter = 0;
+
+function createChart() {
     Highcharts.setOptions({
         lang: {
             loading: 'Загрузка...',
@@ -27,8 +26,8 @@ $(document).ready(function () {
             exportButtonTitle: "Экспорт",
             printButtonTitle: "Печать",
             rangeSelectorFrom: "С",
-            rangeSelectorTo: "По",
             rangeSelectorZoom: "Период",
+            rangeSelectorTo: "По",
             downloadPNG: 'Скачать PNG',
             downloadJPEG: 'Скачать JPEG',
             downloadPDF: 'Скачать PDF',
@@ -36,65 +35,78 @@ $(document).ready(function () {
             printChart: 'Напечатать график'
         },
         time: {
-            timezoneOffset: -420
+            timezoneOffset: - 420
         }
     });
-    window.chart = Highcharts.chart('chart', {
+    Highcharts.chart('chart', {
         chart: {
-            type: 'line'
+        type: 'line'
         },
         credits: {
             href: 'http://tavda.net/',
-            text: 'Tavda.net'
+                    text: 'Tavda.net'
         },
         title: {
-            text: title
+        text: title
         },
         subtitle: {
-            text: period
+        text: period
         },
         xAxis: {
-            type: 'datetime',
-            crosshair: {
+        type: 'datetime',
+                crosshair: {
                 enabled: true,
-                color: '#00572b'
-            }
+                        color: '#00572b'
+                }
         },
         yAxis: {
-            title: {
-                text: title
-            },
-            labels: {
+        title: {
+        text: title
+        },
+                labels: {
                 formatter: function () {
-                    return this.value + ' '+ units;
+                return this.value + ' ' + units;
                 }
-            }
+                }
         },
         tooltip: {
-            split: true,
-            distance: 30,
-            pointFormat: '{series.name}<br><b>'+title+': {point.y:,.2f} '+units+'</b>',
-            xDateFormat: '%d.%m.%Y %H:%M:%S'
+        split: true,
+                distance: 30,
+                pointFormat: '{series.name}<br><b>' + title + ': {point.y:,.2f} ' + units + '</b>',
+                xDateFormat: '%d.%m.%Y %H:%M:%S'
         },
         plotOptions: {
             area: {
                 marker: {
                     enabled: false,
-                    symbol: 'circle',
-                    radius: 2,
-                    states: {
+                        symbol: 'circle',
+                        radius: 2,
+                        states: {
                         hover: {
-                            enabled: true
+                        enabled: true
                         }
                     }
                 }
             }
         },
-        series: series
+        series: seriesOptions
+    });
+};
+
+$.each(series, function (i, serie) {
+    $.getJSON('/api/meter_history/', serie.params, function (data) {
+        seriesOptions[seriesCounter] = {
+            name: serie.name,
+            data: data
+        };
+        seriesCounter += 1;
+        if (seriesCounter === series.length) {
+            createChart();
+        }
     });
 });
-
 </script>
 <div style="width: 100%; height: 500px;" id="chart"></div>
 <?php
+
 HTML::showPageFooter();

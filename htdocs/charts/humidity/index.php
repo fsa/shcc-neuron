@@ -4,18 +4,18 @@ require_once '../../common.php';
 HTML::addHeader('<script src="/libs/jquery/jquery.min.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/highcharts.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
-HTML::showPageHeader('Температура');
+HTML::showPageHeader('Относительная влажность');
 ?>
 <script>
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 1, from: '2018-06-16'}
+        params: {place: 2, measure: 2, from: '2018-06-16'}
         },{
         name: 'Кухня',
-        params: {place: 3, measure: 1, from: '2018-06-16'}
+        params: {place: 3, measure: 2, from: '2018-06-16'}
         }];
-var title = 'Температура';
-var units = '\u00B0C';
+var title = 'Относительная влажность';
+var units = '%';
 var period = 'За период с по';
 var seriesOptions=[], seriesCounter = 0;
 
