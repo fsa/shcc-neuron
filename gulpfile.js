@@ -61,6 +61,7 @@ gulp.task('leaflet', function () {
 gulp.task('highcharts', function () {
     console.log('Копирование highcharts');
     return gulp.src([
+        'node_modules/highcharts/highstock.js',
         'node_modules/highcharts/highcharts.js',
         'node_modules/highcharts/modules/exporting.js'
     ])

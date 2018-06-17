@@ -2,7 +2,8 @@
 
 require_once '../../common.php';
 HTML::addHeader('<script src="/libs/jquery/jquery.min.js"></script>');
-HTML::addHeader('<script src="/libs/highcharts/highcharts.js"></script>');
+HTML::addHeader('<script src="/libs/highcharts/highstock.js"></script>');
+#HTML::addHeader('<script src="/libs/highcharts/highcharts.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader('Температура');
 ?>
@@ -12,15 +13,15 @@ date.setDate(date.getDate()-2);
 
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 1, from: date.toJSON()}
+        params: {place: 2, measure: 1}
         },{
         name: 'Кухня',
-        params: {place: 3, measure: 1, from: date.toJSON()}
+        params: {place: 3, measure: 1}
         }];
 var title = 'Температура';
 var units = '\u00B0C';
-var period = 'За период с по';
 var seriesOptions=[], seriesCounter = 0;
+var chart;
 
 function createChart() {
     Highcharts.setOptions({
@@ -44,7 +45,7 @@ function createChart() {
             timezoneOffset: - 420
         }
     });
-    Highcharts.chart('chart', {
+    chart=Highcharts.stockChart('chart', {
         chart: {
         type: 'line'
         },
@@ -55,25 +56,25 @@ function createChart() {
         title: {
         text: title
         },
-        subtitle: {
-        text: period
-        },
         xAxis: {
-        type: 'datetime',
-                crosshair: {
+            type: 'datetime',
+            crosshair: {
                 enabled: true,
                         color: '#00572b'
-                }
+            },
+            events: {
+                afterSetExtremes: afterSetExtremes
+            },
         },
         yAxis: {
-        title: {
-        text: title
-        },
-                labels: {
+            title: {
+                text: title
+            },
+            labels: {
                 formatter: function () {
                 return this.value + ' ' + units;
                 }
-                }
+            }
         },
         tooltip: {
         split: true,
@@ -99,8 +100,31 @@ function createChart() {
     });
 };
 
+
+function afterSetExtremes(e) {
+
+    chart.showLoading('Загрузка данных...');
+    seriesCounter = 0;
+    $.each(series, function (i, serie) {
+        params=serie.params;
+        params.from=new Date(e.min).toJSON();
+        params.to=new Date(e.max).toJSON();
+        $.getJSON('/api/meter_history/', params, function (data) {
+            seriesOptions[seriesCounter] = {
+                name: serie.name,
+                data: data
+            };
+            
+            seriesCounter += 1;
+            if (seriesCounter === series.length) {
+                chart.hideLoading();
+            }
+        });
+    });
+}
 $.each(series, function (i, serie) {
     $.getJSON('/api/meter_history/', serie.params, function (data) {
+//        data = [].concat(data, [[Date.UTC(2011, 9, 14, 19, 59), null]]);
         seriesOptions[seriesCounter] = {
             name: serie.name,
             data: data
