@@ -4,7 +4,7 @@ namespace SmartHome;
 
 class TtsDaemon implements Daemon {
 
-    const COMMAND='mpg123';
+    const COMMAND='mpg123 -q';
     const PRE_SOUND='notification.mp3';
     const PRE_SOUND_PERIOD=5;
 
