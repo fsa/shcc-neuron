@@ -25,7 +25,9 @@ switch ($cmd) {
 function start() {
     $stmt=DB::query('SELECT name, namespace FROM modules WHERE daemon_disabled=0 AND disabled=0');
     $daemons=$stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    foreach ($daemons as $name=>$namespace) {
+    echo "Starting TTS daemon".PHP_EOL;
+    exec("php -f daemon.php \"SmartHome\\TtsDaemon\"");
+    foreach ($daemons as $name=> $namespace) {
         $daemon_class=$namespace.'\\Daemon';
         if (class_exists($daemon_class)) {
             echo "Starting module daemon '$name'.".PHP_EOL;
@@ -43,7 +45,7 @@ function stop() {
         }
         $name=substr($pidfile,0,-4);
         $pid=file_get_contents($dir.$pidfile);
-        echo "Stoping module daemon '$name'.".PHP_EOL;
+        echo "Stoping daemon '$name'.".PHP_EOL;
         if (posix_kill($pid,SIGKILL)) {
             pcntl_signal_dispatch();
             echo "Daemon $pid stopped.".PHP_EOL;
