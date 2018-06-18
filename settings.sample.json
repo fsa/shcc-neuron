@@ -13,6 +13,10 @@
     "yandex": {
         "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
     },
+    "tts": {
+        "pre_sound": "dingdong.mp3",
+        "play_sound_cmd": "mpg123 -q %s"
+    },
     "xiaomi": {
         "devices_keys": {
             "f0b4299a72d0": "aaaaaaaaaaaaaaaa"
