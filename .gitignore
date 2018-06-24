@@ -1,3 +1,5 @@
 settings.json
 config/*.conf
 node_modules/*
+daemon/phpmd
+daemon/phpmd.service

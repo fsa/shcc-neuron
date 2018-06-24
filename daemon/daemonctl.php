@@ -15,7 +15,6 @@ switch ($cmd) {
         break;
     case "restart":
         stop();
-        sleep(2);
         start();
         break;
     default:
