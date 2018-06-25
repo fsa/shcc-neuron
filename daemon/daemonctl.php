@@ -22,8 +22,7 @@ switch ($cmd) {
 }
 
 function start() {
-    $stmt=DB::query('SELECT name, namespace FROM modules WHERE daemon_disabled=0 AND disabled=0');
-    $daemons=$stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    $daemons=SmartHome\Modules::getActiveDaemons();
     $daemons['TTS']='Tts';
     foreach ($daemons as $name=> $namespace) {
         $daemon_class=$namespace.'\\Daemon';

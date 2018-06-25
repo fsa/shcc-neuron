@@ -21,9 +21,6 @@ $data=json_decode($json);
 if(is_null($data)){
     die('Wrong JSON data');
 }
-$stmt=DB::prepare('SELECT m.id, m.property, d.place_id, m.measure_id FROM meters m LEFT JOIN devices d ON m.device_id=d.id LEFT JOIN modules md ON d.module_id=md.id WHERE md.name=? AND d.uid=?');
-$stmt->execute([$module,$uid]);
-$sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
-$stmt->closeCursor();
+$sensors=SmartHome\Meters::getDeviceMeters($module,$uid);
 SmartHome\MeterHistory::addRecords($sensors,$data);
 #TODO открывать пользовтельский файл или код для обработки событий от модуля
