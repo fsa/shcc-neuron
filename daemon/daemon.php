@@ -35,8 +35,10 @@ while (!$stop_server) {
     try {
         $daemon->iteration();    
     } catch (Exception $ex) {
-        echo date('c').PHP_EOL.print_r($ex,true);
+        error_log(date('c').PHP_EOL.print_r($ex,true));
+        $daemon->finish();
         sleep(15);
+        $daemon->prepare();
     }
 }
 $daemon->finish();

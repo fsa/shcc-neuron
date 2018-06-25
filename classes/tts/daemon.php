@@ -15,7 +15,6 @@ class Daemon implements \SmartHome\Daemon {
     private $play_sound_cmd;
 
     public function __construct($precess_url) {
-        $this->queue=new Queue;
         $tts=file_get_contents(__DIR__.'/../../config/tts.conf');
         $this->tts_provider=unserialize($tts);
         $settings=\Settings::get('tts');
@@ -27,17 +26,24 @@ class Daemon implements \SmartHome\Daemon {
         return 'tts';
     }
 
+    public function prepare() {
+        $this->last_message_time=0;
+        $this->queue=new Queue;
+    }
+
     public function iteration() {
         $message=$this->queue->receiveMessage();
-        $this->playVoice($message);
+        if($message) {
+            $this->playVoice($message);
+        } else {
+            error_log(print_r($this->queue,true));
+            sleep(30);
+            $this->queue=new Queue();
+        }
     }
 
     public function finish() {
         
-    }
-
-    public function prepare() {
-        $this->last_message_time=0;
     }
 
     private function playVoice($text) {

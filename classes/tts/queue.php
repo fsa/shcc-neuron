@@ -6,7 +6,7 @@ class Queue {
 
     const PROJ='a';
     const CHMOD=0600;
-    const MAX_MESSAGE_SIZE=512;
+    const MAX_MESSAGE_SIZE=1024;
 
     private $queue;
 
@@ -15,16 +15,13 @@ class Queue {
     }
     
     public function addMessage($text) {
-        $res=msg_send($this->queue, 1, $text, false);
-        if($res===false) {
-            throw new Exception('msg_send error');
-        }
+        return msg_send($this->queue, 1, $text, false);
     }
     
     public function receiveMessage() {
         $res=msg_receive($this->queue,1,$msgtype,self::MAX_MESSAGE_SIZE,$message,false);
         if($res===false) {
-            throw new Exception('msg_receive error');
+            return false;
         }
         return $message;
     }
