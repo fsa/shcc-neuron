@@ -1,8 +1,8 @@
 <?php
 
-namespace SmartHome;
+namespace Tts;
 
-class TtsDaemon implements Daemon {
+class Daemon implements \SmartHome\Daemon {
 
     const PLAY_SOUND_CMD='mpg123 -q %s';
     const PRE_SOUND='notification.mp3';
@@ -15,7 +15,7 @@ class TtsDaemon implements Daemon {
     private $play_sound_cmd;
 
     public function __construct($precess_url) {
-        $this->queue=new TtsQueue;
+        $this->queue=new Queue;
         $tts=file_get_contents(__DIR__.'/../../config/tts.conf');
         $this->tts_provider=unserialize($tts);
         $settings=\Settings::get('tts');

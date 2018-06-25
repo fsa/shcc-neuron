@@ -24,12 +24,11 @@ switch ($cmd) {
 function start() {
     $stmt=DB::query('SELECT name, namespace FROM modules WHERE daemon_disabled=0 AND disabled=0');
     $daemons=$stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    echo "Starting TTS daemon".PHP_EOL;
-    exec("php -f daemon.php \"SmartHome\\TtsDaemon\"");
+    $daemons['TTS']='Tts';
     foreach ($daemons as $name=> $namespace) {
         $daemon_class=$namespace.'\\Daemon';
         if (class_exists($daemon_class)) {
-            echo "Starting module daemon '$name'.".PHP_EOL;
+            echo "Starting '$name' daemon.".PHP_EOL;
             exec("php -f daemon.php \"$daemon_class\"");
         }
     }

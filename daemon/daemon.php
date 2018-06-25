@@ -32,7 +32,12 @@ $STDERR=fopen($baseDir.'/log/'.$daemon_name.'_error.log','ab');
 $daemon->prepare();
 $stop_server=false;
 while (!$stop_server) {
-    $daemon->iteration();
+    try {
+        $daemon->iteration();    
+    } catch (Exception $ex) {
+        echo date('c').PHP_EOL.print_r($ex,true);
+        sleep(15);
+    }
 }
 $daemon->finish();
 unlink($pid_file);
