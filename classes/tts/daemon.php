@@ -14,7 +14,7 @@ class Daemon implements \SmartHome\Daemon {
     private $pre_sound;
     private $play_sound_cmd;
 
-    public function __construct($precess_url) {
+    public function __construct($process_url) {
         $tts=file_get_contents(__DIR__.'/../../config/tts.conf');
         $this->tts_provider=unserialize($tts);
         $settings=\Settings::get('tts');

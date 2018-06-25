@@ -7,7 +7,7 @@ interface Daemon {
      * Конструктор класса
      * @param type $precess_url URL для обработки событий
      */
-    function __construct($precess_url);
+    function __construct($process_url);
     /**
      * Возвращает имя демона
      */
