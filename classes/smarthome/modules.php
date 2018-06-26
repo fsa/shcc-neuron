@@ -2,6 +2,8 @@
 
 namespace SmartHome;
 
+use DB;
+
 class Modules {
 
     public static function getActiveDaemons() {
