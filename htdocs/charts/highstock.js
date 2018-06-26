@@ -25,6 +25,36 @@ Highcharts.setOptions({
 
 function createChart() {
     chart=Highcharts.stockChart('chart', {
+        rangeSelector: {
+            selected: 0,
+            buttons: [{
+                type: 'day',
+                count: 1,
+                text: '1д'
+            }, {
+                type: 'day',
+                count: 3,
+                text: '3д'
+            }, {
+                type: 'day',
+                count: 6,
+                text: '6д'
+            },{
+                type: 'month',
+                count: 1,
+                text: '1м'
+            }, {
+                type: 'ytd',
+                text: 'YTD'
+            }, {
+                type: 'year',
+                count: 1,
+                text: '1г'
+            }, {
+                type: 'all',
+                text: 'Всё'
+            }]
+        },
         chart: {
         type: 'line'
         },
@@ -44,6 +74,7 @@ function createChart() {
             events: {
                 afterSetExtremes: afterSetExtremes
             },
+            ordinal: false
         },
         yAxis: {
             title: {
