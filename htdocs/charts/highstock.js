@@ -44,9 +44,6 @@ function createChart() {
                 count: 1,
                 text: '1м'
             }, {
-                type: 'ytd',
-                text: 'YTD'
-            }, {
                 type: 'year',
                 count: 1,
                 text: '1г'
