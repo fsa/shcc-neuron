@@ -2,7 +2,7 @@
 
 namespace SmartHome;
 
-use DB;
+use DB, PDO;
 
 class Modules {
 
