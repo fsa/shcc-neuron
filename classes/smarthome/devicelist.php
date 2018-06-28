@@ -1,18 +1,17 @@
 <?php
 
-namespace Yeelight;
+namespace SmartHome;
 
 class DeviceList {
 
     private $list;
 
     public function __construct() {
-        $this->query();
     }
 
-    public function query() {
-        $ms=new \MemoryStorage;
-        $this->list=$ms->getArray('yeelight');
+    public function query($module_name) {
+        $ms=new \SmartHome\DeviceMemoryStorage;
+        $this->list=$ms->getModuleDevices($module_name);
     }
 
     public function fetch() {

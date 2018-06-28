@@ -2,7 +2,7 @@
 
 namespace Yeelight;
 
-class GenericDevice {
+class GenericDevice implements \SmartHome\DeviceInterface {
 
     private $location;
     private $id;
@@ -27,7 +27,7 @@ class GenericDevice {
     }
 
     public function __sleep() {
-        return array('location','id','model','fw_ver','support','power','bright','color_mode','ct','rgb','hue','sat','name','updated');
+        return array ('location','id','model','fw_ver','support','power','bright','color_mode','ct','rgb','hue','sat','name','updated');
     }
 
     public function __destruct() {
@@ -252,6 +252,7 @@ class GenericDevice {
     public function sendBgStartCF(int $count,int $action,string $flow_expression): int {
         return $this->sendCommand('bg_start_cf',[$count,$action,$flow_expression]);
     }
+
     /**
      * flow_expression helper
      * @param int $duration
@@ -265,7 +266,7 @@ class GenericDevice {
         if ($mode<>1 and $mode<>2 and $mode<>7) {
             throw new Exception('Mode error: 1-color, 2-color temperature, 7-sleep');
         }
-        $dig_value=($mode==1)?hexdec($value):(int) $value;
+        $dig_value=($mode==1)?hexdec($value):(int)$value;
         return "$duration,$mode,$dig_value,$brightness";
     }
 
@@ -350,7 +351,7 @@ class GenericDevice {
     public function getLastUpdate() {
         return $this->updated;
     }
-    
+
     public function getModuleName() {
         return 'yeelight';
     }
@@ -382,4 +383,5 @@ class GenericDevice {
     public function __toString() {
         return $this->power=="on"?"Включена":"Выключена";
     }
+
 }

@@ -2,22 +2,17 @@
 
 require_once '../common.php';
 HTML::showPageHeader('Список устройств в памяти');
-$mem=new MemoryStorage();
-$xiaomi=new Xiaomi\DeviceList();
-$table=new Table();
-$table->setCaption('Xiaomi');
-$table->addField('sid','ID');
-$table->addField('name','Наименование');
-$table->addField('status_description','Информация');
-$table->addField('voltage','Батарея');
-$table->addField('updated','Был активен');
-$table->showTable($xiaomi);
-$yeelight=new Yeelight\DeviceList();
-$table=new Table();
-$table->setCaption('Yeelight');
-$table->addField('id','ID');
-$table->addField('name','Наименование');
-$table->addField('status_description','Информация');
-$table->addField('updated','Был активен');
-$table->showTable($yeelight);
+$mem=new \SmartHome\DeviceMemoryStorage;
+$modules=$mem->getModuleList();
+foreach ($modules as $module) {
+    $devices=new SmartHome\DeviceList();
+    $devices->query($module);
+    $table=new Table();
+    $table->setCaption('Модуль '.$module);
+    $table->addField('id','ID');
+    $table->addField('name','Наименование');
+    $table->addField('status_description','Информация');
+    $table->addField('updated','Был активен');
+    $table->showTable($devices);
+}
 HTML::showPageFooter();

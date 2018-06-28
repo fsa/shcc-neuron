@@ -20,8 +20,8 @@ class Daemon implements \SmartHome\Daemon {
     }
 
     public function prepare() {
-        $this->storage=new \MemoryStorage();
-        $this->devices=$this->storage->getArray(self::DAEMON_NAME);
+        $this->storage=new \SmartHome\DeviceMemoryStorage;
+        $this->devices=$this->storage->getModuleDevices(self::DAEMON_NAME);
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
     }
@@ -42,7 +42,7 @@ class Daemon implements \SmartHome\Daemon {
         }
         if (isset($this->devices[$sid])) {
             $this->devices[$sid]->update($pkt);
-            $this->storage->setVar(self::DAEMON_NAME,$this->devices);
+            $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);
             $actions=$this->devices[$sid]->getActions();
             if (!is_null($actions)) {
                 $data=['module'=>self::DAEMON_NAME,'uid'=>$sid,'data'=>$actions];

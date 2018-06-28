@@ -2,7 +2,7 @@
 
 namespace Xiaomi\Devices;
 
-abstract class AbstractDevice implements \SmartHome\SensorsInterface {
+abstract class AbstractDevice implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface {
 
     protected $sid;
     protected $model;
