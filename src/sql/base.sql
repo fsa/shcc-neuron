@@ -37,6 +37,8 @@ CREATE TABLE devices (
   `module_id` int(10) UNSIGNED NOT NULL,
   `uid` varchar(64) NOT NULL,
   `name` text NOT NULL,
+  `classname` varchar(64) NULL DEFAULT NULL,
+  `init_data` text NULL DEFAULT NULL,
   `place_id` int(10) UNSIGNED NOT NULL,
   `disabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),

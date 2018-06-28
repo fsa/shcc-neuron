@@ -10,11 +10,10 @@ require_once 'autoloader.php';
 $mem=new \SmartHome\DeviceMemoryStorage;
 
 $devices=$mem->getModuleDevices('xiaomi');
-$devices['f0b4299a72d0']->setKey(\Settings::get('xiaomi')->devices_keys->f0b4299a72d0);
-$message=$devices['f0b4299a72d0']->prepareCommand(['illumination'=>'on']);
+$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
 $devices['f0b4299a72d0']->sendMessage($message);
 sleep(1);
-$message=$devices['f0b4299a72d0']->prepareCommand(['illumination'=>'off']);
+$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>'FFFFFF']);
 $devices['f0b4299a72d0']->sendMessage($message);
 
 # add_channels {"chs":[{"id":555555,"url":"https://rmgradio.gcdn.co/hit_m.aac","type":0}]}

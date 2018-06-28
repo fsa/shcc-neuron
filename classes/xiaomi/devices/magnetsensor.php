@@ -38,18 +38,23 @@ class MagnetSensor extends AbstractDevice {
     }
 
     public function __toString() {
-        $result='';
+        $result=[];
         switch ($this->status) {
+            case null:
+                break;
             case "open":
-                $result.="Открыто";
+                $result[]="Открыто.";
                 break;
             case "close":
-                $result.="Закрыто";
+                $result[]="Закрыто.";
                 break;
             default:
-                $result.="Статус ".$this->status;
+                $result[]="Статус ".$this->status.'.';
         }
-        return $result.'. '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+        if ($this->voltage) {
+            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+        }
+        return join(' ',$result);
     }
 
     public function getDeviceIndicators(): array {

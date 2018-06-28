@@ -15,7 +15,7 @@ class XiaomiGateway extends AbstractDevice {
     private $bright;
     private $rgb;
     private $token;
-    private $key;
+    protected $key;
     private $illumination;
     
     private $stream;
@@ -155,7 +155,14 @@ class XiaomiGateway extends AbstractDevice {
     }
 
     public function __toString() {
-        return 'Шлюз. '.($this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.').'. Датчик света: '.$this->illumination.'.';
+        $result=[];
+        if(!is_null($this->bright)) {
+            $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';
+        }
+        if($this->illumination) {
+            $result[]='Датчик света: '.$this->illumination.'.';
+        }
+        return join(' ',$result);
     }
 
     public function getDeviceIndicators(): array {

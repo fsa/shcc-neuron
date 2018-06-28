@@ -23,7 +23,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     private $actions;
 
     public function __construct() {
-        
+        $this->updated=0;
     }
 
     public function __sleep() {

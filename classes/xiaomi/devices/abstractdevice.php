@@ -12,7 +12,14 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface, \SmartHome\
 
     public function __construct() {
         $this->actions=[];
-        $this->updated=time();
+        $this->updated=0;
+    }
+
+    public function init($init_data) {
+        $data=json_decode($init_data);
+        foreach ($data as $key=> $value) {
+            $this->$key=$value;
+        }
     }
 
     public function update(\Xiaomi\XiaomiPacket $pkt) {

@@ -42,12 +42,18 @@ class MotionSensor extends AbstractDevice {
     }
 
     public function __toString() {
-        if ($this->lastMotion==0) {
-            $result='Зафиксировано движение.';
-        } else {
-            $result='Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion).'.';
+        $result=[];
+        if (!is_null($this->lastMotion)) {
+            if ($this->lastMotion==0) {
+                $result[]='Зафиксировано движение.';
+            } else {
+                $result[]='Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion).'.';
+            }
         }
-        return $result.' '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+        if ($this->voltage) {
+            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+        }
+        return join(' ',$result);
     }
 
     public function getDeviceIndicators(): array {
