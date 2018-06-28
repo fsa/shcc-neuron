@@ -51,9 +51,17 @@ class XiaomiHTSensor extends AbstractDevice {
     public function getDeviceName() {
         return "Xiaomi Mi Smart Temperature and Humidity Sensor";
     }
-    
+
     public function __toString() {
         return sprintf('Температура воздуха %+.1f &deg;C, относительная влажность %.1f%%. Батарея CR2032: %.3f В.',$this->temperature,$this->humidity,$this->voltage);
+    }
+
+    public function getDeviceIndicators(): array {
+        return [];
+    }
+
+    public function getDeviceMeters(): array {
+        return ['temperature','humidity'];
     }
 
 }

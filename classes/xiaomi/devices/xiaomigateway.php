@@ -157,4 +157,13 @@ class XiaomiGateway extends AbstractDevice {
     public function __toString() {
         return 'Шлюз. '.($this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.').'. Датчик света: '.$this->illumination.'.';
     }
+
+    public function getDeviceIndicators(): array {
+        return [];
+    }
+
+    public function getDeviceMeters(): array {
+        return ['illumination'];
+    }
+
 }

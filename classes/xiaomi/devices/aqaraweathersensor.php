@@ -82,4 +82,12 @@ class AqaraWeatherSensor extends AbstractDevice {
         return sprintf('Температура воздуха %+.1f &deg;C, относительная влажность %.1f%%, атмосферное давление %.1f мм.рт.ст. Батарея CR2032: %.3f В.',$this->temperature,$this->humidity,$this->pressure,$this->voltage);
     }
 
+    public function getDeviceIndicators(): array {
+        return [];
+    }
+
+    public function getDeviceMeters(): array {
+        return ['temperature','humidity','pressure'];
+    }
+
 }

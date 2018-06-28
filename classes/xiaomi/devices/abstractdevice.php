@@ -2,7 +2,7 @@
 
 namespace Xiaomi\Devices;
 
-abstract class AbstractDevice {
+abstract class AbstractDevice implements \SmartHome\SensorsInterface {
 
     protected $sid;
     protected $model;
@@ -47,11 +47,11 @@ abstract class AbstractDevice {
         $this->actions=[];
         return $actions;
     }
-    
+
     public function getModuleName() {
         return 'xiaomi';
     }
-    
+
     public function getDeviceId() {
         return $this->sid;
     }
@@ -59,7 +59,7 @@ abstract class AbstractDevice {
     public function getLastUpdate(): int {
         return $this->updated;
     }
-    
+
     public function getVoltage() {
         return $this->voltage;
     }
@@ -67,6 +67,6 @@ abstract class AbstractDevice {
     abstract protected function updateParam($param,$value);
 
     abstract public function getDeviceName();
-    
+
     abstract public function __toString();
 }

@@ -23,11 +23,12 @@ class MagnetSensor extends AbstractDevice {
     private function setStatus(string $value) {
         $last=$this->status;
         $this->status=$value;
-        if($last!=$value) {
+        if ($last!=$value) {
             $this->actions['status']=$value;
+            $this->actions['alarm']=$value!='close';
         }
     }
-    
+
     public function getStatus() {
         return $this->status;
     }
@@ -35,7 +36,7 @@ class MagnetSensor extends AbstractDevice {
     public function getDeviceName() {
         return "Xiaomi Smart Door and Windows Sensor";
     }
-    
+
     public function __toString() {
         $result='';
         switch ($this->status) {
@@ -50,4 +51,13 @@ class MagnetSensor extends AbstractDevice {
         }
         return $result.'. '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
     }
+
+    public function getDeviceIndicators(): array {
+        return ['alarm'];
+    }
+
+    public function getDeviceMeters(): array {
+        return [];
+    }
+
 }

@@ -30,6 +30,7 @@ class MotionSensor extends AbstractDevice {
     private function setLastMotion(int $value) {
         $this->lastMotion=$value==0?0:time()-$value;
         $this->actions['motion']=$value;
+        $this->actions['alarm']=$value==0;
     }
 
     public function getLastMotion() {
@@ -47,6 +48,14 @@ class MotionSensor extends AbstractDevice {
             $result='Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion).'.';
         }
         return $result.' '.sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+    }
+
+    public function getDeviceIndicators(): array {
+        return ['alarm'];
+    }
+
+    public function getDeviceMeters(): array {
+        return [];
     }
 
 }

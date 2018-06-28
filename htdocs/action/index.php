@@ -21,6 +21,8 @@ $data=json_decode($json);
 if(is_null($data)){
     die('Wrong JSON data');
 }
-$sensors=SmartHome\Meters::getDeviceMeters($module,$uid);
-SmartHome\MeterHistory::addRecords($sensors,$data);
+$meters=SmartHome\Sensors::getDeviceMeters($module,$uid);
+SmartHome\MeterHistory::addRecords($meters,$data);
+$indicators=SmartHome\Sensors::getDeviceIndicators($module,$uid);
+SmartHome\IndicatorHistory::addRecords($indicators,$data);
 #TODO открывать пользовтельский файл или код для обработки событий от модуля

@@ -7,13 +7,14 @@
 # 158d00015a89a8 - motion
 # 158d0001537514 - magnet
 require_once 'autoloader.php';
-$mem=new Shm();
+$mem=new MemoryStorage();
 
-$devices=$mem->getVar(2);
-var_dump($devices);
+$devices=$mem->getArray('xiaomi');
 $devices['f0b4299a72d0']->setKey(\Settings::get('xiaomi')->devices_keys->f0b4299a72d0);
-$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec('64FFFFFF')]);
+$message=$devices['f0b4299a72d0']->prepareCommand(['set_led'=>'on']);
 $devices['f0b4299a72d0']->sendMessage($message);
 sleep(3);
-$message=$devices['f0b4299a72d0']->prepareCommand(['rgb'=>hexdec("00FFFFFF")]);
+$message=$devices['f0b4299a72d0']->prepareCommand(['set_led'=>'off']);
 $devices['f0b4299a72d0']->sendMessage($message);
+
+# add_channels {"chs":[{"id":555555,"url":"https://rmgradio.gcdn.co/hit_m.aac","type":0}]}

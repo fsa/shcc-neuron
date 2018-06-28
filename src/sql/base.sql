@@ -54,7 +54,7 @@ CREATE TABLE measures (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Датчики устройств
+-- Измерительные датчики
 CREATE TABLE meters (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_id` int(10) UNSIGNED NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE meters (
   CONSTRAINT `meters_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- История показаний датчиков устройств
+-- История показаний измерительных датчиков устройств
 CREATE TABLE meter_history (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `meter_id` int(10) UNSIGNED NOT NULL,
@@ -79,3 +79,23 @@ CREATE TABLE meter_history (
   CONSTRAINT `meter_history_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Сигнализационные датчики
+CREATE TABLE indicators (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `device_id` int(10) UNSIGNED NOT NULL,
+  `property` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `indicators_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- История срабатывания датчиков сигнализации устройств
+CREATE TABLE indicator_history (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `indicator_id` int(10) UNSIGNED NOT NULL,
+  `place_id` int(10) UNSIGNED NOT NULL,
+  `value` tinyint(1) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `indicator_history_sensors_ibfk_1` FOREIGN KEY (`indicator_id`) REFERENCES `indicators` (`id`),
+  CONSTRAINT `indicator_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
