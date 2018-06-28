@@ -2,10 +2,8 @@
 
 require_once '../common.php';
 HTML::showPageHeader('Список устройств в памяти');
-$mem=new \SmartHome\DeviceMemoryStorage;
-$modules=$mem->getModuleList();
-foreach ($modules as $module) {
-    $devices=new SmartHome\DeviceList();
+$devices=new SmartHome\DeviceList();
+foreach ($devices->getModuleList() as $module) { 
     $devices->query($module);
     $table=new Table();
     $table->setCaption('Модуль '.$module);

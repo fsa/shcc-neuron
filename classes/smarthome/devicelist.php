@@ -7,6 +7,12 @@ class DeviceList {
     private $list;
 
     public function __construct() {
+        
+    }
+
+    public function getModuleList() {
+        $ms=new \SmartHome\DeviceMemoryStorage;
+        return $ms->getModuleList();
     }
 
     public function query($module_name) {
