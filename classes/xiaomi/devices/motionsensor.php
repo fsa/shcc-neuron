@@ -47,7 +47,7 @@ class MotionSensor extends AbstractDevice {
             if ($this->lastMotion==0) {
                 $result[]='Зафиксировано движение.';
             } else {
-                $result[]='Движении не зафиксировано с '.date('d.m.Y H:i:s',$this->lastMotion).'.';
+                $result[]='Движение отсутствует. Последнее движение было '.date('d.m.Y H:i:s',$this->lastMotion).'.';
             }
         }
         if ($this->voltage) {
