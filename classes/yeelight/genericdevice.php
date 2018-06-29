@@ -163,7 +163,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         $addr=parse_url($this->location);
         $socket=stream_socket_client("tcp://".$addr['host'].":".$addr['port'],$errno,$errstr);
         stream_set_timeout($socket,3);
-        #stream_set_blocking($socket,false);
         if (!$socket) {
             throw new Exception("$errstr ($errno)");
         }
@@ -177,8 +176,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         }
         return ($duration==0)?'sudden':'smooth';
     }
-
-    #TODO get_prop
 
     public function sendGetProp(array $params): int {
         return $this->sendCommand('get_prop',$params);
@@ -326,8 +323,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     public function sendSetName(string $name): int {
         return $this->sendCommand('set_name',[$name]);
     }
-
-    #TODO bg_set_XXXX bg_toggle - background light
 
     public function sendDevToggle(): int {
         return $this->sendCommand('dev_toggle');
