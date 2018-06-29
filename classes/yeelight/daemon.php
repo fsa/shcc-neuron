@@ -30,8 +30,8 @@ class Daemon implements \SmartHome\Daemon {
     public function iteration() {
         $pkt=$this->socketserver->getPacket();
         $p=$pkt->getParams();
-        if (isset($p['id'])) {
-            $id=$p['id'];
+        if (isset($p['id']) and isset($p['model'])) {
+            $id=$p['model'].'_'.$p['id'];
             if (!isset($this->devices[$id])) {
                 $this->devices[$id]=new GenericDevice();
             }

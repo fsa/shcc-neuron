@@ -15,9 +15,9 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface, \SmartHome\
         $this->updated=0;
     }
 
-    public function init($init_data) {
-        $data=json_decode($init_data);
-        foreach ($data as $key=> $value) {
+    public function init($device_id,$init_data) {
+        $this->sid=$device_id;
+        foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
     }

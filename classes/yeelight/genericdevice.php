@@ -34,6 +34,15 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         $this->disconnect();
     }
 
+    public function init($device_id,$init_data) {
+        $parts=explode('_',$device_id,2);
+        $this->model=$parts[0];
+        $this->id=$parts[1];
+        foreach ($init_data as $key=> $value) {
+            $this->$key=$value;
+        }
+    }
+
     public function updateState($params) {
         foreach ($params as $param=> $value) {
             switch ($param) {
