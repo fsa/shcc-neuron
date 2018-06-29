@@ -22,7 +22,7 @@ class XiaomiSwitch extends AbstractDevice {
         return "Xiaomi Smart Wireless Switch";
     }
 
-    public function __toString() {
+    public function getDeviceStatus() {
         $result=[];
         if($this->updated) {
             $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);

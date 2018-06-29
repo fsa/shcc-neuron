@@ -78,7 +78,7 @@ class AqaraWeatherSensor extends AbstractDevice {
         return "Aqara Temperature Humidity Sensor";
     }
     
-    public function __toString() {
+    public function getDeviceStatus() {
         $result=[];
         if($this->temperature) {
             $result[]=sprintf('Температура воздуха %+.1f &deg;C.',$this->temperature);

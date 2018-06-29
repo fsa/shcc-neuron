@@ -5,6 +5,7 @@ namespace SmartHome;
 class DeviceList {
 
     private $list;
+    private $fetch_class;
 
     public function __construct() {
         
@@ -18,6 +19,11 @@ class DeviceList {
     public function query($module_name) {
         $ms=new \SmartHome\DeviceMemoryStorage;
         $this->list=$ms->getModuleDevices($module_name);
+        $this->fetch_class=\stdClass::class;
+    }
+    
+    public function setFetchClass($class_name) {
+        $this->fetch_class=$class_name;
     }
 
     public function fetch() {
@@ -25,10 +31,11 @@ class DeviceList {
         if (is_null($device)) {
             return null;
         }
-        $result=new \stdClass();
+        $result=new $this->fetch_class;
+        $result->obj=$device;
         $result->id=$device->getDeviceId();
         $result->name=$device->getDeviceName();
-        $result->status_description=$device;
+        $result->status=$device->getDeviceStatus();
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Offline':date('d.m.Y H:i:s',$date);
         return $result;

@@ -384,7 +384,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         }
     }
 
-    public function __toString() {
+    public function getDeviceStatus() {
         return $this->power=="on"?"Включена":"Выключена";
     }
 

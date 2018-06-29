@@ -41,7 +41,7 @@ class MotionSensor extends AbstractDevice {
         return "Xiaomi Smart IR Human Body Sensor";
     }
 
-    public function __toString() {
+    public function getDeviceStatus() {
         $result=[];
         if (!is_null($this->lastMotion)) {
             if ($this->lastMotion==0) {

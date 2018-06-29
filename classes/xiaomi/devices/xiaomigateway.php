@@ -154,7 +154,7 @@ class XiaomiGateway extends AbstractDevice {
         return "Xiaomi Mi Smart Multifunctional Gateway";
     }
 
-    public function __toString() {
+    public function getDeviceStatus() {
         $result=[];
         if(!is_null($this->bright)) {
             $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';

@@ -45,7 +45,7 @@ class Table {
                         $actions[]='<a href="'.sprintf($param[0],$value).'">'.$param[2].'</a> ';
                     }
                 }
-                $row['buttons']=join($this->buttons_separator,$actions);
+                $row->buttons=join($this->buttons_separator,$actions);
             }
             $template->showRow($row);
         }

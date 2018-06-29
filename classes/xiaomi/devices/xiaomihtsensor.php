@@ -52,7 +52,7 @@ class XiaomiHTSensor extends AbstractDevice {
         return "Xiaomi Mi Smart Temperature and Humidity Sensor";
     }
 
-    public function __toString() {
+    public function getDeviceStatus() {
         $result=[];
         if($this->temperature) {
             $result[]=sprintf('Температура воздуха %+.1f &deg;C.',$this->temperature);

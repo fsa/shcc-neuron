@@ -72,8 +72,4 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface, \SmartHome\
     }
 
     abstract protected function updateParam($param,$value);
-
-    abstract public function getDeviceName();
-
-    abstract public function __toString();
 }
