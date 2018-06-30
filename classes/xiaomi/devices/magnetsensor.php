@@ -58,7 +58,7 @@ class MagnetSensor extends AbstractDevice {
     }
 
     public function getDeviceIndicators(): array {
-        return ['alarm'];
+        return ['alarm'=>'Открытие'];
     }
 
     public function getDeviceMeters(): array {

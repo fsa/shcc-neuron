@@ -57,7 +57,7 @@ class MotionSensor extends AbstractDevice {
     }
 
     public function getDeviceIndicators(): array {
-        return ['alarm'];
+        return ['alarm'=>'Зафиксировано движение'];
     }
 
     public function getDeviceMeters(): array {

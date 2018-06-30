@@ -28,6 +28,7 @@ class HTML {
 
     public function footer() {
 ?>
+<hr>
 </body>
 </html>
 <?php        

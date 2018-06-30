@@ -100,7 +100,7 @@ class AqaraWeatherSensor extends AbstractDevice {
     }
 
     public function getDeviceMeters(): array {
-        return ['temperature','humidity','pressure'];
+        return ['temperature'=>'Температура','humidity'=>'Относительная влажность','pressure'=>'Атмосферное давление'];
     }
 
 }

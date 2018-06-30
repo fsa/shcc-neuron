@@ -28,6 +28,28 @@ class DB {
     public static function isConnected(): bool {
         return !is_null(self::$_instance);
     }
+    
+    public static function insert($table,$values) {
+        $keys=array_keys($values);
+        $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',',$keys).') VALUES (:'.join(',:',$keys).')');
+        $stmt->execute($values);
+        $id=self::lastInsertId();
+        $stmt->closeCursor();
+        return $id;
+    }
+
+    public static function update($table,$values,$index='id') {
+        $keys=array_keys($values);
+        $i=array_search($index,$keys);
+        if ($i!==false) {
+            unset($keys[$i]);
+        }
+        foreach ($keys as &$key) {
+            $key=$key.'=:'.$key;
+        }
+        $stmt=self::prepare('UPDATE '.$table.' SET '.join(',',$keys).' WHERE '.$index.'=:'.$index);
+        return $stmt->execute($values);
+    }
 
     public static function __callStatic($name,$args) {
         $callback=array(self::getInstance(),$name);

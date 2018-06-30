@@ -2,7 +2,7 @@
 Description=phpmd-daemon
 After=network.target
 After=syslog.target
-Requires=mysql.service
+Requires=mysqld.service
 
 [Service]
 Type=forking

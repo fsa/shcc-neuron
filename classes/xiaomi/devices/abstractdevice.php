@@ -21,7 +21,15 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface, \SmartHome\
             $this->$key=$value;
         }
     }
+    
+    public function getInitDataList() {
+        return [];
+    }
 
+    public function getInitDataValues() {
+        return [];
+    }
+    
     public function update(\Xiaomi\XiaomiPacket $pkt) {
         $this->actions['cmd']=$pkt->getCmd();
         $this->sid=$pkt->getSid();

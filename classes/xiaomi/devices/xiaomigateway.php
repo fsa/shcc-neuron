@@ -11,7 +11,7 @@ class XiaomiGateway extends AbstractDevice {
     const MULTICAST_ADDRESS='224.0.0.50';
     const MULTICAST_PORT=9898;
 
-    private $ip;
+    protected $ip;
     private $bright;
     private $rgb;
     private $token;
@@ -22,6 +22,14 @@ class XiaomiGateway extends AbstractDevice {
     
     public function __sleep() {
         return ['ip','bright','rgb','token','key','illumination','sid','model','voltage','updated'];
+    }
+    
+    public function getInitDataList() {
+        return ['ip'=>'IP адрес','key'=>'Пароль'];
+    }
+
+    public function getInitDataValues() {
+        return ['ip'=>$this->ip,'key'=>$this->key];
     }
 
     public function update(\Xiaomi\XiaomiPacket $pkt) {
@@ -170,7 +178,7 @@ class XiaomiGateway extends AbstractDevice {
     }
 
     public function getDeviceMeters(): array {
-        return ['illumination'];
+        return ['illumination'=>'Датчик освещённости'];
     }
 
 }

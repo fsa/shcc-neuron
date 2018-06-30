@@ -34,7 +34,8 @@ class XiaomiSwitch extends AbstractDevice {
     }
 
     public function getDeviceIndicators(): array {
-        return [];
+        #TODO проверить имён корректность событий
+        return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_press'=>'Долгое нажатие','long_press_release'=>'Завершение долгого нажатия'];
     }
 
     public function getDeviceMeters(): array {

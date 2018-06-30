@@ -42,6 +42,14 @@ class GenericDevice implements \SmartHome\DeviceInterface {
             $this->$key=$value;
         }
     }
+    
+    public function getInitDataList() {
+        return ['location'=>'IP адрес'];
+    }
+
+    public function getInitDataValues() {
+        return ['location'=>$this->location];
+    }
 
     public function updateState($params) {
         foreach ($params as $param=> $value) {

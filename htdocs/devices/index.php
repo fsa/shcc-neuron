@@ -33,8 +33,14 @@ class Devices {
             case "sensors":
                 if ($this->obj instanceof \SmartHome\SensorsInterface) {
                     $result=[];
-                    $result[]='Измерители: '.join(', ',$this->obj->getDeviceMeters());
-                    $result[]='Контроль: '.join(', ',$this->obj->getDeviceIndicators());
+                    $analog=join(', ',$this->obj->getDeviceMeters());
+                    $digital=join(', ',$this->obj->getDeviceIndicators());
+                    if($analog) {
+                        $result[]='Аналоговые датчики: '.$analog;
+                    }
+                    if($digital) {
+                        $result[]='Цифровые датчики: '.$digital;
+                    }
                     return join('<br>',$result);
                 } else {
                     return "Нет датчиков.";
