@@ -3,7 +3,6 @@
 if (!isset($module) or !isset($id)) {
     die;
 }
-$id='f0b4299a72d0';
 $sh=new SmartHome\DeviceMemoryStorage;
 $memdevices=$sh->getModuleDevices($module);
 if(!isset($memdevices[$id])) {
