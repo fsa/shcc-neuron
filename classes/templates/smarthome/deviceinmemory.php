@@ -5,7 +5,7 @@ namespace Templates\SmartHome;
 class DeviceInMemory {
     public static function show($device) {
 ?>
-<table>
+<table class="table table-striped table-bordered">
     <caption>Данные устройства в памяти</caption>
     <tr>
         <th>Параметр</th>

@@ -17,18 +17,32 @@ class HTML {
 <?=$this->header?>
 </head>
 <body>
-    <p>
-        <a href="/">Главная страница</a> |
-        <a href="/devices/">Обнаруженные устройства</a> |
-        <a href="/charts/">Графики</a>
-    </p>
-<hr>
+    <nav class="navbar navbar-expand-md navbar-light bg-gray fixed-top">
+      <a class="navbar-brand" href="/">Главная страница</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/devices/">Обнаруженные устройства</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/charts/">Графики</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="container-fluid p-5">
 <?php
     }
 
     public function footer() {
 ?>
-<hr>
+    </main>
+    <footer class="container bg-gray">&copy; Tavda.net 2018</footer>
 </body>
 </html>
 <?php        

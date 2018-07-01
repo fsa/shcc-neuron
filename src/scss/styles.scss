@@ -1,32 +1,21 @@
-body,html {
-    padding: 0.3rem;
-    margin: 0;
+@import "functions";
+@import "variables";
+@import "mixins";
+@import "reboot";
+@import "tables";
+@import "forms";
+@import "nav";
+@import "navbar";
+@import "buttons";
+
+.bg-gray {
+    background-color: #e5e5e5;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+main {
+    padding: 1rem;
 }
 
-th,td {
-    border: solid 1px black;
-    padding: 0.3rem;
-}
-
-caption {
-    padding: 0.5rem;
-}
-
-input[type="text"] {
-    width: 100%;
-    padding: 0.2rem 0;
-}
-
-select {
-    width: 100%;
-    padding: 0.2rem;
-}
-
-input[type="submit"] {
-    padding: 0.2rem;
+footer {
+    padding: 1rem;    
 }

@@ -9,7 +9,7 @@ class Table{
 
     public function showHeader(){
 ?>
-        <table>
+        <table class="table table-striped table-bordered table-hover">
 <?php
         if (!is_null($this->caption)) {
 ?>
