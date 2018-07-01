@@ -38,7 +38,7 @@ gulp.task('scss', function () {
             .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('jslibs', ['jquery', 'leaflet', 'highcharts'], function () {
+gulp.task('jslibs', ['jquery', 'leaflet', 'highcharts','bootstrap'], function () {
     console.log('Копирование мелких библиотек js');
     return gulp.src([
         'node_modules/html5shiv/dist/html5shiv.min.js',
@@ -74,4 +74,12 @@ gulp.task('jquery', function () {
         'node_modules/jquery/dist/jquery.min.js',
     ])
             .pipe(gulp.dest('htdocs/libs/jquery'));
+});
+
+gulp.task('bootstrap', function () {
+    console.log('Копирование bootstrap');
+    return gulp.src([
+        'node_modules/bootstrap/dist/js/bootstrap.min.js',
+    ])
+            .pipe(gulp.dest('htdocs/libs/bootstrap'));
 });

@@ -1,7 +1,6 @@
 <?php
 
 require_once '../../common.php';
-HTML::addHeader('<script src="/libs/jquery/jquery.min.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/highstock.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader('Атмосферное давление');

@@ -7,15 +7,14 @@
 @import "nav";
 @import "navbar";
 @import "buttons";
-
-.bg-gray {
-    background-color: #e5e5e5;
-}
+@import "utilities/align";
+@import "utilities/background";
 
 main {
     padding: 1rem;
 }
 
 footer {
+    color: white;
     padding: 1rem;    
 }

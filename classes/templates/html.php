@@ -14,10 +14,12 @@ class HTML {
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="gray">
 <link rel="stylesheet" href="/styles.css">
+<script src="/libs/jquery/jquery.min.js"></script>
+<script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-gray fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="/">Главная страница</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -42,7 +44,7 @@ class HTML {
     public function footer() {
 ?>
     </main>
-    <footer class="container bg-gray">&copy; Tavda.net 2018</footer>
+    <footer class="container bg-dark">&copy; Tavda.net 2018</footer>
 </body>
 </html>
 <?php        
