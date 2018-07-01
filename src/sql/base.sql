@@ -1,22 +1,13 @@
 CREATE DATABASE IF NOT EXISTS `phpmd` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `phpmd`;
 
--- Объекты недвижимости или их части
-CREATE TABLE `objects` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Места размещения устройств
+-- Места размещения устройств (древовидная структура)
 CREATE TABLE `places` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `object_id` int(10) UNSIGNED NOT NULL,
+  `pid` int(10) UNSIGNED DEFAULT NULL,
   `name` text NOT NULL,
-  `root_place_id` int(10) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY (`root_place_id`),
-  CONSTRAINT `places_objects_ibfk_1` FOREIGN KEY (`object_id`) REFERENCES `objects` (`id`)
+  CONSTRAINT `places_places_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `places` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Модули
@@ -101,3 +92,12 @@ CREATE TABLE indicator_history (
   CONSTRAINT `indicator_history_sensors_ibfk_1` FOREIGN KEY (`indicator_id`) REFERENCES `indicators` (`id`),
   CONSTRAINT `indicator_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `modules` (`id`, `name`, `namespace`, `disabled`) VALUES
+(1, 'xiaomi', 'Xiaomi', 0),
+(2, 'yeelight', 'Yeelight', 0);
+
+INSERT INTO `measures` (`id`, `name`, `unit`) VALUES
+(1, 'Температура воздуха','&deg;C'),
+(2, 'Относительная влажность','%'),
+(3, 'Атмосферное давление','мм.рт.ст.');

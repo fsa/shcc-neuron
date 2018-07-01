@@ -81,4 +81,11 @@ class Devices {
         $this->device->id=$id;
         return $id;
     }
+    
+    public static function getDeviceById($id) {
+        $s=DB::prepare('SELECT * FROM devices WHERE id=?');
+        $s->execute([$id]);
+        $s->setFetchMode(PDO::FETCH_CLASS,Entity\Device::class);
+        return $s->fetch();
+    }
 }

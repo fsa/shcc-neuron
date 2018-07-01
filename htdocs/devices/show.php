@@ -11,7 +11,7 @@ $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
     if($mem_device) {
-        require_once 'register.php';
+        HTML::redirect("edit/?module=$module&id=$id");
         exit;
     } else {
         throw new AppException("В модуле '$module' устройство с идентификатором '$id' не найдено.");
@@ -23,5 +23,6 @@ if(!$mem_device) {
 <p>Устройство не загружено в память.</p>
 <?php
 }
-var_dump($mem_device,$device);
+$tpl=new Templates\SmartHome\DeviceInMemory;
+$tpl->show($mem_device);
 HTML::showPageFooter();
