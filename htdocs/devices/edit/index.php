@@ -55,7 +55,7 @@ $values=$device->getInitData();
 foreach ($init_data_list as $param=>$name) {
     Forms::inputString('init['.$param.']',$values[$param],$name);    
 }
-Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceList());
+Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
 Forms::submitButton($device->id?'Сохранить':'Создать');
 ?>
 </form>
