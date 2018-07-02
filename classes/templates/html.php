@@ -15,36 +15,33 @@ class HTML {
 <meta name="theme-color" content="gray">
 <link rel="stylesheet" href="/styles.css">
 <script src="/libs/jquery/jquery.min.js"></script>
-<script src="/libs/bootstrap/bootstrap.min.js"></script>
+<script src="/libs/bootstrap/bootstrap.bundle.min.js"></script>
 <?=$this->header?>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="/">Главная страница</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="/">Главная страница</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Свернуть меню"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/devices/">Обнаруженные устройства</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/charts/">Графики</a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/devices/">Обнаруженные устройства</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/charts/">Графики</a>
+            </li>
         </ul>
-      </div>
-    </nav>
+    </div>
+</nav>
 
-    <main role="main" class="container-fluid p-5">
+<main role="main" class="container-fluid">
 <?php
     }
 
     public function footer() {
 ?>
-    </main>
-    <footer class="container bg-dark">&copy; Tavda.net 2018</footer>
+</main>
+<footer class="container bg-dark">&copy; Tavda.net 2018</footer>
 </body>
 </html>
 <?php        

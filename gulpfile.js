@@ -79,7 +79,7 @@ gulp.task('jquery', function () {
 gulp.task('bootstrap', function () {
     console.log('Копирование bootstrap');
     return gulp.src([
-        'node_modules/bootstrap/dist/js/bootstrap.min.js',
+        'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
     ])
             .pipe(gulp.dest('htdocs/libs/bootstrap'));
 });
