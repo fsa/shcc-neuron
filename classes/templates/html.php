@@ -25,9 +25,6 @@ class HTML {
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/devices/">Обнаруженные устройства</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/charts/">Графики</a>
             </li>
             <li class="nav-item">

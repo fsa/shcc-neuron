@@ -1,5 +1,5 @@
 <?php
-require_once '../../common.php';
+require_once '../../../common.php';
 use Templates\Forms;
 $id=filter_input(INPUT_GET,'id');
 $module=filter_input(INPUT_GET,'module');
