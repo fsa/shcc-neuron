@@ -3,7 +3,7 @@ config/*.conf
 node_modules/*
 daemon/phpmd
 daemon/phpmd.service
-custom/
+custom/*
 !custom/lib.php
 !custom/minutely.php
 !custom/minutely.sh
