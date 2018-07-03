@@ -14,9 +14,9 @@ class Devices {
     }
     
     public static function get($uname) {
-        $s=DB::prepare('SELECT m.name AS module,d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE d.unique_name');
+        $s=DB::prepare('SELECT m.name AS module,d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE d.unique_name=?');
         $s->execute([$uname]);
-        $dev=$row->fetch(PDO::FETCH_OBJ);
+        $dev=$s->fetch(PDO::FETCH_OBJ);
         if(!$dev) {
             return null;
         }

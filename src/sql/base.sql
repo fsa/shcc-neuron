@@ -93,6 +93,12 @@ CREATE TABLE indicator_history (
   CONSTRAINT `indicator_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE variables (
+  `name` varchar(64) NOT NULL,
+  `value` text NULL DEFAULT NULL,
+  UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT INTO `modules` (`id`, `name`, `namespace`, `disabled`) VALUES
 (1, 'xiaomi', 'Xiaomi', 0),
 (2, 'yeelight', 'Yeelight', 0);
