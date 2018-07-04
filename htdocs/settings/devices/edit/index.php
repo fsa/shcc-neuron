@@ -1,5 +1,10 @@
 <?php
 require_once '../../../common.php';
+$action=filter_input(INPUT_POST,'action');
+if($action) {
+    require 'edit.php';
+    exit;
+}
 use Templates\Forms;
 $id=filter_input(INPUT_GET,'id');
 $module=filter_input(INPUT_GET,'module');
@@ -43,7 +48,7 @@ if($module) {
     Templates\SmartHome\DeviceInMemory::show($memdev);
 }
 ?>
-<form method="POST" action="register/">
+<form method="POST" action="./">
 <?php
 Forms::inputHidden('id',$device->id);
 Forms::inputSelect('module_id',$device->module_id,'Модуль:',\SmartHome\Modules::getModuleList());
@@ -56,7 +61,7 @@ foreach ($init_data_list as $param=>$name) {
     Forms::inputString('init['.$param.']',$values[$param],$name);    
 }
 Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
-Forms::submitButton($device->id?'Сохранить':'Создать');
+Forms::submitButton($device->id?'Сохранить':'Создать',$device->id?'update':'insert');
 ?>
 </form>
 <?php

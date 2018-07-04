@@ -61,6 +61,10 @@ class Devices {
         return $this->device;
     }
     
+    public function setDevice(Entity\Device $device) {
+        $this->device=$device;
+    }
+    
     public function setDeviceProperties(array $data) {
         $this->exists(true);
         foreach ($data as $param=>$value) {
