@@ -25,4 +25,8 @@ $meters=SmartHome\Sensors::getDeviceMeters($module,$uid);
 SmartHome\MeterHistory::addRecords($meters,$data);
 $indicators=SmartHome\Sensors::getDeviceIndicators($module,$uid);
 SmartHome\IndicatorHistory::addRecords($indicators,$data);
-#TODO открывать пользовтельский файл или код для обработки событий от модуля
+$name=SmartHome\Devices::getUniqueNameByUid($module,$uid).'.php';
+chdir('../../custom/events/');
+if($name and file_exists($name)) {
+    include $name;
+}

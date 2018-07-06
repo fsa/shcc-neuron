@@ -5,6 +5,6 @@ daemon/phpmd
 daemon/phpmd.service
 custom/*
 !custom/lib.php
-!custom/minutely.sample.php
+!custom/*.sample.php
 !custom/minutely.sh
 sound/cache/

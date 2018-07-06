@@ -92,4 +92,10 @@ class Devices {
         $s->setFetchMode(PDO::FETCH_CLASS,Entity\Device::class);
         return $s->fetch();
     }
+    
+    public static function getUniqueNameByUid($module,$uid) {
+        $s=DB::prepare('SELECT unique_name FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.uid=?');
+        $s->execute([$module,$uid]);
+        return $s->fetch(PDO::FETCH_COLUMN);
+    }
 }
