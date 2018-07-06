@@ -50,17 +50,20 @@ if($module) {
 ?>
 <form method="POST" action="./">
 <?php
+Forms::inputString('unique_name',$device->unique_name,'Уникальное имя устройства:');
 Forms::inputHidden('id',$device->id);
-Forms::inputSelect('module_id',$device->module_id,'Модуль:',\SmartHome\Modules::getModuleList());
-Forms::inputString('uid',$device->uid,'ID устройства в модуле:');
-Forms::inputString('classname',$device->classname,'Класс устройства:');
-Forms::inputString('unique_name',$device->unique_name,'Уникальный ID в системе (укажите удобное для вас имя):');
+Forms::inputSelect('module_id',$device->module_id,'Модуль*:',\SmartHome\Modules::getModuleList());
+Forms::inputString('uid',$device->uid,'Аппаратное ID устройства*:');
+Forms::inputString('classname',$device->classname,'Класс устройства*:');
 Forms::inputString('name',$device->name,'Наименование:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=>$name) {
-    Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param]:'',$name);    
+    Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param].':':'',$name);    
 }
 Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
+?>
+<p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
+<?php
 Forms::submitButton($device->id?'Сохранить':'Создать',$device->id?'update':'insert');
 ?>
 </form>
