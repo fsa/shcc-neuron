@@ -71,7 +71,7 @@ class XiaomiHTSensor extends AbstractDevice {
     }
 
     public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура','humidity'=>'Относительная влажность'];
+        return ['temperature'=>'Температура, &deg;C','humidity'=>'Относительная влажность, %'];
     }
 
 }

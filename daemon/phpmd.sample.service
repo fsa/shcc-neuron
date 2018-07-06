@@ -1,8 +1,7 @@
 [Unit]
 Description=phpmd-daemon
 After=network.target
-After=syslog.target
-Requires=mysqld.service
+After=mysqld.service
 
 [Service]
 Type=forking

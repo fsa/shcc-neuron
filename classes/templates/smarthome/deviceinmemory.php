@@ -28,11 +28,11 @@ if($device instanceof \SmartHome\SensorsInterface) {
 ?>
     <tr>
         <td>Аналоговые датчики</td>
-        <td><?=join(', ',$device->getDeviceMeters())?></td>
+        <td><?=join('<br>',$device->getDeviceMeters())?></td>
     </tr>
     <tr>
         <td>Цифровые датчики</td>
-        <td><?=join(', ',$device->getDeviceIndicators())?></td>
+        <td><?=join('<br>',$device->getDeviceIndicators())?></td>
     </tr>
 <?php
 }
