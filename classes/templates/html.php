@@ -41,7 +41,7 @@ class HTML {
     public function footer() {
 ?>
 </main>
-<footer class="container bg-dark">&copy; Tavda.net 2018</footer>
+<footer class="container-fluid bg-dark">&copy; Tavda.net 2018</footer>
 </body>
 </html>
 <?php        
