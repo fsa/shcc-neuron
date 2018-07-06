@@ -58,7 +58,7 @@ Forms::inputString('unique_name',$device->unique_name,'Уникальный ID �
 Forms::inputString('name',$device->name,'Наименование:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=>$name) {
-    Forms::inputString('init['.$param.']',$values[$param],$name);    
+    Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param]:'',$name);    
 }
 Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
 Forms::submitButton($device->id?'Сохранить':'Создать',$device->id?'update':'insert');
