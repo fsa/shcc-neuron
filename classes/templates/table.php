@@ -29,9 +29,9 @@ class Table{
 <?php
         }
 
-        public function showRow($row){
+        public function showRow($row,$style=''){
 ?>
-            <tr>
+            <tr<?=$style?>>
 <?php
             foreach ($this->fields as $name=> $description) {
 ?>

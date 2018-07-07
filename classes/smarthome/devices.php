@@ -86,6 +86,12 @@ class Devices {
         return $id;
     }
     
+    public static function getDevicesStmt(): \PDOStatement {
+        $s=DB::query('SELECT d.id, d.unique_name, d.name, d.classname, p.name AS place, CASE disabled WHEN 1 THEN "table-danger" END AS style FROM devices d LEFT JOIN places p ON d.place_id=p.id');
+        $s->setFetchMode(PDO::FETCH_OBJ);
+        return $s;
+    }
+    
     public static function getDeviceById($id) {
         $s=DB::prepare('SELECT * FROM devices WHERE id=?');
         $s->execute([$id]);

@@ -11,7 +11,7 @@ $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
     if($mem_device) {
-        HTML::redirect("edit/?module=$module&id=$id");
+        HTML::redirect("../edit/?module=$module&id=$id");
         exit;
     } else {
         throw new AppException("В модуле '$module' устройство с идентификатором '$id' не найдено.");

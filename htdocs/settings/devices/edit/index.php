@@ -61,6 +61,7 @@ foreach ($init_data_list as $param=>$name) {
     Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param].':':'',$name);    
 }
 Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
+Forms::inputCheckbox('disabled',$device->disabled,'Выключить');
 ?>
 <p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
 <?php

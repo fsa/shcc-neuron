@@ -1,26 +1,24 @@
 <?php
 
 require_once '../../common.php';
-$module=filter_input(INPUT_GET,'module');
-$id=filter_input(INPUT_GET,'id');
-if($module) {
-    if($id) {
-        require_once 'show.php';
-        exit;
-    }
-    die;
-}
-HTML::showPageHeader('Список устройств в памяти');
-$devices=new SmartHome\DeviceList();
-foreach ($devices->getModuleList() as $module) {
-    $devices->query($module);
-    $table=new Table();
-    $table->setCaption('Модуль '.$module);
-    $table->addField('id','ID');
-    $table->addField('name','Наименование');
-    $table->addField('status','Информация');
-    $table->addField('updated','Был активен');
-    $table->addButton('Подробности','./?module='.$module.'&id=%s');
-    $table->showTable($devices);
-}
+HTML::showPageHeader('Устройтва');
+?>
+<p><a href="memory/">Устройства в памяти</a></p>
+<p><a href="edit/">Добавить новое устройство вручную</a></p>
+<?php
+$devices=new Table;
+$devices->addField('unique_name','Имя');
+$devices->addField('name','Описание');
+$devices->addField('classname','Класс');
+$devices->addField('place','Место установки');
+$devices->addButton('Изменить','edit/?id=%s');
+$devices->setRowStyleField('style');
+$devices->showTable(\SmartHome\Devices::getDevicesStmt());
+?>
+<table>
+    <tr class="table-danger">
+        <td>Отключенные устройства</td>
+    </tr>
+</table>
+<?php
 HTML::showPageFooter();

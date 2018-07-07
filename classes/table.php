@@ -7,6 +7,7 @@ class Table {
     private $buttons=[];
     private $buttons_separator='<br>';
     private $template;
+    private $row_style_field;
 
     public function setTemplate(string $template) {
         $this->template=$template;
@@ -14,6 +15,10 @@ class Table {
     
     public function setCaption($caption) {
         $this->caption=$caption;
+    }
+    
+    public function setRowStyleField($name) {
+        $this->row_style_field=$name;
     }
 
     public function addField($name,$description) {
@@ -47,7 +52,11 @@ class Table {
                 }
                 $row->buttons=join($this->buttons_separator,$actions);
             }
-            $template->showRow($row);
+            if(is_null($this->row_style_field) or is_null($row->{$this->row_style_field})) {
+                $template->showRow($row);
+            } else {
+                $template->showRow($row,' class="'.$row->{$this->row_style_field}.'"');
+            }
         }
         $template->showFooter();
     }
