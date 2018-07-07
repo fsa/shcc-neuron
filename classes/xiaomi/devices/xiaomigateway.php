@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class XiaomiGateway extends AbstractDevice {
+class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterface {
     
     const MULTICAST_ADDRESS='224.0.0.50';
     const MULTICAST_PORT=9898;

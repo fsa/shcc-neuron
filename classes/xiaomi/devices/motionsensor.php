@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class MotionSensor extends AbstractDevice {
+class MotionSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
 
     private $lastMotion;
 

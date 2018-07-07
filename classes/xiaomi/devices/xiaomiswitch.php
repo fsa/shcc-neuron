@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class XiaomiSwitch extends AbstractDevice {
+class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInterface {
 
     protected function updateParam($param,$value) {
         switch ($param) {
@@ -33,13 +33,9 @@ class XiaomiSwitch extends AbstractDevice {
         return join(' ',$result);
     }
 
-    public function getDeviceIndicators(): array {
+    public function getDeviceActions(): array {
         #TODO проверить имён корректность событий
         return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_press'=>'Долгое нажатие','long_press_release'=>'Завершение долгого нажатия'];
-    }
-
-    public function getDeviceMeters(): array {
-        return [];
     }
 
 }

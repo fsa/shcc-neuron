@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class MagnetSensor extends AbstractDevice {
+class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
 
     private $status;
     private $open_timer;

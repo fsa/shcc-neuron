@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class AqaraWeatherSensor extends AbstractDevice {
+class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
 
     private $temperature;
     private $humidity;

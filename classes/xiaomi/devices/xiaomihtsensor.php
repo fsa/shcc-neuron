@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class XiaomiHTSensor extends AbstractDevice {
+class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
 
     private $temperature;
     private $humidity;
