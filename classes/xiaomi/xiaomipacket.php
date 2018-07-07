@@ -84,7 +84,7 @@ class XiaomiPacket {
 #            case "sensor_wleak.aq1":
 #                return new Devices\AqaraWleakSensor;
             default:
-                return null;
+                return new Devices\Unknown($this->pkt->model);
         }
     }
 

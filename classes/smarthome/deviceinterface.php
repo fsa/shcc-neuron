@@ -12,6 +12,11 @@ interface DeviceInterface {
     function init($device_id,$init_data);
     
     /**
+     * Возвращает название устройства
+     */
+    function getDeviceName();
+
+    /**
      * Возвращает список свойств объекта, которые будут присвоены при минимальной инициализации
      */
     function getInitDataList();
