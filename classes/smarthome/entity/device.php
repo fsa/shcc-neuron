@@ -7,7 +7,7 @@ class Device {
     public $unique_name;
     public $module_id;
     public $uid;
-    public $name;
+    public $description;
     public $classname;
     public $init_data;
     public $place_id;

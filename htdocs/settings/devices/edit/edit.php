@@ -8,7 +8,7 @@ $device->id=filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
 $device->unique_name=filter_input(INPUT_POST,'unique_name');
 $device->module_id=filter_input(INPUT_POST,'module_id',FILTER_VALIDATE_INT);
 $device->uid=filter_input(INPUT_POST,'uid');
-$device->name=filter_input(INPUT_POST,'name');
+$device->description=filter_input(INPUT_POST,'description');
 $device->classname=filter_input(INPUT_POST,'classname');
 $init=filter_input(INPUT_POST,'init',FILTER_DEFAULT,FILTER_REQUIRE_ARRAY);
 if(is_array($init)) {

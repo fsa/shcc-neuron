@@ -372,7 +372,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return $this->model.'_'.$this->id;
     }
 
-    public function getDeviceName() {
+    public function getDeviceDescription() {
         switch ($this->model) {
             case "lamp":
                 return "Настольная лампа";

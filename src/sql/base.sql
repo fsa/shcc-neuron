@@ -27,7 +27,7 @@ CREATE TABLE devices (
   `unique_name` varchar(64) NOT NULL,
   `module_id` int(10) UNSIGNED NOT NULL,
   `uid` varchar(64) NOT NULL,
-  `name` text NOT NULL,
+  `description` text NOT NULL,
   `classname` varchar(64) NULL DEFAULT NULL,
   `init_data` text NULL DEFAULT NULL,
   `place_id` int(10) UNSIGNED NULL,

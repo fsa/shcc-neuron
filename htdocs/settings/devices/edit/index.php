@@ -23,7 +23,7 @@ if($module) {
     $device->module_id=\SmartHome\Modules::getModuleIdByName($module);
     $device->uid=$id;
     $device->unique_name=$module.'_'.$id;
-    $device->name=$memdev->getDeviceName();
+    $device->description=$memdev->getDeviceDescription();
     $device->classname=get_class($memdev);
     $device->setInitData($memdev->getInitDataValues());
     $device->place_id=0;
@@ -55,7 +55,7 @@ Forms::inputHidden('id',$device->id);
 Forms::inputSelect('module_id',$device->module_id,'Модуль*:',\SmartHome\Modules::getModuleList());
 Forms::inputString('uid',$device->uid,'Аппаратное ID устройства*:');
 Forms::inputString('classname',$device->classname,'Класс устройства*:');
-Forms::inputString('name',$device->name,'Наименование:');
+Forms::inputString('description',$device->description,'Описание:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=>$name) {
     Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param].':':'',$name);    

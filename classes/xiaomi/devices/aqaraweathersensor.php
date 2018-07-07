@@ -74,7 +74,7 @@ class AqaraWeatherSensor extends AbstractDevice {
         return $this->pressure;
     }
 
-    public function getDeviceName() {
+    public function getDeviceDescription() {
         return "Aqara Temperature Humidity Sensor";
     }
     

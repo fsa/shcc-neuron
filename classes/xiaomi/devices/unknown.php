@@ -10,7 +10,7 @@ class Unknown extends AbstractDevice {
         $this->params[$param]=$value;
     }
 
-    public function getDeviceName() {
+    public function getDeviceDescription() {
         return "Неизвестный тип устройства";
     }
 

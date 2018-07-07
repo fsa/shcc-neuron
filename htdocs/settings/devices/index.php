@@ -8,7 +8,7 @@ HTML::showPageHeader('Устройтва');
 <?php
 $devices=new Table;
 $devices->addField('unique_name','Имя');
-$devices->addField('name','Описание');
+$devices->addField('description','Описание');
 $devices->addField('classname','Класс');
 $devices->addField('place','Место установки');
 $devices->addButton('Изменить','edit/?id=%s');

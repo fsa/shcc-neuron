@@ -158,7 +158,7 @@ class XiaomiGateway extends AbstractDevice {
         return $this->illumination;
     }
 
-    public function getDeviceName() {
+    public function getDeviceDescription() {
         return "Xiaomi Mi Smart Multifunctional Gateway";
     }
 

@@ -34,7 +34,7 @@ class DeviceList {
         $result=new $this->fetch_class;
         $result->obj=$device;
         $result->id=$device->getDeviceId();
-        $result->name=$device->getDeviceName();
+        $result->name=$device->getDeviceDescription();
         $result->status=$device->getDeviceStatus();
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Offline':date('d.m.Y H:i:s',$date);
