@@ -40,11 +40,11 @@ CREATE TABLE devices (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Типы измеряемых параметров, сохраняемых в истории
-CREATE TABLE measures (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE meter_units (
+  `property` varchar(64) NOT NULL,
   `name` text NOT NULL,
   `unit` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`property`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Измерительные датчики
@@ -52,10 +52,10 @@ CREATE TABLE meters (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_id` int(10) UNSIGNED NOT NULL,
   `property` varchar(64) NOT NULL,
-  `measure_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY (`device_id`,`property`),
   CONSTRAINT `meters_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`),
-  CONSTRAINT `meters_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
+  CONSTRAINT `meters_meter_units_ibfk_1` FOREIGN KEY (`property`) REFERENCES `meter_units` (`property`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- История показаний измерительных датчиков устройств
@@ -78,6 +78,7 @@ CREATE TABLE indicators (
   `device_id` int(10) UNSIGNED NOT NULL,
   `property` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY (`device_id`,`property`),
   CONSTRAINT `indicators_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

@@ -92,7 +92,7 @@ class Devices {
         return $s;
     }
     
-    public static function getDeviceById($id) {
+    public static function getDeviceById($id): Entity\Device {
         $s=DB::prepare('SELECT * FROM devices WHERE id=?');
         $s->execute([$id]);
         $s->setFetchMode(PDO::FETCH_CLASS,Entity\Device::class);

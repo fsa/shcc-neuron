@@ -36,6 +36,14 @@ if($device instanceof \SmartHome\SensorsInterface) {
     </tr>
 <?php
 }
+if($device instanceof \SmartHome\DeviceActionInterface) {
+?>
+    <tr>
+        <td>События от устройства</td>
+        <td><?=join('<br>',$device->getDeviceActions())?></td>
+    </tr>
+<?php
+}
 ?>
 </table>
 <?php
