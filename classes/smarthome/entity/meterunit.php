@@ -2,7 +2,7 @@
 
 namespace SmartHome\Entity;
 
-class Measure {
+class MeterUnit {
     public $id;
     public $name;
     public $unit;

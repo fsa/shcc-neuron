@@ -17,12 +17,9 @@ class Meters {
         $this->meter->device_id=$id;
     }
     
-    public function setProperty($property) {
+    public function setProperty($property,$description) {
         $this->meter->property=$property;
-    }
-    
-    public function setMeasureId($description) {
-        
+        #TODO по опианию найти единицу измерения или оздать
     }
     
     public function insert() {

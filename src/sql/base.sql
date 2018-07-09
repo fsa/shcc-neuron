@@ -41,10 +41,10 @@ CREATE TABLE devices (
 
 -- Типы измеряемых параметров, сохраняемых в истории
 CREATE TABLE meter_units (
-  `property` varchar(64) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `unit` varchar(64) NOT NULL,
-  PRIMARY KEY (`property`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Измерительные датчики
@@ -52,10 +52,11 @@ CREATE TABLE meters (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `device_id` int(10) UNSIGNED NOT NULL,
   `property` varchar(64) NOT NULL,
+  `meter_unit_id` int (10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`device_id`,`property`),
   CONSTRAINT `meters_devices_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`),
-  CONSTRAINT `meters_meter_units_ibfk_1` FOREIGN KEY (`property`) REFERENCES `meter_units` (`property`)
+  CONSTRAINT `meters_meter_units_ibfk_1` FOREIGN KEY (`meter_unit_id`) REFERENCES `meter_units` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- История показаний измерительных датчиков устройств
@@ -63,13 +64,13 @@ CREATE TABLE meter_history (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `meter_id` int(10) UNSIGNED NOT NULL,
   `place_id` int(10) UNSIGNED NOT NULL,
-  `measure_id` int(10) UNSIGNED NOT NULL,
+  `meter_unit_id` int(10) UNSIGNED NOT NULL,
   `value` float NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `meter_history_meters_ibfk_1` FOREIGN KEY (`meter_id`) REFERENCES `meters` (`id`),
   CONSTRAINT `meter_history_places_ibfk_1` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`),
-  CONSTRAINT `meter_history_measures_ibfk_1` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
+  CONSTRAINT `meter_history_meter_units_ibfk_1` FOREIGN KEY (`meter_unit_id`) REFERENCES `meter_units` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Сигнализационные датчики
@@ -103,8 +104,3 @@ CREATE TABLE variables (
 INSERT INTO `modules` (`id`, `name`, `namespace`, `disabled`) VALUES
 (1, 'xiaomi', 'Xiaomi', 0),
 (2, 'yeelight', 'Yeelight', 0);
-
-INSERT INTO `measures` (`id`, `name`, `unit`) VALUES
-(1, 'Температура воздуха','&deg;C'),
-(2, 'Относительная влажность','%'),
-(3, 'Атмосферное давление','мм.рт.ст.');
