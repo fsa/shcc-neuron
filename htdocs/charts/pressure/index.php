@@ -9,9 +9,9 @@ HTML::showPageHeader('Атмосферное давление');
 var date=new Date();
 date.setDate(date.getDate()-2);
 var series = [{
-        name: 'Комната',
-        params: {place: 2, meter: 3}
-        }];
+    name: 'Комната',
+        params: {place: 2, unit: 3}
+    }];
 var title = 'Атмосферное давление';
 var units = 'мм.рт.ст.';
 

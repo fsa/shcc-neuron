@@ -10,10 +10,10 @@ var date=new Date();
 date.setDate(date.getDate()-2);
 var series = [{
         name: 'Комната',
-        params: {place: 2, meter: 2}
+        params: {place: 2, unit: 2}
         },{
         name: 'Кухня',
-        params: {place: 3, meter: 2}
+        params: {place: 3, unit: 2}
         }];
 var title = 'Относительная влажность';
 var units = '%';
