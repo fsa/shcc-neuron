@@ -10,7 +10,7 @@ var date=new Date();
 date.setDate(date.getDate()-2);
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 3}
+        params: {place: 2, meter: 3}
         }];
 var title = 'Атмосферное давление';
 var units = 'мм.рт.ст.';

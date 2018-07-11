@@ -8,10 +8,10 @@ HTML::showPageHeader('Температура');
 <script>
 var series = [{
         name: 'Комната',
-        params: {place: 2, measure: 1}
+        params: {place: 2, meter: 1}
         },{
         name: 'Кухня',
-        params: {place: 3, measure: 1}
+        params: {place: 3, meter: 1}
         }];
 var title = 'Температура';
 var units = '\u00B0C';
