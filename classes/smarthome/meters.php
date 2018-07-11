@@ -30,6 +30,12 @@ class Meters {
         return $id;
     }
     
+    public static function getMetersByUnitId($id) {
+        $s=DB::prepare('SELECT m.id, d.place_id, p.name FROM meters m LEFT JOIN devices d ON m.device_id=d.id LEFT JOIN places p ON d.place_id=p.id WHERE meter_unit_id');
+        $s->execute([$id]);
+        return $s->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public static function getMetersByDeviceId($id) {
         $s=DB::prepare('SELECT property,id FROM meters WHERE device_id=?');
         $s->execute([$id]);
