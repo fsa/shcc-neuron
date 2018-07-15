@@ -14,11 +14,7 @@ try {
         $result='Я пока ничего не умею.';
         $result_tts="Я пока ничего не умею.";
     }
-    if (!$result_tts) {
-        $alice->setText($result);
-    } else {
-        $alice->setText($result,$result_tts);
-    }
+    $alice->setText($result,$result_tts);
 } catch (AppException $ex) {
     $alice->setText($ex->getMessage());
 } catch (Exception $ex) {

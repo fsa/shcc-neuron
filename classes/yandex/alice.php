@@ -42,11 +42,9 @@ class Alice {
         return $this->session;
     }
     
-    public function setText($text,$tts=null) {
-        $search=['&nbsp;','&deg;'];
-        $replace=[' ','°'];
-        $this->result['response']['text']=str_replace($search,$replace,$text);
-        if(!is_null($tts)) {
+    public function setText($text,$tts=false) {
+        $this->result['response']['text']=html_entity_decode($text);
+        if($tts) {
             $this->result['response']['tts']=$tts;
         }
     }
