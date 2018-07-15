@@ -9,8 +9,20 @@ if(!($obj instanceof SmartHome\SensorsInterface)) {
 $meters=$obj->getDeviceMeters();
 $indicators=$obj->getDeviceIndicators();
 if(isset($meters[$param])) {
-    echo 'Аналоговый датчик';
-    die;
+    $meter=new SmartHome\Meters;
+    $meter->create();
+    $meter->setDeviceId($id);
+    $meter->setProperty($param,$meters[$param]);
+    try {
+        $meter->insert();    
+    } catch (PDOException $ex) {
+        if($ex->getCode()==23000) {
+            throw new AppException('Данный датчик уже зарегистрирован в базе');
+        }
+        throw $ex;
+    }
+    HTML::showNotification('Аналоговый датчик '.$param,'Датчик добавлен','./?id='.$id);
+    exit;
 }
 if(isset($indicators[$param])) {
     $indicator=new \SmartHome\Indicators;

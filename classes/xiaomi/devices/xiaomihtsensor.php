@@ -71,7 +71,7 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
     }
 
     public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура, &deg;C','humidity'=>'Относительная влажность, %'];
+        return ['temperature'=>'Температура воздуха, &deg;C','humidity'=>'Относительная влажность, %'];
     }
 
 }

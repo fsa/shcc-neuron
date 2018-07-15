@@ -100,7 +100,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
     }
 
     public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура, &deg;C','humidity'=>'Относительная влажность, %','pressure'=>'Атмосферное давление, мм.рт.ст.'];
+        return ['temperature'=>'Температура воздуха, &deg;C','humidity'=>'Относительная влажность, %','pressure'=>'Атмосферное давление, мм.рт.ст.'];
     }
 
 }

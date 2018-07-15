@@ -19,7 +19,7 @@ class Meters {
     
     public function setProperty($property,$description) {
         $this->meter->property=$property;
-        #TODO по опианию найти единицу измерения или оздать
+        $this->meter->meter_unit_id=MeterUnits::getUnitId($description);
     }
     
     public function insert() {
