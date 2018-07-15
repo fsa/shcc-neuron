@@ -27,12 +27,12 @@ class Settings {
         return self::$_instance;
     }
 
-    public static function get($name) {
+    public static function get(string $name,$default_value=null) {
         $s=self::getInstance();
         if (isset($s->settings->$name)) {
             return $s->settings->$name;
         }
-        return null;
+        return $default_value;
     }
 
 }
