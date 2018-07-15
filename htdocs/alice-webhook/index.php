@@ -1,10 +1,10 @@
 <?php
 
 require_once '../common.php';
-$alice=new Yandex\Alice(file_get_contents('php://input'));
 $result_tts=false;
 try {
-    #$alice->checkSkillId('skill_id');
+    $alice=new Yandex\Alice(file_get_contents('php://input'));
+    $alice->checkSkillId(Settings::get('yandex')->alice_skill_id);
     $request=$alice->getRequest();
     $command=mb_strtolower($request['command']);
     if ($alice->isNewDialog()) {
