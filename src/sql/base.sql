@@ -15,7 +15,8 @@ CREATE TABLE `modules` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `namespace` varchar(64) NOT NULL,
-  `daemon_disabled` tinyint(1) NOT NULL DEFAULT 0,
+  `daemon` tinyint(1) NOT NULL DEFAULT 0,
+  `settings` tinyint(1) NOT NULL DEFAULT 0,
   `disabled` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE (`name`)
@@ -102,5 +103,6 @@ CREATE TABLE variables (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `modules` (`id`, `name`, `namespace`, `disabled`) VALUES
-(1, 'xiaomi', 'Xiaomi', 0),
-(2, 'yeelight', 'Yeelight', 0);
+(1, 'xiaomi', 'Xiaomi', 1, 0, 0),
+(2, 'yeelight', 'Yeelight', 1, 0, 0),
+(3, 'yandex', 'Yandex', 0, 1, 0);
