@@ -30,6 +30,9 @@ class HTML {
             <li class="nav-item">
                 <a class="nav-link" href="/settings/">Настройки</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login/">Вход/выход</a>
+            </li>
         </ul>
     </div>
 </nav>
