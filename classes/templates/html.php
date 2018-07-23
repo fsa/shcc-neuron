@@ -30,9 +30,21 @@ class HTML {
             <li class="nav-item">
                 <a class="nav-link" href="/settings/">Настройки</a>
             </li>
+<?php
+if(\Auth::getUser()->login=='guest') {
+?>
             <li class="nav-item">
-                <a class="nav-link" href="/login/">Вход/выход</a>
+                <a class="nav-link" href="/login/">Вход</a>
             </li>
+<?php
+} else {
+?>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout/">Выход</a>
+            </li>
+<?php
+}
+?>
         </ul>
     </div>
 </nav>

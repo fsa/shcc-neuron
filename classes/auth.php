@@ -11,12 +11,12 @@ class Auth {
         }
     }
 
-    public static function memberOf(array $groups) {
+    public static function memberOf(array $groups): bool {
         $auth=self::getInstance();
         return $auth->checkAccess($groups);
     }
 
-    public static function login($user) {
+    public static function login(UserInterface $user) {
         self::$_instance=new self($user);
     }
 
@@ -28,11 +28,11 @@ class Auth {
         session_commit();
     }
     
-    public static function getUser() {
+    public static function getUser(): UserInterface {
         return self::$_instance->user;
     }
 
-    private static function getInstance() {
+    private static function getInstance(): self {
         if (is_null(self::$_instance)) {
             self::$_instance=new self;
         }
@@ -58,7 +58,7 @@ class Auth {
         session_commit();
     }
 
-    private function checkAccess(array $groups) {
+    private function checkAccess(array $groups): bool {
         return true;
         #TODO проверить на админа
         foreach ($groups AS $group) {

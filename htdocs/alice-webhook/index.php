@@ -1,20 +1,21 @@
 <?php
 
 require_once '../common.php';
-$result_tts=false;
+$tts=false;
 try {
     $alice=new Yandex\Alice(file_get_contents('php://input'));
-    $alice->checkSkillId(Settings::get('yandex')->alice_skill_id);
+    //$alice->checkSkillId(Settings::get('yandex')->alice_skill_id);
     $request=$alice->getRequest();
     $command=mb_strtolower($request['command']);
     if ($alice->isNewDialog()) {
-        $result="Умный дом приветствует вас";
-        #$result_tts="Умный дом приветствует вас";
+        $text="Я умный дом phpmd. А кто вы? Я вас не знаю.";
+        #$text="Умный дом phpmd приветствует вас!";
+        #$tts="Умный дом приветствует вас";
     } else {
-        $result='Я пока ничего не умею.';
-        $result_tts="Я пока ничего не умею.";
+        $text='Я вас не знаю.';
+        $tts="Я вас не знаю.";
     }
-    $alice->setText($result,$result_tts);
+    $alice->setText($text,$tts);
 } catch (AppException $ex) {
     $alice->setText($ex->getMessage());
 } catch (Exception $ex) {
