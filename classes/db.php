@@ -33,9 +33,7 @@ class DB {
         $keys=array_keys($values);
         $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',',$keys).') VALUES (:'.join(',:',$keys).')');
         $stmt->execute($values);
-        $id=self::lastInsertId();
-        $stmt->closeCursor();
-        return $id;
+        return self::lastInsertId();
     }
 
     public static function update($table,$values,$index='id') {

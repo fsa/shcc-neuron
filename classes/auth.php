@@ -29,7 +29,7 @@ class Auth {
     }
     
     public static function getUser(): UserInterface {
-        return self::$_instance->user;
+        return self::getInstance()->user;
     }
 
     private static function getInstance(): self {
