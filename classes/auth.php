@@ -5,18 +5,18 @@ class Auth {
     private static $_instance;
     private $user;
 
-    public static function grantAccess(array $groups) {
+    public static function grantAccess(array $groups=[]) {
         if (!self::memberOf($groups)) {
             throw new AppException('Доступ пользователю запрещён');
         }
     }
 
-    public static function memberOf(array $groups): bool {
+    public static function memberOf(array $groups=[]): bool {
         $auth=self::getInstance();
         return $auth->checkAccess($groups);
     }
 
-    public static function login(UserInterface $user) {
+    public static function login(Auth\UserInterface $user) {
         self::$_instance=new self($user);
     }
 
@@ -28,7 +28,7 @@ class Auth {
         session_commit();
     }
     
-    public static function getUser(): UserInterface {
+    public static function getUser(): Auth\UserInterface {
         return self::getInstance()->user;
     }
 
@@ -51,7 +51,7 @@ class Auth {
         }
         if (!isset($_SESSION['user'])) {
             session_destroy();
-            $this->user=new User;
+            $this->user=new Auth\UserEntity;
             return;
         }
         $this->user=$_SESSION['user'];
@@ -59,10 +59,16 @@ class Auth {
     }
 
     private function checkAccess(array $groups): bool {
-        return true;
-        #TODO проверить на админа
+        $admins=\Settings::get('admins');
+        if(array_search($this->user->getId(),$admins)!==false) {
+            return true;
+        }
+        if(sizeof($groups)==0) {
+            return $this->user->getLogin()!='guest';
+        }
+        $user_groups=$this->user->getGroups();
         foreach ($groups AS $group) {
-            if (isset($this->user->$group) and $this->user->$group==1) {
+            if (array_search($group,$user_groups)!==false) {
                 return true;
             }
         }
