@@ -4210,3 +4210,38 @@ footer {
   color: white;
   padding: 1rem;
 }
+
+#parent_popup {
+  background: #444444;
+  height: 100%;
+  opacity: 0.9;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  top: 0;
+  left: 0;
+}
+
+#popup {
+  background-color: #FFFFFF;
+  height: auto;
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  color: #000000;
+  width: 400px;
+  padding: 10px;
+  margin-left: -200px;
+}
+
+#popup p {
+  text-align: center;
+}
+
+#popup h1 {
+  background: none;
+  text-align: center;
+  padding: 0.1rem;
+  font-size: 1.1rem;
+  color: black;
+}

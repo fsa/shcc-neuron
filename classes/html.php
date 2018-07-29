@@ -3,6 +3,7 @@
 class HTML {
 
     private static $_instance=null;
+    private static $header_sent=false;
 
     private function __clone() {
         
@@ -40,6 +41,7 @@ class HTML {
         self::disableBrowserCache();
         $html->title=$title;
         $html->Header();
+        self::$header_sent=true;
     }
 
     public static function showPageFooter() {
@@ -63,7 +65,7 @@ class HTML {
     public static function showException($message) {
         $title='Ошибка';
         $message="<p>$message</p>".PHP_EOL;
-        if (headers_sent()) {
+        if (self::$header_sent) {
             self::showPopup($title,$message);
             self::showPageFooter();
             return;
@@ -128,18 +130,17 @@ class HTML {
         self::disableBrowserCache();
         $html->show();
     }
-
+    
     public static function Exception($ex) {
-        if ($ex instanceof AppException) {
-            $message=$ex->getMessage();
-        } else {
-            $message=$ex;
-            if (ini_get('display_errors')!=1) {
-                error_log($ex,0);
-                $message='Извините. Произошла программная ошибка. Если вы часто видите это сообщение, сообщите о нём администратору сайта.';
-            }
+        if (method_exists($ex, 'Handler')) {
+            $ex->Handler($ex);
+            exit;
+        }
+        $message=$ex;
+        if (ini_get('display_errors')!=1) {
+            error_log($ex,0);
+            $message='Извините. Произошла программная ошибка. Если вы часто видите это сообщение, сообщите о нём администратору сайта.';
         }
         self::showException($message);
     }
-
 }

@@ -11,6 +11,10 @@ class UserEntity implements UserInterface {
     public $groups='["guest"]';
     public $disabled=false;
 
+    public function __sleep() {
+        return ['id','login','name','email','groups','disabled'];
+    }
+
     public function getId() {
         return $this->id;
     }

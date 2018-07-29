@@ -1,10 +1,11 @@
 <?php
 
-require_once '../../../common.php';
 $id=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
 if (!$id) {
     die;
 }
+require_once '../../../common.php';
+Auth::grantAccess(['admin']);
 $device=SmartHome\Devices::getDeviceById($id);
 if (!$device) {
     die;

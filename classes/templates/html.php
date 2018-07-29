@@ -27,20 +27,24 @@ class HTML {
             <li class="nav-item">
                 <a class="nav-link" href="/charts/">Графики</a>
             </li>
+<?php
+if(\Auth::memberOf(['admin'])) {
+?>
             <li class="nav-item">
                 <a class="nav-link" href="/settings/">Настройки</a>
             </li>
 <?php
-if(\Auth::getUser()->login=='guest') {
+}
+if(\Auth::memberOf()) {
 ?>
             <li class="nav-item">
-                <a class="nav-link" href="/login/">Вход</a>
+                <a class="nav-link" href="/logout/">Выход</a>
             </li>
 <?php
 } else {
 ?>
             <li class="nav-item">
-                <a class="nav-link" href="/logout/">Выход</a>
+                <a class="nav-link" href="/login/">Вход</a>
             </li>
 <?php
 }
