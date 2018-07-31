@@ -6,14 +6,16 @@ try {
     $alice=new Yandex\Alice(file_get_contents('php://input'));
     //$alice->checkSkillId(Settings::get('yandex')->alice_skill_id);
     $request=$alice->getRequest();
+    $session=$alice->getSession();
     $command=mb_strtolower($request['command']);
-    if ($alice->isNewDialog()) {
-        $text="Я умный дом phpmd. А кто вы? Я вас не знаю.";
-        #$text="Умный дом phpmd приветствует вас!";
-        #$tts="Умный дом приветствует вас";
+    if (strripos($command,'помощь')!==false) { #Test: 
+        $text="Это приватный навык для управления умным домом. Для использования навыка необходимо зарегистрироваться.";
+    } else if ($alice->isNewDialog()) {
+        $text="Я умный дом phpmd. Я вас не знаю. Вам необходимо зарегистрироваться. Ваш ID:".$session['user_id'];
+        $tts="Я умный дом. Я вас не знаю. Вам необходимо зарегистрироваться.";
     } else {
-        $text='Я вас не знаю.';
-        $tts="Я вас не знаю.";
+        $text='Мне не разрешают общаться с незнакомцами. Вам нужно зарегистрироваться у автора проекта.';
+        #$tts="Я вас не знаю.";
     }
     $alice->setText($text,$tts);
 } catch (AppException $ex) {
