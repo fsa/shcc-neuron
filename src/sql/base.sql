@@ -102,7 +102,7 @@ CREATE TABLE variables (
   UNIQUE KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `modules` (`id`, `name`, `namespace`, `disabled`) VALUES
+INSERT INTO `modules` (`id`, `name`, `namespace`, daemon, settings, `disabled`) VALUES
 (1, 'xiaomi', 'Xiaomi', 1, 0, 0),
 (2, 'yeelight', 'Yeelight', 1, 0, 0),
 (3, 'yandex', 'Yandex', 0, 1, 0);
