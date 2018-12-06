@@ -23,9 +23,15 @@ if ($unit) {
 <p>
     <?php
     foreach (SmartHome\MeterUnits::getUnitsList() as $id=> $name) {
-        ?>
-        <a href="./?unit=<?=$id?>"><?=$name?></a>
-        <?php
+        if($id==$unit) {
+?>
+        <a class="btn btn-primary" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+<?php            
+        } else {
+?>
+        <a class="btn btn-secondary" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+<?php
+        }
     }
     ?>
 </p>
