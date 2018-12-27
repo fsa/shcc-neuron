@@ -15,7 +15,6 @@ class HTML {
 <meta name="theme-color" content="gray">
 <link rel="stylesheet" href="/styles.css">
 <script src="/libs/jquery/jquery.min.js"></script>
-<script src="/libs/bootstrap/bootstrap.bundle.min.js"></script>
 <?=$this->header?>
 </head>
 <body>

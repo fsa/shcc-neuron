@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
         sass = require('gulp-sass'),
         autoprefixer = require('gulp-autoprefixer'),
@@ -7,21 +9,6 @@ var gulp = require('gulp'),
         rename = require('gulp-rename'),
         del = require('del'),
         browserSync = require('browser-sync');
-
-gulp.task('default', function () {
-    console.log('Нет действия по умолчанию.');
-});
-
-gulp.task('watch', ['browser-sync'], function () {
-    gulp.watch('src/scss/**/*.+(scss|sass)', ['scss']);
-    gulp.watch('htdocs/**/*.+(php|html|css|js)', browserSync.reload);
-});
-
-gulp.task('browser-sync', ['scss'], function () {
-    browserSync({
-        proxy: "phpmd.localhost"
-    });
-});
 
 gulp.task('scss', function () {
     return gulp.src('src/scss/**/*.+(scss|sass)')
@@ -35,15 +22,6 @@ gulp.task('scss', function () {
             .pipe(autoprefixer(['last 15 versions', '>1%', 'ie 8']))
 //    .pipe(cssnano())
             .pipe(gulp.dest('htdocs'))
-            .pipe(browserSync.reload({stream: true}));
-});
-
-gulp.task('jslibs', ['jquery', 'leaflet', 'highcharts','bootstrap'], function () {
-    console.log('Копирование мелких библиотек js');
-    return gulp.src([
-        'node_modules/html5shiv/dist/html5shiv.min.js',
-    ])
-            .pipe(gulp.dest('htdocs/libs'))
             .pipe(browserSync.reload({stream: true}));
 });
 
@@ -71,7 +49,7 @@ gulp.task('highcharts', function () {
 gulp.task('jquery', function () {
     console.log('Копирование jquery');
     return gulp.src([
-        'node_modules/jquery/dist/jquery.min.js',
+        'node_modules/jquery/dist/jquery.min.js'
     ])
             .pipe(gulp.dest('htdocs/libs/jquery'));
 });
@@ -79,7 +57,33 @@ gulp.task('jquery', function () {
 gulp.task('bootstrap', function () {
     console.log('Копирование bootstrap');
     return gulp.src([
-        'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+        'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
     ])
             .pipe(gulp.dest('htdocs/libs/bootstrap'));
+});
+
+gulp.task('small-libs', function () {
+    console.log('Копирование мелких библиотек js');
+    return gulp.src([
+        'node_modules/html5shiv/dist/html5shiv.min.js'
+    ])
+            .pipe(gulp.dest('htdocs/libs'))
+            .pipe(browserSync.reload({stream: true}));
+});
+
+gulp.task('jslibs', gulp.parallel('jquery', 'leaflet', 'highcharts'));
+
+gulp.task('browser-sync', gulp.series('scss', function () {
+    browserSync({
+        proxy: "phpmd.localhost"
+    });
+}));
+
+gulp.task('watch', gulp.series('browser-sync', function () {
+    gulp.watch('src/scss/**/*.+(scss|sass)', gulp.parallel('scss'));
+    gulp.watch('htdocs/**/*.+(php|html|css|js)', browserSync.reload);
+}));
+
+gulp.task('default', function () {
+    console.log('Нет действия по умолчанию.');
 });
