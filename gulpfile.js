@@ -1,17 +1,13 @@
 'use strict';
 
-var gulp = require('gulp'),
-        sass = require('gulp-sass'),
-        autoprefixer = require('gulp-autoprefixer'),
-        concat = require('gulp-concat'),
-        uglify = require('gulp-uglifyjs'),
-        cssnano = require('gulp-cssnano'),
-        rename = require('gulp-rename'),
-        del = require('del'),
-        browserSync = require('browser-sync');
+const {src, dest, watch, series, parallel} = require('gulp'),
+    sass = require('gulp-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
+    cssnano = require('gulp-cssnano'),
+    bs = require('browser-sync').create();
 
-gulp.task('scss', function () {
-    return gulp.src('src/scss/**/*.+(scss|sass)')
+function scssTask() {
+    return src('src/scss/**/*.+(scss|sass)')
             .pipe(sass(
                     {
                         outputStyle: 'expanded',
@@ -21,69 +17,69 @@ gulp.task('scss', function () {
 //    .pipe(concat('styles.css'))
             .pipe(autoprefixer(['last 15 versions', '>1%', 'ie 8']))
 //    .pipe(cssnano())
-            .pipe(gulp.dest('htdocs'))
-            .pipe(browserSync.reload({stream: true}));
-});
+            .pipe(dest('htdocs'))
+            .pipe(bs.stream());
+};
 
-gulp.task('leaflet', function () {
-    console.log('Копирование Leaflet');
-    return gulp.src([
+function leafletTask() {
+    return src([
         'node_modules/leaflet/dist/leaflet.js',
         'node_modules/leaflet/dist/leaflet.css',
         'node_modules/leaflet/dist/**/*.png'
     ])
-            .pipe(gulp.dest('htdocs/libs/leaflet'));
-    ;
-});
+            .pipe(dest('htdocs/libs/leaflet'));
+}
 
-gulp.task('highcharts', function () {
-    console.log('Копирование highcharts');
-    return gulp.src([
+function highchartsTask() {
+    return src([
         'node_modules/highcharts/highstock.js',
         'node_modules/highcharts/highcharts.js',
         'node_modules/highcharts/modules/exporting.js'
     ])
-            .pipe(gulp.dest('htdocs/libs/highcharts'));
-});
+            .pipe(dest('htdocs/libs/highcharts'));
+}
 
-gulp.task('jquery', function () {
-    console.log('Копирование jquery');
-    return gulp.src([
+function jqueryTask() {
+    return src([
         'node_modules/jquery/dist/jquery.min.js'
     ])
-            .pipe(gulp.dest('htdocs/libs/jquery'));
-});
+            .pipe(dest('htdocs/libs/jquery'));
+}
 
-gulp.task('bootstrap', function () {
-    console.log('Копирование bootstrap');
-    return gulp.src([
+function bootstrapTask() {
+    return src([
         'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
     ])
-            .pipe(gulp.dest('htdocs/libs/bootstrap'));
-});
+            .pipe(dest('htdocs/libs/bootstrap'));
+}
 
-gulp.task('small-libs', function () {
-    console.log('Копирование мелких библиотек js');
-    return gulp.src([
+function html5shivTask() {
+    return src([
         'node_modules/html5shiv/dist/html5shiv.min.js'
     ])
-            .pipe(gulp.dest('htdocs/libs'))
-            .pipe(browserSync.reload({stream: true}));
-});
+            .pipe(dest('htdocs/libs'))
+            .pipe(bs.stream());
+}
 
-gulp.task('jslibs', gulp.parallel('jquery', 'leaflet', 'highcharts'));
-
-gulp.task('browser-sync', gulp.series('scss', function () {
-    browserSync({
+function watchTask() {
+    bs.init({
         proxy: "phpmd.localhost"
     });
-}));
+    watch('src/scss/**/*.+(scss|sass)', scssTask);
+    watch('htdocs/**/*.+(php|html|css|js)', bs.reload);
+}
 
-gulp.task('watch', gulp.series('browser-sync', function () {
-    gulp.watch('src/scss/**/*.+(scss|sass)', gulp.parallel('scss'));
-    gulp.watch('htdocs/**/*.+(php|html|css|js)', browserSync.reload);
-}));
-
-gulp.task('default', function () {
+function defaultTask(cb) {
     console.log('Нет действия по умолчанию.');
-});
+    cb();
+}
+
+exports.bootstrap = bootstrapTask;
+exports.scss = scssTask;
+exports.leaflet = leafletTask;
+exports.highcharts = highchartsTask;
+exports.jquery = jqueryTask;
+exports.html5shiv = html5shivTask;
+exports.jslibs = parallel(jqueryTask,leafletTask,highchartsTask,html5shivTask);
+exports.watch = watchTask;
+exports.default = defaultTask;
