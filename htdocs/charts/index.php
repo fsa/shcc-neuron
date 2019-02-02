@@ -20,21 +20,21 @@ if ($unit) {
     HTML::showPageHeader('Просмотр графиков');
 }
 ?>
-<p>
+<div class="row">
     <?php
     foreach (SmartHome\MeterUnits::getUnitsList() as $id=> $name) {
         if($id==$unit) {
 ?>
-        <a class="btn btn-primary" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+        <a class="btn btn-primary col" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
 <?php            
         } else {
 ?>
-        <a class="btn btn-secondary" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+        <a class="btn btn-secondary col" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
 <?php
         }
     }
     ?>
-</p>
+</div>
 <?php
 if ($unit) {
 ?>
