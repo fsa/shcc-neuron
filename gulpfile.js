@@ -48,7 +48,7 @@ function jqueryTask() {
 
 function bootstrapTask() {
     return src([
-        'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+        'node_modules/bootstrap/dist/js/bootstrap.min.js'
     ])
             .pipe(dest('htdocs/libs/bootstrap'));
 }
@@ -80,6 +80,6 @@ exports.leaflet = leafletTask;
 exports.highcharts = highchartsTask;
 exports.jquery = jqueryTask;
 exports.html5shiv = html5shivTask;
-exports.jslibs = parallel(jqueryTask,leafletTask,highchartsTask,html5shivTask);
+exports.jslibs = parallel(jqueryTask,bootstrapTask,leafletTask,highchartsTask,html5shivTask);
 exports.watch = watchTask;
 exports.default = defaultTask;

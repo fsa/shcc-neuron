@@ -15,6 +15,7 @@ class HTML {
 <meta name="theme-color" content="gray">
 <link rel="stylesheet" href="/styles.css">
 <script src="/libs/jquery/jquery.min.js"></script>
+<script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
 <body>
@@ -59,7 +60,7 @@ if(\Auth::memberOf()) {
     public function footer() {
 ?>
 </main>
-<footer class="container-fluid bg-dark">&copy; Tavda.net 2018</footer>
+<footer class="container-fluid bg-dark">&copy; Tavda.net, 2018-2019.</footer>
 </body>
 </html>
 <?php        
