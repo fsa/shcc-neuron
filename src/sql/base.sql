@@ -106,3 +106,8 @@ INSERT INTO `modules` (`id`, `name`, `namespace`, daemon, settings, `disabled`) 
 (1, 'xiaomi', 'Xiaomi', 1, 0, 0),
 (2, 'yeelight', 'Yeelight', 1, 0, 0),
 (3, 'yandex', 'Yandex', 0, 1, 0);
+
+INSERT INTO `meter_units` (`id`, `name`, `unit`) VALUES
+(1, 'Температура воздуха', '&deg;C'),
+(2, 'Относительная влажность', '%'),
+(3, 'Атмосферное давление', 'мм.рт.ст.');

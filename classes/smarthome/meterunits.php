@@ -23,6 +23,11 @@ class MeterUnits {
         return $s->fetchAll(PDO::FETCH_KEY_PAIR);
     }
     
+    public static function getUnits() {
+        $s=DB::query('SELECT * FROM meter_units');
+        return $s->fetchAll(PDO::FETCH_UNIQUE|PDO::FETCH_ASSOC);        
+    }
+
     public static function getUnitById($id) {
         $s=DB::prepare('SELECT id,name,unit FROM meter_units WHERE id=?');
         $s->execute([$id]);

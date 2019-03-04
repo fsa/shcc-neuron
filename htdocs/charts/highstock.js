@@ -1,3 +1,7 @@
+//var date = new Date();
+//date.setDate(date.getDate() - 2);
+
+var units,unit;
 var seriesOptions=[], seriesCounter = 0;
 var chart;
 
@@ -23,7 +27,7 @@ Highcharts.setOptions({
     }
 });
 
-function createChart() {
+function createChart(title, units) {
     chart=Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -112,33 +116,44 @@ function afterSetExtremes(e) {
 
     chart.showLoading();
     seriesCounter = 0;
-    $.each(series, function (i, serie) {
-        params=serie.params;
+    $.each(unit.meters, function (i, meter) {
+        params={'place': meter.place_id,'unit': unit_id};
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
         $.getJSON('/api/meter_history/', params, function (data) {
             seriesOptions[seriesCounter] = {
-                name: serie.name,
+                name: meter.name,
                 data: data
             };
             
             seriesCounter += 1;
-            if (seriesCounter === series.length) {
+            if (seriesCounter === unit.meters.length) {
                 chart.hideLoading();
             }
         });
     });
 }
-$.each(series, function (i, serie) {
-    $.getJSON('/api/meter_history/', serie.params, function (data) {
-        seriesOptions[seriesCounter] = {
-            name: serie.name,
-            data: data
-        };
-        seriesCounter += 1;
-        if (seriesCounter === series.length) {
-            createChart();
-        }
-    });
-});
 
+$.urlParam = function(name) {  
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);  
+    return results[1] || 0;  
+};
+
+var unit_id=$.urlParam('unit');
+$.getJSON('/api/meter_units/', [], function(units) {
+    unit=units[unit_id];
+
+    $.each(unit.meters, function (i, meter) {
+        $.getJSON('/api/meter_history/', {'place': meter.place_id,'unit': unit_id}, function (data) {
+            seriesOptions[seriesCounter] = {
+                name: meter.name,
+                data: data
+            };
+            seriesCounter += 1;
+            if (seriesCounter === unit.meters.length) {
+                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text());
+            }
+        });
+    });
+
+});
