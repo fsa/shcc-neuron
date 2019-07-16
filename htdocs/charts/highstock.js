@@ -139,7 +139,8 @@ $.urlParam = function(name) {
     return results[1] || 0;  
 };
 
-var unit_id=$.urlParam('unit');
+//var unit_id=$.urlParam('unit');
+var unit_id=$('#unit_id').attr('unit_id');
 $.getJSON('/api/meter_units/', [], function(units) {
     unit=units[unit_id];
 
