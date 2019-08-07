@@ -18,41 +18,45 @@ class HTML {
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
-<body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="/">Главная страница</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Свернуть меню"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/charts/">Графики</a>
-            </li>
+<header class="header">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" role="navigation">
+<a class="navbar-brand" href="/" role="banner">PHPMD</a>
+ 
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
+<span class="navbar-toggler-icon"></span>
+</button>
+ 
+<div class="collapse navbar-collapse" id="navbarsDefault">
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="/charts/">Графики</a>
+    </li>
 <?php
 if(\Auth::memberOf(['admin'])) {
 ?>
-            <li class="nav-item">
-                <a class="nav-link" href="/settings/">Настройки</a>
-            </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/settings/">Настройки</a>
+    </li>
 <?php
 }
 if(\Auth::memberOf()) {
 ?>
-            <li class="nav-item">
-                <a class="nav-link" href="/logout/">Выход</a>
-            </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/logout/">Выход</a>
+    </li>
 <?php
 } else {
 ?>
-            <li class="nav-item">
-                <a class="nav-link" href="/login/">Вход</a>
-            </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/login/">Вход</a>
+    </li>
 <?php
 }
 ?>
-        </ul>
-    </div>
+</ul>
+</div>
 </nav>
-
+</header>
 <main role="main" class="container-fluid">
 <?php
     }
