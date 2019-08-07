@@ -76,10 +76,9 @@ function defaultTask(cb) {
 
 exports.bootstrap = bootstrapTask;
 exports.scss = scssTask;
-exports.leaflet = leafletTask;
 exports.highcharts = highchartsTask;
 exports.jquery = jqueryTask;
 exports.html5shiv = html5shivTask;
-exports.jslibs = parallel(jqueryTask,bootstrapTask,leafletTask,highchartsTask,html5shivTask);
+exports.jslibs = parallel(jqueryTask,bootstrapTask,highchartsTask,html5shivTask);
 exports.watch = watchTask;
 exports.default = defaultTask;
