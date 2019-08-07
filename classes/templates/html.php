@@ -16,6 +16,7 @@ class HTML {
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="gray">
 <link rel="stylesheet" href="/styles.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="/libs/jquery/jquery.min.js"></script>
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
