@@ -11120,6 +11120,16 @@ a.text-dark:hover, a.text-dark:focus {
   }
 }
 
+body {
+  padding-top: 3.5rem;
+  margin-bottom: 3.5rem;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 main {
   padding: 1rem;
 }
@@ -11127,6 +11137,9 @@ main {
 footer {
   color: white;
   padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 #parent_popup {

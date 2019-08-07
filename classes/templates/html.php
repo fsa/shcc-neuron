@@ -3,6 +3,8 @@
 namespace Templates;
 
 class HTML {
+    
+    public $header;
 
     public function header() {
 ?>
@@ -18,6 +20,7 @@ class HTML {
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
+<body>
 <header class="header">
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" role="navigation">
 <a class="navbar-brand" href="/" role="banner">PHPMD</a>
@@ -64,7 +67,7 @@ if(\Auth::memberOf()) {
     public function footer() {
 ?>
 </main>
-<footer class="container-fluid bg-dark">&copy; Tavda.net, 2018-2019.</footer>
+<footer class="footer container-fluid bg-dark">&copy; Tavda.net, 2018-2019.</footer>
 </body>
 </html>
 <?php        
