@@ -25,6 +25,7 @@ class Auth {
         session_name($session->name);
         session_start();
         unset($_SESSION['user']);
+        Auth\Session::destroy();
         session_commit();
     }
     
@@ -46,12 +47,19 @@ class Auth {
         if ($user) {
             $this->user=$user;
             $_SESSION['user']=$user;
+            Auth\Session::start($user);
             session_commit();
             return;
         }
         if (!isset($_SESSION['user'])) {
-            session_destroy();
-            $this->user=new Auth\UserEntity;
+            $user=Auth\Session::refresh();
+            if(!$user) {
+                session_destroy();
+                $this->user=new Auth\UserEntity;
+                return;
+            }
+            $_SESSION['user']=$user;
+            session_commit();
             return;
         }
         $this->user=$_SESSION['user'];
@@ -74,5 +82,5 @@ class Auth {
         }
         return false;
     }
-
+    
 }
