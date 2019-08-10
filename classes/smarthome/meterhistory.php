@@ -71,7 +71,7 @@ class MeterHistory {
         } else {
             $period='';
         }
-        $stmt=\DB::prepare('SELECT UNIX_TIMESTAMP(timestamp)*1000,value FROM meter_history WHERE '.join(' AND ',$where).$period);
+        $stmt=\DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000,value FROM meter_history WHERE '.join(' AND ',$where).$period);
         $stmt->execute($params);
         $rows=$stmt->fetchAll(\PDO::FETCH_NUM);
         return json_encode($rows,JSON_NUMERIC_CHECK);

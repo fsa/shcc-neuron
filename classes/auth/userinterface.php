@@ -4,7 +4,7 @@ namespace Auth;
 
 interface UserInterface {
     
-    function getId();
+    function getId(): ?int;
 
     function getLogin(): string;
 
@@ -12,5 +12,7 @@ interface UserInterface {
 
     function getEmail(): string;
 
-    function getGroups(): array;
+    function getScope(): array;
+    
+    static function jsonUnserialize($json);
 }

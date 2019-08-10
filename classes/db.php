@@ -2,7 +2,8 @@
 
 class DB {
 
-    private static $_instance=null;
+    private static $pdo=null;
+    private static $inTransaction=false;
 
     private function __construct() {
         
@@ -13,45 +14,66 @@ class DB {
     }
 
     public static function getInstance(): PDO {
-        if (self::$_instance) {
-            return self::$_instance;
+        if (self::$pdo) {
+            return self::$pdo;
         }
         $config=\Settings::get('pdo');
-        self::$_instance=new PDO($config->dsn,$config->username,$config->password);
-        self::$_instance->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+        self::$pdo=new PDO($config->dsn, $config->username, $config->password);
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         foreach ($config->init AS $query) {
-            self::$_instance->query($query);
+            self::$pdo->query($query);
         }
-        return self::$_instance;
+        return self::$pdo;
     }
 
     public static function isConnected(): bool {
-        return !is_null(self::$_instance);
+        return !is_null(self::$pdo);
     }
-    
-    public static function insert($table,$values) {
+
+    public static function insert($table, $values) {
         $keys=array_keys($values);
-        $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',',$keys).') VALUES (:'.join(',:',$keys).')');
+        $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',', $keys).') VALUES (:'.join(',:', $keys).')');
         $stmt->execute($values);
         return self::lastInsertId();
     }
 
-    public static function update($table,$values,$index='id') {
+    public static function update($table, $values, $index='id') {
         $keys=array_keys($values);
-        $i=array_search($index,$keys);
+        $i=array_search($index, $keys);
         if ($i!==false) {
             unset($keys[$i]);
         }
         foreach ($keys as &$key) {
             $key=$key.'=:'.$key;
         }
-        $stmt=self::prepare('UPDATE '.$table.' SET '.join(',',$keys).' WHERE '.$index.'=:'.$index);
+        $stmt=self::prepare('UPDATE '.$table.' SET '.join(',', $keys).' WHERE '.$index.'=:'.$index);
         return $stmt->execute($values);
     }
+    
+    public static function beginTransaction() {
+        self::getInstance()->beginTransaction();
+        self::$inTransaction=true;
+    }
 
-    public static function __callStatic($name,$args) {
-        $callback=array(self::getInstance(),$name);
-        return call_user_func_array($callback,$args);
+    public static function rollback(): bool {
+        if (is_null(self::$pdo)) {
+            return true;
+        }
+        if (!self::$inTransaction) {
+            return true;
+        }
+        $result=self::$pdo->rollback();
+        self::$inTransaction=false;
+        return $result;
+    }
+    
+    public static function prepare(string $statement, array $driver_options=[]): PDOStatement {
+        return self::getInstance()->prepare($statement,$driver_options);
+    }
+
+    public static function __callStatic($name, $args) {
+        $callback=array(self::getInstance(), $name);
+        return call_user_func_array($callback, $args);
     }
 
 }

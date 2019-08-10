@@ -23,7 +23,7 @@ class DeviceMemoryStorage {
         $array=@shm_get_var($this->shm,$key);
         if ($array===false or !is_array($array)) {
             $array=[];
-            $stmt=\DB::prepare('SELECT d.uid,d.classname,d.init_data FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.disabled=0');
+            $stmt=\DB::prepare('SELECT d.uid,d.classname,d.init_data FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.disabled=false');
             $stmt->execute([$module_name]);
             while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
                 $device_obj=new $device->classname;

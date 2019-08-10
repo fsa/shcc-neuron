@@ -14,7 +14,7 @@ class Vars {
     }
 
     public static function set($name,$value) {
-        $s=DB::prepare('INSERT INTO variables (name,value) VALUES (?,?) ON DUPLICATE KEY UPDATE value=?');
+        $s=DB::prepare('INSERT INTO variables (name,value) VALUES (?,?) ON CONFLICT DO UPDATE value=?');
         $s->execute([$name,$value,$value]);
     }
 

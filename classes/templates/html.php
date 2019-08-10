@@ -2,6 +2,8 @@
 
 namespace Templates;
 
+use Auth\Internal as Auth;
+
 class HTML {
     
     public $header;
@@ -36,14 +38,14 @@ class HTML {
         <a class="nav-link" href="/charts/">Графики</a>
     </li>
 <?php
-if(\Auth::memberOf(['admin'])) {
+if(Auth::memberOf(['admin'])) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/settings/">Настройки</a>
     </li>
 <?php
 }
-if(\Auth::memberOf()) {
+if(Auth::memberOf()) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/logout/">Выход</a>

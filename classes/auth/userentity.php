@@ -3,22 +3,35 @@
 namespace Auth;
 
 class UserEntity implements UserInterface {
+    
+    use jsonUnserialize;
 
     public $id;
     public $login='guest';
     public $name='Гость';
     public $email;
-    public $groups='["guest"]';
+    public $scope='["guest"]';
     public $disabled=false;
 
     public function __sleep() {
-        return ['id', 'login', 'name', 'email', 'groups', 'disabled'];
+        return ['id','login','name','email','scope','disabled'];
+    }
+    
+    public function jsonSerialize() {
+        return [
+            'id'=>$this->id,
+            'login'=>$this->login,
+            'name'=>$this->name,
+            'email'=>$this->email,
+            'scope'=>$this->scope,
+            'disabled'=>$this->disabled
+        ];
     }
 
-    public function getId() {
+    public function getId(): ?int {
         return $this->id;
     }
-
+    
     public function getLogin(): string {
         return $this->login;
     }
@@ -31,8 +44,8 @@ class UserEntity implements UserInterface {
         return $this->email;
     }
 
-    public function getGroups(): array {
-        return json_decode($this->groups);
+    public function getScope(): array {
+        return json_decode($this->scope);
     }
 
 }
