@@ -10,6 +10,13 @@
             "SET TIME_ZONE=\"Asia/Yekaterinburg\""
         ]
     },
+    "session": {
+        "name": "phpmd-session",
+        "uid": "phpmd-uid",
+        "token": "phpmd-token",
+        "time": 2592000,
+        "path": "/"
+    },
     "yandex": {
         "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
         "alice_skill_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
