@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../common.php';
-Auth::grantAccess(['admin']);
+Auth\Internal::grantAccess(['admin']);
 HTML::showPageHeader('Устройтва');
 ?>
 <p><a href="memory/">Просмотр и добавление обнаруженных устройств</a></p>

@@ -8,5 +8,5 @@ if (!$login or!$password) {
     exit;
 }
 $user=Auth\User::authenticate($login,$password);
-Auth::login($user);
+Auth\Internal::login($user);
 HTML::redirect('../');

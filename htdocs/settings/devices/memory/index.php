@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../../common.php';
-Auth::grantAccess(['admin']);
+Auth\Internal::grantAccess(['admin']);
 $module=filter_input(INPUT_GET,'module');
 $id=filter_input(INPUT_GET,'id');
 if($module) {

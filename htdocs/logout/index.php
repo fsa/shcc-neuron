@@ -1,5 +1,5 @@
 <?php
 
 require_once '../common.php';
-Auth::logout();;
+Auth\Internal::logout();;
 HTML::redirect('../');

@@ -1,7 +1,7 @@
 <?php
 
 require_once '../common.php';
-Auth::grantAccess(['admin']);
+Auth\Internal::grantAccess(['admin']);
 HTML::showPageHeader('Настройки');
 ?>
 <p><a href="places/">Места</a></p>

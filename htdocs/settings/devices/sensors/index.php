@@ -5,7 +5,7 @@ if (!$id) {
     die;
 }
 require_once '../../../common.php';
-Auth::grantAccess(['admin']);
+Auth\Internal::grantAccess(['admin']);
 $device=SmartHome\Devices::getDeviceById($id);
 if (!$device) {
     die;

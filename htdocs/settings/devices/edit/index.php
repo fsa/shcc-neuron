@@ -1,6 +1,6 @@
 <?php
 require_once '../../../common.php';
-Auth::grantAccess(['admin']);
+Auth\Internal::grantAccess(['admin']);
 $action=filter_input(INPUT_POST,'action');
 if($action) {
     require 'edit.php';
