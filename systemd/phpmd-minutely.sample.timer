@@ -1,0 +1,8 @@
+[Unit]
+Description=Timer for PHPMD minutely script
+
+[Timer]
+OnCalendar=minutely
+
+[Install]
+WantedBy=timers.target

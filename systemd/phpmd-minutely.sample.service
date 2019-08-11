@@ -1,0 +1,8 @@
+[Unit]
+Description=PHPMD minutely script
+
+[Service]
+WorkingDirectory=/home/fsa/NetBeansProjects/phpmd/custom/
+ExecStart=/opt/phpmd/custom/minutely.sh
+User=www-data
+Group=www-data

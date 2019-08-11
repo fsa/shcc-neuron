@@ -2,7 +2,9 @@ settings.json
 config/*.conf
 node_modules/*
 daemon/phpmd
-daemon/phpmd.service
+systemd/phpmd.service
+systemd/phpmd-minutely.service
+systemd/phpmd-minutely.timer
 custom/*
 !custom/lib.php
 !custom/*.sample.php
