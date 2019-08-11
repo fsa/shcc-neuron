@@ -5,7 +5,7 @@ After=mysqld.service
 
 [Service]
 Type=forking
-WorkingDirectory=/var/www/phpmd/daemon/
+WorkingDirectory=/opt/phpmd/daemon/
 ExecStart=/usr/bin/php -f daemonctl.php start
 ExecStop=/usr/bin/php -f daemonctl.php stop
 Restart=always

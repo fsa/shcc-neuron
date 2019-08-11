@@ -8,7 +8,7 @@ if(!is_array(spl_autoload_functions())) {
 
 $night=boolval(getVar('System.NightMode'));
 $security=boolval(getVar('System.SecurityMode'));
-$mute=boolval($night or $security);
+$mute=boolval($night or $security or getVar('System.SoundMute'));
 $minute=date('i');
 $hour=date('H');
 $time=date('H:i');
