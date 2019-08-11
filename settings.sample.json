@@ -1,13 +1,15 @@
 {
-    "site_title": "PHP MajorDomo",
+    "site": {
+        "title": "PHP MajorDomo"
+    },
     "url": "http://127.0.0.1",
     "daemon-ip": "127.0.0.1",
     "pdo": {
-        "dsn": "mysql:host=localhost;dbname=phpmd;charset=utf8",
+        "dsn": "pgsql:host=localhost;dbname=phpmd",
         "username": "phpmd",
         "password": "phpmd",
         "init": [
-            "SET TIME_ZONE=\"Asia/Yekaterinburg\""
+            "SET TIMEZONE=\"Asia/Yekaterinburg\""
         ]
     },
     "session": {
