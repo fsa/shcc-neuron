@@ -1,8 +1,8 @@
 # Документация PHPMD
 
-[Пользовательские скрипты](scripts.md)
+[Пользовательские скрипты](userscripts.md)
 
 [Системные перемнные](variables.md)
 
 ## Оборудование Yeelight
-[Основное устройство](yeelight\GenericDevice.md)
+[Основное устройство](yeelight/GenericDevice.md)
