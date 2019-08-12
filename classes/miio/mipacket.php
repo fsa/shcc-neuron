@@ -27,7 +27,7 @@ class MiPacket {
     public function getDeviceId() {
         return $this->device_id;
     }
-
+    
     public function setRemoteAddr($ip,$port=false) {
         $this->remote_ip=$ip;
         if($port) {
@@ -59,4 +59,31 @@ class MiPacket {
             }
         }
     }
+    
+    # Методы для работы с кодированными сообщенями
+
+    public function setToken($token) {
+        $this->token=$token;
+        $this->key=md5(hex2bin($this->token));
+        $this->iv=md5(hex2bin($this->key.$this->token));
+    }
+
+    private function encrypt($data) {
+        return bin2hex(openssl_encrypt($data,'AES-128-CBC',hex2bin($this->key),OPENSSL_RAW_DATA,hex2bin($this->iv)));
+    }
+
+    public function decryptMessage() {
+        return openssl_decrypt(hex2bin($this->data),'AES-128-CBC',hex2bin($this->key),OPENSSL_RAW_DATA,hex2bin($this->iv));
+    }
+
+    public function buildMessage($msg) {
+        $this->data=$this->encrypt($msg);
+        $this->length=sprintf('%04x',(int)strlen($this->data)/2+32);
+        $this->timestamp=sprintf('%08x',time()+$this->timeDiff);
+        $packet=$this->magic.$this->length.$this->device_id.$this->timestamp.$this->token.$this->data;
+        $this->checksum=md5(hex2bin($packet));
+        $packet=$this->magic.$this->length.$this->device_id.$this->timestamp.$this->checksum.$this->data;
+        return $packet;
+    }
+
 }
