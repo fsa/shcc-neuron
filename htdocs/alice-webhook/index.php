@@ -14,7 +14,6 @@ $dump=[
 file_put_contents('json_'.date('Y_m_d').'.txt', print_r($dump, true).PHP_EOL, FILE_APPEND | LOCK_EX);
 $filename=implode('_',explode('/',$path)).'.php';
 if(file_exists($filename)) {
-    \Auth\Bearer::grantAccess();
     include $filename;
     exit;
 }
