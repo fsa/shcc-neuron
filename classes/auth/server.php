@@ -113,13 +113,33 @@ class Server {
             "token_type"=>"bearer",
             "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
             "refresh_token"=>$refresh_token,
-            "scope"=>$auth_tokens->scope,
-            "test"=>print_r($auth_tokens, true)
+            "scope"=>$auth_tokens->scope
         ]);
     }
 
     private function requestPostPassword() {
-        httpResponse::json(['error'=>'unsupported_response_type']);
+        $login=filter_input(INPUT_POST, 'username');
+        $password=filter_input(INPUT_POST, 'password');
+        $scope=filter_input(INPUT_POST, 'scope');
+        $user=User::authenticate($login,$password);
+        if(is_null($user)) {
+            html::showException('Неверное имя пользователя или пароль!');
+            exit;
+        }
+        $scope=User::checkScope($scope, $user->getId());
+        $code=$this->genCode();
+        $access_token=$this->genAccessToken();
+        $refresh_token=$this->genRefreshToken();
+        $s=DB::prepare('INSERT INTO auth_tokens (user_id, code, access_token, refresh_token, scope) VALUES (?,?,?,?,?)');
+        $s->execute([$user->getId(),$code, $access_token, $refresh_token,$scope]);
+        $s->closeCursor();        
+        httpResponse::json([
+            "access_token"=>$access_token,
+            "token_type"=>"bearer",
+            "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
+            "refresh_token"=>$refresh_token,
+            "scope"=>$auth_tokens->scope
+        ]);
     }
 
     private function requestPostRefreshToken() {
