@@ -9,13 +9,13 @@ class User {
 
     private $user;
 
-    public static function authenticate($login, $password): UserInterface {
+    public static function authenticate($login, $password): ?UserInterface {
         $user=new self;
         $user->fetch($login);
         if ($user->userExist() and $user->isPasswordCorrect($password)) {
             return $user->user;
         }
-        throw new \AppException('Неверное имя пользователя или пароль!');
+        return null;
     }
 
     public static function authenticateExternal(UserInterface $user_ext) {

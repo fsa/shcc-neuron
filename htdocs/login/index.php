@@ -8,6 +8,10 @@ if (!$login or!$password) {
     exit;
 }
 $user=Auth\User::authenticate($login,$password);
+if(is_null($user)) {
+    html::showNotification('Ошибка', 'Неверное имя пользователя или пароль!');
+    exit;
+}
 Auth\Internal::login($user);
 $url=filter_input(INPUT_POST,'redirect_uri');
 HTML::redirect(is_null($url)?'/':$url);

@@ -131,7 +131,7 @@ class HTML {
         $message="<p>$message</p>".PHP_EOL;
         if (!is_null($url)) {
             $html->header='<meta http-equiv="Refresh" content="5;URL='.$url.'">';
-            $message.="<p><a href=\"$url\">Продолжить.</a></p>";
+            $message.="<p><a href=\"$url\">Продолжить</a></p>";
         }
         Header("Content-Type: text/html; charset=utf-8");
         self::disableBrowserCache();
@@ -139,7 +139,7 @@ class HTML {
         $html->message=$message;
         $html->site_title=\Settings::get('site')->title;
         $html->show();
-        die;
+        exit;
     }
 
     public static function disableBrowserCache() {
