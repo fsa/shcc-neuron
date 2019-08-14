@@ -2,7 +2,8 @@
 
 namespace Auth;
 
-use HTML;
+use HTML,
+    AppException;
 
 class Internal {
 
@@ -65,7 +66,7 @@ class Internal {
         }
         if (!isset($_SESSION['user'])) {
             $user=Session::refresh();
-            if(!$user) {
+            if (!$user) {
                 session_destroy();
                 $this->user=new UserEntity;
                 return;
