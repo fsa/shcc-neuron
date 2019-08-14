@@ -123,8 +123,7 @@ class Server {
         $scope=filter_input(INPUT_POST, 'scope');
         $user=User::authenticate($login,$password);
         if(is_null($user)) {
-            html::showException('Неверное имя пользователя или пароль!');
-            exit;
+            httpResponse::json(['error'=>'invalid_client']);  
         }
         $scope=User::checkScope($scope, $user->getId());
         $code=$this->genCode();
