@@ -9,7 +9,7 @@ if (!$login or!$password) {
 }
 $user=Auth\User::authenticate($login,$password);
 if(is_null($user)) {
-    html::showException('Неверное имя пользователя или пароль!');
+    HTML::showException('Неверное имя пользователя или пароль!');
     exit;
 }
 Auth\Internal::login($user);
