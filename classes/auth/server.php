@@ -123,7 +123,11 @@ class Server {
         $scope=filter_input(INPUT_POST, 'scope');
         $user=User::authenticate($login,$password);
         if(is_null($user)) {
-            httpResponse::json(['error'=>'invalid_client']);  
+            Fail2Ban::addFail($login);
+            httpResponse::error(401);  
+        }
+        if(Fail2Ban::ipIsBlocked() or Fail2Ban::loginIsBlocked($login)) {
+            httpResponse::error(429);
         }
         $scope=User::checkScope($scope, $user->getId());
         $code=$this->genCode();
