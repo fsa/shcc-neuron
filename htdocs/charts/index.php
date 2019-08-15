@@ -1,5 +1,6 @@
 <?php
 require_once '../common.php';
+Auth\Internal::grantAccess();
 $unit=filter_input(INPUT_GET,'unit',FILTER_VALIDATE_INT);
 if (!$unit) {
     $units=SmartHome\MeterUnits::getUnitsList();

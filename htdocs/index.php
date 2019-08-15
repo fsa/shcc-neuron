@@ -1,6 +1,7 @@
 <?php
 
 require_once 'common.php';
+Auth\Internal::grantAccess();
 HTML::showPageHeader('Умный дом');
 ?>
 <h1>Умный дом</h1>

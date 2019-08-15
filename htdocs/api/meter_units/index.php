@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../common.php';
+Auth\Internal::grantAccess();
 $units=SmartHome\MeterUnits::getUnits();
 foreach($units as $key=>&$unit) {
     $unit['meters']=SmartHome\Meters::getMetersByUnitId($key);
