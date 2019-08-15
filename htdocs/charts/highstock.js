@@ -27,7 +27,7 @@ Highcharts.setOptions({
     }
 });
 
-function createChart(title, units) {
+function createChart(title, units, minimal, maximal) {
     chart=Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -85,7 +85,9 @@ function createChart(title, units) {
                 formatter: function () {
                 return this.value + ' ' + units;
                 }
-            }
+            },
+            softMin: minimal,
+            softMax: maximal
         },
         tooltip: {
         split: true,
@@ -152,7 +154,7 @@ $.getJSON('/api/meter_units/', [], function(units) {
             };
             seriesCounter += 1;
             if (seriesCounter === unit.meters.length) {
-                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text());
+                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text(), meter.minimal, meter.maximal);
             }
         });
     });
