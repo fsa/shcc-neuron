@@ -66,6 +66,26 @@ if(Auth::memberOf()) {
 <main role="main" class="container-fluid">
 <?php
     }
+    
+    public function Card($title, $text, $date=null) {
+?>
+<div class="col-sm-3">
+<div class="card border-secondary mb-4">
+<div class="card-header bg-secondary text-white"><?=$title?></div>
+<div class="card-body">
+<p class="card-text"><?=$text?></p>
+<?php
+        if(!is_null($date)) {
+?>
+<p class="card-text"><small class="text-muted"><?=$date?></small></p>
+<?php
+        }
+?>
+</div>
+</div>
+</div>
+<?php
+    }
 
     public function footer() {
 ?>
