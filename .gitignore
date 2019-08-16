@@ -1,4 +1,5 @@
 settings.json
+backup/*.sql
 config/*.conf
 node_modules/*
 daemon/phpmd
