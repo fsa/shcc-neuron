@@ -67,7 +67,7 @@ if(Auth::memberOf()) {
 <?php
     }
     
-    public function Card($title, $text, $date=null) {
+    public function Card($title, $text, $state=null) {
 ?>
 <div class="col-sm-3">
 <div class="card border-secondary mb-4">
@@ -75,9 +75,9 @@ if(Auth::memberOf()) {
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
 <?php
-        if(!is_null($date)) {
+        if(!is_null($state)) {
 ?>
-<p class="card-text"><small class="text-muted"><?=$date?></small></p>
+<p class="card-text"><small class="text-muted"><?=$state?></small></p>
 <?php
         }
 ?>
