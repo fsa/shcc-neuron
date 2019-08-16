@@ -2,22 +2,25 @@
 
 require_once 'common.php';
 Auth\Internal::grantAccess();
-HTML::showPageHeader('Умный дом');
+HTML::showPageHeader('Панель управления');
+if(file_exists('../custom/dashboard.php')) {
+    include_once '../custom/dashboard.php';
+} else {
 ?>
-<h1>Умный дом</h1>
+<p><strong>Умный дом</strong></p>
 <?php
-if(SmartHome\Vars::get('SyStem.NightMode')) {
+    if(SmartHome\Vars::get('System.NightMode')) {
 ?>
 <p>Включен ночной режим.</p>
 <?php
-}
-if(SmartHome\Vars::get('SyStem.SecurityMode')) {
+    }
+    if(SmartHome\Vars::get('System.SecurityMode')) {
 ?>
 <p>Включен режим охраны.</p>
 <?php
-}
-#var_dump(Auth::getUser());
+    }
 ?>
-<p>Это тестовая версия системы &laquo;Умный дом&raquo;. Используйте её на свой страх и риск.</p>
+<p>Для настройки внешнего вида этой страницы создайте файл custom/dashboard.php.</p>
 <?php
+}
 HTML::showPageFooter();
