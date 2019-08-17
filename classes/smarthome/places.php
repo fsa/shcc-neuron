@@ -78,7 +78,7 @@ class Places {
     }
     
     public static function getPlaceListStmt() {
-        $s=DB::query('SELECT NULL,"-----" UNION SELECT id, name FROM places');
+        $s=DB::query("SELECT NULL, '-----' UNION SELECT id, name FROM places");
         return $s;
     }
 
