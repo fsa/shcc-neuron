@@ -35,25 +35,25 @@ class HTML {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <a class="nav-link" href="/charts/">Графики</a>
+        <a class="nav-link text-white" href="/charts/">Графики</a>
     </li>
 <?php
 if(Auth::memberOf(['admin'])) {
 ?>
     <li class="nav-item">
-        <a class="nav-link" href="/settings/">Настройки</a>
+        <a class="nav-link text-white" href="/settings/">Настройки</a>
     </li>
 <?php
 }
 if(Auth::memberOf()) {
 ?>
     <li class="nav-item">
-        <a class="nav-link" href="/logout/">Выход</a>
+        <a class="nav-link text-white" href="/logout/">Выход</a>
     </li>
 <?php
 } else {
 ?>
-    <li class="nav-item">
+    <li class="nav-item text-white">
         <a class="nav-link" href="/login/">Вход</a>
     </li>
 <?php
@@ -70,8 +70,8 @@ if(Auth::memberOf()) {
     public function Card($title, $text, $state=null) {
 ?>
 <div class="col-sm-3">
-<div class="card border-secondary mb-4">
-<div class="card-header bg-secondary text-white"><?=$title?></div>
+<div class="card border-dark mb-4">
+<div class="card-header bg-dark text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
 <?php
