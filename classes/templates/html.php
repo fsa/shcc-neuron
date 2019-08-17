@@ -16,7 +16,7 @@ class HTML {
 <meta charset="utf-8">
 <title><?=$this->title?></title>
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="gray">
+<meta name="theme-color" content="#343a40">
 <link rel="stylesheet" href="/styles.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="/libs/jquery/jquery.min.js"></script>
