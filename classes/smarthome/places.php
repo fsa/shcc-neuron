@@ -60,21 +60,39 @@ class Places {
         return $id;
     }
     
+    public static function create($name, $pid) {
+        $s=DB::prepare('INSERT INTO places (name, pid) VALUES (?,?) RETURNING id');
+        $s->execute([$name, $pid]);
+        return $s->fetch(PDO::FETCH_COLUMN);        
+    }
+
+    public static function move($id, $parent) {
+        $s=DB::prepare('UPDATE places SET pid=? WHERE id=?');
+        $s->execute([$parent, $id]);
+        return $s->rowCount();        
+    }
+
     public static function delete($id) {
         $s=DB::prepare('DELETE FROM places WHERE id=?');
         $s->execute([$id]);
         return $s->rowCount();
     }
-
-    public static function getRootPlaces() {
-        $s=DB::query('SELECT id, name FROM places WHERE pid IS NULL');
-        return $s->fetchAll(PDO::FETCH_KEY_PAIR);
+    
+    public static function rename($id, $name) {
+        $s=DB::prepare('UPDATE places SET name=? WHERE id=?');
+        $s->execute([$name, $id]);
+        return $s->rowCount();        
     }
 
-    public static function getPlaceChild($id) {
-        $s=DB::prepare('SELECT id, name FROM places WHERE pid=?');
+    public static function getRootPlaces($fetch_stype=PDO::FETCH_KEY_PAIR) {
+        $s=DB::query('SELECT id, name AS text FROM places WHERE pid IS NULL ORDER BY id');
+        return $s->fetchAll($fetch_stype);
+    }
+
+    public static function getPlaceChild($id, $fetch_stype=PDO::FETCH_KEY_PAIR) {
+        $s=DB::prepare('SELECT id, name AS text FROM places WHERE pid=? ORDER BY id');
         $s->execute([$id]);
-        return $s->fetchAll(PDO::FETCH_KEY_PAIR);
+        return $s->fetchAll($fetch_stype);
     }
     
     public static function getPlaceListStmt() {

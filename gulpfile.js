@@ -39,6 +39,17 @@ function highchartsTask() {
             .pipe(dest('htdocs/libs/highcharts'));
 }
 
+function jstreeTask() {
+    return src([
+        'node_modules/jstree/dist/jstree.min.js',
+        'node_modules/jstree/dist/themes/default/throbber.gif',
+        'node_modules/jstree/dist/themes/default/32px.png',
+        'node_modules/jstree/dist/themes/default/40px.png',
+        'node_modules/jstree/dist/themes/default/style.min.css'
+    ])
+            .pipe(dest('htdocs/libs/jstree'));
+}
+
 function jqueryTask() {
     return src([
         'node_modules/jquery/dist/jquery.min.js'
@@ -78,7 +89,8 @@ exports.bootstrap = bootstrapTask;
 exports.scss = scssTask;
 exports.highcharts = highchartsTask;
 exports.jquery = jqueryTask;
+exports.jstree = jstreeTask;
 exports.html5shiv = html5shivTask;
-exports.jslibs = parallel(jqueryTask,bootstrapTask,highchartsTask,html5shivTask);
+exports.jslibs = parallel(jqueryTask,jstreeTask,bootstrapTask,highchartsTask,html5shivTask);
 exports.watch = watchTask;
 exports.default = defaultTask;

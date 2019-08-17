@@ -2,32 +2,102 @@
 
 require_once '../../common.php';
 Auth\Internal::grantAccess(['admin']);
+HTML::addHeader('<script src="/libs/jstree/jstree.min.js"></script>');
+HTML::addHeader('<link rel="stylesheet" href="/libs/jstree/style.min.css">');
 HTML::showPageHeader('Объекты');
 ?>
 <p>Создайте иерархию объектов - мест размещения устройств. Рекомендуется использовать древовидную структуру где корневыми элементами являются отдельные объекты недвижимости (дом, гараж, баня и т.д.), далее, у каждого объекта есть свои помещения (прихожая, спальня, кухня, подвал и т.д.). В каждом помещении могут иметься окна, двери и т.д. На окнах могут быть добавлены форточки, ставни и т.д.</p>
-<div class="bg-warning">
-<p>Внимание!!! В данный момент не проверяется попытка присвоения в качестве родительского элемента одного из дочерних. В этом случае вся ветка потеряет связь с корневыми элементами и пропадёт из списка редактирования. Для восстановления дерева объектов будет необходимо вручную скорректировать базу данных. Эта недоработка будет исправлена в будущих версиях системы.</p>
-<p>Удаление элементов, которые содержат дочерние объекты или привязанные устройства, невозможно, т.к. это будет вызывать нарушение целостности базы данных и генерировать исключительную ситуацию.</p>
-</div>
-<p><a href="edit/">Создать новый корневой элемент</a></p>
-<?php
-showList(\SmartHome\Places::getRootPlaces());
-HTML::showPageFooter();
-
-function showList($list) {
-?>
-<ul>
-<?php
-    foreach ($list as $key=>$value) {
-        $child=\SmartHome\Places::getPlaceChild($key);
-?>
-        <li><?=$value?> || <a href="edit/?id=<?=$key?>">Редактировать</a> || <a href="edit/?pid=<?=$key?>">Создать дочерний элемент</a><?php if(sizeof($child)==0) {?> || <a href="remove/?id=<?=$key?>">Удалить</a><?php } ?></li>
-<?php
-        if(sizeof($child)>0) {
-            showList($child);
+<p><a href="edit/">Создать новый элемент</a></p>
+<div id="container"></div>
+<script>
+$(function() {
+    $('#container').jstree({
+    'core' : {
+      'data' : {
+        "url" : "/api/places/"
+      },
+      "check_callback": true
+    },
+    "contextmenu":{         
+    "items": function($node) {
+        var tree = $("#container").jstree(true);
+        return {
+            "Create": {
+                "label": "Добавить элемент",
+                "action": function (obj) { 
+                    $node = tree.create_node($node, {"text": "Новый элемент"});
+                    tree.edit($node);
+                }
+            },
+            "Rename": {
+                "label": "Переименовать",
+                "action": function (obj) { 
+                    tree.edit($node);
+                }
+            },                         
+            "Remove": {
+                "label": "Удалить",
+                "action": function (obj) { 
+                    tree.delete_node($node);
+                    }
+                }
+            };
         }
-    }
-?>
-</ul>
+    },
+
+    "state" : { "key" : "places_state" },
+    "plugins" : ["state", "dnd", "contextmenu"]
+    })
+        .on("move_node.jstree", function (e, data) {
+            console.log(data);
+            params={
+                "place_id": data.node.id,
+                "parent": data.parent
+            };
+            $.get('/api/places/move/', params, function(result) {
+                if(result.error) {
+                    alert('Не удалось переместить элемент');
+                }
+
+            });
+        })
+        .on("create_node.jstree", function (e, data) {
+            console.log(data);
+            params={
+                "text": data.node.text,
+                "parent": data.parent
+            };
+            $.get('/api/places/create/', params, function(result) {
+                if(result.error) {
+                    alert('Не удалось создать элемент');
+                } else {
+                    // Элементу нужно присвоить ID
+                    console.log(e);
+                }
+            });
+        })
+            .on("delete_node.jstree", function (e, data) {
+            params={
+                "id": data.node.id
+            };
+            $.get('/api/places/delete/', params, function(result) {
+                if(result.error) {
+                    alert('Не удалось удалить элемент');
+                }
+            });
+        })
+            .on("rename_node.jstree", function (e, data) {
+            params={
+                "id": data.node.id,
+                "text": data.node.text
+            };
+            $.get('/api/places/rename/', params, function(result) {
+                if(result.error) {
+                    alert('Не удалось переименовать элемент');
+                }
+            });
+        });
+});
+</script>
 <?php
-}
+HTML::showPageFooter();
