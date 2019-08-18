@@ -10,5 +10,4 @@ if(!$text or !$parent) {
 if($text=='') {
     httpResponse::json(['error'=>'Заголовок элемента не может быть пустым']);
 }
-$id=SmartHome\Places::create($text, $parent);
-httpResponse::json(['id'=>$id]);
+httpResponse::json(SmartHome\Places::create($text, $parent));

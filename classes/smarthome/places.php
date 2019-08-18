@@ -61,9 +61,9 @@ class Places {
     }
     
     public static function create($name, $pid) {
-        $s=DB::prepare('INSERT INTO places (name, pid) VALUES (?,?) RETURNING id');
+        $s=DB::prepare('INSERT INTO places (name, pid) VALUES (?,?) RETURNING id, name AS text');
         $s->execute([$name, $pid]);
-        return $s->fetch(PDO::FETCH_COLUMN);        
+        return $s->fetch(PDO::FETCH_OBJ);
     }
 
     public static function move($id, $parent) {

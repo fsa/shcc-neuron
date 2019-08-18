@@ -13,10 +13,50 @@ HTML::showPageHeader('Объекты');
 $(function() {
     $('#container').jstree({
     'core' : {
-      'data' : {
-        "url" : "/api/places/"
-      },
-      "check_callback": true
+        'data' : {
+            "url" : "/api/places/"
+        },
+        "check_callback": function (operation, node, node_parent, node_position, more) {
+            if(operation==='rename_node') {
+                params={
+                    "id": node.id,
+                    "text": node_position
+                };
+                $.get('/api/places/rename/', params, function(result) {
+                    if(result.error) {
+                        alert(result.error);
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            if(operation==='move_node') {
+                params={
+                    "place_id": node.id,
+                    "parent": node_parent.id
+                };
+                $.get('/api/places/move/', params, function(result) {
+                    if(result.error) {
+                        alert(result.error);
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            if(operation==='delete_node') {
+                params={
+                    "id": node.id
+                };
+                $.get('/api/places/delete/', params, function(result) {
+                    if(result.error) {
+                        alert(result.error);
+                        return false;
+                    }
+                    return true;
+                });
+            }
+            return true;
+        }
     },
     "contextmenu":{         
     "items": function($node) {
@@ -25,8 +65,18 @@ $(function() {
             "Create": {
                 "label": "Добавить элемент",
                 "action": function (obj) { 
-                    $node = tree.create_node($node, {"text": "Новый элемент"});
-                    tree.edit($node);
+                    params={
+                        "text": "Новый элемент",
+                        "parent": $node.id
+                    };
+                    $.get('/api/places/create/', params, function(result) {
+                        if(result.error) {
+                            alert(result.error);
+                            return;
+                        }
+                        $node = tree.create_node($node, result);
+                        tree.edit($node);
+                    });
                 }
             },
             "Rename": {
@@ -47,56 +97,7 @@ $(function() {
 
     "state" : { "key" : "places_state" },
     "plugins" : ["state", "dnd", "contextmenu"]
-    })
-        .on("move_node.jstree", function (e, data) {
-            console.log(data);
-            params={
-                "place_id": data.node.id,
-                "parent": data.parent
-            };
-            $.get('/api/places/move/', params, function(result) {
-                if(result.error) {
-                    alert('Не удалось переместить элемент');
-                }
-
-            });
-        })
-        .on("create_node.jstree", function (e, data) {
-            console.log(data);
-            params={
-                "text": data.node.text,
-                "parent": data.parent
-            };
-            $.get('/api/places/create/', params, function(result) {
-                if(result.error) {
-                    alert('Не удалось создать элемент');
-                } else {
-                    // Элементу нужно присвоить ID
-                    console.log(e);
-                }
-            });
-        })
-            .on("delete_node.jstree", function (e, data) {
-            params={
-                "id": data.node.id
-            };
-            $.get('/api/places/delete/', params, function(result) {
-                if(result.error) {
-                    alert('Не удалось удалить элемент');
-                }
-            });
-        })
-            .on("rename_node.jstree", function (e, data) {
-            params={
-                "id": data.node.id,
-                "text": data.node.text
-            };
-            $.get('/api/places/rename/', params, function(result) {
-                if(result.error) {
-                    alert('Не удалось переименовать элемент');
-                }
-            });
-        });
+    });
 });
 </script>
 <?php
