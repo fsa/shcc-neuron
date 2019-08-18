@@ -59,7 +59,7 @@ Forms::inputString('classname',$device->classname,'Класс устройств
 Forms::inputString('description',$device->description,'Описание:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=>$name) {
-    Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param].':':'',$name);    
+    Forms::inputString('init['.$param.']',isset($values[$param])?$values[$param]:'',$name);    
 }
 Forms::inputSelect('place_id',$device->place_id,'Расположение:',\SmartHome\Places::getPlaceListStmt());
 Forms::inputCheckbox('disabled',$device->disabled,'Выключить');

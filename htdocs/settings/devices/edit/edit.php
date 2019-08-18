@@ -18,7 +18,7 @@ $device->place_id=filter_input(INPUT_POST,'place_id',FILTER_VALIDATE_INT);
 if(!$device->place_id) {
     $device->place_id=null;
 }
-$device->disabled=filter_input(INPUT_POST,'disabled')==!false;
+$device->disabled=filter_input(INPUT_POST,'disabled')==!false?1:0;
 $devices=new \SmartHome\Devices;
 $devices->setDevice($device);
 if($device->id) {
