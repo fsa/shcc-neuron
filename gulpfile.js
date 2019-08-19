@@ -21,15 +21,6 @@ function scssTask() {
             .pipe(bs.stream());
 };
 
-function leafletTask() {
-    return src([
-        'node_modules/leaflet/dist/leaflet.js',
-        'node_modules/leaflet/dist/leaflet.css',
-        'node_modules/leaflet/dist/**/*.png'
-    ])
-            .pipe(dest('htdocs/libs/leaflet'));
-}
-
 function highchartsTask() {
     return src([
         'node_modules/highcharts/highstock.js',
