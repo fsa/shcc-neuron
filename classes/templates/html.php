@@ -67,6 +67,18 @@ if(Auth::memberOf()) {
 <?php
     }
     
+    public function CardsHeader(){
+?>
+<div class="row">
+<?php
+    }
+
+    public function CardsFooter(){
+?>
+</div>
+<?php
+    }
+    
     public function Card($title, $text, $state=null) {
 ?>
 <div class="col-sm-3">
