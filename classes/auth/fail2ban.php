@@ -8,21 +8,21 @@ use DB,
 class Fail2Ban {
 
     public static function addFail($login) {
-        $fail2ban=\Settings::get('fail2ban');
-        if (is_null($fail2ban)) {
+        $proxy=\Settings::get('trusted_proxy_x_real_ip');
+        if (is_null($proxy)) {
             return;
         }
-        $ip=self::getClientIp($fail2ban->trusted_proxy_x_real_ip);
+        $ip=self::getClientIp($proxy);
         $s=DB::prepare('INSERT INTO auth_fail2ban (login, ip, fail_time) VALUES (?,?,NOW())');
         $s->execute([$login, $ip]);
     }
 
     public static function ipIsBlocked(): bool {
-        $fail2ban=\Settings::get('fail2ban');
-        if (is_null($fail2ban)) {
+        $proxy=\Settings::get('trusted_proxy_x_real_ip');
+        if (is_null($proxy)) {
             return false;
         }
-        $ip=self::getClientIp($fail2ban->trusted_proxy_x_real_ip);
+        $ip=self::getClientIp($proxy);
         $s=DB::prepare("SELECT count(*) FROM auth_fail2ban WHERE fail_time+INTERVAL '5 minutes'>NOW() AND ip=?");
         $s->execute([$ip]);
         $count=$s->fetch(PDO::FETCH_COLUMN);
@@ -33,10 +33,6 @@ class Fail2Ban {
     }
 
     public static function loginIsBlocked($login): bool {
-        $fail2ban=\Settings::get('fail2ban');
-        if (is_null($fail2ban)) {
-            return false;
-        }
         $s=DB::prepare("SELECT count(*) FROM auth_fail2ban WHERE fail_time+INTERVAL '5 minutes'>NOW() AND login=?");
         $s->execute([$login]);
         $count=$s->fetch(PDO::FETCH_COLUMN);

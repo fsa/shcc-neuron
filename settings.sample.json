@@ -20,8 +20,7 @@
         "path": "/"
     },
     "yandex": {
-        "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-        "alice_skill_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+        "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
     },
     "tts": {
         "pre_sound": "dingdong.mp3",
@@ -29,7 +28,7 @@
     },
     "openweathermap": {
         "api_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "city_id": "1496747"
+        "city_id": "1486209"
     },
     "home": {
         "city": "Екатеринбург",
@@ -37,5 +36,6 @@
         "lat": 56.83827, 
         "lon": 60.60345
     },
-    "timezone": "Asia/Yekaterinburg"
+    "timezone": "Asia/Yekaterinburg",
+    "admins": [1]
 }
