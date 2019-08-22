@@ -1,5 +1,29 @@
 # История изменений
 
+## v0.3.1, 22.08.2019
+
+### Изменение базы данных
+
+Комментарии к таблицам вынесены из комментариев SQL в комментарии к таблицам. Удалена устаревшая таблица auth_codes. Для приведения базы данных к текущему виду выполните следующие запросы:
+```sql
+DROP TABLE auth_codes;
+COMMENT ON TABLE auth_users IS 'Пользователи системы';
+COMMENT ON TABLE auth_server IS 'Клиенты сервера OAuth 2.0';
+COMMENT ON TABLE auth_tokens IS 'Токены OAuth 2.0';
+COMMENT ON TABLE auth_sessions IS 'Сессии пользователей системы';
+COMMENT ON TABLE auth_fail2ban IS 'Данные об ошибках аутентификации';
+COMMENT ON TABLE places IS 'Места размещения устройств';
+COMMENT ON TABLE modules IS 'Модули';
+COMMENT ON TABLE devices IS 'Устройства';
+COMMENT ON TABLE meter_units IS 'Типы измеряемых параметров';
+COMMENT ON TABLE meters IS 'Измерительные датчики';
+COMMENT ON TABLE meter_history IS 'Журнал измерений';
+COMMENT ON TABLE indicators IS 'Контрольные датчики';
+COMMENT ON TABLE indicator_history IS 'Журнал контрольных датчиков';
+COMMENT ON TABLE variables IS 'Пользовательские и системные переменные';
+COMMENT ON TABLE tts_log IS 'Журнал голосовых сообщений';
+```
+
 ## v0.3.0, 19.08.2019
 
 ### Изменение базы данных
