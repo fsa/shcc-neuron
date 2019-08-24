@@ -10,4 +10,3 @@ custom/*
 !custom/lib.php
 !custom/*.sample.php
 !custom/minutely.sh
-sound/cache/
