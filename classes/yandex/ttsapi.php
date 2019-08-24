@@ -2,6 +2,8 @@
 
 namespace Yandex;
 
+use Settings;
+
 /**
  * https://tts.voicetech.yandex.net/generate? 
   key=<API‑ключ>
@@ -69,7 +71,7 @@ class TtsApi implements \Tts\TtsInterface {
     }
 
     public function getVoiceFile($text) {
-        $filename=__DIR__.'/../../sound/cache/yandex/'.$this->params['speaker'].'/'.md5($text).'_'.'_'.$this->params['emotion'].'.mp3';
+        $filename=Settings::get('cache_dir','/var/cache/phpmd').'/yandex/'.$this->params['speaker'].'/'.$this->params['lang'].'/'.$this->params['emotion'].'/'.md5($text).'.'.$this->params['format'];
         if (!file_exists($filename)) {
             $this->requestApi($filename,$text);
         }
