@@ -6,8 +6,9 @@ require_once 'autoloader.php';
 $daemon_class=$argv[1];
 $daemon=new $daemon_class(\Settings::get('url').'/action/');
 $daemon_name=$daemon->getName();
-$baseDir=dirname(__FILE__);
-$pid_file=$baseDir.'/pid/'.$daemon_name.'.pid';
+$log_dir=Settings::get('log_dir', '/var/log/phpmd');
+$pid_dir=Settings::get('pid_dir', '/var/run/phpmd');
+$pid_file=$pid_dir.'/'.$daemon_name.'.pid';
 if (isDaemonActive($pid_file)) {
     echo "Daemon \"$daemon_name\" already active.".PHP_EOL;
     exit;
@@ -21,13 +22,13 @@ if ($child_pid==-1) {
 }
 posix_setsid();
 file_put_contents($pid_file,getmypid());
-ini_set('error_log',$baseDir.'/log/error.log');
+ini_set('error_log',$log_dir.'/error.log');
 fclose(STDIN);
 fclose(STDOUT);
 fclose(STDERR);
 $STDIN=fopen('/dev/null','r');
-$STDOUT=fopen($baseDir.'/log/'.$daemon_name.'.log','ab');
-$STDERR=fopen($baseDir.'/log/'.$daemon_name.'_error.log','ab');
+$STDOUT=fopen($log_dir.'/'.$daemon_name.'.log','ab');
+$STDERR=fopen($log_dir.'/'.$daemon_name.'_error.log','ab');
 
 $daemon->prepare();
 $stop_server=false;
