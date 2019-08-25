@@ -58,8 +58,8 @@ class HTML {
         header("Content-Type: text/html; charset=utf-8");
         header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T", self::$timestamp));
         self::disableBrowserCache();
-        $html->title=($title?$title.' :: ':'').\Settings::get('site')->title;
-        self::$title=$title?$title:\Settings::get('site')->title;
+        $html->title=($title?$title.' :: ':'').Settings::get('site')->title;
+        self::$title=$title?$title:Settings::get('site')->title;
         $html->Header();
     }
 
@@ -114,7 +114,7 @@ class HTML {
         $html=new \Templates\Message();
         $html->style='danger';
         $html->title=$title;
-        $html->site_title=\Settings::get('site')->title;
+        $html->site_title=Settings::get('site')->title;
         $html->message=$message;
         $html->show();
     }
@@ -137,7 +137,7 @@ class HTML {
         self::disableBrowserCache();
         $html->title=$title;
         $html->message=$message;
-        $html->site_title=\Settings::get('site')->title;
+        $html->site_title=Settings::get('site')->title;
         $html->show();
         exit;
     }
@@ -185,16 +185,16 @@ class HTML {
     }
 
     public static function Exception($ex) {
-        \DB::rollback();
+        DB::rollback();
         switch (get_class($ex)) {
             case 'AppException':
                 $message=$ex->getMessage();
                 break;
             default:
                 $message=$ex;
-                if (\Settings::get('debug')!=true) {
+                if (Settings::get('debug')!=true) {
                     error_log($message, 0);
-                    $message='Извините. Произошла программная ошибка. Если вы часто видите это сообщение, сообщите о нём администратору сайта.';
+                    $message='Извините. Произошла программная ошибка. Информация об ошибке сохранена в журнале. Если вы часто видите это сообщение, сообщите о нём администратору сайта.';
                 }
         }
         self::showException($message);
@@ -204,8 +204,8 @@ class HTML {
         if (substr($name, 0, 4)!='show') {
             throw new Exception('Вызван несуществующий метод '.$name);
         }
-        $name=substr($name, 4);
-        $callback=array(self::getInstance(), $name);
+        $method_name=substr($name, 4);
+        $callback=array(self::getInstance(), $method_name);
         return call_user_func_array($callback, $args);
     }
 
