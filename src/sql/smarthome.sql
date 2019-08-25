@@ -97,7 +97,7 @@ INSERT INTO modules (id, name, namespace, daemon, settings, disabled) VALUES
 (2, 'yeelight', 'Yeelight', true, false, false),
 (3, 'yandex', 'Yandex', false, true, false);
 
-INSERT INTO meter_units (id, name, unit) VALUES
+INSERT INTO meter_units (id, name, unit, minimal, maximal) VALUES
 (1, 'Температура воздуха', '&deg;C', 24, 28),
 (2, 'Относительная влажность', '%', 40, 60),
 (3, 'Атмосферное давление', 'мм.рт.ст.', 740, 750);
