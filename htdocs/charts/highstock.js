@@ -147,7 +147,7 @@ $.getJSON('/api/meter_units/', [], function(units) {
     unit=units[unit_id];
 
     $.each(unit.meters, function (i, meter) {
-        $.getJSON('/api/meter_history/', {'place': meter.place_id,'unit': unit_id}, function (data) {
+        $.getJSON('/api/meter_history/', {'meter': meter.id}, function (data) {
             seriesOptions[seriesCounter] = {
                 name: meter.name,
                 data: data
