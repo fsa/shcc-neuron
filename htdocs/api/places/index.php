@@ -2,7 +2,12 @@
 
 require_once '../../common.php';
 Auth\Internal::grantAccess();
-$places=genTree(\SmartHome\Places::getRootPlaces(PDO::FETCH_OBJ));
+$places=[
+    'id'=>null,
+    'text'=>'Объекты',
+    'state'=>['opened'=>true],
+    'children'=>genTree(\SmartHome\Places::getRootPlaces(PDO::FETCH_OBJ))
+];
 httpResponse::json($places);
 
 function genTree($roots) {
@@ -11,8 +16,7 @@ function genTree($roots) {
         $child=\SmartHome\Places::getPlaceChild($value->id,PDO::FETCH_OBJ);
         if(sizeof($child)>0) {
             $places[$key]->state=['opened'=>true];
-            $places[$key]->children=$child;
-            genTree($child);
+            $places[$key]->children=genTree($child);
         }
     }
     return $places;
