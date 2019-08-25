@@ -70,6 +70,10 @@ class DB {
     public static function prepare(string $statement, array $driver_options=[]): PDOStatement {
         return self::getInstance()->prepare($statement,$driver_options);
     }
+    
+    public static function disconnect(): void {
+        self::$pdo=null;
+    }
 
     public static function __callStatic($name, $args) {
         $callback=array(self::getInstance(), $name);

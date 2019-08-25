@@ -2,6 +2,8 @@
 
 namespace Xiaomi;
 
+use DB;
+
 class Daemon implements \SmartHome\Daemon {
 
     const DAEMON_NAME='xiaomi';
@@ -22,6 +24,7 @@ class Daemon implements \SmartHome\Daemon {
     public function prepare() {
         $this->storage=new \SmartHome\DeviceMemoryStorage;
         $this->devices=$this->storage->getModuleDevices(self::DAEMON_NAME);
+        DB::disconnect();
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
     }
