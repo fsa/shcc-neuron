@@ -29,7 +29,7 @@ class MeterUnits {
     }
 
     public static function getUnitById($id) {
-        $s=DB::prepare('SELECT id,name,unit FROM meter_units WHERE id=?');
+        $s=DB::prepare('SELECT id,name,unit,minimal,maximal FROM meter_units WHERE id=?');
         $s->execute([$id]);
         return $s->fetch(PDO::FETCH_OBJ);
     }

@@ -31,7 +31,7 @@ class Meters {
     }
     
     public static function getMetersByUnitId($id) {
-        $s=DB::prepare('SELECT m.id, d.place_id, p.name, m.minimal, m.maximal FROM meters m LEFT JOIN devices d ON m.device_id=d.id LEFT JOIN places p ON d.place_id=p.id WHERE meter_unit_id=?');
+        $s=DB::prepare('SELECT m.id, d.place_id, p.name FROM meters m LEFT JOIN devices d ON m.device_id=d.id LEFT JOIN places p ON d.place_id=p.id WHERE meter_unit_id=?');
         $s->execute([$id]);
         return $s->fetchAll(PDO::FETCH_OBJ);
     }
@@ -40,6 +40,12 @@ class Meters {
         $s=DB::prepare('SELECT property,id FROM meters WHERE device_id=?');
         $s->execute([$id]);
         return $s->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+    
+    public static function getMetersPlaces(int $unit): array {
+        $s=DB::prepare('SELECT p.id, p.name FROM (SELECT place_id FROM meter_history WHERE meter_unit_id=? GROUP BY place_id) mp LEFT JOIN places p ON p.id=mp.place_id');
+        $s->execute([$unit]);
+        return $s->fetchAll(PDO::FETCH_OBJ);
     }
 
 }

@@ -143,18 +143,16 @@ $.urlParam = function(name) {
 
 //var unit_id=$.urlParam('unit');
 var unit_id=$('#unit_id').attr('unit_id');
-$.getJSON('/api/meter_units/', [], function(units) {
-    unit=units[unit_id];
-
-    $.each(unit.meters, function (i, meter) {
-        $.getJSON('/api/meter_history/', {'meter': meter.id}, function (data) {
+$.getJSON('/api/meter_places/', {'unit': unit_id}, function(unit) {
+    $.each(unit.places, function (i, place) {
+        $.getJSON('/api/meter_history/', {'place': place.id,'unit': unit.id}, function (data) {
             seriesOptions[seriesCounter] = {
-                name: meter.name,
+                name: place.name,
                 data: data
             };
             seriesCounter += 1;
-            if (seriesCounter === unit.meters.length) {
-                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text(), meter.minimal, meter.maximal);
+            if (seriesCounter === unit.places.length) {
+                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text(), Number(unit.minimal), Number(unit.maximal));
             }
         });
     });
