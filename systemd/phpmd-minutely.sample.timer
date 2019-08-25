@@ -3,6 +3,7 @@ Description=Timer for PHPMD minutely script
 
 [Timer]
 OnCalendar=minutely
+AccuracySec=1us
 
 [Install]
 WantedBy=timers.target
