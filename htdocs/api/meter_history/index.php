@@ -12,11 +12,11 @@ try {
     $history->setPlaceId($place_id,$meter_unit_id);
     $history->setMeterId($meter_id);
     $history->setFromDateTime($from);
-    $history->setToDateTime($to);    
+    $history->setToDateTime($to);
+    $result=$history->getHistory();
 } catch (AppException $ex) {
     httpResponse::json(['error'=>$ex->getMessage()]);
 } catch (Exception $ex) {
     httpResponse::json(['error'=>'Internal error']);
 }
-header('Content-Type: application/json');
-echo $history->getJson();
+httpResponse::json($result, JSON_NUMERIC_CHECK);

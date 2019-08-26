@@ -39,7 +39,7 @@ class MeterHistory {
         $this->to=strtotime($datetime);
     }
 
-    public function getJson() {
+    public function getHistory() {
         if(!$this->place_id and !$this->meter_id) {
             throw new Exception('Не задано место или измерительный прибор');
         }
@@ -73,8 +73,7 @@ class MeterHistory {
         }
         $stmt=\DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000,value FROM meter_history WHERE '.join(' AND ',$where).$period);
         $stmt->execute($params);
-        $rows=$stmt->fetchAll(\PDO::FETCH_NUM);
-        return json_encode($rows,JSON_NUMERIC_CHECK);
+        return $stmt->fetchAll(\PDO::FETCH_NUM);
     }
 
     /**

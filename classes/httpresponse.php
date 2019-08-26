@@ -39,9 +39,9 @@ class httpResponse {
         header(getenv('SERVER_PROTOCOL').' 401 Unauthorized', true);
     }
 
-    public static function json($response) {
+    public static function json($response, $options=JSON_UNESCAPED_UNICODE) {
         header('Content-Type: application/json');
-        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        echo json_encode($response, $options);
         exit;
     }
 
