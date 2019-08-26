@@ -48,9 +48,13 @@ class MeterHistory {
         }
         $params=[];
         $where=[];
-        if($this->place_id) {
-            $where[]='place_id=:place_id';
-            $params['place_id']=$this->place_id;
+        if(is_int($this->place_id)) {
+	    if($this->place_id) {
+        	$where[]='place_id=:place_id';
+        	$params['place_id']=$this->place_id;
+	    } else {
+		$where[]='place_id IS NULL';
+	    }
         }
         if($this->meter_id) {
             $where[]='meter_id=:meter_id';
