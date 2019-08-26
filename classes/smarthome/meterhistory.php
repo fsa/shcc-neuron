@@ -40,7 +40,7 @@ class MeterHistory {
     }
 
     public function getHistory() {
-        if(!$this->place_id and !$this->meter_id) {
+        if(!is_int($this->place_id) and !$this->meter_id) {
             throw new Exception('Не задано место или измерительный прибор');
         }
         if(!$this->meter_id and !$this->meter_unit_id) {
