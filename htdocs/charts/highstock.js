@@ -122,17 +122,14 @@ function afterSetExtremes(e) {
     chart.showLoading();
     seriesCounter = 0;
     $.each(unit.places, function (i, place) {
-        params={'place': place.id,'unit': unit.id};
+        params={'place': place.id||0,'unit': unit.id};
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
         $.getJSON('/api/meter_history/', params, function (data) {
-            if(!data.error) {
-                seriesOptions[seriesCounter] = {
-                    name: place.name,
-                    data: data
-                };
-            }
-            
+            seriesOptions[seriesCounter] = {
+                name: place.name || 'Неизвестно',
+                data: data
+            };            
             seriesCounter += 1;
             if (seriesCounter === unit.places.length) {
                 chart.hideLoading();
@@ -151,13 +148,11 @@ var unit_id=$('#unit_id').attr('unit_id');
 $.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
     unit=mp;
     $.each(mp.places, function (i, place) {
-        $.getJSON('/api/meter_history/', {'place': place.id,'unit': mp.id}, function (data) {
-            if(!data.error) {
-                seriesOptions[seriesCounter] = {
-                    name: place.name,
-                    data: data
-                };
-            }
+        $.getJSON('/api/meter_history/', {'place': place.id || 0,'unit': mp.id}, function (data) {
+            seriesOptions[seriesCounter] = {
+                name: place.name || 'Неизвестно',
+                data: data
+            };
             seriesCounter += 1;
             if (seriesCounter === mp.places.length) {
                 createChart(mp);

@@ -14,7 +14,7 @@ try {
     $history->setFromDateTime($from);
     $history->setToDateTime($to);
     $result=$history->getHistory();
-} catch (AppException $ex) {
+} catch (SmartHome\Exception $ex) {
     httpResponse::json(['error'=>$ex->getMessage()]);
 } catch (Exception $ex) {
     httpResponse::json(['error'=>'Internal error']);
