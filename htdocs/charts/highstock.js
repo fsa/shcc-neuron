@@ -27,7 +27,11 @@ Highcharts.setOptions({
     }
 });
 
-function createChart(title, units, minimal, maximal) {
+function createChart(unit) {
+    title=$("<div/>").html(unit.name).text();
+    units=$("<div/>").html(unit.unit).text();
+    minimal=Number(unit.minimal);
+    maximal=Number(unit.maximal);
     chart=Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -115,21 +119,20 @@ function createChart(title, units, minimal, maximal) {
 
 
 function afterSetExtremes(e) {
-
     chart.showLoading();
     seriesCounter = 0;
-    $.each(unit.meters, function (i, meter) {
-        params={'place': meter.place_id,'unit': unit_id};
+    $.each(unit.places, function (i, place) {
+        params={'place': place.id,'unit': unit.id};
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
         $.getJSON('/api/meter_history/', params, function (data) {
             seriesOptions[seriesCounter] = {
-                name: meter.name,
+                name: place.name,
                 data: data
             };
             
             seriesCounter += 1;
-            if (seriesCounter === unit.meters.length) {
+            if (seriesCounter === unit.places.length) {
                 chart.hideLoading();
             }
         });
@@ -143,16 +146,17 @@ $.urlParam = function(name) {
 
 //var unit_id=$.urlParam('unit');
 var unit_id=$('#unit_id').attr('unit_id');
-$.getJSON('/api/meter_places/', {'unit': unit_id}, function(unit) {
-    $.each(unit.places, function (i, place) {
-        $.getJSON('/api/meter_history/', {'place': place.id,'unit': unit.id}, function (data) {
+$.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
+    unit=mp;
+    $.each(mp.places, function (i, place) {
+        $.getJSON('/api/meter_history/', {'place': place.id,'unit': mp.id}, function (data) {
             seriesOptions[seriesCounter] = {
                 name: place.name,
                 data: data
             };
             seriesCounter += 1;
-            if (seriesCounter === unit.places.length) {
-                createChart($("<div/>").html(unit.name).text(), $("<div/>").html(unit.unit).text(), Number(unit.minimal), Number(unit.maximal));
+            if (seriesCounter === mp.places.length) {
+                createChart(mp);
             }
         });
     });
