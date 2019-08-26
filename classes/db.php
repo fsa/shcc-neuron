@@ -30,11 +30,11 @@ class DB {
         return !is_null(self::$pdo);
     }
 
-    public static function insert($table, $values) {
+    public static function insert($table, $values, $index='id') {
         $keys=array_keys($values);
-        $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',', $keys).') VALUES (:'.join(',:', $keys).')');
+        $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',', $keys).') VALUES (:'.join(',:', $keys).') RETURNING '.$index);
         $stmt->execute($values);
-        return self::lastInsertId();
+        return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 
     public static function update($table, $values, $index='id') {
