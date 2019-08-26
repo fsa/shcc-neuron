@@ -7,8 +7,8 @@ abstract class Description implements \JsonSerializable {
     public $type;
     public $retrievable;
 
-    public function setRetrievable(bool $state) {
-        $this->retrievable=$state;
+    public function __construct(?bool $state=null) {
+        $this->retrievable=$state;        ;
     }
 
     public function jsonSerialize() {
