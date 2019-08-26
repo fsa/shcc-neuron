@@ -126,10 +126,12 @@ function afterSetExtremes(e) {
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
         $.getJSON('/api/meter_history/', params, function (data) {
-            seriesOptions[seriesCounter] = {
-                name: place.name,
-                data: data
-            };
+            if(!data.error) {
+                seriesOptions[seriesCounter] = {
+                    name: place.name,
+                    data: data
+                };
+            }
             
             seriesCounter += 1;
             if (seriesCounter === unit.places.length) {
@@ -150,10 +152,12 @@ $.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
     unit=mp;
     $.each(mp.places, function (i, place) {
         $.getJSON('/api/meter_history/', {'place': place.id,'unit': mp.id}, function (data) {
-            seriesOptions[seriesCounter] = {
-                name: place.name,
-                data: data
-            };
+            if(!data.error) {
+                seriesOptions[seriesCounter] = {
+                    name: place.name,
+                    data: data
+                };
+            }
             seriesCounter += 1;
             if (seriesCounter === mp.places.length) {
                 createChart(mp);
