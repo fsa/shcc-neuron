@@ -395,6 +395,18 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function getDeviceStatus() {
         return $this->power=="on"?"Включена":"Выключена";
     }
+    
+    public function refreshState() {
+        $ip=parse_url($this->location, PHP_URL_HOST);
+        $yeelight=new SocketServer();
+        $yeelight->sendDiscover($ip);
+        $packet=$yeelight->waitPacket($ip);
+        $this->updateState($packet->getParams());
+    }
+
+    public function getPower(): bool {
+        return $this->power=='on';
+    }
 
     public function setPower(bool $value) {
         $this->sendSetPower($value);
