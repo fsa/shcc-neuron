@@ -437,7 +437,9 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         $yeelight=new SocketServer();
         $yeelight->sendDiscover($ip);
         $packet=$yeelight->waitPacket($ip);
-        $this->updateState($packet->getParams());
+        if($packet) {
+            $this->updateState($packet->getParams());
+        }
     }
 
     public function setPower(bool $value) {
@@ -463,6 +465,10 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
 
     public function setRGB(int $rgb) {
         $this->sendSetRGB(dechex($rgb));
+    }
+    
+    public function setBrightness(int $brightness) {
+        $this->sendSetBright($brightness);
     }
 
 }
