@@ -8,4 +8,4 @@ if (!is_array(spl_autoload_functions())) {
     spl_autoload_register();
     date_default_timezone_set(\Settings::get('timezone'));
 }
-require 'functions.php';
+require_once 'functions.php';
