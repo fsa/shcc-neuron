@@ -24,6 +24,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
 
     public function __construct() {
         $this->updated=0;
+        $this->actions=[];
     }
 
     public function __sleep() {
