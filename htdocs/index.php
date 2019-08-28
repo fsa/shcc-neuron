@@ -4,28 +4,24 @@ require_once 'common.php';
 Auth\Internal::grantAccess();
 HTML::addHeader('<script src="/js/controllers.js"></script>');
 HTML::showPageHeader('Панель управления');
-if(file_exists('../custom/dashboard.php')) {
-    include_once '../custom/dashboard.php';
+chdir('../custom/dashboard/');
+include_once '../functions.php';
+$page=filter_input(INPUT_GET,'page');
+if(!$page) {
+    if(file_exists('index.php')) {
+        require 'index.php';        
+    } else {
+        require 'index.sample.php';
+    }
 } else {
-    HTML::showCardsHeader();
-    HTML::showCard('Настройте внешний вид','Для настройки внешнего вида этой страницы создайте файл custom/dashboard.php.');
-    $state=[];
-    if(SmartHome\Vars::get('System.NightMode')) {
-        $state[]='Включен ночной режим.';
+    if(preg_match('/^[a-zA-Z0-9-_]*$/', $page)) {        
+        if(file_exists($page.'.php')) {
+            require $page.'.php';
+        } else {
+            echo "<p>Страницы не существует</p>";
+        }
+    } else {
+        echo "<p>Неверное имя страницы</p>";        
     }
-    if(SmartHome\Vars::get('System.SecurityMode')) {
-        $state[]='Включен режим охраны.';
-    }
-    if(sizeof($state)==0) {
-        $state[]='Система работает в обычном режиме.';
-    }
-    HTML::showCard('Состояние системы',join('<br>', $state));
-    $log=Tts\Log::getLastMessages();
-    $log_message=[];
-    foreach ($log AS $row) {
-        $log_message[]=sprintf('%s %s', date('H:i:s',strtotime($row->timestamp)), $row->text);
-    }
-    HTML::showCard('Последние голосовые сообщения',join('<br>', $log_message));
-    HTML::showCardsFooter();
 }
 HTML::showPageFooter();

@@ -2,11 +2,11 @@
 
 require_once '../../common.php';
 Auth\Internal::grantAccess(['control']);
-$dir='../../../custom/command/';
+chdir('../../../custom/command/');
+require_once '../functions.php';
 $device_name=filter_input(INPUT_GET,'device_name');
 $filename=$device_name.'.php';
-if($device_name and file_exists($dir.$filename)) {
-    chdir($dir);
+if($device_name and file_exists($filename)) {
     $result=require_once $filename;
     httpResponse::json($result);
 }
