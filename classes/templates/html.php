@@ -69,7 +69,7 @@ if(Auth::memberOf()) {
     
     public function CardsHeader(){
 ?>
-<div class="row">
+<div class="card-columns">
 <?php
     }
 
@@ -81,8 +81,7 @@ if(Auth::memberOf()) {
     
     public function Card($title, $text, $state=null) {
 ?>
-<div class="col-sm-3">
-<div class="card border-dark mb-4">
+<div class="card border-dark">
 <div class="card-header bg-dark text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
@@ -93,7 +92,6 @@ if(Auth::memberOf()) {
 <?php
         }
 ?>
-</div>
 </div>
 </div>
 <?php
