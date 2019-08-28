@@ -8,6 +8,6 @@ $filename=$device_name.'.php';
 if($device_name and file_exists($dir.$filename)) {
     chdir($dir);
     $result=require_once $filename;
-    httpResponse::json(['power'=>$result]);
+    httpResponse::json($result);
 }
 httpResponse::json(['error'=>'Устройство не настроено']);
