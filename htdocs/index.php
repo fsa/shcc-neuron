@@ -2,6 +2,7 @@
 
 require_once 'common.php';
 Auth\Internal::grantAccess();
+HTML::addHeader('<script src="/js/controllers.js"></script>');
 HTML::showPageHeader('Панель управления');
 if(file_exists('../custom/dashboard.php')) {
     include_once '../custom/dashboard.php';
