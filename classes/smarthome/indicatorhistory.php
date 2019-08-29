@@ -13,7 +13,7 @@ class IndicatorHistory {
         $stmt=\DB::prepare('INSERT INTO indicator_history (indicator_id,place_id,value) VALUES (?,?,?)');
         foreach ($sensors as $sensor) {
             if (isset($data->{$sensor->property})) {
-                $stmt->execute([$sensor->id,$sensor->place_id,$data->{$sensor->property}]);
+                $stmt->execute([$sensor->id,$sensor->place_id, $data->{$sensor->property}?'true':'false']);
             }
         }
         $stmt->closeCursor();
