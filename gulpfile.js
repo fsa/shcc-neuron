@@ -50,7 +50,8 @@ function jqueryTask() {
 
 function bootstrapTask() {
     return src([
-        'node_modules/bootstrap/dist/js/bootstrap.min.js'
+        'node_modules/bootstrap/dist/js/bootstrap.min.js',
+        'node_modules/bootstrap/dist/js/bootstrap.min.js.map'       
     ])
             .pipe(dest('htdocs/libs/bootstrap'));
 }
