@@ -15,6 +15,10 @@ class Queue {
     }
     
     public function addMessage($text) {
+        $queue_stat=msg_stat_queue($this->queue);
+        if($queue_stat['msg_qnum']>15 and time()-$queue_stat['msg_rtime']>30) {
+            return false;
+        }
         return msg_send($this->queue, 1, $text, false);
     }
     
@@ -24,5 +28,12 @@ class Queue {
             return false;
         }
         return $message;
+    }
+    
+    public function dropOldMessage() {
+        $queue_stat=msg_stat_queue($this->queue);
+        if(time()-$queue_stat['msg_stime']>180) {
+            while($this->receiveMessage());
+        }
     }
 }

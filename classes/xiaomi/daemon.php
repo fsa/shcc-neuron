@@ -4,7 +4,7 @@ namespace Xiaomi;
 
 use DB;
 
-class Daemon implements \SmartHome\Daemon {
+class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='xiaomi';
 

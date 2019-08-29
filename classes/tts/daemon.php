@@ -2,7 +2,7 @@
 
 namespace Tts;
 
-class Daemon implements \SmartHome\Daemon {
+class Daemon implements \SmartHome\DaemonInterface {
 
     const PLAY_SOUND_CMD='mpg123 -q %s';
     const PRE_SOUND='notification.mp3';
@@ -16,7 +16,9 @@ class Daemon implements \SmartHome\Daemon {
 
     public function __construct($process_url) {
         $tts=file_get_contents(__DIR__.'/../../config/tts.conf');
-        $this->tts_provider=unserialize($tts);
+        if($tts!==false) {
+            $this->tts_provider=unserialize($tts);
+        }
         $settings=\Settings::get('tts');
         $this->pre_sound=isset($settings->pre_sound)?$settings->pre_sound:self::PRE_SOUND;
         $this->play_sound_cmd=isset($settings->play_sound_cmd)?$settings->play_sound_cmd:self::PLAY_SOUND_CMD;
@@ -29,6 +31,7 @@ class Daemon implements \SmartHome\Daemon {
     public function prepare() {
         $this->last_message_time=0;
         $this->queue=new Queue;
+        $this->queue->dropOldMessage();
     }
 
     public function iteration() {
@@ -47,11 +50,14 @@ class Daemon implements \SmartHome\Daemon {
     }
 
     private function playVoice($text) {
-        $filename=$this->tts_provider->getVoiceFile($text);
+        if(is_null($this->tts_provider)) {
+            return;
+        }
+        $voice_file=$this->tts_provider->getVoiceFile($text);
         if(time()-$this->last_message_time>self::PRE_SOUND_PERIOD) {
             $this->playMp3(__DIR__.'/../../sound/'.$this->pre_sound);
         }
-        $this->playMp3($filename);
+        $this->playMp3($voice_file);
         $this->last_message_time=time();        
     }
 

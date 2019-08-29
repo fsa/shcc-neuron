@@ -2,10 +2,10 @@
 
 namespace SmartHome;
 
-interface Daemon {
+interface DaemonInterface {
     /**
      * Конструктор класса
-     * @param type $precess_url URL для обработки событий
+     * @param string $process_url URL для обработки событий
      */
     function __construct($process_url);
     /**
