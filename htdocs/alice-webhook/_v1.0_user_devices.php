@@ -1,6 +1,6 @@
 <?php
 if(!isset($request_id)) {die;}
-#\Auth\Bearer::grantAccess();
+\Auth\Bearer::grantAccess();
 $user_id='FSA';
 $devices[0]=new \Yandex\SmartHome\DeviceInfo('yeelight_bslamp');
 $devices[0]->setName('Светильник');

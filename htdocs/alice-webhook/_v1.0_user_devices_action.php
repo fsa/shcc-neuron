@@ -1,8 +1,7 @@
 <?php
 
 if(!isset($request_id)) {die;}
-#\Auth\Bearer::grantAccess();
-#TODO: разгрести $request_content со списком устройств
+\Auth\Bearer::grantAccess();
 $request=json_decode($request_content);
 file_put_contents('action_'.date('Y_m_d').'.txt', print_r($request, true).PHP_EOL, FILE_APPEND | LOCK_EX);
 $id=0;
