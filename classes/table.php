@@ -47,16 +47,12 @@ class Table {
                 foreach ($this->buttons AS $param) {
                     $value=$row->{$param[1]};
                     if (!is_null($value)) {
-                        $actions[]='<a href="'.sprintf($param[0],$value).'">'.$param[2].'</a> ';
+                        $actions[]=sprintf("<a href=\"$param[0]\">%s</a>",$value,$param[2]);
                     }
                 }
                 $row->buttons=join($this->buttons_separator,$actions);
             }
-            if(is_null($this->row_style_field) or is_null($row->{$this->row_style_field})) {
-                $template->showRow($row);
-            } else {
-                $template->showRow($row,' class="'.$row->{$this->row_style_field}.'"');
-            }
+            $template->showRow($row, $this->row_style_field);
         }
         $template->showFooter();
     }

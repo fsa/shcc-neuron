@@ -9,11 +9,11 @@ class Table{
 
     public function showHeader(){
 ?>
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-hover table-sm table-responsive">
 <?php
         if (!is_null($this->caption)) {
 ?>
-            <caption><?=$this->caption?></caption>
+            <caption style="caption-side: top;"><?=$this->caption?></caption>
 <?php
         }
 ?>
@@ -21,7 +21,7 @@ class Table{
 <?php
         foreach ($this->fields as $description) {
 ?>
-                <th><?=$description?></th>
+                <th class="table-bordered"><?=$description?></th>
 <?php
         }
 ?>
@@ -29,9 +29,10 @@ class Table{
 <?php
         }
 
-        public function showRow($row,$style=''){
+        public function showRow($row,$style_field=''){
+            $style=(!is_null($style_field) and !is_null($row->$style_field))?' '.$row->$style_field:'';
 ?>
-            <tr<?=$style?>>
+            <tr class="table-bordered<?=$style?>">
 <?php
             foreach ($this->fields as $name=> $description) {
 ?>
