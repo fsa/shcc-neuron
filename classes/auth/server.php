@@ -47,6 +47,7 @@ class Server {
                     break;
                 case 'client_credentials':
                     $this->requestClientCredentials();
+                    break;
                 case 'refresh_token':
                     $this->requestPostRefreshToken();
                     break;
@@ -95,8 +96,8 @@ class Server {
         $client_id=filter_input(INPUT_POST, 'client_id');
         $client_secret=filter_input(INPUT_POST, 'client_secret');
         if (
-                $auth_tokens->client_id!=$client_id or
-                $auth_tokens->client_secret!=$client_secret or!$auth_tokens->safe_uri
+            $auth_tokens->client_id!=$client_id or
+            $auth_tokens->client_secret!=$client_secret or!$auth_tokens->safe_uri
         ) {
             $s=DB::prepare('DELETE FROM auth_tokens WHERE code=?');
             $s->execute([$code]);
@@ -156,7 +157,7 @@ class Server {
         $scope=filter_input(INPUT_POST, 'scope'); #TODO ?
         $access_token=$this->genAccessToken();
         $refresh_token=$this->genRefreshToken();
-        $token=self::fetchTokensByRefreshToken($refresh_token);
+        $token=self::fetchTokensByRefreshToken($old_refresh_token);
         if(!$token) {
             httpResponse::json(['error'=>'invalid_grant']);            
         }
