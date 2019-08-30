@@ -444,15 +444,15 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     }
 
     public function setPower(bool $value) {
-        $this->sendSetPower($value);
+        $this->sendSetPower($value, 300);
     }
 
     public function setPowerOff() {
-        $this->sendSetPower(false);
+        $this->sendSetPower(false, 300);
     }
 
     public function setPowerOn() {
-        $this->sendSetPower(true);
+        $this->sendSetPower(true, 300);
     }
 
     public function setCT(int $ct_value) {

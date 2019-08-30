@@ -2,9 +2,7 @@
 
 namespace Auth;
 
-use DB,
-    PDO,
-    httpResponse;
+use httpResponse;
 
 class Bearer {
 
