@@ -194,6 +194,12 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         return $this->sendCommand('set_ct_abx', [$ct_value, $this->getEffect($duratin), $duratin]);
     }
 
+    /**
+     * 
+     * @param int $ct_value цветовая температура (1700-6500К)
+     * @param int $duratin
+     * @return int
+     */
     public function sendBgSetCtAbx(int $ct_value, int $duratin=0): int {
         return $this->sendCommand('bg_set_ct_abx', [$ct_value, $this->getEffect($duratin), $duratin]);
     }
