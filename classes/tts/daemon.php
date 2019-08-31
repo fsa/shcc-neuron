@@ -15,10 +15,17 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $play_sound_cmd;
 
     public function __construct($process_url) {
-        $tts=file_get_contents(__DIR__.'/../../config/tts.conf');
-        if($tts!==false) {
-            $this->tts_provider=unserialize($tts);
+        $tts_config_file=__DIR__.'/../../config/tts.conf';
+        if(file_exists($tts_config_file)) {
+            $tts=file_get_contents($tts_config_file);
+            if($tts!==false) {
+                $this->tts_provider=unserialize($tts);
+            }
+            if(!($this->tts_provider instanceof TtsInterface)) {
+                $this->tts_provider=null;
+            }
         }
+        var_dump($this->tts_provider);
         $settings=\Settings::get('tts');
         $this->pre_sound=isset($settings->pre_sound)?$settings->pre_sound:self::PRE_SOUND;
         $this->play_sound_cmd=isset($settings->play_sound_cmd)?$settings->play_sound_cmd:self::PLAY_SOUND_CMD;
