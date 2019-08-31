@@ -12,6 +12,10 @@ if($module) {
     die;
 }
 HTML::showPageHeader('Список устройств в памяти');
+?>
+<p><a href="../">Вернуться к списку устройств</a></p>
+<hr>
+<?php
 $devices=new SmartHome\DeviceList();
 foreach ($devices->getModuleList() as $module) {
     $devices->query($module);
