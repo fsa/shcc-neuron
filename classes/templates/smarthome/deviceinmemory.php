@@ -6,7 +6,7 @@ class DeviceInMemory {
     public static function show($device) {
 ?>
 <table class="table table-striped table-bordered">
-    <caption>Данные устройства в памяти</caption>
+    <caption style="caption-side: top;">Данные устройства в памяти</caption>
     <tr>
         <th>Параметр</th>
         <th>Значение</th>
