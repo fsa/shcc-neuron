@@ -25,7 +25,6 @@ class Daemon implements \SmartHome\DaemonInterface {
                 $this->tts_provider=null;
             }
         }
-        var_dump($this->tts_provider);
         $settings=\Settings::get('tts');
         $this->pre_sound=isset($settings->pre_sound)?$settings->pre_sound:self::PRE_SOUND;
         $this->play_sound_cmd=isset($settings->play_sound_cmd)?$settings->play_sound_cmd:self::PLAY_SOUND_CMD;
