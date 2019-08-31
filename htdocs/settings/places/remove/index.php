@@ -7,4 +7,5 @@ if(!$id) {
 require_once '../../../common.php';
 Auth\Internal::grantAccess(['admin']);
 $count=\SmartHome\Places::delete($id);
-HTML::showNotification('Удаление объекта',$count?'Объект удалён':'Объект не был удалён','../');
+HTML::storeNotification('Удаление объекта',$count?'Объект удалён':'Объект не был удалён');
+httpResponse::redirect('../');

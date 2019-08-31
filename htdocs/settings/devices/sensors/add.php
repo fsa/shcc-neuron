@@ -21,8 +21,8 @@ if(isset($meters[$param])) {
         }
         throw $ex;
     }
-    HTML::showNotification('Аналоговый датчик '.$param,'Датчик добавлен','./?id='.$id);
-    exit;
+    HTML::storeNotification('Аналоговый датчик '.$param,'Датчик добавлен');
+    httpResponse::redirect('./?id='.$id);
 }
 if(isset($indicators[$param])) {
     $indicator=new \SmartHome\Indicators;
@@ -37,7 +37,7 @@ if(isset($indicators[$param])) {
         }
         throw $ex;
     }
-    HTML::showNotification('Цифровой датчик '.$param,'Датчик добавлен','./?id='.$id);
-    exit;
+    HTML::storeNotification('Цифровой датчик '.$param,'Датчик добавлен');
+    httpResponse::redirect('./?id='.$id);
 }
 HTML::showNotification('Добавление датчика','Указанного параметра нет ни в списке аналоговых датчиков, ни в цифровых.');
