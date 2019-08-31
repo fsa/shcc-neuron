@@ -24,11 +24,11 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         return ['ip','bright','rgb','token','key','illumination','sid','model','voltage','updated'];
     }
     
-    public function getInitDataList() {
+    public function getInitDataList(): array {
         return ['ip'=>'IP адрес','key'=>'Пароль'];
     }
 
-    public function getInitDataValues() {
+    public function getInitDataValues(): array {
         return ['ip'=>$this->ip,'key'=>$this->key];
     }
 
@@ -158,11 +158,11 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         return $this->illumination;
     }
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         return "Xiaomi Mi Smart Multifunctional Gateway";
     }
 
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         $result=[];
         if(!is_null($this->bright)) {
             $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';

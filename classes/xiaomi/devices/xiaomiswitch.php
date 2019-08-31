@@ -18,11 +18,11 @@ class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInte
         }
     }
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         return "Xiaomi Smart Wireless Switch";
     }
 
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         $result=[];
         if($this->updated) {
             $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);

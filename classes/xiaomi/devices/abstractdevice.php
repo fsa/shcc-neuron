@@ -15,18 +15,18 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         $this->updated=0;
     }
 
-    public function init($device_id,$init_data) {
+    public function init($device_id,$init_data): void {
         $this->sid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
     }
     
-    public function getInitDataList() {
+    public function getInitDataList(): array {
         return [];
     }
 
-    public function getInitDataValues() {
+    public function getInitDataValues(): array {
         return [];
     }
     
@@ -67,7 +67,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         return 'xiaomi';
     }
 
-    public function getDeviceId() {
+    public function getDeviceId(): string {
         return $this->sid;
     }
 

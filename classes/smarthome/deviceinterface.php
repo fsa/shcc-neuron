@@ -6,42 +6,42 @@ interface DeviceInterface {
 
     /**
      * Минимальная инициализация объекта для возможности управления устройством
-     * @param type $device_id
-     * @param type $init_data
+     * @param string $device_id
+     * @param array $init_data
      */
-    function init($device_id,$init_data);
+    function init($device_id,$init_data): void;
     
     /**
      * Возвращает описание устройства
      */
-    function getDeviceDescription();
+    function getDeviceDescription(): string;
 
     /**
      * Возвращает список свойств объекта, которые будут присвоены при минимальной инициализации
      */
-    function getInitDataList();
+    function getInitDataList(): array;
     
     /**
      * Возвращает текущеие свойства объекта, которые нужны при инициализации
      */
-    function getInitDataValues();
+    function getInitDataValues(): array;
     /**
      * Возвращает идентификатор устройства, уникальный внутри модуля
      */
-    function getDeviceId();
+    function getDeviceId(): string;
 
     /**
-     * Возвращает наименование устройства
+     * Возвращает наименование модуля устройства
      */
-    function getModuleName();
+    function getModuleName(): string;
 
     /**
-     * Возврщает детальную информацию о состоянии устройства
+     * Возвращает детальную информацию о состоянии устройства
      */
-    function getDeviceStatus();
+    function getDeviceStatus(): string;
 
     /**
-     * Возвращает дату последнего обновления данных устройства
+     * Возвращает дату и время последнего обновления данных устройства в формате timestamp
      */
-    function getLastUpdate();
+    function getLastUpdate(): int;
 }

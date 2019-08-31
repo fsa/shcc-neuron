@@ -11,23 +11,23 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     private $iv='';
     private $updated;
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         return "Неизвестное устройство";
     }
 
-    public function getDeviceId() {
+    public function getDeviceId(): string {
         return $this->uid;
     }
 
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         return "Неизвестно.";
     }
 
-    public function getInitDataList() {
+    public function getInitDataList(): array {
         return ['ip'=>'IP адрес','token'=>'Токен'];
     }
 
-    public function getInitDataValues() {
+    public function getInitDataValues(): array {
         return ['ip'=>$this->ip,'token'=>$this->token];
     }
 
@@ -35,11 +35,11 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return $this->updated;
     }
 
-    public function getModuleName() {
+    public function getModuleName(): string {
         return "miio";
     }
 
-    public function init($device_id,$init_data) {
+    public function init($device_id,$init_data): void {
         $this->uid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;

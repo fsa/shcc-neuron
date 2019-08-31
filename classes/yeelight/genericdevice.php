@@ -35,7 +35,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         $this->disconnect();
     }
 
-    public function init($device_id, $init_data) {
+    public function init($device_id, $init_data): void {
         $parts=explode('_', $device_id, 2);
         $this->model=$parts[0];
         $this->id=$parts[1];
@@ -44,11 +44,11 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         }
     }
 
-    public function getInitDataList() {
+    public function getInitDataList(): array {
         return ['location'=>'IP адрес'];
     }
 
-    public function getInitDataValues() {
+    public function getInitDataValues(): array {
         return ['location'=>$this->location];
     }
 
@@ -360,26 +360,26 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         return stream_get_contents($this->socket);
     }
 
-    public function disconnect() {
+    public function disconnect(): void {
         if (!is_null($this->socket)) {
             fclose($this->socket);
             $this->socket=null;
         }
     }
 
-    public function getLastUpdate() {
+    public function getLastUpdate(): int {
         return $this->updated;
     }
 
-    public function getModuleName() {
+    public function getModuleName(): string {
         return 'yeelight';
     }
 
-    public function getDeviceId() {
+    public function getDeviceId(): string {
         return $this->model.'_'.$this->id;
     }
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         switch ($this->model) {
             case "lamp":
                 return "Настольная лампа";
@@ -399,7 +399,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         }
     }
 
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         return $this->power=="on"?"Включена":"Выключена";
     }
     

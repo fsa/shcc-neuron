@@ -74,11 +74,11 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         return $this->pressure;
     }
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         return "Aqara Temperature Humidity Sensor";
     }
     
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         $result=[];
         if($this->temperature) {
             $result[]=sprintf('Температура воздуха %+.1f &deg;C.',$this->temperature);

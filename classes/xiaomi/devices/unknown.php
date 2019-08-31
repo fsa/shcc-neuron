@@ -10,7 +10,7 @@ class Unknown extends AbstractDevice {
         $this->params[$param]=$value;
     }
 
-    public function getDeviceDescription() {
+    public function getDeviceDescription(): string {
         return "Неизвестный тип устройства";
     }
 
@@ -22,7 +22,7 @@ class Unknown extends AbstractDevice {
         return [];
     }
 
-    public function getDeviceStatus() {
+    public function getDeviceStatus(): string {
         return $this->model.'=>'.print_r($this->params,true);
     }
 
