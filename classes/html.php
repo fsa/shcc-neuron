@@ -7,7 +7,6 @@ class HTML {
     private static $timestamp=null;
     private static $title;
     private static $header_shown=false;
-    private static $root_dir='./';
 
     private function __clone() {
         
@@ -20,7 +19,6 @@ class HTML {
     public static function getInstance() {
         if (self::$_instance===null) {
             self::$_instance=new Templates\HTML();
-            #TODO: вычислить каталог
         }
         return self::$_instance;
     }
@@ -30,19 +28,6 @@ class HTML {
         self::$_instance=new $name();
     }
 
-    public static function setVar($var, $value) {
-        $html=self::getInstance();
-        $html->$var=$value;
-    }
-
-    public static function getRootDir() {
-        return self::$root_dir;
-    }
-
-    public static function setRootDir($dir) {
-        self::$root_dir=$dir;
-    }
-
     public static function getTitle() {
         return self::$title;
     }
@@ -50,23 +35,24 @@ class HTML {
     public static function showPageHeader($title=null) {
         $html=self::getInstance();
         self::$header_shown=true;
-        #$html->username=\User\Auth::getName();
         if (!self::$timestamp) {
             self::$timestamp=filemtime(getenv('SCRIPT_FILENAME'));
         }
+        $html->title=($title?$title.' :: ':'').Settings::get('site')->title;
+        self::$title=$title?$title:Settings::get('site')->title;
         header("HTTP/1.0 200 OK");
         header("Content-Type: text/html; charset=utf-8");
         header("Last-Modified: ".gmdate("D, d M Y H:i:s \G\M\T", self::$timestamp));
         self::disableBrowserCache();
-        $html->title=($title?$title.' :: ':'').Settings::get('site')->title;
-        self::$title=$title?$title:Settings::get('site')->title;
         $html->Header();
-    }
-
-    public static function showTitleH1() {
-        $html=self::getInstance();
-        $html->title=self::$title;
-        $html->TitleH1();
+        $title_notification=filter_input(INPUT_COOKIE,'message_title');
+        if(!$title_notification) {
+            return;
+        }
+        $text_notification=filter_input(INPUT_COOKIE,'message_text');
+        setcookie('message_title','',time()-3600,'/');
+        setcookie('message_text','',time()-3600,'/');
+        $html->Popup($title_notification, $text_notification, 'bg-info text-white');
     }
 
     public static function showPageFooter() {
@@ -94,11 +80,6 @@ class HTML {
         self::addHeader("<meta name=\"description\" content=\"$description\">");
     }
 
-    public static function addLeafletJs() {
-        self::addHeader('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
-        self::addHeader('<link rel="stylesheet" href="/libs/leaflet/leaflet.css">');
-    }
-
     public static function addKeyword($keyword) {
         self::$keywords[]=$keyword;
     }
@@ -112,18 +93,16 @@ class HTML {
             return;
         }
         $html=new \Templates\Message();
-        $html->style='danger';
+        $html->style='bg-danger';
         $html->title=$title;
-        $html->site_title=Settings::get('site')->title;
+        $html->site_info=Settings::get('site');
         $html->message=$message;
         $html->show();
     }
 
     public static function showPopup($title, $message) {
-        $html=new \Templates\Popup();
-        $html->title=$title;
-        $html->message="<h1>$title</h1>".PHP_EOL."$message";
-        $html->show();
+        $html=self::getInstance();
+        $html->Popup($title, $message);
     }
 
     public static function showNotification($title, $message, $url=null) {
@@ -137,9 +116,14 @@ class HTML {
         self::disableBrowserCache();
         $html->title=$title;
         $html->message=$message;
-        $html->site_title=Settings::get('site')->title;
+        $html->site_info=Settings::get('site');
         $html->show();
         exit;
+    }
+    
+    public static function storeNotification($title, $message) {
+        setcookie('message_title',$title,0,'/');
+        setcookie('message_text',$message,0,'/');
     }
 
     public static function disableBrowserCache() {
@@ -152,28 +136,9 @@ class HTML {
         return getenv('HTTPS')!==false;
     }
 
-    public static function redirect($location) {
-        header("Location: $location");
-        echo "<a href=\"$location\">$location</a>";
-        exit;
-    }
-
-    public static function redirect301($location) {
-        header(getenv('SERVER_PROTOCOL')." 301 Moved Permanently", true);
-        header("Location: $location");
-        exit;
-    }
-
-    public static function error404() {
-        header(getenv('SERVER_PROTOCOL')." 404 Not Found", true);
-        echo 'File not found';
-        exit;
-    }
-
     public static function showLoginForm($url=false) {
         $html=new \Templates\Login();
         $html->title='Вход в систему';
-        $html->root_dir=self::$root_dir;
         if ($url) {
             $html->redirect_uri=$url;
             $html->url='/login/';
@@ -181,7 +146,15 @@ class HTML {
         Header("Content-Type: text/html; charset=utf-8");
         self::disableBrowserCache();
         $html->show();
-        unset($html);
+    }
+
+    public static function __callStatic($name, $args) {
+        if (substr($name, 0, 4)!='show') {
+            throw new Exception('Вызван несуществующий метод '.$name);
+        }
+        $method_name=substr($name, 4);
+        $callback=array(self::getInstance(), $method_name);
+        return call_user_func_array($callback, $args);
     }
 
     public static function Exception($ex) {
@@ -197,15 +170,6 @@ class HTML {
                 }
         }
         self::showException($message);
-    }
-
-    public static function __callStatic($name, $args) {
-        if (substr($name, 0, 4)!='show') {
-            throw new Exception('Вызван несуществующий метод '.$name);
-        }
-        $method_name=substr($name, 4);
-        $callback=array(self::getInstance(), $method_name);
-        return call_user_func_array($callback, $args);
     }
 
 }

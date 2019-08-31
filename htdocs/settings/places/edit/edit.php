@@ -9,4 +9,4 @@ $name=filter_input(INPUT_POST,'name');
 $places=new \SmartHome\Places;
 $places->createPlace($id,$pid,$name);
 $places->upsert();
-HTML::redirect('../');
+httpResponse::redirect('../');

@@ -21,4 +21,4 @@ if(is_null($user)) {
 }
 Auth\Internal::login($user);
 $url=filter_input(INPUT_POST,'redirect_uri');
-HTML::redirect(is_null($url)?'/':$url);
+httpResponse::redirect(is_null($url)?'/':$url);

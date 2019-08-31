@@ -96,8 +96,36 @@ if(Auth::memberOf()) {
 </div>
 <?php
     }
+    
+    public static function Popup($title, $message, $style='bg-danger text-white') {
+?>
+<div class="modal" tabindex="-1" role="dialog" id="popupMessage">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header <?=$style?>">
+        <h5 class="modal-title"><?=$title?></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <?=$message?>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#popupMessage').modal('show');
+});
+</script>
+<?php
+    }
 
-    public function footer() {
+    public function Footer() {
 ?>
 </main>
 <footer class="footer container-fluid bg-dark">&copy; Tavda.net, 2018-2019.</footer>
