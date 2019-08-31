@@ -3,7 +3,7 @@ Description=PHPMD daemons
 After=nginx.service
 After=php-fpm.service
 After=network.target
-After=mysqld.service
+After=postgresql.service
 
 [Service]
 Type=forking
