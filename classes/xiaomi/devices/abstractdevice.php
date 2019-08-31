@@ -63,7 +63,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         return $actions;
     }
 
-    public function getModuleName() {
+    public function getModuleName(): string {
         return 'xiaomi';
     }
 
