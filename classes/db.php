@@ -3,7 +3,7 @@
 class DB {
 
     private static $pdo=null;
-    private static $inTransaction=false;
+    private static $origExceptionHandler;
 
     private function __construct() {
         
@@ -49,28 +49,31 @@ class DB {
         $stmt=self::prepare('UPDATE '.$table.' SET '.join(',', $keys).' WHERE '.$index.'=:'.$index);
         return $stmt->execute($values);
     }
-    
-    public static function beginTransaction() {
-        self::getInstance()->beginTransaction();
-        self::$inTransaction=true;
+
+    public static function beginTransaction(): bool {
+        $result=self::getInstance()->beginTransaction();
+        self::$origExceptionHandler=set_exception_handler([__CLASS__.'Exception']);
+        return $result;
+    }
+
+    public static function commit(): bool {
+        $result=self::getInstance()->commit();
+        set_error_handler(self::$origExceptionHandler);
+        self::$origExceptionHandler=null;
+        return $result;
     }
 
     public static function rollback(): bool {
-        if (is_null(self::$pdo)) {
-            return true;
-        }
-        if (!self::$inTransaction) {
-            return true;
-        }
-        $result=self::$pdo->rollback();
-        self::$inTransaction=false;
+        $result=self::getInstance()->rollBack();
+        set_error_handler(self::$origExceptionHandler);
+        self::$origExceptionHandler=null;
         return $result;
     }
-    
+
     public static function prepare(string $statement, array $driver_options=[]): PDOStatement {
-        return self::getInstance()->prepare($statement,$driver_options);
+        return self::getInstance()->prepare($statement, $driver_options);
     }
-    
+
     public static function disconnect(): void {
         self::$pdo=null;
     }
@@ -78,6 +81,11 @@ class DB {
     public static function __callStatic($name, $args) {
         $callback=array(self::getInstance(), $name);
         return call_user_func_array($callback, $args);
+    }
+
+    public static function Exception($ex): void {
+        self::rollback();
+        call_user_func(self::$origExceptionHandler,$ex);
     }
 
 }

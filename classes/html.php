@@ -185,7 +185,6 @@ class HTML {
     }
 
     public static function Exception($ex) {
-        DB::rollback();
         switch (get_class($ex)) {
             case 'AppException':
                 $message=$ex->getMessage();
