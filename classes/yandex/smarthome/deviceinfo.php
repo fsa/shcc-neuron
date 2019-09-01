@@ -94,6 +94,10 @@ class DeviceInfo implements \JsonSerializable {
     public function setDeviceSWVersion(string $sw_version) {
         $this->device_info['sw_version']=$sw_version;
     }
+    
+    public function setCapabilities(array $capabilities) {
+        $this->capabilities=$capabilities;
+    }
 
     public function addCapabilitie(Capabilities\Description $description) {
         $this->capabilities[]=$description;

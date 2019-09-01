@@ -1,8 +1,10 @@
 <?php
+/**
+ * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/post-devices-query-docpage/
+ */
 if(!isset($request_id)) {die;}
 \Auth\Bearer::grantAccess();
 $request=json_decode($request_content);
-file_put_contents('query_'.date('Y_m_d').'.txt', print_r($request, true).PHP_EOL, FILE_APPEND | LOCK_EX);
 $id=0;
 foreach ($request->devices as $device) {
     /* @var $yeelight Yeelight\GenericDevice */
@@ -13,12 +15,6 @@ foreach ($request->devices as $device) {
     $devices[$id]->addCapabilitie(new Yandex\SmartHome\Capabilities\onOffState('on', $power));
     $id++;
 }
-file_put_contents('query_'.date('Y_m_d').'.txt', print_r(json_encode([
-    'request_id'=>$request_id,
-    'payload'=>[
-        'devices'=>$devices
-    ]
-]), true).PHP_EOL, FILE_APPEND | LOCK_EX);
 httpResponse::json([
     'request_id'=>$request_id,
     'payload'=>[
