@@ -16,7 +16,7 @@ class Tools {
                 $units='градуса';
             }
         }
-        return sprintf("%+.0f $units цельсия",$temperature);
+        return sprintf("%+.0f $units Цельсия",$temperature);
     }
 
 }
