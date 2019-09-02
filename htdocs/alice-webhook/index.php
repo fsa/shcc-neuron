@@ -1,6 +1,7 @@
 <?php
 
 require_once '../common.php';
+httpResponse::setJsonExceptionHanler();
 $request_id=getenv('HTTP_X_REQUEST_ID');
 $request_content=file_get_contents('php://input');
 $path=getenv('PATH_INFO');

@@ -52,7 +52,7 @@ class DB {
 
     public static function beginTransaction(): bool {
         $result=self::getInstance()->beginTransaction();
-        self::$origExceptionHandler=set_exception_handler([__CLASS__.'Exception']);
+        self::$origExceptionHandler=set_exception_handler([__CLASS__,'Exception']);
         return $result;
     }
 

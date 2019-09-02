@@ -44,5 +44,14 @@ class httpResponse {
         echo json_encode($response, $options);
         exit;
     }
+    
+    public static function setJsonExceptionHanler() {
+        set_exception_handler([__CLASS__,'JsonException']);
+    }
+
+    public static function JsonException($ex) {
+        error_log($ex, 0);
+        self::json(['error'=>'Internal Server Error']);
+    }
 
 }
