@@ -2,7 +2,7 @@
 
 namespace Yandex\SmartHome;
 
-class DeviceState {
+class DeviceResult {
     
     public $id;
     public $capabilities;
@@ -16,7 +16,7 @@ class DeviceState {
     }
 
 
-    public function addCapability(Capabilities\State $state) {
+    public function addCapability(Capabilities\Result $state) {
         $this->capabilities[]=$state;
     }
 }

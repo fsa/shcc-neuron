@@ -2,23 +2,13 @@
 
 namespace Yandex\SmartHome\Capabilities;
 
-abstract class Description implements \JsonSerializable {
+abstract class Description {
 
     public $type;
     public $retrievable;
 
-    public function __construct(?bool $state=null) {
+    public function __construct(?bool $state=true) {
         $this->retrievable=$state;        ;
-    }
-
-    public function jsonSerialize() {
-        $result=[
-            'type'=>$this->type
-        ];
-        if(!is_null($this->retrievable)) {
-            $result['retrievable']=$this->retrievable;
-        }
-        return $result;
     }
 
 }

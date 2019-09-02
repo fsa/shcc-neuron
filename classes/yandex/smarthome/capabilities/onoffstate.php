@@ -2,13 +2,13 @@
 
 namespace Yandex\SmartHome\Capabilities;
 
-class onOffState extends State {
+class OnOffState extends State {
 
     public $type="devices.capabilities.on_off";
     
-    public function __construct($instance, $value) {
+    public function __construct(bool $value) {
         $this->state=[
-            "instance"=>$instance,
+            "instance"=>'on',
             "value"=>$value
         ];
     }

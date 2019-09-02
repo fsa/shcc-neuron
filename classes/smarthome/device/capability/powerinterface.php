@@ -9,4 +9,6 @@ interface PowerInterface {
     function setPowerOff();
 
     function setPower(bool $value);
+    
+    function getPower(): bool;
 }

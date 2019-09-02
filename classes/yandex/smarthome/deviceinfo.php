@@ -99,7 +99,7 @@ class DeviceInfo implements \JsonSerializable {
         $this->capabilities=$capabilities;
     }
 
-    public function addCapabilitie(Capabilities\Description $description) {
+    public function addCapability(Capabilities\Description $description) {
         $this->capabilities[]=$description;
     }
 }

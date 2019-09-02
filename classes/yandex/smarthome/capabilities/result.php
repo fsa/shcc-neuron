@@ -2,7 +2,7 @@
 
 namespace Yandex\SmartHome\Capabilities;
 
-abstract class State {
+abstract class Result {
 
     public $type;
     public $state;

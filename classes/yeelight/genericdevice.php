@@ -460,9 +460,17 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function setPowerOn() {
         $this->sendSetPower(true, 300);
     }
+    
+    public function getPower(): bool {
+        return $this->getPowerValue();
+    }
 
     public function setCT(int $ct_value) {
         $this->sendSetCtAbx($ct_value);
+    }
+    
+    public function getCT(): int {
+        return $this->getCTValue();
     }
 
     public function setHSV($hue, $sat, $value) {
