@@ -478,10 +478,18 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         $this->sendSetBright($value);
     }
 
+    public function getHSV(): array {
+        return [$this->getHueValue(), $this->getSatValue(), $this->getBrightValue()];
+    }
+    
     public function setRGB(int $rgb) {
         $this->sendSetRGB(dechex($rgb));
     }
     
+    public function getRGB(): int {
+        return $this->getRGBValue();
+    }
+
     public function setBrightness(int $brightness) {
         $this->sendSetBright($brightness);
     }

@@ -30,6 +30,14 @@ class Devices {
                 $result=new Capabilities\ColorModel();
                 $result->setTemperatureK(1700,6500,400);
                 return $result;
+            case 'color_rgb';
+                $result=new Capabilities\ColorModel();
+                $result->setRGBModel();
+                return $result;
+            case 'color_hsv';
+                $result=new Capabilities\ColorModel();
+                $result->setHSVModel();
+                return $result;
         }
         throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
 
@@ -40,7 +48,11 @@ class Devices {
             case 'on_off':
                 return new Capabilities\OnOffState($device->getPower());
             case 'color_temperature':
-                return new Capabilities\ColorModelState($device->getCT());
+                return new Capabilities\ColorModelState('temperature_k', $device->getCT());
+            case 'color_hsv':
+                return new Capabilities\ColorModelState('hsv', $device->getHSV());
+            case 'color_rgb':
+                return new Capabilities\ColorModelState('rgb', $device->getRGB());
         }
         throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
     }

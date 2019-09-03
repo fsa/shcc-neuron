@@ -29,6 +29,10 @@ foreach ($request->payload->devices as $device) {
                         $smarthome_device->setCT($capability->state->value);
                         $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
                         break;
+                    case 'rgb':
+                        $smarthome_device->setRGB($capability->state->value);
+                        $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
+                        break;
                 }
                 break;
             default:

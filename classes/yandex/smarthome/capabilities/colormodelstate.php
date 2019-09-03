@@ -6,9 +6,9 @@ class ColorModelState extends State {
 
     public $type="devices.capabilities.color_setting";
 
-    public function __construct(int $value) {
+    public function __construct(string $mode, int $value) {
         $this->state=[
-            "instance"=>'temperature_k',
+            "instance"=>$mode,
             "value"=>$value
         ];
     }
