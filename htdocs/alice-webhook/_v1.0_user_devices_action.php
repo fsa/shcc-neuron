@@ -41,8 +41,15 @@ foreach ($request->payload->devices as $device) {
                 $entity->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('UNDER_CONSTRUCTION', 'Construction in progress...'));
                 break;
             case 'devices.capabilities.range':
-                #TODO: action
-                $entity->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('UNDER_CONSTRUCTION', 'Construction in progress...'));
+                switch ($capability->state->instance) {
+                    case 'brightness':
+/* @var $smarthome_device \SmartHome\Device\Capability\BrightnessInterface */
+                        $smarthome_device->setBrightness($capability->state->value);
+                        break;
+#TODO: action
+                    default:
+                        $entity->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('UNDER_CONSTRUCTION', 'Construction in progress...'));
+                }
                 break;
             case 'devices.capabilities.toggle':
                 #TODO: action

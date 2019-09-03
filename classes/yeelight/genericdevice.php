@@ -2,7 +2,7 @@
 
 namespace Yeelight;
 
-class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Capability\PowerInterface, \SmartHome\Device\Capability\ColorHsvInterface, \SmartHome\Device\Capability\ColorRgbInterface, \SmartHome\Device\Capability\ColorTInterface {
+class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Capability\PowerInterface, \SmartHome\Device\Capability\ColorHsvInterface, \SmartHome\Device\Capability\ColorRgbInterface, \SmartHome\Device\Capability\ColorTInterface, \SmartHome\Device\Capability\BrightnessInterface {
 
     private $location;
     private $id;
@@ -402,7 +402,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function getDeviceStatus(): string {
         return $this->power=="on"?"Включена":"Выключена";
     }
-    
+
     public function getSupportValue(): array {
         return $this->support;
     }
@@ -410,31 +410,31 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function getPowerValue(): bool {
         return $this->power=='on';
     }
-    
+
     public function getBrightValue(): int {
         return intval($this->bright);
     }
-    
+
     public function getColorModeValue(): int {
         return intval($this->color_mode);
     }
-    
+
     public function getCTValue(): int {
         return intval($this->ct);
     }
-    
+
     public function getRGBValue(): int {
         return intval($this->rgb);
     }
-    
+
     public function getHueValue(): int {
         return intval($this->hue);
     }
-    
+
     public function getSatValue(): int {
         return intval($this->sat);
     }
-    
+
     public function getNameValue(): string {
         return $this->name;
     }
@@ -444,7 +444,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         $yeelight=new SocketServer();
         $yeelight->sendDiscover($ip);
         $packet=$yeelight->waitPacket($ip);
-        if($packet) {
+        if ($packet) {
             $this->updateState($packet->getParams());
         }
     }
@@ -460,7 +460,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function setPowerOn() {
         $this->sendSetPower(true, 300);
     }
-    
+
     public function getPower(): bool {
         return $this->getPowerValue();
     }
@@ -468,7 +468,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function setCT(int $ct_value) {
         $this->sendSetCtAbx($ct_value);
     }
-    
+
     public function getCT(): int {
         return $this->getCTValue();
     }
@@ -481,17 +481,21 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     public function getHSV(): array {
         return [$this->getHueValue(), $this->getSatValue(), $this->getBrightValue()];
     }
-    
+
     public function setRGB(int $rgb) {
         $this->sendSetRGB(dechex($rgb));
     }
-    
+
     public function getRGB(): int {
         return $this->getRGBValue();
     }
 
-    public function setBrightness(int $brightness) {
+    public function setBrightness(int $brightness): void {
         $this->sendSetBright($brightness);
+    }
+
+    public function getBrightness(): int {
+        return $this->getBrightValue();
     }
 
 }
