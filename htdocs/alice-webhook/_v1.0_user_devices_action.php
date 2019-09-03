@@ -27,15 +27,15 @@ foreach ($request->payload->devices as $device) {
                 switch ($capability->state->instance) {
                     case 'temperature_k':
                         $smarthome_device->setCT($capability->state->value);
-                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('temperature_k'));
                         break;
                     case 'rgb':
                         $smarthome_device->setRGB($capability->state->value);
-                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('rgb'));
                         break;
                     case 'hsv':
                         $smarthome_device->setHSV($capability->state->value->h, $capability->state->value->s, $capability->state->value->v);
-                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('hsv'));
                         break;
                 }
                 break;
