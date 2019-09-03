@@ -27,7 +27,9 @@ class Devices {
                 return new Capabilities\OnOff();
             case 'color_temperature':
                 #TODO: добавить параметры min, max, precision
-                return new Capabilities\ColorTemperature();
+                $result=new Capabilities\ColorModel();
+                $result->setTemperatureK(1700,6500,400);
+                return $result;
         }
         throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
 
@@ -38,7 +40,7 @@ class Devices {
             case 'on_off':
                 return new Capabilities\OnOffState($device->getPower());
             case 'color_temperature':
-                return new Capabilities\ColorTemperatureState($device->getCT());
+                return new Capabilities\ColorModelState($device->getCT());
         }
         throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
     }
@@ -48,7 +50,7 @@ class Devices {
             case 'devices.capabilities.on_off':
                 return new Capabilities\OnOffResult($error_code, $error_message);
             case 'devices.capabilities.color_setting':
-                # Учесть instance;
+                return new Capabilities\ColorModeResult($error_code, $error_message);
         }
         throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
     }

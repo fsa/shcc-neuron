@@ -2,7 +2,7 @@
 
 namespace Yandex\SmartHome\Capabilities;
 
-class ColorTemperatureState extends State {
+class ColorModelState extends State {
 
     public $type="devices.capabilities.color_setting";
 

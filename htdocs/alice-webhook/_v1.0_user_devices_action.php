@@ -23,6 +23,14 @@ foreach ($request->payload->devices as $device) {
                 $smarthome_device->setPower($power);
                 $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
                 break;
+            case 'devices.capabilities.color_setting':
+                switch ($capability->state->instance) {
+                    case 'temperature_k':
+                        $smarthome_device->setCT($capability->state->value);
+                        $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
+                        break;
+                }
+                break;
             default:
                 $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type),'INVALID_ACTION','Invalid action');
         }
@@ -35,7 +43,7 @@ file_put_contents('json_'.date('Y_m_d').'.txt', 'Ans: '.json_encode([
     'payload'=>[
         'devices'=>$devices,
         'error'=>$ex->getMessage()
-    ]]).PHP_EOL, FILE_APPEND | LOCK_EX);
+    ]], JSON_UNESCAPED_UNICODE).PHP_EOL, FILE_APPEND | LOCK_EX);
 
 }
 httpResponse::json([

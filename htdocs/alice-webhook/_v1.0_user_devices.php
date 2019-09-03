@@ -3,7 +3,7 @@
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/get-devices-docpage/
  */
 if(!isset($request_id)) {die;}
-\Auth\Bearer::grantAccess();
+#\Auth\Bearer::grantAccess();
 $user_id='anonymous';
 $yandex_devices=Yandex\SmartHome\Devices::get(Auth\Bearer::getUserId());
 $devices=[];
