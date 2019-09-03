@@ -21,22 +21,26 @@ foreach ($request->payload->devices as $device) {
             case 'devices.capabilities.on_off':
                 $power=$capability->state->value;
                 $smarthome_device->setPower($power);
-                $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
+                $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\OnOffResult());
                 break;
             case 'devices.capabilities.color_setting':
                 switch ($capability->state->instance) {
                     case 'temperature_k':
                         $smarthome_device->setCT($capability->state->value);
-                        $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
                         break;
                     case 'rgb':
                         $smarthome_device->setRGB($capability->state->value);
-                        $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type));
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
+                        break;
+                    case 'hsv':
+                        $smarthome_device->setHSV($capability->state->value->h, $capability->state->value->s, $capability->state->value->v);
+                        $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult());
                         break;
                 }
                 break;
             default:
-                $devices[$id]->addCapability(Yandex\SmartHome\Devices::getCapabilityResult($smarthome_device, $capability->type),'INVALID_ACTION','Invalid action');
+                $devices[$id]->addCapability(new \Yandex\SmartHome\Capabilities\ColorModelResult('INVALID_ACTION', 'Invalid action'));
         }
     }
     $id++;
