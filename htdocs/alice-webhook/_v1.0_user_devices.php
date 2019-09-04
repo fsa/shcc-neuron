@@ -3,7 +3,7 @@
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/get-devices-docpage/
  */
 if(!isset($request_id)) {die;}
-\Auth\Bearer::grantAccess();
+#\Auth\Bearer::grantAccess();
 $user_id='anonymous';
 $yandex_devices=Yandex\SmartHome\Devices::get(Auth\Bearer::getUserId());
 $devices=[];
@@ -42,9 +42,7 @@ while ($device=$yandex_devices->fetch()) {
                 break;
             case 'brightness':
                 $result=new \Yandex\SmartHome\Capabilities\Range('brightness');
-                #TODO: добавить настройки для яркости
-                $result->setUnit('percent');
-                $result->setRange(0, 100);
+                $result->setUnit(isset($value->unit)?$value->unit:'percent');                                     $result->setRange(isset($value->min)?$value->min:1, isset($value->max)?$value->max:100, isset($value->precision)?$value->precision:1);                
                 $entity->addCapability($result);
                 break;
             default:
