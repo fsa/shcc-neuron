@@ -61,14 +61,14 @@ function createChart(unit) {
             }]
         },
         chart: {
-        type: 'line'
+            type: 'line'
         },
         credits: {
             href: 'http://tavda.net/',
-                    text: 'Tavda.net'
+            text: 'Tavda.net'
         },
         title: {
-        text: title
+            text: title
         },
         xAxis: {
             type: 'datetime',
@@ -94,22 +94,17 @@ function createChart(unit) {
             softMax: maximal
         },
         tooltip: {
-        split: true,
-                distance: 30,
-                pointFormat: '{series.name}<br><b>{point.y:,.2f} ' + units + '</b>',
-                xDateFormat: '%d.%m.%Y %H:%M:%S'
+            split: true,
+            distance: 30,
+            pointFormat: '{series.name}<br><b>{point.y:,.2f} ' + units + '</b>',
+            xDateFormat: '%d.%m.%Y %H:%M:%S'
         },
         plotOptions: {
-            area: {
+            line: {
                 marker: {
-                    enabled: false,
-                        symbol: 'circle',
-                        radius: 2,
-                        states: {
-                        hover: {
-                        enabled: true
-                        }
-                    }
+                    enabled: true,
+                    symbol: 'circle',
+                    radius: 3
                 }
             }
         },

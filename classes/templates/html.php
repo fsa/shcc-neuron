@@ -128,7 +128,7 @@ $(document).ready(function(){
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-dark">&copy; Tavda.net, 2018-2019.</footer>
+<footer class="footer container-fluid bg-dark"><?=date('d.m.Y h:i:s')?></footer>
 </body>
 </html>
 <?php        
