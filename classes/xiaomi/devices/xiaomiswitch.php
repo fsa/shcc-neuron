@@ -35,7 +35,7 @@ class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInte
 
     public function getDeviceActions(): array {
         #TODO проверить имён корректность событий
-        return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_press'=>'Долгое нажатие','long_press_release'=>'Завершение долгого нажатия'];
+        return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_click_press'=>'Долгое нажатие','long_click_release'=>'Завершение долгого нажатия'];
     }
 
 }
