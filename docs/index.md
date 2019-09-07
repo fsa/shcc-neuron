@@ -2,6 +2,8 @@
 
 [Общая информация о системе](common.md)
 
+[Установка системы](install.md)
+
 [Файл конфигурации settings.json](settings.md)
 
 [Пользовательские скрипты](userscripts.md)

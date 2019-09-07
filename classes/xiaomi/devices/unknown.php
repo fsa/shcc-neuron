@@ -4,10 +4,15 @@ namespace Xiaomi\Devices;
 
 class Unknown extends AbstractDevice {
 
-    private $params=[];
+    private $params;
+    
+    public function __construct() {
+        $this->params=new \stdClass();
+        parent::__construct();
+    }
 
     protected function updateParam($param,$value) {
-        $this->params[$param]=$value;
+        $this->params->$param->$value="action";
     }
 
     public function getDeviceDescription(): string {

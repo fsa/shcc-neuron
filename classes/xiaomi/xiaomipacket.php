@@ -83,8 +83,11 @@ class XiaomiPacket {
 #                return new Devices\AqaraWleakSensor;
 #            case "sensor_wleak.aq1":
 #                return new Devices\AqaraWleakSensor;
+#            case "ctrl_86plug.aq1":
+#stdClass Object ( [status] => stdClass Object ( [on] => action ) [inuse] => stdClass Object ( [1] => action ) [power_consumed] => stdClass Object ( [4124] => action ) [load_power] => stdClass Object ( [0.78] => action ) )
+#                 return new Devices\AqaraWleakSensor;
             default:
-                return new Devices\Unknown($this->pkt->model);
+                return new Devices\Unknown();
         }
     }
 
