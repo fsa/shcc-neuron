@@ -42,6 +42,7 @@ $ sudo apt install nginx php-fpm php-pgsql
 1. создать файл с содержимым конфигурации в папке /etc/nginx/sites-available/ и создать на него симлинк в папке sites-enabled;
 2. создать файл с расширением .conf в папаке /etc/nginx/cond.d/.
 Пример файла конфигурации приведён ниже:
+
 ```nginx
 server {
     listen	80 default_server;
