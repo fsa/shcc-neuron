@@ -212,6 +212,7 @@ Created symlink /etc/systemd/system/timers.target.wants/phpmd-minutely.timer →
 Created symlink /etc/systemd/system/phpmd-minutely.timer → /var/www/phpmd/systemd/phpmd-minutely.timer.
 # systemctl start phpmd.service
 # systemctl start phpmd-minutely.timer
+```
 
 ## Включение голосовых оповещений
 
