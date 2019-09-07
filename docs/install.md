@@ -43,7 +43,7 @@ $ sudo apt install nginx php-fpm php-pgsql
 2. создать файл с расширением .conf в папаке /etc/nginx/cond.d/.
 Пример файла конфигурации приведён ниже:
 
-```nginx
+```
 server {
     listen	80 default_server;
 
@@ -87,7 +87,7 @@ server {
 Вместо phpmd.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети.
 
 Запуск php производится с помощью upstream php-fpm, который необходимо указать в секции http основного файла конфигурации nginx /etc/nginx/nginx.conf: 
-```nginx
+```
     upstream php-fpm {
 	server unix:/run/php/php7.2-fpm.sock;
     }
@@ -99,7 +99,7 @@ server {
 Ещё один требуемый файл - acme. Если вы не планируете использовать сертификаты от Let's Encrypt можете просто закомментировать include acme; в файле конфигурации виртуального хоста.
 
 Для удобства получения бесплатных сертификатов https создаём файл /etc/nginx/acme со следующим содержимым:
-```nginx
+```
 location ~ /.well-known/acme-challenge/(.*) {
     default_type "text/plain";
     root /var/www/letsencrypt;
@@ -109,7 +109,7 @@ location ~ /.well-known/acme-challenge/(.*) {
 Также необходимо будет создать папку /var/www/letsencrypt и задать для неё владельца и группу веб-сервера (www-data). Эту папку нужно будет указывать в параметрах certbot при получении сертификата для своего домена.
 
 Для настройки https также желательно добавить в секцию http файла конфигурации nginx /etc/nginx/nginx.conf параметры ssl. Пример параметров конфигурации https приведён ниже:
-```nginx
+```
     ssl_protocols TLSv1.3 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
