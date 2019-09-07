@@ -104,4 +104,20 @@ class Devices {
         $s->execute([$module,$uid]);
         return $s->fetch(PDO::FETCH_COLUMN);
     }
+    
+    public static function getDevicesByModuleName(string $module_name): array {
+        $array=[];
+        $stmt=\DB::prepare('SELECT d.uid,d.classname,d.init_data FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.disabled=false');
+        $stmt->execute([$module_name]);
+        while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
+            $device_obj=new $device->classname;
+            $data=json_decode($device->init_data,true);
+            if (!is_array($data)) {
+                $data=[];
+            }
+            $device_obj->init($device->uid,$data);
+            $array[$device->uid]=$device_obj;
+        }
+        return $array;
+    }
 }

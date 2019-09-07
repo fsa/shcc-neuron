@@ -6,36 +6,26 @@ class DeviceMemoryStorage {
 
     const PROJ='a';
     const CHMOD=0600;
+    const MEMSIZE=1048576;
 
     private $shm;
 
     public function __construct() {
-        $memsize=\Settings::get('device_memory_storage');
-        if (is_null($memsize)) {
-            $memsize=1048576; # 1MB
-        }
+        $memsize=\Settings::get('device_memory_storage', self::MEMSIZE);
         $file=ftok(__FILE__,self::PROJ);
         $this->shm=shm_attach($file,$memsize,self::CHMOD);
+        if (shm_has_var($this->shm,1)) {
+            return;
+        }
+        $modules=[];
+        if(!shm_put_var($this->shm,1,$modules)) {
+            throw new \AppException('Не удалось инициализировать разделяемую память. Дальнейшая работа с устройствами невозможна.');
+        }
     }
 
     public function getModuleDevices(string $module_name) {
         $key=$this->getKeyByModuleName($module_name);
-        $array=shm_get_var($this->shm,$key);
-        if ($array===false or !is_array($array)) {
-            $array=[];
-            $stmt=\DB::prepare('SELECT d.uid,d.classname,d.init_data FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.disabled=false');
-            $stmt->execute([$module_name]);
-            while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
-                $device_obj=new $device->classname;
-                $data=json_decode($device->init_data,true);
-                if (!is_array($data)) {
-                    $data=[];
-                }
-                $device_obj->init($device->uid,$data);
-                $array[$device->uid]=$device_obj;
-            }
-        }
-        return $array;
+        return shm_get_var($this->shm,$key);
     }
     
     public function getDevice($module_name, $uid) {
@@ -48,21 +38,17 @@ class DeviceMemoryStorage {
     }
 
     public function getModuleList() {
-        $keys=@shm_get_var($this->shm,1);
-        if (!is_array($keys)) {
-            return [];
-        }
+        $keys=shm_get_var($this->shm,1);
         return array_keys($keys);
     }
 
     private function getKeyByModuleName($name) {
-        $keys=@shm_get_var($this->shm,1);
-        if (!is_array($keys)) {
-            $keys=[];
-        }
+        $keys=shm_get_var($this->shm,1);
         if (!isset($keys[$name])) {
             $keys[$name]=sizeof($keys)+2;
             shm_put_var($this->shm,1,$keys);
+            $devices=Devices::getDevicesByModuleName($name);
+            shm_put_var($this->shm, $keys[$name], $devices);
         }
         return $keys[$name];
     }

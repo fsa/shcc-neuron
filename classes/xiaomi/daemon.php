@@ -35,14 +35,6 @@ class Daemon implements \SmartHome\DaemonInterface {
         if (is_null($sid)) {
             return;
         }
-        if (!isset($this->devices[$sid])) {
-            $device=$pkt->getDeviceObject();
-            if (is_null($device)) {
-                echo 'New device: '.date('c').PHP_EOL.print_r($pkt,true);
-            } else {
-                $this->devices[$sid]=$device;
-            }
-        }
         if (isset($this->devices[$sid])) {
             $this->devices[$sid]->update($pkt);
             $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);
@@ -50,8 +42,11 @@ class Daemon implements \SmartHome\DaemonInterface {
             if (!is_null($actions)) {
                 $data=['module'=>self::DAEMON_NAME,'uid'=>$sid,'data'=>$actions];
                 file_get_contents($this->process_url.'?'.http_build_query($data));
-                #echo date('c').' '.$sid.'=>'.$actions.PHP_EOL;
             }
+        } else {
+            $device=$pkt->getDeviceObject();
+            $this->devices[$sid]=$device;
+            $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);            
         }
     }
 
