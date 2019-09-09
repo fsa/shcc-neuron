@@ -31,7 +31,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return ['ip'=>$this->ip,'token'=>$this->token];
     }
 
-    public function getLastUpdate() {
+    public function getLastUpdate(): int {
         return $this->updated;
     }
 
