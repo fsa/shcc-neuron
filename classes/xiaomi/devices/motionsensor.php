@@ -16,14 +16,14 @@ class MotionSensor extends AbstractDevice implements \SmartHome\SensorsInterface
                 if ($value=='motion') {
                     $this->setLastMotion(0);
                 } else {
-                    #TODO другие значения
+                    $this->showUnknownParam($param, $value);
                 }
                 break;
             case "no_motion":
                 $this->setLastMotion(intval($value));
                 break;
             default:
-                echo "$param => $value\n";
+                $this->showUnknownParam($param, $value);
         }
     }
 

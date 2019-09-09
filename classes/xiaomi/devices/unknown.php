@@ -7,14 +7,20 @@ class Unknown extends AbstractDevice {
     private $params;
     
     public function __construct() {
-        $this->params=new \stdClass();
+        $this->params=[];
         parent::__construct();
     }
 
     protected function updateParam($param,$value) {
-        $this->params->$param->$value="action";
+        if(array_key_exists($param, $this->params)) {
+            if(array_search($value, $this->params[$param])===false) {
+                array_push($this->params[$param], $value);
+            }
+        } else {
+            $this->params[$param]=[$value];        
+        }
     }
-
+    
     public function getDeviceDescription(): string {
         return "Неизвестный тип устройства";
     }
@@ -28,7 +34,7 @@ class Unknown extends AbstractDevice {
     }
 
     public function getDeviceStatus(): string {
-        return $this->model.'=>'.print_r($this->params,true);
+        return $this->model.'=>'.json_encode($this->params);
     }
 
 }

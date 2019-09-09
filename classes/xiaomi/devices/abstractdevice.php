@@ -78,6 +78,10 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     public function getVoltage() {
         return $this->voltage;
     }
+    
+    protected function showUnknownParam($param, $value) {
+        printf('%s=>{%s=%s}',$this->getDeviceId(),$param,$value);
+    }
 
     abstract protected function updateParam($param,$value);
 }

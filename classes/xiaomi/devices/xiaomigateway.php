@@ -71,7 +71,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
             case "proto_version":
                 break;
             default:
-                echo "$param => $value\n";
+                $this->showUnknownParam($param, $value);
         }
     }
 

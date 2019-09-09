@@ -20,7 +20,7 @@ class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface
                 $this->setNoClose($value);
                 break;
             default:
-                echo "$param => $value\n";
+                $this->showUnknownParam($param, $value);
         }
     }
 

@@ -61,6 +61,7 @@ class XiaomiPacket {
         switch ($this->pkt->model) {
             case "gateway":
                 return new Devices\XiaomiGateway;
+            case "weather":
             case "weather.v1":
                 return new Devices\AqaraWeatherSensor;
             case "sensor_ht":
@@ -68,15 +69,15 @@ class XiaomiPacket {
             case "motion":
                 return new Devices\MotionSensor;
             case "magnet":
+            case "sensor_magnet.aq2":
                 return new Devices\MagnetSensor;
             case "switch":
                 return new Devices\XiaomiSwitch;
+            case "sensor_switch.aq2":
+            case "sensor_switch.aq3":
+                return new Devices\AqaraSwitch;
 #            case "sensor_wleak.aq1":
 #                return new Devices\AqaraWleakSensor;
-#            case "sensor_switch.aq2":
-#                return new Devices\AqaraSwitchSensor2;
-#            case "sensor_switch.aq3":
-#                return new Devices\AqaraSwitchSensor3;
 #            case "86sw1":
 #                return new Devices\AqaraWleakSensor;
 #            case "86sw2":

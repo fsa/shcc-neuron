@@ -20,7 +20,7 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
                 $this->setHumidity($value);
                 break;
             default:
-                echo "$param => $value\n";
+                $this->showUnknownParam($param, $value);
         }
     }
 

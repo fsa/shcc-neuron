@@ -25,7 +25,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
                 $this->setPressure($value);
                 break;
             default:
-                echo "$param => $value\n";
+                $this->showUnknownParam($param, $value);
         }
     }
 

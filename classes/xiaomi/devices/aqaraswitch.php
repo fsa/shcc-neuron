@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Беспроводная кнопка Xiaomi
+ * Беспроводная кнопка Aqara
+ * Код не тестировался
  */
 
 namespace Xiaomi\Devices;
 
-class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInterface {
+class AqaraSwitch extends AbstractDevice implements \SmartHome\DeviceActionInterface {
 
     protected function updateParam($param,$value) {
         switch ($param) {
@@ -19,7 +20,7 @@ class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInte
     }
 
     public function getDeviceDescription(): string {
-        return "Xiaomi Smart Wireless Switch";
+        return "Aqara Smart Wireless Switch";
     }
 
     public function getDeviceStatus(): string {
@@ -34,7 +35,7 @@ class XiaomiSwitch extends AbstractDevice implements \SmartHome\DeviceActionInte
     }
 
     public function getDeviceActions(): array {
-        return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_click_press'=>'Долгое нажатие','long_click_release'=>'Завершение долгого нажатия'];
+        return ['click'=>'Нажатие','double_click'=>'Двойной клик'];
     }
 
 }
