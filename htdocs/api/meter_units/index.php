@@ -1,10 +1,10 @@
 <?php
 
 require_once '../../common.php';
+httpResponse::setJsonExceptionHanler();
 Auth\Internal::grantAccess();
 $units=SmartHome\MeterUnits::getUnits();
 foreach($units as $key=>&$unit) {
     $unit['meters']=SmartHome\Meters::getMetersByUnitId($key);
 }
-header('Content-Type: application/json');
-echo json_encode($units,JSON_UNESCAPED_UNICODE|JSON_NUMERIC_CHECK);
+httpResponse::json($result, JSON_UNESCAPED_UNICODE|JSON_NUMERIC_CHECK);

@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../common.php';
+httpResponse::setJsonExceptionHanler();
 Auth\Internal::grantAccess(['control']);
 chdir('../../../custom/command/');
 require_once '../functions.php';
