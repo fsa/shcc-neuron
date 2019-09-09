@@ -44,8 +44,8 @@ class Daemon implements \SmartHome\DaemonInterface {
                 file_get_contents($this->process_url.'?'.http_build_query($data));
             }
         } else {
-            $device=$pkt->getDeviceObject();
-            $this->devices[$sid]=$device;
+            $this->devices[$sid]=$pkt->getDeviceObject();
+            $this->devices[$sid]->update($pkt);            
             $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);            
         }
     }

@@ -68,7 +68,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getDeviceId(): string {
-        return $this->sid??'';
+        return $this->sid;
     }
 
     public function getLastUpdate(): int {
