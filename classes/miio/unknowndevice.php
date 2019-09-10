@@ -2,14 +2,12 @@
 
 namespace miIO;
 
-class GenericDevice implements \SmartHome\DeviceInterface {
+class UnknownDevice implements \SmartHome\DeviceInterface {
 
     private $uid;
-    private $ip;
     private $token;
-    private $key='';
-    private $iv='';
     private $updated;
+    private $mipacket;
 
     public function getDeviceDescription(): string {
         return "Неизвестное устройство";
@@ -24,11 +22,11 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getInitDataList(): array {
-        return ['ip'=>'IP адрес','token'=>'Токен'];
+        return ['token'=>'Токен'];
     }
 
     public function getInitDataValues(): array {
-        return ['ip'=>$this->ip,'token'=>$this->token];
+        return ['token'=>$this->token];
     }
 
     public function getLastUpdate(): int {
@@ -44,6 +42,12 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
+    }
+    
+    public function update(MiPacket $pkt) {
+        $this->mipacket=$pkt;
+        $this->uid=$pkt->getDeviceId();
+        $this->updated=time();
     }
 
 }

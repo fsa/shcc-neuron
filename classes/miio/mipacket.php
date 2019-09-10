@@ -3,14 +3,16 @@
 namespace miIO;
 
 class MiPacket {
-
+    
     private $magic='2131';
-    private $length='';
-    private $device_id='';
-    private $timestamp='';
-    private $checksum='';
+    private $length;
+    private $device_id;
+    private $timestamp;
+    private $checksum;
     private $data;
-    private $token='';
+    private $token;
+    private $key;
+    private $iv;
     private $firstSet=true;
     private $timeDiff=0;
     private $remote_ip;
@@ -28,6 +30,14 @@ class MiPacket {
         return $this->device_id;
     }
     
+    public function isMiIOPacket() {
+        return $this->magic=='2131';
+    }
+
+    public function isHelloPacket() {
+        return $this->length=='0020';
+    }
+
     public function setRemoteAddr($ip,$port=false) {
         $this->remote_ip=$ip;
         if($port) {
@@ -53,10 +63,7 @@ class MiPacket {
                 $this->firstSet=false;
             }
         } else {
-            $data_length=strlen($msg)-64;
-            if ($data_length>0) {
-                $this->data=substr($msg,64,$data_length);
-            }
+            $this->data=strlen($msg)>64?substr($msg,64,$data_length):'';
         }
     }
     
@@ -86,4 +93,7 @@ class MiPacket {
         return $packet;
     }
 
+    public static function getHelloMessage(): string {
+        return hex2bin('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+    }
 }

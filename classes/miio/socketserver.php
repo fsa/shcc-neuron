@@ -5,13 +5,12 @@ namespace miIO;
 class SocketServer {
 
     const MIIO_PORT=54321;
-    const HELLO_MSG='21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
     const DISCOVERY_TIMEOUT=2;
 
     private $stream;
     private $socket;
 
-    public function createSocket() {
+    public function __construct() {
         $this->stream=stream_socket_server("udp://0.0.0.0:".self::MIIO_PORT,$errno,$errstr,STREAM_SERVER_BIND);
         if (!$this->stream) {
             throw new Exception("$errstr ($errno)");
@@ -41,7 +40,7 @@ class SocketServer {
         return stream_socket_sendto($this->stream,$data,0,$ip.':'.self::MIIO_PORT);
     }
     
-    public function receiveFrom() {
+    public function getPacket(): MiPacket {
         $pkt=stream_socket_recvfrom($this->stream,4096,0,$peer);
         $mipacket=new MiPacket();
         $mipacket->parseMessage(bin2hex($pkt));
@@ -51,10 +50,9 @@ class SocketServer {
 
     public static function sendDiscovery() {
         $server=new self;
-        $server->createSocket();
         $server->setBroadcastSocket();
         $server->setTimeoutSocket(self::DISCOVERY_TIMEOUT);
-        $server->sendTo('255.255.255.255',hex2bin(self::HELLO_MSG));
+        $server->sendTo('255.255.255.255', MiPacket::getHelloMessage());
     }
 
 }
