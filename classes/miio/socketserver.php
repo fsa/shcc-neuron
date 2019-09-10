@@ -8,14 +8,15 @@ class SocketServer {
     const HELLO_MSG='21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
     const DISCOVERY_TIMEOUT=2;
 
+    private $stream;
     private $socket;
 
     public function createSocket() {
-        $stream=stream_socket_server("udp://0.0.0.0:".self::MIIO_PORT,$errno,$errstr,STREAM_SERVER_BIND);
-        if (!$stream) {
+        $this->stream=stream_socket_server("udp://0.0.0.0:".self::MIIO_PORT,$errno,$errstr,STREAM_SERVER_BIND);
+        if (!$this->stream) {
             throw new Exception("$errstr ($errno)");
         }
-        $this->socket=socket_import_stream($stream);
+        $this->socket=socket_import_stream($this->stream);
         if (!$this->socket) {
             throw new Exception('Unable to import stream.');
         }
@@ -37,39 +38,23 @@ class SocketServer {
     }
     
     public function sendTo($ip,$data) {
-        return socket_sendto($this->socket,$data,strlen($data),0,$ip,self::MIIO_PORT);
+        return stream_socket_sendto($this->stream,$data,0,$ip.':'.self::MIIO_PORT);
     }
     
     public function receiveFrom() {
-        $bytes=@socket_recvfrom($this->socket,$buf,4096,0,$remote_ip,$remote_port);
-        if($bytes==0) {
-            return false;
-        }
-        if($buf=='') {
-            return true;
-        }
+        $pkt=stream_socket_recvfrom($this->stream,4096,0,$peer);
         $mipacket=new MiPacket();
-        $mipacket->parseMessage(bin2hex($buf));
-        $mipacket->setRemoteAddr($remote_ip,$remote_port);
+        $mipacket->parseMessage(bin2hex($pkt));
+        $mipacket->setRemoteAddr($peer);
         return $mipacket;
     }
 
-    public static function discovery() {
+    public static function sendDiscovery() {
         $server=new self;
         $server->createSocket();
         $server->setBroadcastSocket();
         $server->setTimeoutSocket(self::DISCOVERY_TIMEOUT);
         $server->sendTo('255.255.255.255',hex2bin(self::HELLO_MSG));
-        $result=[];
-        while ($mipacket=$server->receiveFrom()) {
-            if ($mipacket===true) {
-                continue;
-            }
-            if($mipacket->getDeviceId()!='ffffffffffffffff') {
-                $result[$mipacket->getDeviceId()]=$mipacket->getRemoteIp();
-            }
-        }
-        return $result;
     }
 
 }
