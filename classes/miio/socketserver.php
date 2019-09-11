@@ -36,23 +36,20 @@ class SocketServer {
         }
     }
     
-    public function sendTo($ip,$data) {
-        return stream_socket_sendto($this->stream,$data,0,$ip.':'.self::MIIO_PORT);
+    public function sendTo($peer,$data) {
+        return stream_socket_sendto($this->stream,$data,0,$peer);
     }
     
     public function getPacket(): MiPacket {
         $pkt=stream_socket_recvfrom($this->stream,4096,0,$peer);
-        $mipacket=new MiPacket();
-        $mipacket->parseMessage(bin2hex($pkt));
-        $mipacket->setRemoteAddr($peer);
-        return $mipacket;
+        return new MiPacket($pkt, $peer);
     }
 
     public static function sendDiscovery() {
         $server=new self;
         $server->setBroadcastSocket();
         $server->setTimeoutSocket(self::DISCOVERY_TIMEOUT);
-        $server->sendTo('255.255.255.255', MiPacket::getHelloMessage());
+        $server->sendTo('255.255.255.255:'.self::MIIO_PORT, MiPacket::getHelloMessage());
     }
 
 }
