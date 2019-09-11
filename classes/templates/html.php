@@ -128,7 +128,7 @@ $(document).ready(function(){
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-dark"><?=date('d.m.Y h:i:s')?></footer>
+<footer class="footer container-fluid bg-dark"><?=date('d.m.Y H:i:s')?></footer>
 </body>
 </html>
 <?php        
