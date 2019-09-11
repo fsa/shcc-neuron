@@ -20,11 +20,10 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     private $socket;
     private $updated;
     private $message_id=1;
-    private $actions;
+    private $actions=[];
 
     public function __construct() {
         $this->updated=0;
-        $this->actions=[];
     }
 
     public function __sleep() {
