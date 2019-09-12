@@ -95,7 +95,8 @@ COMMENT ON TABLE tts_log IS 'Журнал голосовых сообщений'
 INSERT INTO modules (id, name, namespace, daemon, settings, disabled) VALUES
 (1, 'xiaomi', 'Xiaomi', true, false, false),
 (2, 'yeelight', 'Yeelight', true, false, false),
-(3, 'yandex', 'Yandex', false, true, false);
+(3, 'yandex', 'Yandex', false, true, false),
+(4, 'miio', 'miIO', true, false, true);
 
 INSERT INTO meter_units (id, name, unit, minimal, maximal) VALUES
 (1, 'Температура воздуха', '&deg;C', 18, 25),
