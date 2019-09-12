@@ -4,6 +4,8 @@ namespace miIO;
 
 use DB;
 
+use Settings;
+
 class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='miio';
@@ -12,9 +14,14 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $socketserver;
     private $devices;
     private $process_url;
+    private $tokens=[];
     
     public function __construct($process_url) {
         $this->process_url=$process_url;
+        $miio=Settings::get('miio');
+        if(isset($miio->tokens)) {
+            $this->tokens=$miio->tokens;
+        }
     }
 
     public function getName() {
@@ -48,7 +55,11 @@ class Daemon implements \SmartHome\DaemonInterface {
                 file_get_contents($this->process_url.'?'.http_build_query($data));
             }
         } else {
-            $this->devices[$sid]=$pkt->getDeviceObject();
+            $this->devices[$sid]=new GenericDevice;
+            $this->devices[$sid]->update($pkt);
+            if(isset($this->tokens->$sid)) {
+                $this->devices[$sid]->setDeviceToken($this->tokens->$sid);
+            }
             $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);            
         }
     }

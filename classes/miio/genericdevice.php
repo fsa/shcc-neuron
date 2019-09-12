@@ -23,7 +23,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getDeviceDescription(): string {
-        return "Неподдерживаемый тип устройства";
+        return "Универсальное устройство";
     }
 
     public function getDeviceId(): string {
@@ -31,15 +31,15 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getDeviceStatus(): string {
-        return print_r($this->data,true)??'Нет данных';
+        return sprintf('Токен: %s. Адрес: %s',$this->token?'указан':'укажите в settings.json',$this->location)??'Нет данных';
     }
 
     public function getInitDataList(): array {
-        return ['token'=>'Токен'];
+        return [];
     }
 
     public function getInitDataValues(): array {
-        return ['token'=>$this->token];
+        return [];
     }
 
     public function getLastUpdate(): int {
@@ -67,6 +67,10 @@ class GenericDevice implements \SmartHome\DeviceInterface {
 
     public function getDeviceToken(): ?string {
         return $this->token;
+    }
+
+    public function setDeviceToken(string $token): void {
+        $this->token=$token;
     }
 
     public function getDeviceTimeDiff(): ?int {

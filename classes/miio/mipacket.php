@@ -100,10 +100,4 @@ class MiPacket {
         return hex2bin('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
     }
 
-    public function getDeviceObject() {
-        $obj=new GenericDevice;
-        $obj->update($this);
-        return $obj;
-    }
-
 }
