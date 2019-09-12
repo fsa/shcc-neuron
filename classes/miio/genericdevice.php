@@ -2,17 +2,25 @@
 
 namespace miIO;
 
-class UnknownDevice implements \SmartHome\DeviceInterface {
+class GenericDevice implements \SmartHome\DeviceInterface {
 
     private $uid;
     private $location;
     private $token;
     private $timediff;
     private $connection;
-    private static $message_id=1;
     private $updated;
 
     private $data;
+
+    public function __construct(GenericDevice $device=null) {
+        if(!is_null($device)) {
+            $this->uid=$device->getDeviceId();
+            $this->location=$device->getDeviceAddr();
+            $this->token=$device->getDeviceToken();
+            $this->timediff=$device->getDeviceTimeDiff();
+        }
+    }
 
     public function getDeviceDescription(): string {
         return "Неподдерживаемый тип устройства";
@@ -52,7 +60,19 @@ class UnknownDevice implements \SmartHome\DeviceInterface {
             $this->$key=$value;
         }
     }
-    
+
+    public function getDeviceAddr(): ?string {
+        return $this->location;
+    }
+
+    public function getDeviceToken(): ?string {
+        return $this->token;
+    }
+
+    public function getDeviceTimeDiff(): ?int {
+        return $this->timediff;
+    }
+
     public function update(MiPacket $pkt) {
         if($pkt->isHelloPacket()) {
             $this->uid=$pkt->getDeviceId();
@@ -67,7 +87,7 @@ class UnknownDevice implements \SmartHome\DeviceInterface {
 
     public function sendCommand(string $method, array $params=[]): string {
         #TODO: проверка token и location
-        $id=self::$message_id++;
+        $id=time();
         $cmd=[
             'id'=>$id,
             'method'=>$method,

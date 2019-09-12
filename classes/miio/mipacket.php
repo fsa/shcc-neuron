@@ -101,7 +101,7 @@ class MiPacket {
     }
 
     public function getDeviceObject() {
-        $obj=new UnknownDevice;
+        $obj=new GenericDevice;
         $obj->update($this);
         return $obj;
     }
