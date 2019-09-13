@@ -56,6 +56,9 @@ class MiPacket {
 
     public function parseMessage($msg): void {
         $this->magic=substr($msg,0,4);
+        if($this->magic!='2131') {
+            return;
+        }
         $this->length=substr($msg,4,4);
         $this->device_id=substr($msg,8,16);
         $this->timestamp=substr($msg,24,8);
