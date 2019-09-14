@@ -57,10 +57,6 @@ class Table {
         $template->showFooter();
     }
 
-    private function showTableFooter() {
-        echo "</table>";
-    }
-
     public function createCsv($statement,$filename) {
         header('Content-Type: application/csv');
         header('Content-Disposition: attachment; filename="'.$filename.'.csv";');
