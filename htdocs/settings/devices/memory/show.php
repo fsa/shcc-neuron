@@ -6,6 +6,7 @@ if (!isset($uid)) {
 $sh=new SmartHome\Device\MemoryStorage;
 $mem_device=$sh->getDevice($uid);
 $devices=new SmartHome\Devices;
+list($module,$id)=explode('_', $uid, 2);
 $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
