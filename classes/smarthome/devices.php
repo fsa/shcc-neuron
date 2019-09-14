@@ -20,8 +20,8 @@ class Devices {
         if(!$dev) {
             return null;
         }
-        $mem=new DeviceMemoryStorage;
-        $device=$mem->getDevice($dev->module,$dev->uid);
+        $mem=new Device\MemoryStorage;
+        $device=$mem->getDevice($dev->module.'_'.$dev->uid);
         if(is_null($device)) {
             $device=new $dev->classname;
             $device->init($dev->uid,json_decode($dev->init_data));

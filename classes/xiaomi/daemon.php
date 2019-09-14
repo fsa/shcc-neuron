@@ -8,9 +8,11 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='xiaomi';
 
+    /**
+    *  @var \SmartHome\Device\MemoryStorage
+    */
     private $storage;
     private $socketserver;
-    private $devices;
     private $process_url;
     
     public function __construct($process_url) {
@@ -22,31 +24,32 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new \SmartHome\DeviceMemoryStorage;
-        $this->devices=$this->storage->getModuleDevices(self::DAEMON_NAME);
-        DB::disconnect();
+        $this->storage=new \SmartHome\Device\MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
+        DB::disconnect();
     }
 
     public function iteration() {
         $pkt=$this->socketserver->getPacket();
-        $sid=$pkt->getSid();
-        if (is_null($sid)) {
+        $uid=$pkt->getSid();
+        if (is_null($uid)) {
             return;
         }
-        if (isset($this->devices[$sid])) {
-            $this->devices[$sid]->update($pkt);
-            $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);
-            $actions=$this->devices[$sid]->getActions();
+        $uid=self::DAEMON_NAME.'_'.$uid;
+        $device=$this->storage->getDevice($uid);
+        if(is_null($device)) {
+            $device=$pkt->getDeviceObject();
+            $device->update($pkt);
+            $this->storage->setDevice($uid, $device);
+        } else {
+            $device->update($pkt);
+            $this->storage->setDevice($uid, $device);
+            $actions=$device->getActions();
             if (!is_null($actions)) {
-                $data=['module'=>self::DAEMON_NAME,'uid'=>$sid,'data'=>$actions];
+                $data=['module'=>self::DAEMON_NAME,'uid'=>$uid,'data'=>$actions];
                 file_get_contents($this->process_url.'?'.http_build_query($data));
             }
-        } else {
-            $this->devices[$sid]=$pkt->getDeviceObject();
-            $this->devices[$sid]->update($pkt);            
-            $this->storage->setModuleDevices(self::DAEMON_NAME,$this->devices);            
         }
     }
 

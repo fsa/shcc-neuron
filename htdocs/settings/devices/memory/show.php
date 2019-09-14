@@ -1,20 +1,19 @@
 <?php
 
-if (!isset($module)) {
+if (!isset($uid)) {
     die;
 }
-$sh=new SmartHome\DeviceMemoryStorage;
-$memdevices=$sh->getModuleDevices($module);
-$mem_device=isset($memdevices[$id])?$memdevices[$id]:null;
+$sh=new SmartHome\Device\MemoryStorage;
+$mem_device=$sh->getDevice($uid);
 $devices=new SmartHome\Devices;
 $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
     if($mem_device) {
-        httpResponse::redirect("../edit/?module=$module&id=$id");
+        httpResponse::redirect("../edit/?uid=$uid");
         exit;
     } else {
-        throw new AppException("В модуле '$module' устройство с идентификатором '$id' не найдено.");
+        throw new AppException("Устройство с идентификатором '$uid' не найдено.");
     }
 }
 HTML::showPageHeader();

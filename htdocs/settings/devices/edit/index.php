@@ -8,22 +8,18 @@ if($action) {
 }
 use Templates\Forms;
 $id=filter_input(INPUT_GET,'id');
-$module=filter_input(INPUT_GET,'module');
-if($module) {
-    if(!$id) {
-        die;
-    }
-    $sh=new SmartHome\DeviceMemoryStorage;
-    $memdevices=$sh->getModuleDevices($module);
-    if(!isset($memdevices[$id])) {
+$uid=filter_input(INPUT_GET,'uid');
+if($uid) {
+    $sh=new SmartHome\Device\MemoryStorage;
+    $memdev=$sh->getDevice($uid);
+    if(is_null($memdev)) {
         throw new AppException('Что-то пошло не так. Не найдено устройство в памяти.');
     }
-    $memdev=$memdevices[$id];
     $init_data_list=$memdev->getInitDataList();
     $device=new SmartHome\Entity\Device;
-    $device->module_id=\SmartHome\Modules::getModuleIdByName($module);
-    $device->uid=$id;
-    $device->unique_name=$module.'_'.$id;
+    $device->module_id=$memdev->getModuleName();
+    $device->uid=$uid;
+    $device->unique_name=$uid;
     $device->description=$memdev->getDeviceDescription();
     $device->classname=get_class($memdev);
     $device->setInitData($memdev->getInitDataValues());
@@ -41,8 +37,8 @@ if($module) {
         $init_data_list=[];
     }
 }
-HTML::showPageHeader("Регистрация оборудования модуля '$module'");
-if($module) {
+HTML::showPageHeader("Регистрация оборудования '$uid'");
+if($uid) {
 ?>
 <p>Для работы с новым устройством его необходимо добавить в базу данных.</p>
 <?php

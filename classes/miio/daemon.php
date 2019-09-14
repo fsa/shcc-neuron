@@ -8,9 +8,11 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='miio';
 
+    /**
+     *  @var \SmartHome\Device\MemoryStorage
+     */
     private $storage;
     private $socketserver;
-    private $devices;
     private $process_url;
     private $tokens=[];
 
@@ -23,8 +25,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new \SmartHome\DeviceMemoryStorage;
-        $this->devices=$this->storage->getModuleDevices(self::DAEMON_NAME);
+        $this->storage=new \SmartHome\Device\MemoryStorage;
         $this->tokens=Tokens::getTokens();
         $this->socketserver=new SocketServer();
         $this->socketserver->setBroadcastSocket();
@@ -37,25 +38,26 @@ class Daemon implements \SmartHome\DaemonInterface {
         if (!$pkt->isMiIOPacket()) {
             return;
         }
-        $sid=$pkt->getDeviceId();
-        if ($sid=='ffffffffffffffff') {
+        $uid=$pkt->getDeviceId();
+        if ($uid=='ffffffffffffffff') {
             return;
         }
-        if (isset($this->devices[$sid])) {
-            $this->devices[$sid]->update($pkt);
-            $this->storage->setModuleDevices(self::DAEMON_NAME, $this->devices);
-            $actions=$this->devices[$sid]->getActions();
+        $device=$this->storage->getDevice($uid);
+        if(is_null($device)) {
+            $device=new GenericDevice;
+            if (isset($this->tokens[$uid])) {
+                $device->setDeviceToken($this->tokens[$uid]);
+            }
+            $device->update($pkt);
+            $this->storage->setDevice(self::DAEMON_NAME.'_'.$uid, $device);
+        } else {
+            $device->update($pkt);
+            $this->storage->setDevice(self::DAEMON_NAME.'_'.$uid, $device);
+            $actions=$device->getActions();
             if (!is_null($actions)) {
                 $data=['module'=>self::DAEMON_NAME, 'uid'=>$sid, 'data'=>$actions];
                 file_get_contents($this->process_url.'?'.http_build_query($data));
             }
-        } else {
-            $this->devices[$sid]=new GenericDevice;
-            if (isset($this->tokens[$sid])) {
-                $this->devices[$sid]->setDeviceToken($this->tokens[$sid]);
-            }
-            $this->devices[$sid]->update($pkt);
-            $this->storage->setModuleDevices(self::DAEMON_NAME, $this->devices);
         }
     }
 
