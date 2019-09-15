@@ -120,4 +120,22 @@ class Devices {
         }
         return $array;
     }
+
+    public static function getMeters($uid) {
+        $stmt=DB::prepare('SELECT m.id, m.property, d.place_id, m.meter_unit_id FROM meters m LEFT JOIN devices d ON m.device_id=d.id WHERE d.uid=?');
+        $stmt->execute([$uid]);
+        $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
+        $stmt->closeCursor();
+        return $sensors;
+    }
+
+    public static function getIndicators(string $uid) {
+        $stmt=DB::prepare('SELECT i.id, i.property, d.place_id FROM indicators i LEFT JOIN devices d ON i.device_id=d.id WHERE d.uid=?');
+        $stmt->execute([$uid]);
+        $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
+        $stmt->closeCursor();
+        return $sensors;
+    }
+
+
 }

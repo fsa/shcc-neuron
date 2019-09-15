@@ -21,9 +21,9 @@ $data=json_decode($json);
 if(is_null($data)){
     die('Wrong JSON data');
 }
-$meters=SmartHome\Sensors::getDeviceMeters($module,$uid);
+$meters=SmartHome\Devices::getMeters($uid);
 SmartHome\MeterHistory::addRecords($meters,$data);
-$indicators=SmartHome\Sensors::getDeviceIndicators($module,$uid);
+$indicators=SmartHome\Devices::getIndicators($uid);
 SmartHome\IndicatorHistory::addRecords($indicators,$data);
 $name=SmartHome\Devices::getUniqueNameByUid($module,$uid);
 $dir='../../custom/events/';
