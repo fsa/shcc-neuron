@@ -36,6 +36,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
 
     public function init($device_id, $init_data): void {
         $parts=explode('_', $device_id, 2);
+        #TODO: теперь информации о модели в uid устройства нет
         $this->model=$parts[0];
         $this->id=$parts[1];
         foreach ($init_data as $key=> $value) {
@@ -44,11 +45,11 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     }
 
     public function getInitDataList(): array {
-        return ['location'=>'IP адрес'];
+        return ['location'=>'IP адрес', 'model'=>'Тип устройства'];
     }
 
     public function getInitDataValues(): array {
-        return ['location'=>$this->location];
+        return ['location'=>$this->location, 'model'=>$this->model];
     }
 
     public function updateState($params) {
@@ -375,7 +376,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     }
 
     public function getDeviceId(): string {
-        return $this->model.'_'.$this->id;
+        return 'yeelight_'.$this->id;
     }
 
     public function getDeviceDescription(): string {

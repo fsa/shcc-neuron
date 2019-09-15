@@ -24,6 +24,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
+        \SmartHome\Devices::refreshMemoryDevices(self::DAEMON_NAME);
         $this->storage=new \SmartHome\Device\MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
@@ -36,12 +37,14 @@ class Daemon implements \SmartHome\DaemonInterface {
         $p=$pkt->getParams();
         if (isset($p['id']) and isset($p['model'])) {
             $uid=self::DAEMON_NAME.'_'.$p['id'];
+            $this->storage->lockMemory();
             $device=$this->storage->getDevice($uid);
             if (is_null($device)) {
                 $device=new GenericDevice();
             }
             $device->updateState($p);
             $this->storage->setDevice($uid, $device);
+            $this->storage->releaseMemory();
             $actions=$device->getActions();
             if (!is_null($actions)) {
                 $data=['module'=>self::DAEMON_NAME,'uid'=>$uid,'data'=>$actions];

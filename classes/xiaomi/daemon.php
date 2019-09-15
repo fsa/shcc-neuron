@@ -24,6 +24,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
+        \SmartHome\Devices::refreshMemoryDevices(self::DAEMON_NAME);
         $this->storage=new \SmartHome\Device\MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
@@ -37,14 +38,17 @@ class Daemon implements \SmartHome\DaemonInterface {
             return;
         }
         $uid=self::DAEMON_NAME.'_'.$uid;
+        $this->storage->lockMemory();
         $device=$this->storage->getDevice($uid);
         if(is_null($device)) {
             $device=$pkt->getDeviceObject();
             $device->update($pkt);
             $this->storage->setDevice($uid, $device);
+            $this->storage->releaseMemory();
         } else {
             $device->update($pkt);
             $this->storage->setDevice($uid, $device);
+            $this->storage->releaseMemory();
             $actions=$device->getActions();
             if (!is_null($actions)) {
                 $data=['module'=>self::DAEMON_NAME,'uid'=>$uid,'data'=>$actions];

@@ -11,6 +11,7 @@ HTML::showPageHeader('Устройтва');
 <?php
 $devices=new HTML\Table;
 $devices->addField('unique_name','Имя');
+$devices->addField('uid', 'Идентификатор устройства');
 $devices->addField('description','Описание');
 $devices->addField('classname','Класс');
 $devices->addField('place','Место установки');
