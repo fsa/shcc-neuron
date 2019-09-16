@@ -12,6 +12,7 @@ class Unknown extends AbstractDevice {
     }
 
     protected function updateParam($param,$value) {
+        $this->actions[$param]=$value;
         if(array_key_exists($param, $this->params)) {
             if(array_search($value, $this->params[$param])===false) {
                 array_push($this->params[$param], $value);

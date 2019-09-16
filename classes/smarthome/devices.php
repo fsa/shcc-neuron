@@ -21,10 +21,12 @@ class Devices {
             return null;
         }
         $mem=new Device\MemoryStorage;
-        $device=$mem->getDevice($dev->module.'_'.$dev->uid);
+        $device=$mem->getDevice($dev->uid);
         if(is_null($device)) {
             $device=new $dev->classname;
-            $device->init($dev->uid,json_decode($dev->init_data));
+            if(!is_null($dev->init_data)) {
+                $device->init($dev->uid,json_decode($dev->init_data));
+            }
         }
         return $device;
     }

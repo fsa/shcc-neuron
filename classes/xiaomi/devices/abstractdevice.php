@@ -31,8 +31,9 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     }
     
     public function update(\Xiaomi\XiaomiPacket $pkt) {
+        $this->actions=[];
         $this->actions['cmd']=$pkt->getCmd();
-        $this->sid=$pkt->getSid();
+        $this->sid='xiaomi_'.$pkt->getSid();
         $this->model=$pkt->getModel();
         foreach ($pkt->getData() as $param=> $value) {
             switch ($param) {
@@ -58,9 +59,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         if (sizeof($this->actions)<2) {
             return null;
         }
-        $actions=json_encode($this->actions);
-        $this->actions=[];
-        return $actions;
+        return json_encode($this->actions);
     }
 
     public function getModuleName(): string {
