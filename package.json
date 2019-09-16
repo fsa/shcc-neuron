@@ -1,14 +1,14 @@
 {
-    "name": "phpmd",
-    "version": "0.3.4",
+    "name": "neohome",
+    "version": "0.4.0",
     "description": "Умный дом",
-    "homepage": "https://github.com/fsa/phpmd",
+    "homepage": "https://github.com/fsa/neohome",
     "bugs": {
         "email": "support@tavda.net"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/fsa/phpmd.git"
+        "url": "git://github.com/fsa/neohome.git"
     },
     "main": "gulpfile.js",
     "scripts": {

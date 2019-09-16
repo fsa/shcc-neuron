@@ -1,5 +1,5 @@
 [Unit]
-Description=PHPMD daemons
+Description=Neohome daemons
 After=nginx.service
 After=php-fpm.service
 After=network.target
@@ -7,10 +7,10 @@ After=postgresql.service
 
 [Service]
 Type=forking
-WorkingDirectory=/var/www/phpmd/daemon/
-RuntimeDirectory=phpmd
-LogsDirectory=phpmd
-CacheDirectory=phpmd
+WorkingDirectory=/var/www/neohome/daemon/
+RuntimeDirectory=neohome
+LogsDirectory=neohome
+CacheDirectory=neohome
 ExecStart=/usr/bin/php -f daemonctl.php start
 ExecStop=/usr/bin/php -f daemonctl.php stop
 Restart=always

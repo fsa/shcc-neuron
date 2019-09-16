@@ -66,7 +66,7 @@ function html5shivTask() {
 
 function watchTask() {
     bs.init({
-        proxy: "phpmd.localhost"
+        proxy: "neohome.localhost"
     });
     watch('src/scss/**/*.+(scss|sass)', scssTask);
     watch('htdocs/**/*.+(php|html|css|js)', bs.reload);

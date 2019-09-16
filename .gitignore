@@ -2,10 +2,9 @@
 /backup/*.sql
 /config/*.conf
 /node_modules/*
-/daemon/phpmd
-/systemd/phpmd.service
-/systemd/phpmd-minutely.service
-/systemd/phpmd-minutely.timer
+/systemd/neohome.service
+/systemd/neohome-minutely.service
+/systemd/neohome-minutely.timer
 /custom/*
 !/custom/lib.php
 !/custom/functions.php

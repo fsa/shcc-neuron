@@ -44,9 +44,9 @@
 Параметры подключения к базе данных.
 ```json
 "pdo": {
-    "dsn": "pgsql:host=localhost;dbname=phpmd",
-    "username": "phpmd",
-    "password": "phpmd",
+    "dsn": "pgsql:host=localhost;dbname=neohome",
+    "username": "neohome",
+    "password": "neohome",
     "init": [
         "SET TIMEZONE=\"Asia/Yekaterinburg\""
     ]
@@ -54,7 +54,7 @@
 ```
 
 ### Параметр dsn
-Должен содержать тип базы данных pgsql (другие БД не поддерживаются), адрес хоста и имя базы данных (phpmd).
+Должен содержать тип базы данных pgsql (другие БД не поддерживаются), адрес хоста и имя базы данных (neohome).
 
 ### Поля username и password
 Задают реквизиты пользователя для подключения к базе данных.
@@ -67,9 +67,9 @@
 Задаёт параметры для работы с веб-сессиями.
 ```json
 "session": {
-    "name": "phpmd-session",
-    "uid": "phpmd-uid",
-    "token": "phpmd-token",
+    "name": "neohome-session",
+    "uid": "neohome-uid",
+    "token": "neohome-token",
     "time": 2592000,
     "path": "/"
 }
@@ -179,21 +179,21 @@
 
 Необязательный параметр. Путь до папки для хранения журналов демонов.
 ```json
-"log_dir": "/log/phpmd"
+"log_dir": "/log/neohome"
 ```
 
 ## Параметр pid_dir
 
 Необязательный параметр. Путь до папки для хранения pid файлов демонов.
 ```json
-"pid_dir": "/tmp/phpmd/pid"
+"pid_dir": "/tmp/neohome/pid"
 ```
 
 ## Параметр cache_dir
 
 Необязательный параметр. Путь до папки для хранения кеша.
 ```json
-"cache_dir": "/tmp/phpmd/cache"
+"cache_dir": "/tmp/neohome/cache"
 ```
 
 ## Параметр debug

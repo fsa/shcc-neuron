@@ -1,6 +1,6 @@
 # Установка системы
 
-Для установки phpmd подойдёт любой дистрибутив Linux в котором имеются необходимые версии PHP, PostgreSQL и nginx. Кроме этого, рекомендуется использовать систему инициализации systemd, но это необязательно, нужно будет обеспечить запуск демонов при старте системы и ежеминутный запуск shell-скрипта.
+Для установки Neohome подойдёт любой дистрибутив Linux в котором имеются необходимые версии PHP, PostgreSQL и nginx. Кроме этого, рекомендуется использовать систему инициализации systemd, но это необязательно, нужно будет обеспечить запуск демонов при старте системы и ежеминутный запуск shell-скрипта.
 
 Рекомендуемым вариантом установки является Ubuntu 18.04 LTS, т.к. в состав ещё репозиториев включены все необходимые компоненты. Все команды для установки системы приведены для Ubuntu.
 
@@ -48,14 +48,14 @@ $ sudo apt install nginx php-fpm php-pgsql
 server {
     listen	80 default_server;
 
-    server_name  phpmd.example.com;
+    server_name  neohome.example.com;
     
     charset utf-8;
     
-    access_log  /var/log/nginx/phpmd_access.log;
-    error_log  /var/log/nginx/phpmd_error.log;
+    access_log  /var/log/nginx/neohome_access.log;
+    error_log  /var/log/nginx/neohome_error.log;
 
-    root /var/www/phpmd/htdocs;
+    root /var/www/neohome/htdocs;
 
     index index.php;
 
@@ -78,14 +78,14 @@ server {
 
     # https
     listen 443 ssl http2 default_server;
-    ssl_certificate /etc/letsencrypt/live/phpmd.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/phpmd.example./com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/neohome.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/neohome.example.com/privkey.pem;
 
     add_header Strict-Transport-Security max-age=15768000;
 
 }
 ```
-Вместо phpmd.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети.
+Вместо neohome.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети.
 
 Запуск php производится с помощью upstream php-fpm, который необходимо указать в секции http основного файла конфигурации nginx /etc/nginx/nginx.conf: 
 ```
@@ -123,12 +123,12 @@ location ~ /.well-known/acme-challenge/(.*) {
     ssl_stapling_verify on;
 ```
 
-## Получение phpmd
+## Получение neohome
 
-phpmd рекомендуется размещать в папке /var/www/phpmd. Для получения текущей версии умного дома перейдите в папку /var/www и клонируйте репозиторий phpmd с github:
+Neohome рекомендуется размещать в папке /var/www/neohome. Для получения текущей версии умного дома перейдите в папку /var/www и клонируйте репозиторий neohome с github:
 ```bash
 # cd /var/www
-# git clone https://github.com/fsa/phpmd
+# git clone https://github.com/fsa/neohome
 ```
 Создаём settings.json.
 ```bash
@@ -144,38 +144,38 @@ phpmd рекомендуется размещать в папке /var/www/phpmd
 
 Воспользуйтесь командной строкой, чтобы создать базу данных и импортировать в неё необходимые таблицы. Для этого переключитесь на пользователя postgres, выберите папку со скриптами инициализации базы данных и запустите psql.
 ```bash
-root@phpmd:~# su postgres
-postgres@phpmd:/root$ cd /var/www/phpmd/src/sql
-postgres@phpmd:/var/www/phpmd/src/sql$ psql
+root@neohome:~# su postgres
+postgres@neohome:/root$ cd /var/www/neohome/src/sql
+postgres@neohome:/var/www/neohome/src/sql$ psql
 ```
 
 Создайте пользователя и базу данных для него. Задайте пароль для пользователя.
 ```
-postgres=# create user phpmd;
+postgres=# create user neohome;
 CREATE ROLE
-postgres=# create database phpmd owner=phpmd;
+postgres=# create database neohome owner=neohome;
 CREATE DATABASE
-postgres=# \password phpmd
+postgres=# \password neohome
 Enter new password: 
 Enter it again:
 ```
 
 Когда база данных создана можно подключиться к серверу с помощью вновь созданного пользователя к базе данных и инициализировать её с помощью команд импорта:
 ```
-postgres=# \c phpmd phpmd 127.0.0.1
-Password for user phpmd: 
+postgres=# \c neohome neohome 127.0.0.1
+Password for user neohome:
 SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
-You are now connected to database "phpmd" as user "phpmd" on host "127.0.0.1" at port "5432".
-phpmd=> \i auth.sql 
+You are now connected to database "neohome" as user "neohome" on host "127.0.0.1" at port "5432".
+neohome=> \i auth.sql
 ...
-phpmd=> \i smarthome.sql 
+neohome=> \i smarthome.sql
 ...
-phpmd=> \i yandex.sql 
+neohome=> \i yandex.sql
 ...
 ```
 Завершающим этапом является создание пользователя для доступа к сайту умного дома.
 ```sql
-phpmd=> insert into auth_users (login, password, name) values ('user','$2y$10$3BJwk3WNeAtIxd8Gory/TONHAFe.8GkKAM2Afjxdc1njS25a.twbi', 'User');
+neohome=> insert into auth_users (login, password, name) values ('user','$2y$10$3BJwk3WNeAtIxd8Gory/TONHAFe.8GkKAM2Afjxdc1njS25a.twbi', 'User');
 ```
 Первое поле, в данном случае - это имя пользователя, которое используется для входа в систему. Второе поле - это хеш пароля, который можно получить с помощью команды password_hash:
 ```php
@@ -201,18 +201,18 @@ echo password_hash('password', PASSWORD_DEFAULT);
 
 ## Обеспечение автоматического запуска необходимых процессов на системе с systemd
 
-Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении умного дома в папке /var/www/phpmd необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки systemd с суффиксами sample в файлы без этого суффикса. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
+Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении умного дома в папке /var/www/neohome необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки systemd с суффиксами sample в файлы без этого суффикса. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
 
 Теперь вы можете активировать и запустит требуемые юниты:
 ```bash
-# systemctl enable phpmd.service
-Created symlink /etc/systemd/system/multi-user.target.wants/phpmd.service → /var/www/phpmd/systemd/phpmd.service.
-Created symlink /etc/systemd/system/phpmd.service → /var/www/phpmd/systemd/phpmd.service.
-# systemctl enable phpmd-minutely.timer
-Created symlink /etc/systemd/system/timers.target.wants/phpmd-minutely.timer → /var/www/phpmd/systemd/phpmd-minutely.timer.
-Created symlink /etc/systemd/system/phpmd-minutely.timer → /var/www/phpmd/systemd/phpmd-minutely.timer.
-# systemctl start phpmd.service
-# systemctl start phpmd-minutely.timer
+# systemctl enable neohome.service
+Created symlink /etc/systemd/system/multi-user.target.wants/neohome.service → /var/www/neohome/systemd/neohome.service.
+Created symlink /etc/systemd/system/neohome.service → /var/www/neohome/systemd/neohome.service.
+# systemctl enable neohome-minutely.timer
+Created symlink /etc/systemd/system/timers.target.wants/neohome-minutely.timer → /var/www/neohome/systemd/neohome-minutely.timer.
+Created symlink /etc/systemd/system/neohome-minutely.timer → /var/www/neohome/systemd/neohome-minutely.timer.
+# systemctl start neohome.service
+# systemctl start neohome-minutely.timer
 ```
 
 ## Включение голосовых оповещений

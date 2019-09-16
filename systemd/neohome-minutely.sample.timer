@@ -1,5 +1,5 @@
 [Unit]
-Description=Timer for PHPMD minutely script
+Description=Timer for Neohome minutely script
 
 [Timer]
 OnCalendar=minutely

@@ -6,8 +6,8 @@ require_once 'autoloader.php';
 $daemon_class=$argv[1];
 $daemon=new $daemon_class(\Settings::get('url').'/action/');
 $daemon_name=$daemon->getName();
-$log_dir=Settings::get('log_dir', '/var/log/phpmd');
-$pid_dir=Settings::get('pid_dir', '/var/run/phpmd');
+$log_dir=Settings::get('log_dir', '/var/log/neohome');
+$pid_dir=Settings::get('pid_dir', '/var/run/neohome');
 $pid_file=$pid_dir.'/'.$daemon_name.'.pid';
 if (isDaemonActive($pid_file)) {
     echo "Daemon \"$daemon_name\" already active.".PHP_EOL;

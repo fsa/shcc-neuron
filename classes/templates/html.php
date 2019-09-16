@@ -26,7 +26,7 @@ class HTML {
 <body>
 <header class="header">
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" role="navigation">
-<a class="navbar-brand" href="/" role="banner">PHPMD</a>
+<a class="navbar-brand" href="/" role="banner">Neohome</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
 <span class="navbar-toggler-icon"></span>

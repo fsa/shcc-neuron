@@ -1,8 +1,0 @@
-[Unit]
-Description=PHPMD minutely script
-
-[Service]
-WorkingDirectory=/var/www/phpmd/custom/
-ExecStart=/var/www/phpmd/custom/minutely.sh
-User=www-data
-Group=www-data

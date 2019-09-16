@@ -1,21 +1,21 @@
 {
     "site": {
-        "title": "PHP MajorDomo"
+        "title": "Neohome"
     },
     "url": "http://127.0.0.1",
     "daemon-ip": "127.0.0.1",
     "pdo": {
-        "dsn": "pgsql:host=localhost;dbname=phpmd",
-        "username": "phpmd",
-        "password": "phpmd",
+        "dsn": "pgsql:host=localhost;dbname=neohome",
+        "username": "neohome",
+        "password": "neohome",
         "init": [
             "SET TIMEZONE=\"Asia/Yekaterinburg\""
         ]
     },
     "session": {
-        "name": "phpmd-session",
-        "uid": "phpmd-uid",
-        "token": "phpmd-token",
+        "name": "neohome-session",
+        "uid": "neohome-uid",
+        "token": "neohome-token",
         "time": 2592000,
         "path": "/"
     },
