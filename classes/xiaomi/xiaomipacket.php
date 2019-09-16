@@ -73,6 +73,8 @@ class XiaomiPacket {
                 return new Devices\MagnetSensor;
             case "switch":
                 return new Devices\XiaomiSwitch;
+            case "remote.b286acn01":
+                return new Devices\AqaraWirelessRemoteSwitch;
             case "sensor_switch.aq2":
             case "sensor_switch.aq3":
                 return new Devices\AqaraSwitch;
