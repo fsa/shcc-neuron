@@ -1,6 +1,3 @@
-//var date = new Date();
-//date.setDate(date.getDate() - 2);
-
 var units,unit;
 var seriesOptions=[], seriesCounter = 0;
 var chart;
@@ -106,6 +103,9 @@ function createChart(unit) {
                     symbol: 'circle',
                     radius: 3
                 }
+            },
+            series: {
+                showInNavigator: true
             }
         },
         series: seriesOptions
@@ -124,7 +124,7 @@ function afterSetExtremes(e) {
             seriesOptions[seriesCounter] = {
                 name: place.name || 'Неизвестно',
                 data: data
-            };            
+            };
             seriesCounter += 1;
             if (seriesCounter === unit.places.length) {
                 chart.hideLoading();
@@ -133,12 +133,6 @@ function afterSetExtremes(e) {
     });
 }
 
-$.urlParam = function(name) {  
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);  
-    return results[1] || 0;  
-};
-
-//var unit_id=$.urlParam('unit');
 var unit_id=$('#unit_id').attr('unit_id');
 $.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
     unit=mp;

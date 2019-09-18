@@ -24,8 +24,11 @@ function scssTask() {
 function highchartsTask() {
     return src([
         'node_modules/highcharts/highstock.js',
+        'node_modules/highcharts/highstock.js.map',
         'node_modules/highcharts/highcharts.js',
-        'node_modules/highcharts/modules/exporting.js'
+        'node_modules/highcharts/highcharts.js.map',
+        'node_modules/highcharts/modules/exporting.js',
+        'node_modules/highcharts/modules/exporting.js.map'
     ])
             .pipe(dest('htdocs/libs/highcharts'));
 }

@@ -78,7 +78,7 @@ class MeterHistory {
         } else {
             $period='';
         }
-        $stmt=DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000,value FROM meter_history WHERE '.join(' AND ', $where).$period);
+        $stmt=DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000 AS ts,value FROM meter_history WHERE '.join(' AND ', $where).$period.' ORDER BY timestamp');
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_NUM);
     }
