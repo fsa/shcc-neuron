@@ -1,0 +1,36 @@
+{
+    "name": "neohome",
+    "version": "0.4.0",
+    "description": "Умный дом",
+    "homepage": "https://github.com/fsa/neohome",
+    "bugs": {
+        "email": "support@tavda.net"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/fsa/neohome.git"
+    },
+    "main": "gulpfile.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Sergey Fedotov",
+    "license": "GPL-3.0+",
+    "devDependencies": {
+        "bootstrap": "^4.3.1",
+        "browser-sync": "^2.26.7",
+        "del": "^5.0.0",
+        "gulp": "^4.0.2",
+        "gulp-autoprefixer": "^6.1.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-cssnano": "^2.1.3",
+        "gulp-rename": "^1.4.0",
+        "gulp-sass": "^4.0.2",
+        "highcharts": "^7.1.2",
+        "html5shiv": "^3.7.3",
+        "jquery": "^3.4.1",
+        "jstree": "^3.3.8",
+        "popper.js": "^1.15.0"
+    },
+    "dependencies": {}
+}

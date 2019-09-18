@@ -1,0 +1,24 @@
+<?php
+
+require_once '../../../common.php';
+Auth\Internal::grantAccess(['admin']);
+$uid=filter_input(INPUT_GET,'uid');
+if($uid) {
+    require_once 'show.php';
+    exit;
+}
+HTML::showPageHeader('Список устройств в памяти');
+?>
+<p><a href="../">Вернуться к списку устройств</a></p>
+<hr>
+<?php
+$devices=new SmartHome\Device\MemoryStorage();
+$devices->selectDevices();
+$table=new HTML\Table();
+$table->addField('uid','ID');
+$table->addField('name','Наименование');
+$table->addField('status','Информация');
+$table->addField('updated','Был активен');
+$table->addButton(new HTML\ButtonLink('Подробности','./?uid=%s','uid'));
+$table->showTable($devices);
+HTML::showPageFooter();
