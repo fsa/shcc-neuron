@@ -5,6 +5,7 @@ namespace Templates;
 class Table{
 
     public $fields=[];
+    public $func=[];
     public $caption;
 
     public function showHeader(){
@@ -35,8 +36,9 @@ class Table{
             <tr class="table-bordered<?=$style?>">
 <?php
             foreach ($this->fields as $name=> $description) {
+                $text=($name=='buttons' or is_null($this->func[$name]))?$row->$name:$this->func[$name]($row);
 ?>
-                <td><?=$row->$name?></td>
+                <td><?=$text?></td>
 <?php
             }
 ?>

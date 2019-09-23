@@ -6,6 +6,7 @@ class Table {
 
     private $caption;
     private $fields=[];
+    privaTE $func=[];
     private $buttons=[];
     private $buttons_separator='<br>';
     private $template;
@@ -23,8 +24,9 @@ class Table {
         $this->row_style_field=$name;
     }
 
-    public function addField($name,$description) {
+    public function addField($name,$description,$func=null) {
         $this->fields[$name]=$description;
+        $this->func[$name]=$func;
     }
 
     public function addButton($button) {
@@ -39,6 +41,7 @@ class Table {
         $template=is_null($this->template)?new \Templates\Table():new $this->template;
         $template->caption=$this->caption;
         $template->fields=$this->fields;
+        $template->func=$this->func;
         if (sizeof($this->buttons)>0) {
             $template->fields['buttons']='Действия';
         }
