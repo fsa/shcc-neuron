@@ -57,6 +57,10 @@ class TtsApi implements \Tts\TtsInterface {
         }
     }
 
+    public function getParams(): array {
+        return $this->params;
+    }
+
     public function getUrl($text) {
         $params=$this->params;
         $params['text']=$text;
