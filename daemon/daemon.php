@@ -34,7 +34,7 @@ $daemon->prepare();
 $stop_server=false;
 while (!$stop_server) {
     try {
-        $daemon->iteration();    
+        $daemon->iteration();
     } catch (Exception $ex) {
         error_log(date('c').PHP_EOL.print_r($ex,true));
         $daemon->finish();

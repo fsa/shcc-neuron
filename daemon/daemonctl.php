@@ -44,7 +44,6 @@ function stop() {
         $pid=file_get_contents($dir.$pidfile);
         echo "Stoping daemon '$name'.".PHP_EOL;
         if (posix_kill($pid,SIGKILL)) {
-            pcntl_signal_dispatch();
             echo "Daemon $pid stopped.".PHP_EOL;
         }
         if (!unlink($dir.$pidfile)) {
