@@ -11,12 +11,31 @@ class Queue {
     private $queue;
 
     public function __construct() {
+        if(msg_queue_exists(ftok(__FILE__,self::PROJ))) {
+            $this->getQueue();
+        }
+    }
+
+    public function getQueue() {
         $this->queue=msg_get_queue(ftok(__FILE__,self::PROJ),self::CHMOD);
     }
-    
+
+    public function dropQueue() {
+        if(is_null($this->queue)) {
+            return;
+        }
+        if(msg_remove_queue($this->queue)) {
+            $this->queue=null;
+        }
+    }
+
     public function addMessage($text) {
+        if(is_null($this->queue)) {
+            return false;
+        }
         $queue_stat=msg_stat_queue($this->queue);
-        if($queue_stat['msg_qnum']>15 and time()-$queue_stat['msg_rtime']>30) {
+        # Защита от переполнения сообщений при падении сервиса TTS
+        if($queue_stat['msg_qnum']>15) {
             return false;
         }
         return msg_send($this->queue, 1, $text, false);
