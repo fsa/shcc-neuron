@@ -44,9 +44,9 @@
 Параметры подключения к базе данных.
 ```json
 "pdo": {
-    "dsn": "pgsql:host=localhost;dbname=neohome",
-    "username": "neohome",
-    "password": "neohome",
+    "dsn": "pgsql:host=localhost;dbname=shcc",
+    "username": "shcc",
+    "password": "shcc",
     "init": [
         "SET TIMEZONE=\"Asia/Yekaterinburg\""
     ]
@@ -54,7 +54,7 @@
 ```
 
 ### Параметр dsn
-Должен содержать тип базы данных pgsql (другие БД не поддерживаются), адрес хоста и имя базы данных (neohome).
+Должен содержать тип базы данных pgsql (другие БД не поддерживаются), адрес хоста и имя базы данных (shcc).
 
 ### Поля username и password
 Задают реквизиты пользователя для подключения к базе данных.
@@ -67,9 +67,9 @@
 Задаёт параметры для работы с веб-сессиями.
 ```json
 "session": {
-    "name": "neohome-session",
-    "uid": "neohome-uid",
-    "token": "neohome-token",
+    "name": "shcc-session",
+    "uid": "shcc-uid",
+    "token": "shcc-token",
     "time": 2592000,
     "path": "/"
 }
@@ -179,21 +179,21 @@
 
 Необязательный параметр. Путь до папки для хранения журналов демонов.
 ```json
-"log_dir": "/log/neohome"
+"log_dir": "/log/shcc"
 ```
 
 ## Параметр pid_dir
 
 Необязательный параметр. Путь до папки для хранения pid файлов демонов.
 ```json
-"pid_dir": "/tmp/neohome/pid"
+"pid_dir": "/tmp/shcc/pid"
 ```
 
 ## Параметр cache_dir
 
 Необязательный параметр. Путь до папки для хранения кеша.
 ```json
-"cache_dir": "/tmp/neohome/cache"
+"cache_dir": "/tmp/shcc/cache"
 ```
 
 ## Параметр debug

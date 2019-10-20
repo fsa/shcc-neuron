@@ -1,5 +1,5 @@
 [Unit]
-Description=Timer for Neohome minutely script
+Description=Timer for SHCC minutely script
 
 [Timer]
 OnCalendar=minutely

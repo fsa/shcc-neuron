@@ -2,9 +2,9 @@
 /backup/*.sql
 /config/*.conf
 /node_modules/*
-/systemd/neohome.service
-/systemd/neohome-minutely.service
-/systemd/neohome-minutely.timer
+/systemd/shcc.service
+/systemd/shcc-minutely.service
+/systemd/shcc-minutely.timer
 /custom/*
 !/custom/lib.php
 !/custom/functions.php

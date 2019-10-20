@@ -1,14 +1,14 @@
 {
-    "name": "neohome",
+    "name": "shcc",
     "version": "0.4.0",
     "description": "Умный дом",
-    "homepage": "https://github.com/fsa/neohome",
+    "homepage": "https://gitlab.com/tavda/shcc",
     "bugs": {
         "email": "support@tavda.net"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/fsa/neohome.git"
+        "url": "git://gitlab.com/tavda/shcc.git"
     },
     "main": "gulpfile.js",
     "scripts": {

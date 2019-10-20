@@ -49,7 +49,7 @@ while ($device=$yandex_devices->fetch()) {
                 throw new \AppException('Ошибка в настройках устройства яндекс. Навык '.$capability.' не реализован.');
         }
     }
-    $entity->setDeviceManufacturer('neohome');
+    $entity->setDeviceManufacturer('shcc');
     $devices[]=$entity;
 }
 httpResponse::json([

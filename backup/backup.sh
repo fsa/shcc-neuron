@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pg_dump -U neohome neohome > neohome.sql
+pg_dump -U shcc shcc > shcc.sql
