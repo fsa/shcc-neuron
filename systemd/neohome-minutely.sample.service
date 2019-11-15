@@ -1,8 +1,0 @@
-[Unit]
-Description=Neohome minutely script
-
-[Service]
-WorkingDirectory=/var/www/neohome/custom/
-ExecStart=/var/www/neohome/custom/minutely.sh
-User=www-data
-Group=www-data

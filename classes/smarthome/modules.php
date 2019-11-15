@@ -22,4 +22,16 @@ class Modules {
         $stmt->execute([$name]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
+
+    public static function getModules() {
+        $stmt=DB::query("SELECT id, name, namespace, description, daemon, settings, disabled FROM modules ORDER BY name");
+        $stmt->setFetchMode(PDO::FETCH_OBJ);
+        return $stmt;
+    }
+
+    public static function disableModule(int $id, bool $disable) {
+        $stmt=DB::prepare('UPDATE modules SET disabled=? WHERE id=? RETURNING namespace');
+        $stmt->execute([$disable?'true':'false', $id]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
 }

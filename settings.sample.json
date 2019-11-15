@@ -1,26 +1,23 @@
 {
     "site": {
-        "title": "Neohome"
+        "title": "SHCC"
     },
     "url": "http://127.0.0.1",
     "daemon-ip": "127.0.0.1",
     "pdo": {
-        "dsn": "pgsql:host=localhost;dbname=neohome",
-        "username": "neohome",
-        "password": "neohome",
+        "dsn": "pgsql:host=localhost;dbname=shcc",
+        "username": "shcc",
+        "password": "shcc",
         "init": [
             "SET TIMEZONE=\"Asia/Yekaterinburg\""
         ]
     },
     "session": {
-        "name": "neohome-session",
-        "uid": "neohome-uid",
-        "token": "neohome-token",
+        "name": "shcc-session",
+        "uid": "shcc-uid",
+        "token": "shcc-token",
         "time": 2592000,
         "path": "/"
-    },
-    "yandex": {
-        "tts_api_key": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
     },
     "tts": {
         "pre_sound": "dingdong.mp3",

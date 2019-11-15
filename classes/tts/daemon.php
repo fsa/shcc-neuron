@@ -37,6 +37,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     public function prepare() {
         $this->last_message_time=0;
         $this->queue=new Queue;
+        $this->queue->getQueue();
         $this->queue->dropOldMessage();
     }
 
@@ -52,7 +53,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function finish() {
-        
+        $this->queue->dropQueue();
     }
 
     private function playVoice($text) {

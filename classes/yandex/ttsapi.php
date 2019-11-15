@@ -57,6 +57,10 @@ class TtsApi implements \Tts\TtsInterface {
         }
     }
 
+    public function getParams(): array {
+        return $this->params;
+    }
+
     public function getUrl($text) {
         $params=$this->params;
         $params['text']=$text;
@@ -71,7 +75,7 @@ class TtsApi implements \Tts\TtsInterface {
     }
 
     public function getVoiceFile($text) {
-        $filename=Settings::get('cache_dir','/var/cache/neohome').'/yandex/'.$this->params['speaker'].'/'.$this->params['lang'].'/'.$this->params['emotion'].'/'.md5($text).'.'.$this->params['format'];
+        $filename=Settings::get('cache_dir','/var/cache/shcc').'/yandex/'.$this->params['speaker'].'/'.$this->params['lang'].'/'.$this->params['emotion'].'/'.md5($text).'.'.$this->params['format'];
         if (!file_exists($filename)) {
             $this->requestApi($filename,$text);
         }
