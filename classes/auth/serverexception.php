@@ -2,6 +2,6 @@
 
 namespace Auth;
 
-class ServerException extends \Exception {
+class ServerException extends \AppException {
     
 }
