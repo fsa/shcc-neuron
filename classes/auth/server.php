@@ -17,7 +17,7 @@ class Server {
     private $client_id;
     private $state;
 
-    public function getResponseType(): bool {
+    public function __construct() {
         $response_type=filter_input(INPUT_GET, 'response_type');
         if ($response_type) {
             $this->state=filter_input(INPUT_GET, 'state');
@@ -32,15 +32,9 @@ class Server {
                 case 'token':
                     $this->requestGetToken();
                     break;
-                default:
-                    throw new ServerException('Не поддерживаемый тип запроса');
             }
-            return true;
+            throw new ServerException('Не поддерживаемый тип запроса');
         }
-        return false;
-    }
-
-    public function getGrantType(): bool {
         $grant_type=filter_input(INPUT_POST, 'grant_type');
         if ($grant_type) {
             $this->client_id=filter_input(INPUT_POST, 'client_id');
@@ -57,12 +51,10 @@ class Server {
                 case 'refresh_token':
                     $this->requestPostRefreshToken();
                     break;
-                default:
-                    httpResponse::json(['error'=>'unsupported_response_type']);
             }
-            return true;
+            httpResponse::json(['error'=>'unsupported_response_type']);
         }
-        return false;
+        throw new ServerException('Неверный запрос');
     }
 
     private function requestGetCode() {
@@ -150,7 +142,7 @@ class Server {
             "token_type"=>"bearer",
             "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
             "refresh_token"=>$refresh_token,
-            "scope"=>$scope
+            "scope"=>$auth_tokens->scope
         ]);
     }
 

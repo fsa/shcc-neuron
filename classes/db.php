@@ -52,20 +52,20 @@ class DB {
 
     public static function beginTransaction(): bool {
         $result=self::getInstance()->beginTransaction();
-        self::$origExceptionHandler=set_exception_handler([__CLASS__,'Exception']);
+        self::$origExceptionHandler=set_exception_handler([self::class, 'Exception']);
         return $result;
     }
 
     public static function commit(): bool {
         $result=self::getInstance()->commit();
-        set_error_handler(self::$origExceptionHandler);
+        set_exception_handler(self::$origExceptionHandler);
         self::$origExceptionHandler=null;
         return $result;
     }
 
     public static function rollback(): bool {
         $result=self::getInstance()->rollBack();
-        set_error_handler(self::$origExceptionHandler);
+        set_exception_handler(self::$origExceptionHandler);
         self::$origExceptionHandler=null;
         return $result;
     }
@@ -84,8 +84,9 @@ class DB {
     }
 
     public static function Exception($ex): void {
+        $origExceptionHandler=self::$origExceptionHandler;
         self::rollback();
-        call_user_func(self::$origExceptionHandler,$ex);
+        call_user_func($origExceptionHandler, $ex);
     }
 
 }
