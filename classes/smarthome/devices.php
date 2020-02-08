@@ -14,7 +14,7 @@ class Devices {
     }
     
     public static function get($uname) {
-        $s=DB::prepare('SELECT m.name AS module,d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE d.unique_name=?');
+        $s=DB::prepare('SELECT p.name AS place_name, m.name AS module,d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id LEFT JOIN places p ON d.place_id=p.id WHERE d.unique_name=?');
         $s->execute([$uname]);
         $dev=$s->fetch(PDO::FETCH_OBJ);
         if(!$dev) {
@@ -28,6 +28,7 @@ class Devices {
                 $device->init($dev->uid,json_decode($dev->init_data));
             }
         }
+        $device->place_name=$dev->place_name;
         return $device;
     }
 
