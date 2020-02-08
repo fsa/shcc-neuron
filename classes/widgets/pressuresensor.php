@@ -9,7 +9,7 @@ class PressureSensor {
 
     public static function show($sensor_name) {
         $sensor=Devices::get($sensor_name);
-        HTML::showCard('Атмосферное давление', round($sensor->getPressure()).' мм.рт.ст.');
+        HTML::showCard('Атмосферное давление', '<span style="font-size: 3rem;">'.round($sensor->getPressure()).' мм.рт.ст.</span>');
     }
 
 }
