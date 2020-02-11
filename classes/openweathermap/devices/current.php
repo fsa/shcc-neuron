@@ -39,7 +39,10 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
     }
 
     public function getDeviceStatus(): string {
-        return is_null($this->weather)?'Информация о погоде отсутствует':'Данные о погоде загружены';
+        if (is_null($this->weather)) {
+            return 'Информация о погоде отсутствует';
+        }
+        return $this->getTemperature().'('.$this->getTempFeelsLike().')&deg;C, '.$this->getHumidity().'%, '.$this->getPressure().'&nbsp;мм.рт.ст., '.$this->weather->weather[0]->description.', ветер '.$this->weather->wind->speed.' м/с, направление '.$this->getWindDirection().' ('.$this->weather->wind->deg.')';
     }
 
     public function getInitDataList(): array {
@@ -99,12 +102,42 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         return isset($this->weather->main->temp)?$this->weather->main->temp:null;
     }
 
+    public function getTempFeelsLike() {
+        return isset($this->weather->main->temp)?$this->weather->main->feels_like:null;
+    }
+
     public function getHumidity() {
         return isset($this->weather->main->humidity)?$this->weather->main->humidity:null;
     }
 
     public function getPressure() {
         return isset($this->weather->main->pressure)?round($this->weather->main->pressure*76000/101325, 2):null;
+    }
+
+    public function getWindDirection() {
+        if (!isset($this->weather->wind->deg)) {
+            return '-';
+        }
+        $deg=$this->weather->wind->deg;
+        if ($deg<22) {
+            return 'C';
+        } elseif ($deg<68) {
+            return 'СЗ';
+        } elseif ($deg<112) {
+            return 'З';
+        } elseif ($deg<158) {
+            return 'ЮЗ';
+        } elseif ($deg<202) {
+            return 'Ю';
+        } elseif ($deg<248) {
+            return 'ЮВ';
+        } elseif ($deg<292) {
+            return 'В';
+        } elseif ($deg<338) {
+            return 'СВ';
+        } else {
+            return 'С';
+        }
     }
 
 }
