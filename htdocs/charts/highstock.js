@@ -105,8 +105,11 @@ function createChart(unit) {
                 }
             },
             series: {
-                showInNavigator: true
+                showInNavigator: true,
             }
+        },
+        legend: {
+            enabled: true
         },
         series: seriesOptions
     });
