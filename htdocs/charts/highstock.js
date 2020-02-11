@@ -105,7 +105,7 @@ function createChart(unit) {
                 }
             },
             series: {
-                showInNavigator: true,
+                showInNavigator: true
             }
         },
         legend: {
