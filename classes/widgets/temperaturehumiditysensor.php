@@ -2,14 +2,12 @@
 
 namespace Widgets;
 
-use HTML,
-    SmartHome\Devices;
+use HTML;
 
 class TemperatureHumiditySensor {
 
-    public static function show($sensor_name) {
-        $sensor=Devices::get($sensor_name);
-        HTML::showCard($sensor->place_name, '<span style="font-size: 2rem;">'.round($sensor->getTemperature(), 1).'&deg;C, '.round($sensor->getHumidity()).'%', date('d.m.Y H:i:s', $sensor->getLastUpdate()).'</span>');
+    public static function show($sensor) {
+        HTML::showCard($sensor->place_name, '<span style="font-size: 2rem;">'.round($sensor->getTemperature(), 1).'&deg;C, '.round($sensor->getHumidity()).'%'.'</span>', date('d.m.Y H:i:s', $sensor->getLastUpdate()));
     }
 
 }

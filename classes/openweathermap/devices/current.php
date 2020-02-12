@@ -114,6 +114,12 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         return isset($this->weather->main->pressure)?round($this->weather->main->pressure*76000/101325, 2):null;
     }
 
+    public function getWindSpeed() {
+        if (!isset($this->weather->wind->speed)) {
+            return '-';
+        }
+        return $this->weather->wind->speed;
+    }
     public function getWindDirection() {
         if (!isset($this->weather->wind->deg)) {
             return '-';
