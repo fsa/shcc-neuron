@@ -27,7 +27,7 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
     }
 
     public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура воздуха, &deg;C', 'humidity'=>'Относительная влажность, %', 'pressure'=>'Атмосферное давление, мм.рт.ст.'];
+        return ['temperature'=>'Температура воздуха, &deg;C', 'humidity'=>'Относительная влажность, %', 'pressure'=>'Атмосферное давление, мм.рт.ст.', 'wind_speed'=>'Скорость ветра, м/с', 'wind_direction'=>'Направление ветра, &deg;'];
     }
 
     public function getDeviceDescription(): string {
@@ -88,7 +88,7 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         $this->weather=$weather;
         $this->updated=$weather->dt;
         $url=Settings::get('url').'/action/';
-        $actions=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2)];
+        $actions=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
         $data=['module'=>$this->getModuleName(), 'uid'=>$this->uid, 'data'=>json_encode($actions), 'ts'=>$weather->dt];
         file_get_contents($url.'?'.http_build_query($data));
         $storage=new MemoryStorage;
