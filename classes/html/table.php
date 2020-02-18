@@ -6,7 +6,7 @@ class Table {
 
     private $caption;
     private $fields=[];
-    privaTE $func=[];
+    privaTE $rowCallback;
     private $buttons=[];
     private $buttons_separator='<br>';
     private $template;
@@ -24,9 +24,8 @@ class Table {
         $this->row_style_field=$name;
     }
 
-    public function addField($name,$description,$func=null) {
+    public function addField($name, $description) {
         $this->fields[$name]=$description;
-        $this->func[$name]=$func;
     }
 
     public function addButton($button) {
@@ -37,34 +36,40 @@ class Table {
         $this->buttons_separator=$separator;
     }
 
+    public function setRowCallback(callable $func) {
+        $this->rowCallback=$func;
+    }
+
     public function showTable($statement) {
         $template=is_null($this->template)?new \Templates\Table():new $this->template;
         $template->caption=$this->caption;
         $template->fields=$this->fields;
-        $template->func=$this->func;
+        $template->style_row=$this->row_style_field;
         if (sizeof($this->buttons)>0) {
             $template->fields['buttons']='Действия';
         }
         $template->showHeader();
-        if (sizeof($this->buttons)>0) {
-            while ($row=$statement->fetch()) {
-                $buttons=[];
-                foreach ($this->buttons AS $button) {
-                    $value=$row->{$button->getParamField()};
-                    if (!is_null($value)) {
-                        $buttons[]=$button->getHtml($value);
-                    }
-                }
-                $row->buttons=join($this->buttons_separator,$buttons);
-                $template->showRow($row, $this->row_style_field);
+        while ($row=$statement->fetch()) {
+            if (sizeof($this->buttons)) {
+                $row->buttons=$this->getButtons($row);
             }
-        } else {
-            while ($row=$statement->fetch()) {
-                $template->showRow($row, $this->row_style_field);
+            if(!is_null($this->rowCallback)) {
+                call_user_func($this->rowCallback, $row);
             }
+            $template->showRow($row);
         }
         $template->showFooter();
     }
 
-}
+    private function getButtons($row) {
+        $buttons=[];
+        foreach ($this->buttons AS $button) {
+            $value=$row->{$button->getParamField()};
+            if (!is_null($value)) {
+                $buttons[]=$button->getHtml($value);
+            }
+        }
+        return join($this->buttons_separator, $buttons);
+    }
 
+}

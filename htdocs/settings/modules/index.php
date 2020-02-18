@@ -29,8 +29,13 @@ $devices=new HTML\Table;
 $devices->addField('name','Наименование');
 $devices->addField('namespace', 'Пространство имён');
 $devices->addField('description', 'Описание');
-$devices->addField('daemon', 'Демон', function($row){return $row->daemon==true?'Есть':'Нет';});
-$devices->addField('settings', 'Настройки', function($row){return $row->settings?'<a href="'.$row->name.'/">Есть</a>':'Нет';});
-$devices->addField('disabled', 'Активность', function($row){return $row->disabled?'<a href="?action=enable&id='.$row->id.'">Включить</a>':'<a href="?action=disable&id='.$row->id.'">Выключить</a>';});
+$devices->addField('daemon', 'Демон');
+$devices->addField('settings', 'Настройки');
+$devices->addField('disabled', 'Активность');
+$devices->setRowCallback(function ($row) {
+    $row->daemon=$row->daemon==true?'Есть':'Нет';
+    $row->settings=$row->settings?'<a href="'.$row->name.'/">Есть</a>':'Нет';
+    $row->disabled=$row->disabled?'<a href="?action=enable&id='.$row->id.'">Включить</a>':'<a href="?action=disable&id='.$row->id.'">Выключить</a>';
+});
 $devices->showTable(\SmartHome\Modules::getModules());
 HTML::showPageFooter();
