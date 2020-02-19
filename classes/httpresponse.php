@@ -50,6 +50,10 @@ class httpResponse {
     }
 
     public static function JsonException($ex) {
+        if($ex instanceof AppException) {
+            self::json(['error'=>$ex->getMessage()]);
+            exit;
+        }
         error_log($ex, 0);
         self::json(['error'=>'Internal Server Error']);
     }
