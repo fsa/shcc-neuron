@@ -171,10 +171,10 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         }
         $addr=parse_url($this->location);
         $socket=stream_socket_client("tcp://".$addr['host'].":".$addr['port'], $errno, $errstr);
-        stream_set_timeout($socket, 3);
         if (!$socket) {
             throw new Exception("$errstr ($errno)");
         }
+        stream_set_timeout($socket, 3);
         $this->socket=$socket;
         return $socket;
     }
