@@ -33,7 +33,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'power': on, 'device_name': device_name}, function(data) {
             if(data.error) {
-               alert(data.error);        
+               $('#'+device_name+'_state').text(data.error);
             }            
         });
     });
@@ -42,7 +42,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'bright': bright, 'device_name': device_name}, function(data) {
             if(data.error) {
-               alert(data.error);
+               $('#'+device_name+'_state').text(data.error);
             }
         });
     });
@@ -51,7 +51,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'ct': ct, 'device_name': device_name}, function(data) {
             if(data.error) {
-               alert(data.error);
+               $('#'+device_name+'_state').text(data.error);
             }
         });
     });
