@@ -8,9 +8,12 @@ $(function() {
                 default:
                     $('#'+device_name+'_'+item).prop('value', value);
             }
-            $('#'+device_name+'_state').text('');
+            setState(device_name, '');
         });
     };
+    function setState (device_name, state) {
+        $('#'+device_name+'_state').text(state);
+    }
     $('.device-state').each(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'device_name': device_name}, function(data) {
@@ -34,7 +37,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'power': on, 'device_name': device_name}, function(data) {
             if(data.error) {
-               $('#'+device_name+'_state').text(data.error);
+               setState(device_name, data.error);
             }            
         });
     });
@@ -43,7 +46,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'bright': bright, 'device_name': device_name}, function(data) {
             if(data.error) {
-               $('#'+device_name+'_state').text(data.error);
+               setState(device_name, data.error);
             }
         });
     });
@@ -52,7 +55,7 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'ct': ct, 'device_name': device_name}, function(data) {
             if(data.error) {
-               $('#'+device_name+'_state').text(data.error);
+               setState(device_name, data.error);
             }
         });
     });
