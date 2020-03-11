@@ -40,7 +40,10 @@ class Table {
         $this->rowCallback=$func;
     }
 
-    public function showTable($statement) {
+    public function showTable($statement): bool {
+        if (!($row=$statement->fetch())) {
+            return false;
+        }
         $template=is_null($this->template)?new \Templates\Table():new $this->template;
         $template->caption=$this->caption;
         $template->fields=$this->fields;
@@ -49,7 +52,7 @@ class Table {
             $template->fields['buttons']='Действия';
         }
         $template->showHeader();
-        while ($row=$statement->fetch()) {
+        do {
             if (sizeof($this->buttons)) {
                 $row->buttons=$this->getButtons($row);
             }
@@ -57,8 +60,9 @@ class Table {
                 call_user_func($this->rowCallback, $row);
             }
             $template->showRow($row);
-        }
+        } while ($row=$statement->fetch());
         $template->showFooter();
+        return true;
     }
 
     private function getButtons($row) {

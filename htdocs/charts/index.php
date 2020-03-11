@@ -17,21 +17,25 @@ HTML::addHeader('<script src="/libs/highcharts/highstock.js"></script>');
 HTML::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 HTML::showPageHeader($name);
 ?>
-<div class="row">
+<ul class="nav nav-pills justify-content-center">
 <?php
     foreach (SmartHome\MeterUnits::getUnitsList() as $id=> $name) {
         if($id==$unit) {
 ?>
-<a class="btn btn-primary col" href="./?unit=<?=$id?>" id="unit_id" unit_id="<?=$id?>" role="button"><?=$name?></a>
+<li class="nav-item">
+    <a class="nav-link active" href="./?unit=<?=$id?>" id="unit_id" unit_id="<?=$id?>" role="button"><?=$name?></a>
+</li>
 <?php            
         } else {
 ?>
-<a class="btn btn-secondary col" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+<li class="nav-item">
+    <a class="nav-link" href="./?unit=<?=$id?>" role="button"><?=$name?></a>
+</li>
 <?php
         }
     }
     ?>
-</div>
+</ul>
 <script src="highstock.js"></script>
 <div style="width: 100%; height: 500px;" id="chart"></div>
 <?php
