@@ -53,7 +53,7 @@ if(Auth::memberOf()) {
 <?php
 } else {
 ?>
-    <li class="nav-item text-white">
+    <li class="nav-item">
         <a class="nav-link" href="/login/">Вход</a>
     </li>
 <?php
@@ -66,7 +66,24 @@ if(Auth::memberOf()) {
 <main role="main" class="container-fluid">
 <?php
     }
-    
+
+    public function NavPills(string $url, array $buttons, $current=null) {
+?>
+<ul class="nav nav-pills justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
+<?php
+    foreach ($buttons as $id=> $name) {
+?>
+<li class="nav-item">
+    <a class="nav-link<?=($id==$current)?' active':''?>" href="<?=sprintf($url, $id)?>"><?=$name?></a>
+</li>
+<?php
+    }
+    ?>
+</ul>
+<?php
+    }
+
+
     public function CardsHeader(){
 ?>
 <div class="card-columns">

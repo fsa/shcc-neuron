@@ -33,8 +33,10 @@ if(!isset($params)) {
 }
 use Templates\Forms;
 HTML::showPageHeader('Яндекс');
+HTML::showNavPills('../../%s/', require '../../sections.php', 'modules');
 ?>
 <p><a href="../">Вернуться к списку модулей</a></p>
+<hr>
 <form method="POST" action="./">
 <?php
 Forms::inputString('api_key', $params['key'], 'Ключ API:');

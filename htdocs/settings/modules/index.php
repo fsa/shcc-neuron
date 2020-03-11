@@ -21,8 +21,8 @@ if($action) {
     throw new AppException('Неизвестный тип действия');
 }
 HTML::showPageHeader('Модули');
+HTML::showNavPills('../%s/', require '../sections.php', 'modules');
 ?>
-<p><a href="../">Вернуться в настройки</a></p>
 <hr>
 <?php
 $devices=new HTML\Table;

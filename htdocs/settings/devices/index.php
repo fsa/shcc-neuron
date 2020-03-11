@@ -3,8 +3,8 @@
 require_once '../../common.php';
 Auth\Internal::grantAccess(['admin']);
 HTML::showPageHeader('Устройтва');
+HTML::showNavPills('../%s/', require '../sections.php', 'devices');
 ?>
-<p><a href="../">Вернуться в настройки</a></p>
 <hr>
 <p><a href="memory/">Добавить новое устройство</a></p>
 <?php

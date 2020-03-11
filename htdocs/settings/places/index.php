@@ -5,8 +5,8 @@ Auth\Internal::grantAccess(['admin']);
 HTML::addHeader('<script src="/libs/jstree/jstree.min.js"></script>');
 HTML::addHeader('<link rel="stylesheet" href="/libs/jstree/style.min.css">');
 HTML::showPageHeader('Объекты');
+HTML::showNavPills('../%s/', require '../sections.php', 'places');
 ?>
-<p><a href="../">Вернуться в настройки</a></p>
 <hr>
 <div id="container"></div>
 <script>

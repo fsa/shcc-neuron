@@ -136,7 +136,7 @@ function afterSetExtremes(e) {
     });
 }
 
-var unit_id=$('#unit_id').attr('unit_id');
+var unit_id=$('#navpills_item_id').attr('navpills_item_id');
 $.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
     unit=mp;
     $.each(mp.places, function (i, place) {
