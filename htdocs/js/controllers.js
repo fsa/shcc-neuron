@@ -11,8 +11,18 @@ $(function() {
             setState(device_name, '');
         });
     };
-    function setState (device_name, state) {
+    function setState(device_name, state) {
         $('#'+device_name+'_state').text(state);
+    }
+    function sendCommand(device_name, command) {
+        command['device_name']=device_name;
+        $.getJSON('/api/command/',command, function(data) {
+            if (data.error) {
+                setState(device_name, data.error);
+            } else {
+                setState(device_name, '');
+            }
+        });
     }
     $('.device-state').each(function() {
         device_name=$(this).attr('device_name');
@@ -27,7 +37,8 @@ $(function() {
         device_name=$(this).attr('device_name');
         $.getJSON('/api/command/',{'device_name': device_name}, function(data) {
             if(data.error) {
-               return;        
+                setState(device_name, data.error);
+                return;
             }
             refresh(device_name, data);
         });
@@ -35,28 +46,16 @@ $(function() {
     $('.device-power').change(function() {
         on=$(this).is(':checked');
         device_name=$(this).attr('device_name');
-        $.getJSON('/api/command/',{'power': on, 'device_name': device_name}, function(data) {
-            if(data.error) {
-               setState(device_name, data.error);
-            }            
-        });
+        sendCommand(device_name, {'power': on});
     });
     $('.device-bright').change(function() {
         bright=$(this).val();
         device_name=$(this).attr('device_name');
-        $.getJSON('/api/command/',{'bright': bright, 'device_name': device_name}, function(data) {
-            if(data.error) {
-               setState(device_name, data.error);
-            }
-        });
+        sendCommand(device_name, {'bright': bright});
     });
     $('.device-ct').change(function() {
         ct=$(this).val();
         device_name=$(this).attr('device_name');
-        $.getJSON('/api/command/',{'ct': ct, 'device_name': device_name}, function(data) {
-            if(data.error) {
-               setState(device_name, data.error);
-            }
-        });
+        sendCommand(device_name, {'ct': ct});
     });
 });
