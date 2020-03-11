@@ -8,6 +8,7 @@ $(function() {
                 default:
                     $('#'+device_name+'_'+item).prop('value', value);
             }
+            $('#'+device_name+'_state').text('');
         });
     };
     $('.device-state').each(function() {

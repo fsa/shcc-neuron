@@ -16,7 +16,7 @@ EOS;
         HTML::showCard('<div class="custom-control custom-switch">
 <input type="checkbox" class="custom-control-input device-power" device_name="'.$lamp_name.'" id="'.$lamp_name.'_power">
 <label class="custom-control-label" for="'.$lamp_name.'_power">Светильник</label>
-</div>', $test, '<span id="'.$lamp_name.'_state"></span>');
+</div>', $test, '<span id="'.$lamp_name.'_state">Нет данных</span>');
 
     }
 }

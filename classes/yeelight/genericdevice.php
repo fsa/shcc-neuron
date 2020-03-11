@@ -176,7 +176,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         if (!$socket) {
             switch ($errno) {
                 case 113:
-                    throw new AppException("Нет связи с устройством '$this->location'.");
+                    throw new AppException("Устройство недоступно.");
                 default:
                     throw new Exception($errstr, $errno);
             }
