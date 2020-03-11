@@ -25,8 +25,8 @@ class HTML {
 </head>
 <body>
 <header class="header">
-<nav class="navbar navbar-expand-md navbar-info fixed-top bg-info" role="navigation">
-<a class="navbar-brand text-white" href="/" role="banner">SHCC</a>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info" role="navigation">
+<a class="navbar-brand" href="/" role="banner">SHCC</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
 <span class="navbar-toggler-icon"></span>
@@ -35,20 +35,20 @@ class HTML {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <a class="nav-link text-white" href="/charts/">Графики</a>
+        <a class="nav-link" href="/charts/">Графики</a>
     </li>
 <?php
 if(Auth::memberOf(['admin'])) {
 ?>
     <li class="nav-item">
-        <a class="nav-link text-white" href="/settings/">Настройки</a>
+        <a class="nav-link" href="/settings/">Настройки</a>
     </li>
 <?php
 }
 if(Auth::memberOf()) {
 ?>
     <li class="nav-item">
-        <a class="nav-link text-white" href="/logout/">Выход</a>
+        <a class="nav-link" href="/logout/">Выход</a>
     </li>
 <?php
 } else {
