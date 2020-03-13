@@ -17,15 +17,15 @@ class HTML {
 <title><?=$this->title?></title>
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#17a2b8">
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/bootstrap.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="/libs/jquery/jquery.min.js"></script>
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
 <body>
-<header class="header">
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-info" role="navigation">
+<header class="container-fluid p-0">
+<nav class="navbar navbar-expand-md navbar-dark bg-info" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
@@ -63,7 +63,7 @@ if(Auth::memberOf()) {
 </div>
 </nav>
 </header>
-<main role="main" class="container-fluid">
+<main role="main" class="container-fluid p-3">
 <?php
     }
 
@@ -145,7 +145,7 @@ $(document).ready(function(){
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-info"><?=date('d.m.Y H:i:s')?></footer>
+<footer class="footer container-fluid bg-info p-3 text-white"><?=date('d.m.Y H:i:s')?></footer>
 </body>
 </html>
 <?php        
