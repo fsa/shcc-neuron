@@ -25,7 +25,7 @@ class HTML {
 </head>
 <body>
 <header class="container-fluid p-0">
-<nav class="navbar navbar-expand-md navbar-dark bg-info" role="navigation">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
@@ -98,8 +98,8 @@ if(Auth::memberOf()) {
     
     public function Card($title, $text, $state=null) {
 ?>
-<div class="card border-info">
-<div class="card-header bg-info text-white"><?=$title?></div>
+<div class="card border-primary">
+<div class="card-header bg-primary text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
 <?php
@@ -145,7 +145,7 @@ $(document).ready(function(){
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-info p-3 text-white"><?=date('d.m.Y H:i:s')?></footer>
+<footer class="footer container-fluid bg-primary p-3 text-white"><?=date('d.m.Y H:i:s')?></footer>
 </body>
 </html>
 <?php        

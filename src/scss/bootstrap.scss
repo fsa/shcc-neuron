@@ -1,3 +1,14 @@
+$theme-colors: (
+    "primary":    #527779,
+    "secondary":  #bfd1d3,
+    "success":    #64778d,
+    "info":       #ecfdff,
+    "warning":    #a25b4b
+//    "danger":     $danger,
+//    "light":      $light,
+//    "dark":       $dark
+);
+
 @import "functions";
 @import "variables";
 @import "mixins";
