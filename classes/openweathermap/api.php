@@ -56,7 +56,7 @@ class Api {
 
     public function fetchForecast() {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, self::OWM_URL.'weather?'.http_build_query($this->getRequestArray()));
+        curl_setopt($ch, CURLOPT_URL, self::OWM_URL.'forecast?'.http_build_query($this->getRequestArray()));
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
