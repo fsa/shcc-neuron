@@ -66,7 +66,6 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
-        $owm_settings=Settings::get('openweathermap');
         if (is_null($this->api_key)) {
             throw new AppException('Не указан ключ API');
         }
@@ -120,6 +119,7 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         }
         return $this->weather->wind->speed;
     }
+
     public function getWindDirection() {
         if (!isset($this->weather->wind->deg)) {
             return '-';
