@@ -6,11 +6,29 @@ class Message {
 
     public $title;
     public $site_info;
-    public $style='bg-info text-white';
+    public $style;
     public $header;
     public $message;
 
     public function show() {
+        switch ($this->style) {
+            case 'primary':
+            case 'secondary':
+            case 'success':
+            case 'danger':
+            case 'info':
+            case 'dark':
+                $style_class='bg-'.$this->style.' text-white';
+                break;
+            case 'warning':
+            case 'light':
+            case 'white':
+            case 'transparent':
+                $style_class='bg-'.$this->style.' text-dark';
+                break;
+            default:
+                $style_class='bg-info text-white';
+        }
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,9 +41,9 @@ class Message {
 </head>
 <body bgcolor="white">
 <div class="container">
-<h1><?=$this->site_info->title?></h1>
+<h1><?=$this->site_info['title']?></h1>
 <div class="card">
-<div class="card-header <?=$this->style?>"><?=$this->title?></div>
+<div class="card-header <?=$style_class?>"><?=$this->title?></div>
 <div class="card-body"><?=$this->message?></div>
 </div>
 </div>

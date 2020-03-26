@@ -12,16 +12,19 @@ class Bearer {
     public static function grantAccess() {
         $bearer=getenv('HTTP_AUTHORIZATION');
         if (!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
-            httpResponse::authRequired('Bearer realm="The access token required"');
+            header('WWW-Authenticate: Bearer realm="The access token required"');
+            httpResponse::error(401);
             exit;
         }
         $token=Server::fetchTokensByAccessToken($matches[1]);
         if (!$token) {
-            httpResponse::authRequired('Bearer error="invalid_token",error_description="Invalid access token"');
+            header('WWW-Authenticate: Bearer error="invalid_token",error_description="Invalid access token"');
+            httpResponse::error(401);
             exit;
         }
         if($token->expired) {
-            httpResponse::authRequired('Bearer error="invalid_token",error_description="The access token expired"');
+            header('WWW-Authenticate: Bearer error="invalid_token",error_description="The access token expired"');
+            httpResponse::error(401);
             exit;
         }
         self::$access_token=$token->access_token;

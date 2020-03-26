@@ -1,8 +1,8 @@
 <?php
 
 require_once '../../common.php';
-httpResponse::setJsonExceptionHanler();
-Auth\Internal::grantAccess();
+httpResponse::setModeJson();
+Auth\Session::grantAccess();
 $place_id=filter_input(INPUT_GET,'place',FILTER_VALIDATE_INT);
 $meter_id=filter_input(INPUT_GET,'meter',FILTER_VALIDATE_INT);
 $meter_unit_id=filter_input(INPUT_GET,'unit',FILTER_VALIDATE_INT);

@@ -2,11 +2,13 @@
 
 namespace Templates;
 
-use Auth\Internal as Auth;
+use Auth\Session as Auth;
 
-class HTML {
-    
+class ContentPage {
+
+    public $title;
     public $header;
+    public $site_info;
 
     public function header() {
 ?>
@@ -14,7 +16,7 @@ class HTML {
 <html>
 <head>
 <meta charset="utf-8">
-<title><?=$this->title?></title>
+<title><?=is_null($this->title)?$this->site_info['title']:$this->title.' :: '.$this->site_info['title']?></title>
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#527779">
 <link rel="stylesheet" href="/bootstrap.css">
@@ -38,7 +40,7 @@ class HTML {
         <a class="nav-link" href="/charts/">Графики</a>
     </li>
 <?php
-if(Auth::memberOf(['admin'])) {
+if(Auth::memberOf([])) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/settings/">Настройки</a>

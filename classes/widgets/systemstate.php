@@ -2,7 +2,7 @@
 
 namespace Widgets;
 
-use HTML,
+use httpResponse,
     SmartHome\Vars;
 
 class SystemState {
@@ -18,7 +18,6 @@ class SystemState {
         if (sizeof($state)==0) {
             $state[]='Система работает в обычном режиме.';
         }
-        HTML::showCard('Состояние системы', join('<br>', $state));
+        httpResponse::showCard('Состояние системы', join('<br>', $state));
     }
-
 }

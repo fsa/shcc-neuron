@@ -1,9 +1,9 @@
 <?php
 
 require_once 'common.php';
-Auth\Internal::grantAccess();
-HTML::addHeader('<script src="/js/controllers.js"></script>');
-HTML::showPageHeader('Панель управления');
+Auth\Session::grantAccess();
+httpResponse::addHeader('<script src="/js/controllers.js"></script>');
+httpResponse::showHtmlHeader('Панель управления');
 chdir('../custom/dashboard/');
 include_once '../functions.php';
 $page=filter_input(INPUT_GET,'page');
@@ -24,4 +24,4 @@ if(!$page) {
         echo "<p>Неверное имя страницы</p>";        
     }
 }
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

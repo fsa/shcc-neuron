@@ -2,6 +2,8 @@
 
 namespace Tts;
 
+use Settings;
+
 class Daemon implements \SmartHome\DaemonInterface {
 
     const PLAY_SOUND_CMD='mpg123 -q %s';
@@ -25,9 +27,9 @@ class Daemon implements \SmartHome\DaemonInterface {
                 $this->tts_provider=null;
             }
         }
-        $settings=\Settings::get('tts');
-        $this->pre_sound=isset($settings->pre_sound)?$settings->pre_sound:self::PRE_SOUND;
-        $this->play_sound_cmd=isset($settings->play_sound_cmd)?$settings->play_sound_cmd:self::PLAY_SOUND_CMD;
+        $settings=Settings::get('tts');
+        $this->pre_sound=isset($settings['pre_sound'])?$settings['pre_sound']:self::PRE_SOUND;
+        $this->play_sound_cmd=isset($settings['play_sound_cmd'])?$settings['play_sound_cmd']:self::PLAY_SOUND_CMD;
     }
 
     public function getName() {

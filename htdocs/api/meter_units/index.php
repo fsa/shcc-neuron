@@ -1,8 +1,8 @@
 <?php
 
 require_once '../../common.php';
-httpResponse::setJsonExceptionHanler();
-Auth\Internal::grantAccess();
+httpResponse::setModeJson();
+Auth\Session::grantAccess();
 $units=SmartHome\MeterUnits::getUnits();
 foreach($units as $key=>&$unit) {
     $unit['meters']=SmartHome\Meters::getMetersByUnitId($key);

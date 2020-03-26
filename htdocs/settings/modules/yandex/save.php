@@ -10,5 +10,5 @@ $yandex=new Yandex\TtsApi($api_key);
 $yandex->setSpeaker($voice);
 $yandex->setEmotion($emotion);
 file_put_contents($tts_file,serialize($yandex));
-HTML::storeNotification('Установка TTS', 'В качестве синтезатора речи установлен Yandex SpeechKit. Голос '.$voice.', эмоциональная окраска голоса '.$emotion.'. Для вступления изменений в силу необходимо перезапустить демона TTS.');
-httpResponse::redirect('../');
+httpResponse::storeNotification('В качестве синтезатора речи установлен Yandex SpeechKit. Голос '.$voice.', эмоциональная окраска голоса '.$emotion.'. Для вступления изменений в силу необходимо перезапустить демона TTS.');
+httpResponse::redirection('../');

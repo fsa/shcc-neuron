@@ -2,13 +2,14 @@
 
 namespace Widgets;
 
-use HTML;
+use httpResponse,
+    Tts\Log;
 
 class MessageLog {
 
     public static function show() {
-        $log=\Tts\Log::getLastMessages();
-        HTML::showCard('Последние голосовые сообщения', join('<br>', $log));
+        $log=Log::getLastMessages();
+        httpResponse::showCard('Последние голосовые сообщения', join('<br>', $log));
     }
 
 }

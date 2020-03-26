@@ -2,7 +2,7 @@
 
 require_once '../../common.php';
 httpResponse::setJsonExceptionHanler();
-Auth\Internal::grantAccess(['control']);
+Auth\Session::grantAccess(['control']);
 chdir('../../../custom/command/');
 require_once '../functions.php';
 $device_name=filter_input(INPUT_GET,'device_name');

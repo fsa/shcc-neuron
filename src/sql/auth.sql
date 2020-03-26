@@ -45,7 +45,7 @@ CREATE TABLE auth_sessions (
     uid varchar(32) NOT NULL,
     token varchar(32) NOT NULL,
     expires timestamptz NOT NULL,
-    user_entity jsonb,
+    user_entity text NOT NULL,
     ip inet DEFAULT NULL,
     browser text DEFAULT NULL,
     created timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP

@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $id=filter_input(INPUT_GET, 'id');
 $text=filter_input(INPUT_GET, 'text');
 if(!$id or !$text) {

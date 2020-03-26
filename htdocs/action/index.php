@@ -1,7 +1,7 @@
 <?php
 
 require_once '../common.php';
-$host=\Settings::get('daemon-ip');
+$host=Settings::get('daemon-ip');
 if (!is_null($host)) {
     var_dump(getenv('REMOTE_ADDR'), $host);
     if (getenv('REMOTE_ADDR')!=$host) {

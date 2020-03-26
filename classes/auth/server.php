@@ -17,13 +17,13 @@ class Server {
     private $client_id;
     private $state;
 
-    public function __construct() {
+    public function getResponseType(): bool {
         $response_type=filter_input(INPUT_GET, 'response_type');
         if ($response_type) {
             $this->state=filter_input(INPUT_GET, 'state');
             $this->client_id=filter_input(INPUT_GET, 'client_id');
             if (!$this->client_id) {
-                throw new ServerException('Не указан идентифиатор клиента');
+                httpResponse::showError('Не указан идентифиатор клиента');
             }
             switch ($response_type) {
                 case 'code':
@@ -32,9 +32,15 @@ class Server {
                 case 'token':
                     $this->requestGetToken();
                     break;
+                default:
+                    httpResponse::showError('Не поддерживаемый тип запроса');
             }
-            throw new ServerException('Не поддерживаемый тип запроса');
+            return true;
         }
+        return false;
+    }
+
+    public function getGrantType(): bool {
         $grant_type=filter_input(INPUT_POST, 'grant_type');
         if ($grant_type) {
             $this->client_id=filter_input(INPUT_POST, 'client_id');
@@ -51,14 +57,16 @@ class Server {
                 case 'refresh_token':
                     $this->requestPostRefreshToken();
                     break;
+                default:
+                    httpResponse::json(['error'=>'unsupported_response_type']);
             }
-            httpResponse::json(['error'=>'unsupported_response_type']);
+            return true;
         }
-        throw new ServerException('Неверный запрос');
+        return false;
     }
 
     private function requestGetCode() {
-        Internal::grantAccess();
+        Session::grantAccess();
         $client_id=filter_input(INPUT_GET, 'client_id');
         $redirect_uri=filter_input(INPUT_GET, 'redirect_uri');
         $scope=filter_input(INPUT_GET, 'scope');
@@ -66,7 +74,7 @@ class Server {
         if (!$client) {
             httpResponse::json(['error'=>'unauthorized_client']);
         }
-        $user_id=Internal::getUser()->id;
+        $user_id=Session::getUser()->id;
         $scope=User::checkScope($scope, $user_id);
         $code=$this->genCode();
         $s=DB::prepare('INSERT INTO auth_tokens (client_id, user_id, code, scope) VALUES (?, ?, ?, ?)');
@@ -76,11 +84,11 @@ class Server {
             'code'=>$code,
             'state'=>$this->state
         ];
-        httpResponse::redirect($redirect_uri.'?'.http_build_query($params), 302, 'Found');
+        httpResponse::redirection($redirect_uri.'?'.http_build_query($params), 302, 'Found');
     }
 
     private function requestGetToken() {
-        throw new ServerException('Не реализовано');
+        httpResponse::showError('Запрос токена не реализован.');
     }
 
     private function requestPostAuthorizationCode() {
@@ -142,7 +150,7 @@ class Server {
             "token_type"=>"bearer",
             "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
             "refresh_token"=>$refresh_token,
-            "scope"=>$auth_tokens->scope
+            "scope"=>$scope
         ]);
     }
 

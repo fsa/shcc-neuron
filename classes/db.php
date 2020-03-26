@@ -17,10 +17,10 @@ class DB {
         if (self::$pdo) {
             return self::$pdo;
         }
-        $config=\Settings::get('pdo');
-        self::$pdo=new PDO($config->dsn, $config->username, $config->password);
+        $config=Settings::get('pdo');
+        self::$pdo=new PDO($config['dsn'], $config['username'], $config['password']);
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        foreach ($config->init AS $query) {
+        foreach ($config['init'] AS $query) {
             self::$pdo->query($query);
         }
         return self::$pdo;

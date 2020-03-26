@@ -1,13 +1,13 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $uid=filter_input(INPUT_GET,'uid');
 if($uid) {
     require_once 'show.php';
     exit;
 }
-HTML::showPageHeader('Список устройств в памяти');
+httpResponse::showHtmlHeader('Список устройств в памяти');
 ?>
 <p><a href="../">Вернуться к списку устройств</a></p>
 <hr>
@@ -23,4 +23,4 @@ $table->addField('status','Информация');
 $table->addField('updated','Был активен');
 $table->addButton(new HTML\ButtonLink('Подробности','./?uid=%s','uid'));
 $table->showTable($devices);
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

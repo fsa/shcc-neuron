@@ -1,9 +1,9 @@
 <?php
 
 require_once '../../common.php';
-Auth\Internal::grantAccess(['admin']);
-HTML::showPageHeader('Устройтва');
-HTML::showNavPills('../%s/', require '../sections.php', 'devices');
+Auth\Session::grantAccess([]);
+httpResponse::showHtmlHeader('Устройтва');
+httpResponse::showNavPills('../%s/', require '../sections.php', 'devices');
 ?>
 <hr>
 <p><a href="memory/">Добавить новое устройство</a></p>
@@ -31,4 +31,4 @@ $devices->showTable(\SmartHome\Devices::getDevicesStmt());
     </tr>
 </table>
 <?php
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

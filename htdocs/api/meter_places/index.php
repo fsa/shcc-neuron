@@ -1,8 +1,8 @@
 <?php
 
 require_once '../../common.php';
-httpResponse::setJsonExceptionHanler();
-Auth\Internal::grantAccess();
+httpResponse::setModeJson();
+Auth\Session::grantAccess();
 $unit=filter_input(INPUT_GET,'unit', FILTER_VALIDATE_INT);
 if(!is_int($unit)) {
     httpResponse::json(['error'=>'Unit require']);

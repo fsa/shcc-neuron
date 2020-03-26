@@ -23,10 +23,10 @@ $devices=new \SmartHome\Devices;
 $devices->setDevice($device);
 if($device->id) {
     $devices->update();
-    HTML::storeNotification('Обновление устройства','Данные об устройстве обновлены','../');
-    httpResponse::redirect('../');
+    httpResponse::storeNotification('Данные об устройстве обновлены');
+    httpResponse::redirection('../');
 } else {
     $devices->insert();
-    HTML::storeNotification('Добавление устройства','Устройство добавлено','../');
-    httpResponse::redirect('../');
+    httpResponse::storeNotification('Устройство добавлено');
+    httpResponse::redirection('../');
 }

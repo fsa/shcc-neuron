@@ -3,6 +3,12 @@
 namespace Templates;
 class Forms {
 
+    public static function formHeader($method, $url) {
+?>
+<form method="<?=$method?>" action="<?=$url?>">
+<?php
+    }
+
     public static function inputHidden($name, $value) {
 ?>
 <input type="hidden" name="<?= $name ?>" value="<?= $value ?>">
@@ -20,23 +26,43 @@ class Forms {
 <?php
     }
 
-    public static function inputString($name, $value, $label) {
+    public static function inputString($name, $value, $label=null) {
 ?>
-<div class="form-group row">
-    <label for="<?= $name ?>" class="col-2 col-form-label"><?= $label ?></label>
-    <div class="col-10">
-            <input class="form-control" type="text" name="<?= $name ?>" id="<?= $name ?>" value="<?= htmlspecialchars($value) ?>">
-    </div>
+<div class="form-group">
+<?php
+        if(!is_null($label)) {
+?>
+    <label for="<?= $name ?>"><?= $label ?></label>
+<?php
+        }
+?>
+    <input class="form-control" type="text" name="<?= $name ?>" id="<?= $name ?>" value="<?= htmlspecialchars($value) ?>">
 </div>
 <?php
     }
-	
+
+    public static function textarea($name, $value, $label=null) {
+?>
+<div class="form-group">
+<?php
+        if(!is_null($label)) {
+?>
+    <label for="<?= $name ?>"><?= $label ?></label>
+<?php
+        }
+?>
+    <textarea class="form-control" name="<?= $name ?>" id="<?= $name ?>" rows="3"><?= htmlspecialchars($value); ?></textarea>
+</div>
+<?php
+    }
+
     public static function inputDate($name, $value, $label) {
+        $date=$value?date("Y-m-d", strtotime($value)):'';
 ?>
 <div class="form-group row">
   <label for="<?= $name ?>" class="col-2 col-form-label"><?=$label?></label>
   <div class="col-10">
-	  <input class="form-control" type="date" name="<?= $name ?>" id="<?= $name ?>" value="<?=date("Y-m-d", strtotime($value))?>">
+	  <input class="form-control" type="date" name="<?= $name ?>" id="<?= $name ?>" value="<?=$date?>">
   </div>
 </div>
 <?php
@@ -64,9 +90,8 @@ class Forms {
 	
     public static function inputSelectArray($name,$value,$label,$array) {
 ?>
-<div class="form-group row">
-    <label for="<?=$name?>" class="col-2 col-form-label"><?=$label?></label>
-    <div class="col-10">
+<div class="form-group">
+    <label for="<?=$name?>"><?=$label?></label>
     <select class="form-control" name="<?=$name?>" id="<?=$name?>">
 <?php
         foreach($array as $name=>$desc) {
@@ -76,7 +101,6 @@ class Forms {
         }
 ?>
     </select>
-    </div>
 </div>
 <?php
     }
@@ -106,6 +130,12 @@ class Forms {
 <button type="submit" name="action" value="<?=$value?>" class="btn <?=$style?>"><?=$label?></button>
 <?php			 
         }
+    }
+
+    public static function formFooter() {
+?>
+</form>
+<?php
     }
 
 }

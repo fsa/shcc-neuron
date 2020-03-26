@@ -4,8 +4,8 @@
  * Вы можете создать файл * index.php в этом же каталоге и он будет подключен
  * вместо данного файла. 
  */
-HTML::showCardsHeader();
-HTML::showCard('Настройте внешний вид','Для настройки внешнего вида этой страницы создайте файл custom/dashboard/index.php.');
+httpResponse::showCardsHeader();
+httpResponse::showCard('Настройте внешний вид','Для настройки внешнего вида этой страницы создайте файл custom/dashboard/index.php.');
 Widgets\SystemState::show();
 Widgets\MessageLog::show();
-HTML::showCardsFooter();
+httpResponse::showCardsFooter();
