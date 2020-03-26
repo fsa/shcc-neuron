@@ -10,7 +10,7 @@ class SunInfo {
 
     public function __construct() {
         $home=Settings::get('home');
-        $this->sun_info=date_sun_info(time(),$home->lat,$home->lon);
+        $this->sun_info=date_sun_info(time(),$home['lat'],$home['lon']);
     }
 
     public function getText(string $time): string {
