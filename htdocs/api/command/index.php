@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../common.php';
-httpResponse::setJsonExceptionHanler();
+httpResponse::setModeJson();
 Auth\Session::grantAccess(['control']);
 chdir('../../../custom/command/');
 require_once '../functions.php';
