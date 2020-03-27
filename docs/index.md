@@ -12,7 +12,7 @@
 
 [Установка системы](install.md)
 
-[Файл конфигурации settings.json](settings.md)
+[Файл конфигурации settings.php](settings.md)
 
 [Пользовательские скрипты](userscripts.md)
 
