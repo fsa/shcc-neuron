@@ -2,13 +2,15 @@
 
 namespace SmartHome;
 
+use Settings;
+
 class SunInfo {
 
     private $sun_info;
 
     public function __construct() {
-        $home=\Settings::get('home');
-        $this->sun_info=date_sun_info(time(),$home->lat,$home->lon);
+        $home=Settings::get('home');
+        $this->sun_info=date_sun_info(time(),$home['lat'],$home['lon']);
     }
 
     public function getText(string $time): string {

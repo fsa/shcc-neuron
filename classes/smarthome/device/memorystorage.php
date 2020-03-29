@@ -2,6 +2,8 @@
 
 namespace SmartHome\Device;
 
+use Settings;
+
 class MemoryStorage {
 
     const PROJ='f';
@@ -14,7 +16,7 @@ class MemoryStorage {
     private $lock;
 
     public function __construct() {
-        $memsize=\Settings::get('device_memory_storage', self::MEMSIZE);
+        $memsize=Settings::get('device_memory_storage', self::MEMSIZE);
         $file=ftok(__FILE__, self::PROJ);
         $this->shm=shm_attach($file, $memsize, self::CHMOD);
         $this->sem=sem_get($file, 1, self::CHMOD);

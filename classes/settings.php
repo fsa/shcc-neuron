@@ -10,14 +10,7 @@ class Settings {
     }
 
     private function __construct() {
-        $settings=file_get_contents(__DIR__.'/../settings.json');
-        if ($settings===false) {
-            throw new Exception('Не удалось открыть файл конфигурации.');
-        }
-        $this->settings=json_decode($settings);
-        if (is_null($this->settings)) {
-            throw new Exception('Ошибка в файле конфигурации.');
-        }
+        $this->settings=require __DIR__.'/../settings.php';
     }
 
     public static function getInstance() {
@@ -29,8 +22,8 @@ class Settings {
 
     public static function get(string $name,$default_value=null) {
         $s=self::getInstance();
-        if (isset($s->settings->$name)) {
-            return $s->settings->$name;
+        if (isset($s->settings[$name])) {
+            return $s->settings[$name];
         }
         return $default_value;
     }

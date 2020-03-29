@@ -97,7 +97,8 @@ INSERT INTO modules (id, name, namespace, description, daemon, settings, disable
 (1, 'xiaomi', 'Xiaomi', 'Обеспечивает поддержу оборудования Xiaomi через шлюз при включении на шлюзе &laquo;Протокола связи локальной сети&raquo;.', true, false, false),
 (2, 'yeelight', 'Yeelight', 'Обеспечивает поддержку светильников Yeelight при включении на этом оборудовании режима &laquo;Управление по локальной сети&raquo;.', true, false, false),
 (3, 'yandex', 'Yandex', 'Обеспечивает взаимодействие с сервисами Яндекс.', false, true, false),
-(4, 'miio', 'miIO', 'Обеспечивает управление устройствами Xiaomi MiHome через протокол miIO (для взаимодействия требуется токен устройства).', true, false, true);
+(4, 'miio', 'miIO', 'Обеспечивает управление устройствами Xiaomi MiHome через протокол miIO (для взаимодействия требуется токен устройства).', true, false, true),
+(5, 'openweathermap', 'OpenWeatherMap', 'Сервис получения данных о погоде openweathermap.org', false, false, false);
 
 INSERT INTO meter_units (id, name, unit, minimal, maximal) VALUES
 (1, 'Температура воздуха', '&deg;C', 18, 25),

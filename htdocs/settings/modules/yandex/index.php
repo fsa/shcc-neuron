@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $tts_file='../../../../config/tts.conf';
 $action=filter_input(INPUT_POST,'action');
 switch ($action) {
@@ -15,7 +15,7 @@ switch ($action) {
         require 'remove.php';
         break;
     default:
-        throw new AppException('Неверное действие');
+        httpResponse::showError('Неверное действие');
 }
 
 if(file_exists($tts_file)) {
@@ -32,9 +32,11 @@ if(!isset($params)) {
     ];
 }
 use Templates\Forms;
-HTML::showPageHeader('Яндекс');
+httpResponse::showHtmlHeader('Яндекс');
+httpResponse::showNavPills('../../%s/', require '../../sections.php', 'modules');
 ?>
 <p><a href="../">Вернуться к списку модулей</a></p>
+<hr>
 <form method="POST" action="./">
 <?php
 Forms::inputString('api_key', $params['key'], 'Ключ API:');
@@ -45,4 +47,4 @@ Forms::submitButton('Отключить синтез речи', 'remove', 'btn-d
 ?>
 </form>
 <?php
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

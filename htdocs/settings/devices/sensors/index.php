@@ -5,7 +5,7 @@ if (!$id) {
     die;
 }
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $device=SmartHome\Devices::getDeviceById($id);
 if (!$device) {
     die;
@@ -16,7 +16,7 @@ if($param) {
     require 'add.php';
     die;
 }
-HTML::showPageHeader('Датчики утройств');
+httpResponse::showHtmlHeader('Датчики утройств');
 if($obj instanceof SmartHome\SensorsInterface) {
     $meters=SmartHome\Meters::getMetersByDeviceId($device->id);
     foreach ($obj->getDeviceMeters() as $name=>$title) {
@@ -32,4 +32,4 @@ if($obj instanceof SmartHome\DeviceActionInterface) {
         echo "<p>$name => $title</p>";
     }    
 }
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

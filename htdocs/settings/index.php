@@ -1,11 +1,13 @@
 <?php
 
 require_once '../common.php';
-Auth\Internal::grantAccess(['admin']);
-HTML::showPageHeader('Настройки');
+Auth\Session::grantAccess([]);
+httpResponse::showHtmlHeader('Настройки');
+$menu=require './sections.php';
+httpResponse::showNavPills('%s/', $menu);
+foreach ($menu as $path=>$name) {
 ?>
-<p><a href="places/">Объекты</a></p>
-<p><a href="devices/">Устройства</a></p>
-<p><a href="modules/">Модули</a></p>      
+<p><a href="<?=$path?>/"><?=$name?></a></p>
 <?php
-HTML::showPageFooter();
+}
+httpResponse::showHtmlFooter();

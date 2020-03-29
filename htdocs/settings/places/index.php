@@ -1,12 +1,12 @@
 <?php
 
 require_once '../../common.php';
-Auth\Internal::grantAccess(['admin']);
-HTML::addHeader('<script src="/libs/jstree/jstree.min.js"></script>');
-HTML::addHeader('<link rel="stylesheet" href="/libs/jstree/style.min.css">');
-HTML::showPageHeader('Объекты');
+Auth\Session::grantAccess([]);
+httpResponse::addHeader('<script src="/libs/jstree/jstree.min.js"></script>');
+httpResponse::addHeader('<link rel="stylesheet" href="/libs/jstree/style.min.css">');
+httpResponse::showHtmlHeader('Объекты');
+httpResponse::showNavPills('../%s/', require '../sections.php', 'places');
 ?>
-<p><a href="../">Вернуться в настройки</a></p>
 <hr>
 <div id="container"></div>
 <script>
@@ -101,4 +101,4 @@ $(function() {
 });
 </script>
 <?php
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

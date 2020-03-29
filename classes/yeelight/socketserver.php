@@ -47,15 +47,15 @@ class SocketServer {
             $r=[$this->stream];
             $w=null;
             $e=null;
-                if (false===($num_changed_streams=@stream_select($r, $w, $e, 0, $timeout/$cycles))) {
-                    throw new Exception('stream_select error');
-                } elseif ($num_changed_streams>0) {
-                    $pkt=stream_socket_recvfrom($this->stream, self::MAX_LENGTH, 0, $peer);
-                    if($addr==parse_url($peer, PHP_URL_HOST)){
-                        return new YeelightPacket($pkt, $peer);
-                    }
+            if (false===($num_changed_streams=@stream_select($r, $w, $e, 0, $timeout/$cycles))) {
+                throw new Exception('stream_select error');
+            } elseif ($num_changed_streams>0) {
+                $pkt=stream_socket_recvfrom($this->stream, self::MAX_LENGTH, 0, $peer);
+                if($addr==parse_url($peer, PHP_URL_HOST)){
+                    return new YeelightPacket($pkt, $peer);
                 }
             }
+        }
         return null;
     }
 

@@ -4,7 +4,7 @@ if (!$param) {
     die;
 }
 if(!($obj instanceof SmartHome\SensorsInterface)) {
-    throw new AppException('Устройство не имеет интерфейса сенсоров');
+    httpResponse::showError('Устройство не имеет интерфейса сенсоров');
 }
 $meters=$obj->getDeviceMeters();
 $indicators=$obj->getDeviceIndicators();
@@ -17,12 +17,12 @@ if(isset($meters[$param])) {
         $meter->insert();    
     } catch (PDOException $ex) {
         if($ex->getCode()==23000) {
-            throw new AppException('Данный датчик уже зарегистрирован в базе');
+            httpResponse::showError('Данный датчик уже зарегистрирован в базе');
         }
         throw $ex;
     }
-    HTML::storeNotification('Аналоговый датчик '.$param,'Датчик добавлен');
-    httpResponse::redirect('./?id='.$id);
+    httpResponse::storeNotification('Добавлен аналоговый датчик '.$param);
+    httpResponse::redirection('./?id='.$id);
 }
 if(isset($indicators[$param])) {
     $indicator=new \SmartHome\Indicators;
@@ -33,11 +33,11 @@ if(isset($indicators[$param])) {
         $indicator->insert();    
     } catch (PDOException $ex) {
         if($ex->getCode()==23000) {
-            throw new AppException('Данный датчик уже зарегистрирован в базе');
+            httpResponse::showError('Данный датчик уже зарегистрирован в базе');
         }
         throw $ex;
     }
-    HTML::storeNotification('Цифровой датчик '.$param,'Датчик добавлен');
-    httpResponse::redirect('./?id='.$id);
+    httpResponse::storeNotification('Добавлен цифровой датчик '.$param);
+    httpResponse::redirection('./?id='.$id);
 }
-HTML::showNotification('Добавление датчика','Указанного параметра нет ни в списке аналоговых датчиков, ни в цифровых.');
+httpResponse::showNotification('Добавление датчика','Указанного параметра нет ни в списке аналоговых датчиков, ни в цифровых.');

@@ -2,6 +2,8 @@
 
 namespace Yeelight;
 
+use AppException;
+
 class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Capability\PowerInterface, \SmartHome\Device\Capability\ColorHsvInterface, \SmartHome\Device\Capability\ColorRgbInterface, \SmartHome\Device\Capability\ColorTInterface, \SmartHome\Device\Capability\BrightnessInterface {
 
     private $location;
@@ -170,18 +172,23 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return $this->socket;
         }
         $addr=parse_url($this->location);
-        $socket=stream_socket_client("tcp://".$addr['host'].":".$addr['port'], $errno, $errstr);
-        stream_set_timeout($socket, 3);
+        $socket=@stream_socket_client("tcp://".$addr['host'].":".$addr['port'], $errno, $errstr);
         if (!$socket) {
-            throw new Exception("$errstr ($errno)");
+            switch ($errno) {
+                case 113:
+                    throw new AppException("Устройство недоступно.");
+                default:
+                    throw new Exception($errstr, $errno);
+            }
         }
+        stream_set_timeout($socket, 3);
         $this->socket=$socket;
         return $socket;
     }
 
     public function getEffect(int $duration) {
         if ($duration>0 and $duration<30) {
-            throw new Exception('Duration must be greater than 30.');
+            throw new AppException('Длительность эффекта должна быть больше 30.');
         }
         return ($duration==0)?'sudden':'smooth';
     }

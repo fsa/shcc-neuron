@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../common.php';
-Auth\Internal::grantAccess();
+Auth\Session::grantAccess();
 $places=[
     'id'=>null,
     'text'=>'Объекты',

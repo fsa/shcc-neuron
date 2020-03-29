@@ -3,3 +3,4 @@ CREATE TABLE miio_tokens (
     uid varchar(64) NOT NULL,
     token varchar(32)
 );
+COMMENT ON TABLE miio_tokens IS 'Токены устройств miIO';

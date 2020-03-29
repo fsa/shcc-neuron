@@ -1,7 +1,8 @@
-/settings.json
+/nbproject/private/
+/settings.php
 /backup/*.sql
 /config/*.conf
-/node_modules/*
+/npm/node_modules/*
 /systemd/shcc.service
 /systemd/shcc-minutely.service
 /systemd/shcc-minutely.timer

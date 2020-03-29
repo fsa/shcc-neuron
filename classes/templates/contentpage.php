@@ -2,11 +2,13 @@
 
 namespace Templates;
 
-use Auth\Internal as Auth;
+use Auth\Session as Auth;
 
-class HTML {
-    
+class ContentPage {
+
+    public $title;
     public $header;
+    public $site_info;
 
     public function header() {
 ?>
@@ -14,18 +16,18 @@ class HTML {
 <html>
 <head>
 <meta charset="utf-8">
-<title><?=$this->title?></title>
+<title><?=is_null($this->title)?$this->site_info['title']:$this->title.' :: '.$this->site_info['title']?></title>
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#343a40">
-<link rel="stylesheet" href="/styles.css">
+<meta name="theme-color" content="#527779">
+<link rel="stylesheet" href="/bootstrap.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="/libs/jquery/jquery.min.js"></script>
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
 <body>
-<header class="header">
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" role="navigation">
+<header class="container-fluid p-0">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
@@ -35,25 +37,25 @@ class HTML {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
     <li class="nav-item">
-        <a class="nav-link text-white" href="/charts/">Графики</a>
+        <a class="nav-link" href="/charts/">Графики</a>
     </li>
 <?php
-if(Auth::memberOf(['admin'])) {
+if(Auth::memberOf([])) {
 ?>
     <li class="nav-item">
-        <a class="nav-link text-white" href="/settings/">Настройки</a>
+        <a class="nav-link" href="/settings/">Настройки</a>
     </li>
 <?php
 }
 if(Auth::memberOf()) {
 ?>
     <li class="nav-item">
-        <a class="nav-link text-white" href="/logout/">Выход</a>
+        <a class="nav-link" href="/logout/">Выход</a>
     </li>
 <?php
 } else {
 ?>
-    <li class="nav-item text-white">
+    <li class="nav-item">
         <a class="nav-link" href="/login/">Вход</a>
     </li>
 <?php
@@ -63,10 +65,27 @@ if(Auth::memberOf()) {
 </div>
 </nav>
 </header>
-<main role="main" class="container-fluid">
+<main role="main" class="container-fluid p-3">
 <?php
     }
-    
+
+    public function NavPills(string $url, array $buttons, $current=null) {
+?>
+<ul class="nav nav-pills justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
+<?php
+    foreach ($buttons as $id=> $name) {
+?>
+<li class="nav-item">
+    <a class="nav-link<?=($id==$current)?' active':''?>" href="<?=sprintf($url, $id)?>"><?=$name?></a>
+</li>
+<?php
+    }
+    ?>
+</ul>
+<?php
+    }
+
+
     public function CardsHeader(){
 ?>
 <div class="card-columns">
@@ -81,8 +100,8 @@ if(Auth::memberOf()) {
     
     public function Card($title, $text, $state=null) {
 ?>
-<div class="card border-dark">
-<div class="card-header bg-dark text-white"><?=$title?></div>
+<div class="card border-primary">
+<div class="card-header bg-primary text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
 <?php
@@ -128,7 +147,7 @@ $(document).ready(function(){
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-dark"><?=date('d.m.Y H:i:s')?></footer>
+<footer class="footer container-fluid bg-primary p-3 text-white"><?=date('d.m.Y H:i:s')?></footer>
 </body>
 </html>
 <?php        

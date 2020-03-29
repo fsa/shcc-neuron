@@ -1,6 +1,6 @@
 <?php
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $action=filter_input(INPUT_POST,'action');
 if($action) {
     require 'edit.php';
@@ -13,7 +13,7 @@ if($uid) {
     $sh=new SmartHome\Device\MemoryStorage;
     $memdev=$sh->getDevice($uid);
     if(is_null($memdev)) {
-        throw new AppException('Что-то пошло не так. Не найдено устройство в памяти.');
+        httpResponse::showError('Что-то пошло не так. Не найдено устройство в памяти.');
     }
     $init_data_list=$memdev->getInitDataList();
     $device=new SmartHome\Entity\Device;
@@ -30,15 +30,15 @@ if($uid) {
         $memdev=new $device->classname;
         $init_data_list=$memdev->getInitDataList();
         if(!$device) {
-            throw new AppException('Устройство не найдено в базе данных');
+            httpResponse::showError('Устройство не найдено в базе данных');
         }
     } else {
         $device=new SmartHome\Entity\Device;
         $init_data_list=[];
     }
 }
-HTML::showPageHeader("Регистрация оборудования");
-if(!$id) {
+httpResponse::showHtmlHeader("Регистрация оборудования");
+if($uid) {
 ?>
 <p>Для работы с новым устройством его необходимо добавить в базу данных.</p>
 <?php
@@ -66,4 +66,4 @@ Forms::submitButton($device->id?'Сохранить':'Создать',$device->i
 ?>
 </form>
 <?php
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

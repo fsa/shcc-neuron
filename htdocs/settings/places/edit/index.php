@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Internal::grantAccess(['admin']);
+Auth\Session::grantAccess([]);
 $action=filter_input(INPUT_POST,'action');
 if($action) {
     require_once 'edit.php';
@@ -18,7 +18,7 @@ if($id) {
     $place->pid=$pid;
 }
 use Templates\Forms;
-HTML::showPageHeader();
+httpResponse::showHtmlHeader();
 ?>
 <form method="POST" action="./">
 <?php
@@ -29,4 +29,4 @@ Forms::submitButton($id?'Редактировать':'Добавить',$id?'edi
 ?>
 </form>
 <?php
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

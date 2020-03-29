@@ -21,7 +21,8 @@ Highcharts.setOptions({
     },
     time: {
         timezoneOffset: - 420
-    }
+    },
+    colors: ['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 });
 
 function createChart(unit) {
@@ -108,6 +109,9 @@ function createChart(unit) {
                 showInNavigator: true
             }
         },
+        legend: {
+            enabled: true
+        },
         series: seriesOptions
     });
 };
@@ -133,7 +137,7 @@ function afterSetExtremes(e) {
     });
 }
 
-var unit_id=$('#unit_id').attr('unit_id');
+var unit_id=$('#navpills_item_id').attr('navpills_item_id');
 $.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
     unit=mp;
     $.each(mp.places, function (i, place) {

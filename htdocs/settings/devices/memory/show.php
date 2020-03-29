@@ -11,13 +11,13 @@ $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
     if($mem_device) {
-        httpResponse::redirect("../edit/?uid=$uid");
+        httpResponse::redirection("../edit/?uid=$uid");
         exit;
     } else {
-        throw new AppException("Устройство с идентификатором '$uid' не найдено.");
+        httpResponse::showError("Устройство с идентификатором '$uid' не найдено.");
     }
 }
-HTML::showPageHeader();
+httpResponse::showHtmlHeader();
 ?>
 <p><a href="./">Вернуться к списку устрйств в памяти</a></p>
 <hr>
@@ -29,4 +29,4 @@ if(!$mem_device) {
 }
 $tpl=new Templates\SmartHome\DeviceInMemory;
 $tpl->show($mem_device);
-HTML::showPageFooter();
+httpResponse::showHtmlFooter();

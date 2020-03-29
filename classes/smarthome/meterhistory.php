@@ -88,11 +88,12 @@ class MeterHistory {
      * @param type $sensors массив сенсоров устройства для сохранения в памяти
      * @param type $data ассоциативный массив имя_сенсора->значение
      */
-    public static function addRecords($sensors, $data) {
-        $stmt=DB::prepare('INSERT INTO meter_history (meter_id,place_id,meter_unit_id,value) VALUES (?,?,?,?)');
+    public static function addRecords($sensors, $data, int $timestamp=null) {
+        $dt=is_null($timestamp)?date('c'):date('c', $timestamp);
+        $stmt=DB::prepare('INSERT INTO meter_history (meter_id,place_id,meter_unit_id,value,timestamp) VALUES (?,?,?,?,?)');
         foreach ($sensors as $sensor) {
             if (isset($data->{$sensor->property})) {
-                $stmt->execute([$sensor->id, $sensor->place_id, $sensor->meter_unit_id, $data->{$sensor->property}]);
+                $stmt->execute([$sensor->id, $sensor->place_id, $sensor->meter_unit_id, $data->{$sensor->property}, $dt]);
             }
         }
         $stmt->closeCursor();
