@@ -1,1 +1,4 @@
-theme: jekyll-theme-slate
+url: http://docs.shcc.ru
+permalink: pretty
+highlighter: rouge
+markdown: kramdown
