@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../common.php';
+require_once '../../../common.php';
 httpResponse::setModeJson();
 Auth\Session::grantAccess();
 $units=SmartHome\MeterUnits::getUnits();

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../common.php';
+require_once '../../../common.php';
 httpResponse::setModeJson();
 Auth\Session::grantAccess();
 $place_id=filter_input(INPUT_GET,'place',FILTER_VALIDATE_INT);

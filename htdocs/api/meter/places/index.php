@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../common.php';
+require_once '../../../common.php';
 httpResponse::setModeJson();
 Auth\Session::grantAccess();
 $unit=filter_input(INPUT_GET,'unit', FILTER_VALIDATE_INT);

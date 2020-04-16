@@ -124,7 +124,7 @@ function afterSetExtremes(e) {
         params={'place': place.id||0,'unit': unit.id};
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
-        $.getJSON('/api/meter_history/', params, function (data) {
+        $.getJSON('/api/meter/history/', params, function (data) {
             seriesOptions[seriesCounter] = {
                 name: place.name || 'Неизвестно',
                 data: data
@@ -138,10 +138,10 @@ function afterSetExtremes(e) {
 }
 
 var unit_id=$('#navpills_item_id').attr('navpills_item_id');
-$.getJSON('/api/meter_places/', {'unit': unit_id}, function(mp) {
+$.getJSON('/api/meter/places/', {'unit': unit_id}, function(mp) {
     unit=mp;
     $.each(mp.places, function (i, place) {
-        $.getJSON('/api/meter_history/', {'place': place.id || 0,'unit': mp.id}, function (data) {
+        $.getJSON('/api/meter/history/', {'place': place.id || 0,'unit': mp.id}, function (data) {
             seriesOptions[seriesCounter] = {
                 name: place.name || 'Неизвестно',
                 data: data
