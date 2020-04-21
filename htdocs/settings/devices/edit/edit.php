@@ -6,7 +6,6 @@ if (!isset($action)) {
 $device=new \SmartHome\Entity\Device;
 $device->id=filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
 $device->unique_name=filter_input(INPUT_POST,'unique_name');
-$device->module_id=filter_input(INPUT_POST,'module_id',FILTER_VALIDATE_INT);
 $device->uid=filter_input(INPUT_POST,'uid');
 $device->description=filter_input(INPUT_POST,'description');
 $device->classname=filter_input(INPUT_POST,'classname');

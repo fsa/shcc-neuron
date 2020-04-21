@@ -14,7 +14,7 @@ class Devices {
     }
     
     public static function get($uname) {
-        $s=DB::prepare('SELECT p.name AS place_name, m.name AS module,d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id LEFT JOIN places p ON d.place_id=p.id WHERE d.unique_name=?');
+        $s=DB::prepare('SELECT p.name AS place_name, d.* FROM devices d LEFT JOIN places p ON d.place_id=p.id WHERE d.unique_name=?');
         $s->execute([$uname]);
         $dev=$s->fetch(PDO::FETCH_OBJ);
         if(!$dev) {
@@ -43,9 +43,9 @@ class Devices {
         $this->device=$s->fetch();
     }
 
-    public function fetchDeviceByUid($module,$id) {
-        $s=DB::prepare('SELECT d.* FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.uid=?');
-        $s->execute([$module,$id]);
+    public function fetchDeviceByUid($uid) {
+        $s=DB::prepare('SELECT d.* FROM devices d WHERE d.uid=?');
+        $s->execute([$uid]);
         $s->setFetchMode(PDO::FETCH_CLASS,Entity\Device::class);
         $this->device=$s->fetch();
     }
@@ -102,15 +102,15 @@ class Devices {
         return $s->fetch();
     }
     
-    public static function getUniqueNameByUid($module,$uid) {
-        $s=DB::prepare('SELECT unique_name FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.uid=?');
+    public static function getUniqueNameByUid($uid) {
+        $s=DB::prepare('SELECT unique_name FROM devices d WHERE d.uid=?');
         $s->execute([$module,$uid]);
         return $s->fetch(PDO::FETCH_COLUMN);
     }
     
-    public static function refreshMemoryDevices(string $module_name): void {
-        $stmt=DB::prepare('SELECT d.uid,d.classname,d.init_data FROM devices d LEFT JOIN modules m ON d.module_id=m.id WHERE m.name=? AND d.disabled=false');
-        $stmt->execute([$module_name]);
+    public static function refreshMemoryDevices(): void {
+        $stmt=DB::prepare('SELECT d.uid, d.classname, d.init_data FROM devices d WHERE d.disabled=false');
+        $stmt->execute();
         $mem=new Device\MemoryStorage();
         $mem->lockMemory();
         while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {

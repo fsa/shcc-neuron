@@ -17,7 +17,6 @@ if($uid) {
     }
     $init_data_list=$memdev->getInitDataList();
     $device=new SmartHome\Entity\Device;
-    $device->module_id=$memdev->getModuleName();
     $device->uid=$uid;
     $device->unique_name=$uid;
     $device->description=$memdev->getDeviceDescription();
@@ -49,7 +48,6 @@ if($uid) {
 <?php
 Forms::inputString('unique_name',$device->unique_name,'Уникальное имя устройства:');
 Forms::inputHidden('id',$device->id);
-Forms::inputSelect('module_id',$device->module_id,'Модуль*:',\SmartHome\Modules::getModuleList());
 Forms::inputString('uid',$device->uid,'Аппаратное ID устройства*:');
 Forms::inputString('classname',$device->classname,'Класс устройства*:');
 Forms::inputString('description',$device->description,'Описание:');

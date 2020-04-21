@@ -4,18 +4,18 @@ require_once '../../common.php';
 Auth\Session::grantAccess([]);
 $action=filter_input(INPUT_GET,'action');
 if($action) {
-    $id=filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    if(!$id) {
-        httpResponse::showError('Не указан номер модуля');
+    $name=filter_input(INPUT_GET, 'name');
+    if(!$name) {
+        httpResponse::showError('Не указано имя демона');
     }
     switch ($action) {
         case 'enable':
-            $name=\SmartHome\Modules::disableModule($id, false);
-            httpResponse::storeNotification('Модуль '.$name.' включен.');
+#            SmartHome\Daemons::enable($name);
+            httpResponse::storeNotification('Демон модуля '.$name.' будет включен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
         case 'disable':
-            \SmartHome\Modules::disableModule($id, true);
-            $name=httpResponse::storeNotification('Модуль '.$name.' выключен.');
+#            SmartHome\Daemons::disable($name);
+            httpResponse::storeNotification('Демон модуля '.$name.' будет выключен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
     }
     httpResponse::showError('Неизвестный тип действия');
@@ -25,17 +25,15 @@ httpResponse::showNavPills('../%s/', require '../sections.php', 'modules');
 ?>
 <hr>
 <?php
+$active_daemons=SmartHome\Daemons::getActive();
 $devices=new HTML\Table;
 $devices->addField('name','Наименование');
-$devices->addField('namespace', 'Пространство имён');
 $devices->addField('description', 'Описание');
 $devices->addField('daemon', 'Демон');
 $devices->addField('settings', 'Настройки');
-$devices->addField('disabled', 'Активность');
-$devices->setRowCallback(function ($row) {
-    $row->daemon=$row->daemon==true?'Есть':'Нет';
-    $row->settings=$row->settings?'<a href="'.$row->name.'/">Есть</a>':'Нет';
-    $row->disabled=$row->disabled?'<a href="?action=enable&id='.$row->id.'">Включить</a>':'<a href="?action=disable&id='.$row->id.'">Выключить</a>';
+$devices->setRowCallback(function ($row) use ($active_daemons) {
+    $row->daemon=class_exists($row->name.'\\Daemon')?(array_search($row->name.'\\Daemon', $active_daemons)===false?'<a href="./?action=enable&name='.$row->name.'">Включить</a>':'<a href="./?action=disable&name='.$row->name.'">Выключить</a>'):'---';
+    $row->settings=isset($row->settings)?'<a href="'.strtolower($row->name).'/">Настроить</a>':'---';
 });
-$devices->showTable(\SmartHome\Modules::getModules());
+$devices->showTable(new SmartHome\Modules);
 httpResponse::showHtmlFooter();

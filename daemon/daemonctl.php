@@ -22,13 +22,13 @@ switch ($cmd) {
 }
 
 function start() {
-    $daemons=SmartHome\Modules::getActiveDaemons();
+    SmartHome\Devices::refreshMemoryDevices();
+    $daemons=SmartHome\Daemons::getActive();
     $daemons['TTS']='Tts';
-    foreach ($daemons as $name=> $namespace) {
-        $daemon_class=$namespace.'\\Daemon';
-        if (class_exists($daemon_class)) {
+    foreach ($daemons as $name=> $class) {
+        if (class_exists($class)) {
             echo "Starting '$name' daemon.".PHP_EOL;
-            exec("php -f daemon.php \"$daemon_class\"");
+            exec("php -f daemon.php \"$class\"");
         }
     }
 }

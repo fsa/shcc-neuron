@@ -73,4 +73,10 @@ class Daemon implements \SmartHome\DaemonInterface {
     private function playMp3(string $filename) {
         system(sprintf($this->play_sound_cmd,$filename));
     }
+
+    public static function disable(): void {
+        $tts=new Queue;
+        $tts->dropQueue();
+    }
+
 }

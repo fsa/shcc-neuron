@@ -29,7 +29,7 @@ $meters=SmartHome\Devices::getMeters($uid);
 SmartHome\MeterHistory::addRecords($meters, $data, $timestamp);
 $indicators=SmartHome\Devices::getIndicators($uid);
 SmartHome\IndicatorHistory::addRecords($indicators, $data, $timestamp);
-$name=SmartHome\Devices::getUniqueNameByUid($module, $uid);
+$name=SmartHome\Devices::getUniqueNameByUid($uid);
 $dir='../../custom/events/';
 if ($name and file_exists($dir.$name.'.php')) {
     chdir($dir);
