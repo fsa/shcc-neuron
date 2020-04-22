@@ -10,11 +10,11 @@ if($action) {
     }
     switch ($action) {
         case 'enable':
-#            SmartHome\Daemons::enable($name);
+            SmartHome\Daemons::enable($name);
             httpResponse::storeNotification('Демон модуля '.$name.' будет включен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
         case 'disable':
-#            SmartHome\Daemons::disable($name);
+            SmartHome\Daemons::disable($name);
             httpResponse::storeNotification('Демон модуля '.$name.' будет выключен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
     }
