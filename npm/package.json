@@ -27,7 +27,7 @@
         "gulp-sass": "^4.0.2",
         "highcharts": "^7.1.2",
         "html5shiv": "^3.7.3",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "jstree": "^3.3.9",
         "popper.js": "^1.16.1"
     },
