@@ -16,9 +16,9 @@ if (!$meter) {
 httpResponse::addHeader('<script src="/libs/highcharts/highstock.js"></script>');
 httpResponse::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 httpResponse::showHtmlHeader($name);
-httpResponse::showNavPills('./?unit=%s', SmartHome\MeterUnits::getUnitsList(), $unit);
 ?>
 <script src="highstock.js"></script>
+<ul class="nav nav-pills justify-content-center" id="charts_list"></ul>
 <div style="width: 100%; height: 500px;" id="chart"></div>
 <?php
 httpResponse::showHtmlFooter();

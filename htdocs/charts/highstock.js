@@ -1,6 +1,7 @@
-var units,unit;
-var seriesOptions=[], seriesCounter = 0;
-var chart;
+`use strict`;
+let units,unit;
+let seriesOptions=[], seriesCounter = 0;
+let chart;
 
 Highcharts.setOptions({
     lang: {
@@ -26,10 +27,10 @@ Highcharts.setOptions({
 });
 
 function createChart(unit) {
-    title=$("<div/>").html(unit.name).text();
-    units=$("<div/>").html(unit.unit).text();
-    minimal=Number(unit.minimal);
-    maximal=Number(unit.maximal);
+    let title=$("<div/>").html(unit.name).text();
+    let units=$("<div/>").html(unit.unit).text();
+    let minimal=Number(unit.minimal);
+    let maximal=Number(unit.maximal);
     chart=Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -64,9 +65,6 @@ function createChart(unit) {
         credits: {
             href: 'http://tavda.net/',
             text: 'Tavda.net'
-        },
-        title: {
-            text: title
         },
         xAxis: {
             type: 'datetime',
@@ -121,7 +119,7 @@ function afterSetExtremes(e) {
     chart.showLoading();
     seriesCounter = 0;
     $.each(unit.places, function (i, place) {
-        params={'place': place.id||0,'unit': unit.id};
+        let params={'place': place.id||0,'unit': unit.id};
         params.from=new Date(e.min).toJSON();
         params.to=new Date(e.max).toJSON();
         $.getJSON('/api/meter/history/', params, function (data) {
@@ -137,20 +135,33 @@ function afterSetExtremes(e) {
     });
 }
 
-var unit_id=$('#navpills_item_id').attr('navpills_item_id');
-$.getJSON('/api/meter/places/', {'unit': unit_id}, function(mp) {
-    unit=mp;
-    $.each(mp.places, function (i, place) {
-        $.getJSON('/api/meter/history/', {'place': place.id || 0,'unit': mp.id}, function (data) {
-            seriesOptions[seriesCounter] = {
-                name: place.name || 'Неизвестно',
-                data: data
-            };
-            seriesCounter += 1;
-            if (seriesCounter === mp.places.length) {
-                createChart(mp);
-            }
+function startChart(chart_id) {
+    $.getJSON('/api/meter/places/', {'unit': chart_id}, function(mp) {
+        unit=mp;
+        $.each(mp.places, function (i, place) {
+            $.getJSON('/api/meter/history/', {'place': place.id || 0,'unit': mp.id}, function (data) {
+                seriesOptions[seriesCounter] = {
+                    name: place.name || 'Неизвестно',
+                    data: data
+                };
+                seriesCounter += 1;
+                if (seriesCounter === mp.places.length) {
+                    createChart(mp);
+                }
+            });
         });
-    });
 
+    });
+}
+
+var chart_id = parseInt(location.hash.substr(1),10);
+if(isNaN(chart_id)) {
+    chart_id=1;
+}
+$.getJSON('/api/meter/units/', function(units) {
+    $.each(units, function(id, unit){
+        $('#charts_list').append(`<li class="nav-item"><a class="nav-link${id==chart_id?' active':''}" href="./?unit=${id}#${id}" onClick="startChart(${id})">${unit.name}</a></li>`);
+    });
 });
+startChart(chart_id);
+
