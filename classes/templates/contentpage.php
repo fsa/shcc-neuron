@@ -19,8 +19,9 @@ class ContentPage {
 <title><?=is_null($this->title)?$this->site_info['title']:$this->title.' :: '.$this->site_info['title']?></title>
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#527779">
+<link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/bootstrap.css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <script src="/libs/jquery/jquery.min.js"></script>
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>

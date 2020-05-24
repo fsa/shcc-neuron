@@ -1,0 +1,13 @@
+{
+    "name": "SHCC",
+    "short_name": "SHCC",
+    "lang": "ru-RU",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#527779",
+    "background_color": "#527779",
+    "icons": [{
+	"src": "favicon.png",
+	"size": "512x512"
+    }]
+}
