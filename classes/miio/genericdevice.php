@@ -10,11 +10,10 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     private $timediff;
     private $connection;
     private $updated;
-
     private $data;
 
     public function __construct(GenericDevice $device=null) {
-        if(!is_null($device)) {
+        if (!is_null($device)) {
             $this->uid=$device->getDeviceId();
             $this->location=$device->getDeviceAddr();
             $this->token=$device->getDeviceToken();
@@ -23,7 +22,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getDeviceDescription(): string {
-        return "Универсальное устройство";
+        return "Неизвестное устройство";
     }
 
     public function getDeviceId(): string {
@@ -31,7 +30,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getDeviceStatus(): string {
-        return sprintf('Токен: %s. Адрес: %s',$this->token?'указан':'укажите в settings.json',$this->location)??'Нет данных';
+        return sprintf('Токен: %s. Адрес: %s', $this->token?'указан':'не указан', $this->location)??'Нет данных';
     }
 
     public function getInitDataList(): array {
@@ -54,7 +53,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return null;
     }
 
-    public function init($device_id,$init_data): void {
+    public function init($device_id, $init_data): void {
         $this->uid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
@@ -78,7 +77,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function update(MiPacket $pkt) {
-        if($pkt->isHelloPacket()) {
+        if ($pkt->isHelloPacket()) {
             $this->uid=$pkt->getDeviceId();
             $this->location=$pkt->getDeviceAddr();
             $this->timediff=$pkt->getDeviceTimestamp()-time();
@@ -113,7 +112,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return $connection->getPacket();
     }
 
-
     private function getConnection(): SocketServer {
         if (!is_null($this->connection)) {
             return $this->connection;
@@ -126,4 +124,5 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     public function disconnect(): void {
         $this->connection=null;
     }
+
 }

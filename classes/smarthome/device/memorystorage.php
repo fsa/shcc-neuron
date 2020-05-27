@@ -42,7 +42,7 @@ class MemoryStorage {
     }
 
     public function setDevice(string $uid, \SmartHome\DeviceInterface $object): void {
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_acquire($this->sem);
         }
         $devices=shm_get_var($this->shm, 0);
@@ -53,31 +53,31 @@ class MemoryStorage {
             shm_put_var($this->shm, 0, $devices);
         }
         shm_put_var($this->shm, $key, $object);
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_release($this->sem);
         }
     }
 
     public function getDevice(string $uid): ?\SmartHome\DeviceInterface {
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_acquire($this->sem);
         }
         $devices=shm_get_var($this->shm, 0);
         $key=array_search($uid, $devices);
         $device=($key===false)?null:shm_get_var($this->shm, $key);
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_release($this->sem);
         }
         return $device;
     }
 
     public function existsDevice(string $uid): bool {
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_acquire($this->sem);
         }
         $devices=shm_get_var($this->shm, 0);
         $key=array_search($uid, $devices);
-        if(is_null($this->lock)) {
+        if (is_null($this->lock)) {
             sem_release($this->sem);
         }
         return $key!==false;
@@ -90,9 +90,13 @@ class MemoryStorage {
         array_shift($this->stmt);
     }
 
+    public function selectDeviceList(array $devices_id): void {
+        $this->stmt=$devices_id;
+    }
+
     public function fetch(): ?object {
         $uid=array_shift($this->stmt);
-        if(is_null($uid)) {
+        if (is_null($uid)) {
             return null;
         }
         $device=$this->getDevice($uid);
@@ -102,12 +106,19 @@ class MemoryStorage {
         $result->name=$device->getDeviceDescription();
         $result->status=$device->getDeviceStatus();
         $date=$device->getLastUpdate();
-        $result->updated=$date==0?'Offline':date('d.m.Y H:i:s',$date);
+        $result->updated=$date==0?'Нет данных':date('d.m.Y H:i:s', $date);
         return $result;
     }
 
     public function closeCursor(): void {
         $this->stmt=null;
+    }
+
+    public static function getDevicesUids() {
+        $mem=new self;
+        $devices=shm_get_var($mem->shm, 0);
+        unset($devices[0]);
+        return $devices;
     }
 
 }

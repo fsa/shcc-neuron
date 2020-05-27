@@ -407,7 +407,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     }
 
     public function getDeviceStatus(): string {
-        return $this->power=="on"?"Включена":"Выключена";
+        return 'Состояние: '.is_null($this->power)?'Нет данных':$this->power;
     }
 
     public function getSupportValue(): array {
