@@ -103,8 +103,8 @@ class MemoryStorage {
         $result=new \stdClass();
         $result->obj=$device;
         $result->uid=$uid;
-        $result->name=$device->getDeviceDescription();
-        $result->status=$device->getDeviceStatus();
+        $result->name=$device->getDescription();
+        $result->status=$device->getStateString();
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Нет данных':date('d.m.Y H:i:s', $date);
         return $result;

@@ -10,35 +10,39 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     private $timediff;
     private $connection;
     private $updated;
-    private $data;
+    private $data="";
 
     public function __construct(GenericDevice $device=null) {
         if (!is_null($device)) {
-            $this->uid=$device->getDeviceId();
+            $this->uid=$device->getId();
             $this->location=$device->getDeviceAddr();
             $this->token=$device->getDeviceToken();
             $this->timediff=$device->getDeviceTimeDiff();
         }
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Неизвестное устройство";
     }
 
-    public function getDeviceId(): string {
+    public function getId(): string {
         return $this->uid;
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        return ['locatation'=>$this->location];
+    }
+
+    public function getStateString(): string {
         return sprintf('Токен: %s. Адрес: %s', $this->token?'указан':'не указан', $this->location)??'Нет данных';
     }
 
     public function getInitDataList(): array {
-        return [];
+        return ['token'=>'Токен'];
     }
 
     public function getInitDataValues(): array {
-        return [];
+        return ['token'=>$this->token];
     }
 
     public function getLastUpdate(): int {

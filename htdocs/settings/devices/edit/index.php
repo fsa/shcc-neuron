@@ -21,7 +21,7 @@ if ($uid) {
     $device=new SmartHome\Entity\Device;
     $device->uid=$uid;
     $device->unique_name=$uid;
-    $device->description=$memdev->getDeviceDescription();
+    $device->description=$memdev->getDescription();
     $device->classname=get_class($memdev);
     $device->setInitData($memdev->getInitDataValues());
     $device->place_id=0;

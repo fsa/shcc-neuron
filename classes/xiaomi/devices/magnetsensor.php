@@ -45,11 +45,19 @@ class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface
         return $this->status;
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Xiaomi Smart Door and Windows Sensor";
     }
 
-    public function getDeviceStatus(): string {
+
+    public function getState(): array {
+        return [
+            'status'=>$this->status,
+            'voltage'=>$this->voltage
+                ];
+    }
+
+    public function getStateString(): string {
         $result=[];
         switch ($this->status) {
             case null:

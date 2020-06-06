@@ -25,7 +25,7 @@ $devices->setRowCallback(function ($row) {
         $row->info='';
         $row->updated='';
     } else {
-        $row->info=$dev->getDeviceStatus();
+        $row->info=$dev->getStateString();
         $updated=$dev->getLastUpdate();
         $row->updated=$updated?date('d.m.Y H:i:s', $updated):'Нет данных';
     }

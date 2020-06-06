@@ -38,7 +38,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         if (!$pkt->isMiIOPacket()) {
             return;
         }
-        $uid=$pkt->getDeviceId();
+        $uid=$pkt->getId();
         if ($uid=='ffffffffffffffff') {
             return;
         }
@@ -48,8 +48,8 @@ class Daemon implements \SmartHome\DaemonInterface {
             $device=new GenericDevice;
             if (isset($this->tokens[$uid])) {
                 $device->setDeviceToken($this->tokens[$uid]);
+                $device->update($pkt);
             }
-            $device->update($pkt);
             $this->storage->setDevice(self::DAEMON_NAME.'_'.$uid, $device);
             $this->storage->releaseMemory();
         } else {

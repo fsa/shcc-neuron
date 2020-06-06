@@ -28,15 +28,27 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         return ['temperature'=>'Температура воздуха, &deg;C', 'humidity'=>'Относительная влажность, %', 'pressure'=>'Атмосферное давление, мм.рт.ст.', 'wind_speed'=>'Скорость ветра, м/с', 'wind_direction'=>'Направление ветра, &deg;'];
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return 'Текущая погода с сайта Gismeteo.ru';
     }
 
-    public function getDeviceId(): string {
+    public function getId(): string {
         return $this->uid;
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        return [
+            'temperature'=>$this->getTemperature(),
+            'temp_feels_like'=>$this->getTempFeelsLike(),
+            'humidity'=>$this->getHumidity(),
+            'pressure'=>$this->getPressure(),
+            'description'=>$this->weather->response->description->full,
+            'wind_speed'=>$this->weather->response->wind->speed->m_s,
+            'wind_direction'=>$this->weather->response->wind->direction->degree
+                ];
+    }
+
+    public function getStateString(): string {
         if (is_null($this->weather)) {
             return 'Информация о погоде отсутствует';
         }
