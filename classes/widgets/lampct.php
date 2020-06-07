@@ -16,7 +16,7 @@ EOS;
         httpResponse::showCard('<div class="custom-control custom-switch">
 <input type="checkbox" class="custom-control-input device-power" device_name="'.$name.'" device_action="power" id="'.$name.'_power">
 <label class="custom-control-label" for="'.$name.'_power">'.$description.'</label>
-</div>', $body, '<span id="'.$name.'_state">Нет данных</span>');
+</div>', $body, '<span id="'.$name.'_state"></span>');
 
     }
 }
