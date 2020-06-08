@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function setState(device_name, state) {
     if (state !== '') {
         let Data = new Date();
-        state = Data.toLocaleTimeString() + state;
+        state = Data.toLocaleTimeString() + ' ' + state;
     }
     document.querySelector('#' + device_name + '_state').innerHTML = state;
 }

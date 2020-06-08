@@ -109,7 +109,7 @@ class Devices {
 
     public static function getUniqueNameByUid($uid) {
         $s=DB::prepare('SELECT unique_name FROM devices d WHERE d.uid=?');
-        $s->execute([$module, $uid]);
+        $s->execute([$uid]);
         return $s->fetch(PDO::FETCH_COLUMN);
     }
 

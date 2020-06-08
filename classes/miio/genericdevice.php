@@ -46,7 +46,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getLastUpdate(): int {
-        return $this->updated;
+        return $this->updated??0;
     }
 
     public function getModuleName(): string {
