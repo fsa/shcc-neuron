@@ -76,15 +76,24 @@ function updateDeviceState(device_name) {
         if (result.error) {
             setState(device_name, result.error);
         } else {
-            for (var key in result) {
-                let value = result[key];
-                if (typeof value === 'boolean') {
-                    document.querySelector('#' + device_name + '_' + key).checked = value;
-                } else {
-                    document.querySelector('#' + device_name + '_' + key).value = value;
-                }
+            for (var key in result.properties) {
+                document.querySelectorAll('#' + device_name + '_' + key).forEach((item)=>{
+                    setElementValue(item, result.properties[key]);
+                });
             }
             setState(device_name, '');
         }
     });
+}
+
+function setElementValue(e, value) {
+    if (e.nodeName === 'INPUT') {
+        if(e.type === 'checkbox') {
+            e.checked = value;
+        } else {
+            e.value = value;
+        }
+    } else {
+        e.innerHTML = value;
+    }
 }

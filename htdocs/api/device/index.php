@@ -17,7 +17,6 @@ if(file_exists($device_name.'.php')) {
         httpResponse::showError($ex->getMessage());
     }
 }
-//TODO: обработка данных устройства
 $device=SmartHome\Devices::get($device_name);
 if(is_null($device)) {
     httpResponse::error(404);
@@ -41,4 +40,4 @@ if($request) {
         httpResponse::showError($ex->getMessage());
     }
 }
-httpResponse::json($device->getState());
+httpResponse::json(['properties'=>$device->getState(), 'last_update'=>$device->getLastUpdate()]);
