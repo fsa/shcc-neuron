@@ -37,6 +37,9 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
     }
 
     public function getState(): array {
+        if(is_null($this->weather)) {
+            return [];
+        }
         return [
             'temperature'=>$this->getTemperature(),
             'temp_feels_like'=>$this->getTempFeelsLike(),
