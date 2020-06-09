@@ -1,12 +1,8 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
-    let device_states = document.querySelectorAll('.device-state');
-    device_states.forEach(item => {
-        let device_name = item.getAttribute('device_name');
-        updateDeviceState(device_name);
-    });
-    device_states.forEach(item => {
+    updateDevices();
+    document.querySelectorAll('.action-state').forEach(item => {
         item.addEventListener('click', (e) => {
             if (e.target) {
                 let device_name = e.target.getAttribute('device_name');
@@ -15,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     // boolean
-    document.querySelectorAll('.device-power').forEach(item => {
+    document.querySelectorAll('.action-boolean').forEach(item => {
         item.addEventListener('change', (e) => {
             if (e.target) {
                 let device_name = e.target.getAttribute('device_name');
@@ -24,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
     //integer
-    document.querySelectorAll('.device-bright, .device-ct').forEach(item => {
+    document.querySelectorAll('.action-integer').forEach(item => {
         item.addEventListener('change', (e) => {
             if (e.target) {
                 let device_name = e.target.getAttribute('device_name');
@@ -64,23 +60,36 @@ function sendCommand(device_name, command) {
     });
 }
 
+function updateDevices () {
+    let device_names=new Set();
+    document.querySelectorAll('[device_name]').forEach(item => {
+        device_names.add(item.getAttribute('device_name'));
+    });
+    device_names.forEach(item => {
+        updateDeviceState(item);
+    });
+}
+
 function updateDeviceState(device_name) {
     fetch('/api/device/?name=' + device_name)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                }
-                setState(device_name, 'Ошибка');
-                console.log(response);
-            }).then(result => {
+    .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        setState(device_name, 'Ошибка');
+        console.log(response);
+    }).then(result => {
         if (result.error) {
             setState(device_name, result.error);
         } else {
             for (var key in result.properties) {
-                document.querySelectorAll('#' + device_name + '_' + key).forEach((item)=>{
+                document.querySelectorAll('[device_name="' + device_name + '"][device_property="' + key + '"]').forEach((item)=>{
                     setElementValue(item, result.properties[key]);
                 });
             }
+            document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item)=>{
+                setElementValue(item, new Date(result.last_update*1000).toLocaleString());
+            });
             setState(device_name, '');
         }
     });

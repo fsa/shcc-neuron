@@ -86,8 +86,8 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         if(!is_null($this->humidity)) {
             $state['humidity']=round($this->humidity);
         }
-        if(!is_null($this->pressureKPa)) {
-            $state['pressure']=round($this->pressureKPa);
+        if(!is_null($this->pressure)) {
+            $state['pressure']=round($this->pressure);
         }
         if(!is_null($this->voltage)) {
             $state['voltage']=$this->voltage;
