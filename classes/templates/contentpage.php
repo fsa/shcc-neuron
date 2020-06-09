@@ -125,13 +125,13 @@ if(Auth::memberOf()) {
             case 'danger':
             case 'info':
             case 'dark':
-                $style_class='bg-'.$this->style.' text-white';
+                $style_class='bg-'.$style.' text-white';
                 break;
             case 'warning':
             case 'light':
             case 'white':
             case 'transparent':
-                $style_class='bg-'.$this->style.' text-dark';
+                $style_class='bg-'.$style.' text-dark';
                 break;
             default:
                 $style_class='bg-info text-dark';
