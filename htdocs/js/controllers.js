@@ -106,3 +106,8 @@ function setElementValue(e, value) {
         e.innerHTML = value;
     }
 }
+
+setInterval(
+  () => updateDevices(),
+  30000
+);
