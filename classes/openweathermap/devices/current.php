@@ -49,7 +49,8 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
             'pressure'=>$this->getPressure(),
             'description'=>$this->weather->weather[0]->description,
             'wind_speed'=>$this->weather->wind->speed,
-            'wind_direction'=>$this->weather->wind->deg
+            'wind_direction'=>$this->weather->wind->deg,
+            'wind_direction_string'=>$this->getWindDirection()
                 ];    }
 
     public function getStateString(): string {
