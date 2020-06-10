@@ -88,7 +88,7 @@ function updateDeviceState(device_name) {
                 });
             }
             document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item)=>{
-                setElementValue(item, new Date(result.last_update*1000).toLocaleString());
+                setElementValue(item, result.last_update>0?new Date(result.last_update*1000).toLocaleString():'Нет данных');
             });
             setState(device_name, '');
         }

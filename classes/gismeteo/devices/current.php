@@ -41,9 +41,9 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
             return [];
         }
         return [
-            'temperature'=>$this->getTemperature(),
-            'temp_feels_like'=>$this->getTempFeelsLike(),
-            'humidity'=>$this->getHumidity(),
+            'temperature'=>round($this->getTemperature(),1),
+            'temp_feels_like'=>round($this->getTempFeelsLike(),1),
+            'humidity'=>round($this->getHumidity()),
             'pressure'=>$this->getPressure(),
             'description'=>$this->weather->response->description->full,
             'wind_speed'=>$this->weather->response->wind->speed->m_s,
