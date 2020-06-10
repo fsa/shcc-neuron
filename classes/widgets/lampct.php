@@ -16,7 +16,7 @@ EOS;
         httpResponse::showCard('<div class="custom-control custom-switch">
 <input type="checkbox" class="custom-control-input action-boolean" device_name="'.$device_name.'" device_action="power" device_property="power" id="'.$device_name.'_power">
 <label class="custom-control-label" for="'.$device_name.'_power">'.$title.'</label>
-</div>', $body, '<span device_name="'.$device_name.'" device_property="last_update"></span> <span id="'.$device_name.'_state"></span>');
+</div>', $body, '<span device_name="'.$device_name.'" device_property="last_update"></span>');
 
     }
 }
