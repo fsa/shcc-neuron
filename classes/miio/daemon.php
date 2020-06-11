@@ -38,7 +38,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         if (!$pkt->isMiIOPacket()) {
             return;
         }
-        $uid=$pkt->getId();
+        $uid=$pkt->getDeviceId();
         if ($uid=='ffffffffffffffff') {
             return;
         }
