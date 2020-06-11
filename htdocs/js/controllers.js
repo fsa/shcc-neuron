@@ -1,7 +1,7 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
-    updateDevices();
+    updatePage();
     document.querySelectorAll('.action-state').forEach(item => {
         item.addEventListener('click', (e) => {
             if (e.target) {
@@ -75,7 +75,7 @@ function sendCommand(device_name, command) {
     });
 }
 
-function updateDevices() {
+function updatePage() {
     let device_names = new Set();
     document.querySelectorAll('[device_name]').forEach(item => {
         device_names.add(item.getAttribute('device_name'));
@@ -83,6 +83,7 @@ function updateDevices() {
     device_names.forEach(item => {
         updateDeviceState(item);
     });
+    updateTtsMessageLog();
 }
 
 function updateDeviceState(device_name) {
@@ -107,6 +108,23 @@ function updateDeviceState(device_name) {
     });
 }
 
+function updateTtsMessageLog() {
+    fetch('/api/tts/messages/')
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+                document.querySelector('#tts_message_log').innerHTML='Ошибка';
+            }).then(result => {
+        if (result.error) {
+            document.querySelector('#tts_message_log').innerHTML=result.error;
+        } else {
+            document.querySelector('#tts_message_log').innerHTML=result.join('<br>');
+        }
+    });
+
+}
+
 function setElementValue(e, value) {
     if (e.nodeName === 'INPUT') {
         if (e.type === 'checkbox') {
@@ -119,4 +137,4 @@ function setElementValue(e, value) {
     }
 }
 
-setInterval(() => updateDevices(), 30000);
+setInterval(() => updatePage(), 30000);
