@@ -2,7 +2,7 @@
 /settings.php
 /backup/*.sql
 /config/*.conf
-/npm/node_modules/*
+/src/node_modules/*
 /systemd/shcc.service
 /systemd/shcc-minutely.service
 /systemd/shcc-minutely.timer

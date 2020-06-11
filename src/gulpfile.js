@@ -7,7 +7,7 @@ const {src, dest, watch, series, parallel} = require('gulp'),
     bs = require('browser-sync').create();
 
 function scssTask() {
-    return src('../src/scss/**/*.+(scss|sass)')
+    return src('scss/**/*.+(scss|sass)')
             .pipe(sass(
                     {
                         outputStyle: 'expanded',
@@ -58,19 +58,11 @@ function bootstrapTask() {
             .pipe(dest('../htdocs/libs/bootstrap'));
 }
 
-function html5shivTask() {
-    return src([
-        'node_modules/html5shiv/dist/html5shiv.min.js'
-    ])
-            .pipe(dest('../htdocs/libs'))
-            .pipe(bs.stream());
-}
-
 function watchTask() {
     bs.init({
         proxy: "shcc.localhost"
     });
-    watch('../src/scss/**/*.+(scss|sass)', scssTask);
+    watch('scss/**/*.+(scss|sass)', scssTask);
     watch('../htdocs/**/*.+(php|html|css|js)', bs.reload);
 }
 
@@ -84,7 +76,6 @@ exports.scss = scssTask;
 exports.highcharts = highchartsTask;
 exports.jquery = jqueryTask;
 exports.jstree = jstreeTask;
-exports.html5shiv = html5shivTask;
-exports.jslibs = parallel(jqueryTask,jstreeTask,bootstrapTask,highchartsTask,html5shivTask);
+exports.jslibs = parallel(jqueryTask,jstreeTask,bootstrapTask,highchartsTask);
 exports.watch = watchTask;
 exports.default = defaultTask;
