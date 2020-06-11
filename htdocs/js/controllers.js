@@ -33,15 +33,15 @@ document.addEventListener('DOMContentLoaded', function () {
 function setState(device_name, state, timestamp = 0) {
     let style = false;
     if (timestamp === 0) {
-        let Data = new Date();
-        state = Data.toLocaleString() + ' ' + state;
+        let datetime = new Date();
+        state = datetime.toLocaleString() + ' ' + state;
         style = true;
     } else {
-        let datetime=new Date(timestamp * 1000);
+        let datetime=new Date(timestamp);
+        state = datetime.toLocaleString() + ' ' + state;
         if (new Date()-datetime>3600000) {
             style = true;
         }
-        state = datetime.toLocaleString() + ' ' + state;
     }
     document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item) => {
         setElementValue(item, state);
@@ -70,7 +70,7 @@ function sendCommand(device_name, command) {
         if (result.error) {
             setState(device_name, result.error);
         } else {
-            setState(device_name, '', new Date().toLocaleString());
+            setState(device_name, '', Date.now());
         }
     });
 }
@@ -92,7 +92,7 @@ function updateDeviceState(device_name) {
                 if (response.status === 200) {
                     return response.json();
                 }
-                setState(device_name, 'Ошибка', true);
+                setState(device_name, 'Ошибка');
                 console.log(response);
             }).then(result => {
         if (result.error) {
@@ -103,7 +103,7 @@ function updateDeviceState(device_name) {
                     setElementValue(item, result.properties[key]);
                 });
             }
-            setState(device_name, result.last_update > 0 ? '': 'Нет данных', result.last_update);
+            setState(device_name, result.last_update > 0 ? '': 'Нет данных', result.last_update*1000);
         }
     });
 }
