@@ -55,7 +55,7 @@ server {
     access_log  /var/log/nginx/shcc_access.log;
     error_log  /var/log/nginx/shcc_error.log;
 
-    root /var/www/shcc/htdocs;
+    root /var/www/shcc/webroot;
 
     index index.php;
 
@@ -225,7 +225,7 @@ echo password_hash('password', PASSWORD_DEFAULT);
 
 Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении в папке /var/www/shcc необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки systemd/sample в папке systemd. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
 ``` bash
-# cd /var/www/shcc/systemd
+# cd /var/www/shcc/service/systemd
 # cp sample/shcc.service ./
 # cp sample/shcc-minutely.service ./
 # cp sample/shcc-minutely.timer ./
@@ -237,10 +237,10 @@ echo password_hash('password', PASSWORD_DEFAULT);
 Теперь вы можете активировать и запустит требуемые юниты:
 ```bash
 # systemctl enable shcc.service
-Created symlink /etc/systemd/system/multi-user.target.wants/shcc.service → /var/www/shcc/systemd/shcc.service.
-Created symlink /etc/systemd/system/shcc.service → /var/www/shcc/systemd/shcc.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/shcc.service → /var/www/shcc/service/systemd/shcc.service.
+Created symlink /etc/systemd/system/shcc.service → /var/www/shcc/service/systemd/shcc.service.
 # systemctl enable shcc-minutely.timer
-Created symlink /etc/systemd/system/timers.target.wants/shcc-minutely.timer → /var/www/shcc/systemd/shcc-minutely.timer.
+Created symlink /etc/systemd/system/timers.target.wants/shcc-minutely.timer → /var/www/shcc/service/systemd/shcc-minutely.timer.
 Created symlink /etc/systemd/system/shcc-minutely.timer → /var/www/shcc/systemd/shcc-minutely.timer.
 # systemctl start shcc.service
 # systemctl start shcc-minutely.timer

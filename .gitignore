@@ -1,12 +1,13 @@
 /nbproject/private/
 /settings.php
-/backup/*.sql
 /config/*.conf
 /src/node_modules/*
-/systemd/shcc.service
-/systemd/shcc-minutely.service
-/systemd/shcc-minutely.timer
+/service/systemd/shcc.service
+/service/systemd/shcc-minutely.service
+/service/systemd/shcc-minutely.timer
 /custom/*
+!/custom/backup/
+/custom/backup/*.sql
 !/custom/lib.php
 !/custom/functions.php
 !/custom/minutely.sh
@@ -14,3 +15,5 @@
 !/custom/dashboard/
 /custom/dashboard/*
 !/custom/dashboard/*.sample.php
+!/custom/sound/dingdong.mp3
+!/custom/sound/notification.mp3

@@ -16,7 +16,7 @@ function scssTask() {
             ))
             .pipe(autoprefixer(['last 15 versions', '>1%', 'ie 8']))
             .pipe(cssnano())
-            .pipe(dest('../htdocs'))
+            .pipe(dest('../webroot'))
             .pipe(bs.stream());
 };
 
@@ -29,7 +29,7 @@ function highchartsTask() {
         'node_modules/highcharts/modules/exporting.js',
         'node_modules/highcharts/modules/exporting.js.map'
     ])
-            .pipe(dest('../htdocs/libs/highcharts'));
+            .pipe(dest('../webroot/libs/highcharts'));
 }
 
 function jstreeTask() {
@@ -40,14 +40,14 @@ function jstreeTask() {
         'node_modules/jstree/dist/themes/default/40px.png',
         'node_modules/jstree/dist/themes/default/style.min.css'
     ])
-            .pipe(dest('../htdocs/libs/jstree'));
+            .pipe(dest('../webroot/libs/jstree'));
 }
 
 function jqueryTask() {
     return src([
         'node_modules/jquery/dist/jquery.min.js'
     ])
-            .pipe(dest('../htdocs/libs/jquery'));
+            .pipe(dest('../webroot/libs/jquery'));
 }
 
 function bootstrapTask() {
@@ -55,7 +55,7 @@ function bootstrapTask() {
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js.map'       
     ])
-            .pipe(dest('../htdocs/libs/bootstrap'));
+            .pipe(dest('../webroot/libs/bootstrap'));
 }
 
 function watchTask() {
@@ -63,7 +63,7 @@ function watchTask() {
         proxy: "shcc.localhost"
     });
     watch('scss/**/*.+(scss|sass)', scssTask);
-    watch('../htdocs/**/*.+(php|html|css|js)', bs.reload);
+    watch('../webroot/**/*.+(php|html|css|js)', bs.reload);
 }
 
 function defaultTask(cb) {

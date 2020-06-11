@@ -7,7 +7,7 @@ After=postgresql.service
 
 [Service]
 Type=forking
-WorkingDirectory=/var/www/shcc/daemon/
+WorkingDirectory=/var/www/shcc/service/
 RuntimeDirectory=shcc
 LogsDirectory=shcc
 CacheDirectory=shcc
