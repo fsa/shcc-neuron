@@ -83,7 +83,8 @@ function updatePage() {
     device_names.forEach(item => {
         updateDeviceState(item);
     });
-    updateTtsMessageLog();
+    updateMessageLog('/api/tts/messages/', '#tts_message_log');
+    updateMessageLog('/api/system/state/', '#system_state');
 }
 
 function updateDeviceState(device_name) {
@@ -108,21 +109,20 @@ function updateDeviceState(device_name) {
     });
 }
 
-function updateTtsMessageLog() {
-    fetch('/api/tts/messages/')
+function updateMessageLog(url, selector) {
+    fetch(url)
             .then(response => {
                 if (response.status === 200) {
                     return response.json();
                 }
-                document.querySelector('#tts_message_log').innerHTML='Ошибка';
+                document.querySelector(selector).innerHTML='Ошибка';
             }).then(result => {
         if (result.error) {
-            document.querySelector('#tts_message_log').innerHTML=result.error;
+            document.querySelector(selector).innerHTML=result.error;
         } else {
-            document.querySelector('#tts_message_log').innerHTML=result.join('<br>');
+            document.querySelector(selector).innerHTML=result.join('<br>');
         }
     });
-
 }
 
 function setElementValue(e, value) {
