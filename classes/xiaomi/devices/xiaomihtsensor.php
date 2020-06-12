@@ -48,11 +48,25 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
         return $this->humidity;
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Xiaomi Mi Smart Temperature and Humidity Sensor";
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        $state=[];
+        if(!is_null($this->temperature)) {
+            $state['temperature']=round($this->temperature,1);
+        }
+        if(!is_null($this->humidity)) {
+            $state['humidity']=round($this->humidity);
+        }
+        if(!is_null($this->voltage)) {
+            $state['voltage']=$this->voltage;
+        }
+        return $state;
+    }
+
+    public function getStateString(): string {
         $result=[];
         if($this->temperature) {
             $result[]=sprintf('Температура воздуха %+.1f &deg;C.',$this->temperature);

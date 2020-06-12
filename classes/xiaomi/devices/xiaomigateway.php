@@ -6,7 +6,7 @@
 
 namespace Xiaomi\Devices;
 
-class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterface {
+class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterface, \SmartHome\Device\Capability\PowerInterface {
     
     const MULTICAST_ADDRESS='224.0.0.50';
     const MULTICAST_PORT=9898;
@@ -158,11 +158,18 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         return $this->illumination;
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Xiaomi Mi Smart Multifunctional Gateway";
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        return [
+            'bright'=>$this->bright,
+            'illumination'=>$this->illumination
+                ];
+    }
+
+    public function getStateString(): string {
         $result=[];
         if(!is_null($this->bright)) {
             $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';
@@ -179,6 +186,26 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
 
     public function getDeviceMeters(): array {
         return ['illumination'=>'Датчик освещённости'];
+    }
+
+    public function getPower(): bool {
+        return $this->bright!=0;
+    }
+
+    public function setPower(bool $value) {
+        if($value) {
+            $this->setPowerOn();
+        } else {
+            $this->setPowerOff();
+        }
+    }
+
+    public function setPowerOff() {
+        $this->sendMessage($this->prepareCommand(['rgb'=>hexdec('64FFFFFF')]));
+    }
+
+    public function setPowerOn() {
+        $this->sendMessage($this->prepareCommand(['rgb'=>hexdec('FFFFFF')]));
     }
 
 }

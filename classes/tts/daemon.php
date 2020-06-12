@@ -64,7 +64,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         }
         $voice_file=$this->tts_provider->getVoiceFile($text);
         if(time()-$this->last_message_time>self::PRE_SOUND_PERIOD) {
-            $this->playMp3(__DIR__.'/../../sound/'.$this->pre_sound);
+            $this->playMp3(__DIR__.'/../../sound/custom/'.$this->pre_sound);
         }
         $this->playMp3($voice_file);
         $this->last_message_time=time();        
@@ -73,4 +73,10 @@ class Daemon implements \SmartHome\DaemonInterface {
     private function playMp3(string $filename) {
         system(sprintf($this->play_sound_cmd,$filename));
     }
+
+    public static function disable(): void {
+        $tts=new Queue;
+        $tts->dropQueue();
+    }
+
 }

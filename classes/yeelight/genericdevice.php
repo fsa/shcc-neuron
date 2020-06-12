@@ -382,11 +382,11 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         return 'yeelight';
     }
 
-    public function getDeviceId(): string {
+    public function getId(): string {
         return 'yeelight_'.$this->id;
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         switch ($this->model) {
             case "lamp":
                 return "Настольная лампа";
@@ -406,8 +406,18 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         }
     }
 
-    public function getDeviceStatus(): string {
-        return $this->power=="on"?"Включена":"Выключена";
+    public function getState(): array {
+        $this->refreshState();
+        # Учесть режим работы с цветом
+        return [
+            'power'=>$this->getPowerValue(),
+            'bright'=>$this->getBrightValue(),
+            'ct'=>$this->getCTValue()
+                ];
+    }
+
+    public function getStateString(): string {
+        return 'Состояние: '.is_null($this->power)?'Нет данных':$this->power;
     }
 
     public function getSupportValue(): array {

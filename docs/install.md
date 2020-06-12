@@ -55,7 +55,7 @@ server {
     access_log  /var/log/nginx/shcc_access.log;
     error_log  /var/log/nginx/shcc_error.log;
 
-    root /var/www/shcc/htdocs;
+    root /var/www/shcc/webroot;
 
     index index.php;
 
@@ -125,20 +125,36 @@ location ~ /.well-known/acme-challenge/(.*) {
 
 ## Получение SHCC
 
-SHCC рекомендуется размещать в папке /var/www/shcc. Для получения текущей версии умного дома перейдите в папку /var/www и клонируйте репозиторий shcc с gitlab:
+SHCC рекомендуется размещать в папке /var/www/shcc. Имеется два способа получения текущей версии SHCC.
+
+### Получение через git
+
+Перейдите в папку установки (рекомендуется /var/www) и клонируйте репозиторий shcc с github:
 ```bash
 # cd /var/www
-# git clone https://gitlab.com/tavda/shcc
+# git clone https://github.com/fsa/shcc
 ```
-Создаём settings.json.
+При этом будет создана папка shcc.
+
+### Получение через composer
+
+Перейдите в папку установки (рекомендуется /var/www) и запустите команду создания проекта:
 ```bash
-# cp settings.sample.json settings.json
+# cd /var/www
+# composer create-project fsa/shcc
+```
+При этом будет создана папка shcc.
+
+## Подготовка shcc к запуску
+
+Создаём settings.php используя шаблон settings.sample.php.
+```bash
+# cp settings.sample.php settings.php
 ```
 Отредактируйте полученный файл указав желаемые настройки. Обратите внимание на:
-1. реквизиты доступа к базе данных; нужно указать имя базы данных, пользователя и пароль, ваш часовой пояс;
-2. ключи доступа для сервисов Яндекс SpeechKit и OpenWeather;
-3. секцию home, где задаётся ваше местоположение и город;
-4. ваш часовой пояс, который должен совпадать с часовым поясом, который используется при инициализации БД.
+1. реквизиты доступа к базе данных; нужно указать имя базы данных, пользователя и пароль;
+2. секцию home, где задаётся ваше местоположение и город;
+3. ваш часовой пояс.
 
 ## Создание базы данных
 
@@ -186,11 +202,17 @@ echo password_hash('password', PASSWORD_DEFAULT);
 
 В примере был использован логин "user" с паролем "123". В целях безопасности лучше придумать свои,
 
+## Конфигурирование модулей
+
+После создания всех необходимых файлов конфигурации и базы данных первая часть системы готова к работе. Вы можете открыть сайт системы в браузере и произвести первоначальную настройку демонов. Для этого перейдите в пункт "Настройки", далее, в раздел "Модули" и включите необходимые вам модули. По умолчанию все демоны модулей находятся в выключенном состоянии.
+
+Кроме этого можно произвести настройку синтеза речи в настройках соответствующих модулей.
+
 ## Запуск демонов и ежеминутного скрипта
 
-Для нормальной работы системны умный дом необходимо запускать два процесса:
-1. daemonctrl.php, который запускает в фоне процессы демонов для конвертирования внутренних протоколов обмена устройств в http запросы, дожен быть запущен 1 раз при запуске умного дома;
-2. скрипт minutely.sh, который выполняет задачи по расписанию, должен запускаться ежеминутно.
+Для нормальной работы контроллера необходимо запускать два процесса:
+1. daemonctrl.php, который запускает в фоне процессы активированных демонов модулей;
+2. скрипт minutely.sh, который выполняет задачи по расписанию и должен запускаться ежеминутно.
 
 ### Создание ежеминутного скрипта
 
@@ -201,15 +223,24 @@ echo password_hash('password', PASSWORD_DEFAULT);
 
 ## Обеспечение автоматического запуска необходимых процессов на системе с systemd
 
-Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении в папке /var/www/shcc необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки systemd с суффиксами sample в файлы без этого суффикса. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
+Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении в папке /var/www/shcc необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки service/systemd/sample в папке service/systemd. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
+``` bash
+# cd /var/www/shcc/service/systemd
+# cp sample/shcc.service ./
+# cp sample/shcc-minutely.service ./
+# cp sample/shcc-minutely.timer ./
+# ln -s shcc.service /lib/systemd/system/
+# ln -s shcc-minutely.service /lib/systemd/system/
+# ln -s shcc-minutely.timer /lib/systemd/system/
+```
 
 Теперь вы можете активировать и запустит требуемые юниты:
 ```bash
 # systemctl enable shcc.service
-Created symlink /etc/systemd/system/multi-user.target.wants/shcc.service → /var/www/shcc/systemd/shcc.service.
-Created symlink /etc/systemd/system/shcc.service → /var/www/shcc/systemd/shcc.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/shcc.service → /var/www/shcc/service/systemd/shcc.service.
+Created symlink /etc/systemd/system/shcc.service → /var/www/shcc/service/systemd/shcc.service.
 # systemctl enable shcc-minutely.timer
-Created symlink /etc/systemd/system/timers.target.wants/shcc-minutely.timer → /var/www/shcc/systemd/shcc-minutely.timer.
+Created symlink /etc/systemd/system/timers.target.wants/shcc-minutely.timer → /var/www/shcc/service/systemd/shcc-minutely.timer.
 Created symlink /etc/systemd/system/shcc-minutely.timer → /var/www/shcc/systemd/shcc-minutely.timer.
 # systemctl start shcc.service
 # systemctl start shcc-minutely.timer
@@ -217,7 +248,7 @@ Created symlink /etc/systemd/system/shcc-minutely.timer → /var/www/shcc/system
 
 ## Включение голосовых оповещений
 
-Для работы голосовых оповещений необходимо установить проигрыватель. По умолчанию используется mpg123.
+Для работы голосовых оповещений необходимо установить проигрыватель. По умолчанию используется mpg123. Указать другой проигрыватель возможно через файл настроек settings.php.
 ```bash
 apt install mpg123
 ```
@@ -225,9 +256,7 @@ apt install mpg123
 ```bash
 mpg123 sound.mp3
 ```
-при этом указав имя существующего любого звукового файла.
-
-Вы можете, также, использовать другой плеер. Для этого установите его и укажите его в файле settings.json в качестве плеера для TTS.
+при этом указав имя существующего звукового файла.
 
 Поскольку демоны работают от пользователя www-data по умолчанию, то нужно добавить этого пользователя в группу audio, чтобы он имел возможность воспроизводить звук:
 ```
@@ -237,17 +266,11 @@ usermod www-data -aG audio
 
 ### Создание конфигурации для синтезатора речи
 
-Данный раздел в будущем будет значительно переработан. В настоящее время используется черновой вариант конфигурации.
+Зайдите в веб-интерфейсе в раздел "Настройки", и произведите настройку необходимого модуля синтеза речи. После этого созраните конфигурацию.
 
-Необходимо сгенерировать конфигурацию для TTS сервиса. Для пример имеется генератор конфигурации для Яндекс SpeechKit: daemon/yandex_config_gen.php. Укажите в файле конфигурации ваш ключ для SpeechKit и запустите скрипт:
-```bash
-# php yandex_config_gen.php
-```
-В результате будет создан файл config/tts.conf.
+### Включение звука для Raspberry Pi
 
-### Включение звука для raspberry pi
-
-При установке Ubuntu на Raspberry pi может оказаться, что звук не воспроизводится. Для его активации необходимо включить звуковой драйвер в файле конфигурации /boot/firmware/usercfg.txt (в старых версиях системы, при его отсутствии, /boot/firmware/config.txt) добавив строку
+При установке Ubuntu на Raspberry Pi может оказаться, что звук не воспроизводится. Для его активации необходимо включить звуковой драйвер в файле конфигурации /boot/firmware/usercfg.txt (в старых версиях системы, при его отсутствии, /boot/firmware/config.txt) добавив строку
 ``` 
 dtparam=audio=on
 ```

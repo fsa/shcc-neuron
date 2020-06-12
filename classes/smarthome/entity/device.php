@@ -5,7 +5,6 @@ namespace SmartHome\Entity;
 class Device {
     public $id;
     public $unique_name;
-    public $module_id;
     public $uid;
     public $description;
     public $classname;

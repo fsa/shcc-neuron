@@ -6,8 +6,8 @@ use httpResponse;
 
 class Weather {
 
-    public static function show($sensor) {
-        httpResponse::showCard($sensor->place_name, sprintf('<span style="font-size: 2rem;"><span class="text-nowrap">%d (%d)&deg;C</span>, %d%%, <span class="text-nowrap">%d м/с (%s)</span></span>', $sensor->getTemperature(), $sensor->getTempFeelsLike(), $sensor->getHumidity(), $sensor->getWindSpeed(), $sensor->getWindDirection()), date('d.m.Y H:i:s', $sensor->getLastUpdate()));
+    public static function show($title, $device_name) {
+        httpResponse::showCard($title, '<span style="font-size: 2rem;"><span class="text-nowrap"><span device_name="'.$device_name.'" device_property="temperature">-</span> (<span device_name="'.$device_name.'" device_property="temp_feels_like">-</span>)&deg;C</span>, <span device_name="'.$device_name.'" device_property="humidity">-</span>%, <span class="text-nowrap"><span device_name="'.$device_name.'" device_property="wind_speed">-</span> м/с (<span device_name="'.$device_name.'" device_property="wind_direction_string">-</span>)</span></span>', '<span device_name="'.$device_name.'" device_property="last_update">');
     }
 
 }

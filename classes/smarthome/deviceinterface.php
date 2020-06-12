@@ -9,12 +9,12 @@ interface DeviceInterface {
      * @param string $device_id
      * @param array $init_data
      */
-    function init($device_id,$init_data): void;
+    function init($device_id, $init_data): void;
     
     /**
      * Возвращает описание устройства
      */
-    function getDeviceDescription(): string;
+    function getDescription(): string;
 
     /**
      * Возвращает список свойств объекта, которые будут присвоены при минимальной инициализации
@@ -28,7 +28,7 @@ interface DeviceInterface {
     /**
      * Возвращает идентификатор устройства, уникальный внутри модуля
      */
-    function getDeviceId(): string;
+    function getId(): string;
 
     /**
      * Возвращает наименование модуля устройства
@@ -36,9 +36,14 @@ interface DeviceInterface {
     function getModuleName(): string;
 
     /**
+     * Возвращает массив с данными о состоянии устройства
+     */
+    function getState(): array;
+
+    /**
      * Возвращает детальную информацию о состоянии устройства
      */
-    function getDeviceStatus(): string;
+    function getStateString(): string;
 
     /**
      * Возвращает дату и время последнего обновления данных устройства в формате timestamp

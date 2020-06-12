@@ -3,7 +3,7 @@
     "description": "Контроллер умного дома SHCC.",
     "homepage": "https://shcc.ru/",
     "type": "project",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "time": "2020-03-29",
     "license": "GPL-3.0-or-later",
     "authors": [

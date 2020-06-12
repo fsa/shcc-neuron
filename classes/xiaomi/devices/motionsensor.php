@@ -37,11 +37,18 @@ class MotionSensor extends AbstractDevice implements \SmartHome\SensorsInterface
         return $this->lastMotion;
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Xiaomi Smart IR Human Body Sensor";
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        return [
+            'last_motion'=>$this->lastMotion,
+            'voltage'=>$this->voltage
+                ];
+    }
+
+    public function getStateString(): string {
         $result=[];
         if (!is_null($this->lastMotion)) {
             if ($this->lastMotion==0) {

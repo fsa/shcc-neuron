@@ -66,7 +66,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         return 'xiaomi';
     }
 
-    public function getDeviceId(): string {
+    public function getId(): string {
         return $this->sid;
     }
 
@@ -79,7 +79,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     }
     
     protected function showUnknownParam($param, $value) {
-        printf('%s=>{%s=%s}',$this->getDeviceId(),$param,$value);
+        printf('%s=>{%s=%s}',$this->getId(),$param,$value);
     }
 
     abstract protected function updateParam($param,$value);

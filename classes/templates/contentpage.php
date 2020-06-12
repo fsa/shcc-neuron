@@ -19,8 +19,9 @@ class ContentPage {
 <title><?=is_null($this->title)?$this->site_info['title']:$this->title.' :: '.$this->site_info['title']?></title>
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#527779">
+<link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/bootstrap.css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <script src="/libs/jquery/jquery.min.js"></script>
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
@@ -116,20 +117,36 @@ if(Auth::memberOf()) {
 <?php
     }
     
-    public static function Popup($title, $message, $style='bg-danger text-white') {
+    public function Popup($id, $message, $title, $style=null) {
+        switch ($style) {
+            case 'primary':
+            case 'secondary':
+            case 'success':
+            case 'danger':
+            case 'info':
+            case 'dark':
+                $style_class='bg-'.$style.' text-white';
+                break;
+            case 'warning':
+            case 'light':
+            case 'white':
+            case 'transparent':
+                $style_class='bg-'.$style.' text-dark';
+                break;
+            default:
+                $style_class='bg-info text-dark';
+        }
 ?>
-<div class="modal" tabindex="-1" role="dialog" id="popupMessage">
-  <div class="modal-dialog" role="document">
+<div class="modal" tabindex="-1" role="dialog" id="<?=$id?>">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header <?=$style?>">
+      <div class="modal-header <?=$style_class?>">
         <h5 class="modal-title"><?=$title?></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <?=$message?>
-      </div>
+      <div class="modal-body"><?=$message?></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
       </div>
@@ -138,7 +155,7 @@ if(Auth::memberOf()) {
 </div>
 <script>
 $(document).ready(function(){
-    $('#popupMessage').modal('show');
+    $('#<?=$id?>').modal('show');
 });
 </script>
 <?php

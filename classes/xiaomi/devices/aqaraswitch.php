@@ -19,11 +19,15 @@ class AqaraSwitch extends AbstractDevice implements \SmartHome\DeviceActionInter
         }
     }
 
-    public function getDeviceDescription(): string {
+    public function getDescription(): string {
         return "Aqara Smart Wireless Switch";
     }
 
-    public function getDeviceStatus(): string {
+    public function getState(): array {
+        return ['voltage'=>$this->voltage];
+    }
+
+    public function getStateString(): string {
         $result=[];
         if($this->updated) {
             $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);

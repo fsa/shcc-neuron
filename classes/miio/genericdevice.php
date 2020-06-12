@@ -10,40 +10,43 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     private $timediff;
     private $connection;
     private $updated;
-
-    private $data;
+    private $data="";
 
     public function __construct(GenericDevice $device=null) {
-        if(!is_null($device)) {
-            $this->uid=$device->getDeviceId();
+        if (!is_null($device)) {
+            $this->uid=$device->getId();
             $this->location=$device->getDeviceAddr();
             $this->token=$device->getDeviceToken();
             $this->timediff=$device->getDeviceTimeDiff();
         }
     }
 
-    public function getDeviceDescription(): string {
-        return "Универсальное устройство";
+    public function getDescription(): string {
+        return "Неизвестное устройство";
     }
 
-    public function getDeviceId(): string {
+    public function getId(): string {
         return $this->uid;
     }
 
-    public function getDeviceStatus(): string {
-        return sprintf('Токен: %s. Адрес: %s',$this->token?'указан':'укажите в settings.json',$this->location)??'Нет данных';
+    public function getState(): array {
+        return ['locatation'=>$this->location];
+    }
+
+    public function getStateString(): string {
+        return sprintf('Токен: %s. Адрес: %s', $this->token?'указан':'не указан', $this->location)??'Нет данных';
     }
 
     public function getInitDataList(): array {
-        return [];
+        return ['token'=>'Токен'];
     }
 
     public function getInitDataValues(): array {
-        return [];
+        return ['token'=>$this->token];
     }
 
     public function getLastUpdate(): int {
-        return $this->updated;
+        return $this->updated??0;
     }
 
     public function getModuleName(): string {
@@ -54,7 +57,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return null;
     }
 
-    public function init($device_id,$init_data): void {
+    public function init($device_id, $init_data): void {
         $this->uid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
@@ -78,7 +81,7 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     }
 
     public function update(MiPacket $pkt) {
-        if($pkt->isHelloPacket()) {
+        if ($pkt->isHelloPacket()) {
             $this->uid=$pkt->getDeviceId();
             $this->location=$pkt->getDeviceAddr();
             $this->timediff=$pkt->getDeviceTimestamp()-time();
@@ -113,7 +116,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return $connection->getPacket();
     }
 
-
     private function getConnection(): SocketServer {
         if (!is_null($this->connection)) {
             return $this->connection;
@@ -126,4 +128,5 @@ class GenericDevice implements \SmartHome\DeviceInterface {
     public function disconnect(): void {
         $this->connection=null;
     }
+
 }
