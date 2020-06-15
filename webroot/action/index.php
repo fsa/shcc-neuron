@@ -8,13 +8,12 @@ if (!is_null($host)) {
         die('Wrong host');
     }
 }
-$module=filter_input(INPUT_GET, 'module');
 $uid=filter_input(INPUT_GET, 'uid');
 $json=filter_input(INPUT_GET, 'data');
 if (!$json) {
     $json=filter_input(INPUT_POST, 'data');
 }
-if (!$module or!$uid or!$json) {
+if (!$uid or !$json) {
     die('Wrong prarameters');
 }
 $data=json_decode($json);

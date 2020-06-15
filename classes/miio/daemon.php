@@ -58,7 +58,7 @@ class Daemon implements \SmartHome\DaemonInterface {
             $this->storage->releaseMemory();
             $actions=$device->getActions();
             if (!is_null($actions)) {
-                $data=['module'=>self::DAEMON_NAME, 'uid'=>$uid, 'data'=>$actions];
+                $data=['uid'=>self::DAEMON_NAME.'_'.$uid, 'data'=>$actions];
                 file_get_contents($this->process_url.'?'.http_build_query($data));
             }
         }
