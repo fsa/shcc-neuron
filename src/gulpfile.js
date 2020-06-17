@@ -8,16 +8,16 @@ const {src, dest, watch, series, parallel} = require('gulp'),
 
 function scssTask() {
     return src('scss/**/*.+(scss|sass)')
-            .pipe(sass(
-                    {
-                        outputStyle: 'expanded',
-                        includePaths: ["node_modules/bootstrap/scss/"]
-                    }
-            ))
-            .pipe(autoprefixer(['last 15 versions', '>1%', 'ie 8']))
-            .pipe(cssnano())
-            .pipe(dest('../webroot'))
-            .pipe(bs.stream());
+    .pipe(sass(
+        {
+            outputStyle: 'expanded',
+            includePaths: ["node_modules/bootstrap/scss/"]
+        }
+    ))
+    .pipe(autoprefixer())
+    .pipe(cssnano())
+    .pipe(dest('../webroot'))
+    .pipe(bs.stream());
 };
 
 function highchartsTask() {
@@ -29,7 +29,7 @@ function highchartsTask() {
         'node_modules/highcharts/modules/exporting.js',
         'node_modules/highcharts/modules/exporting.js.map'
     ])
-            .pipe(dest('../webroot/libs/highcharts'));
+    .pipe(dest('../webroot/libs/highcharts'));
 }
 
 function jstreeTask() {
@@ -40,14 +40,14 @@ function jstreeTask() {
         'node_modules/jstree/dist/themes/default/40px.png',
         'node_modules/jstree/dist/themes/default/style.min.css'
     ])
-            .pipe(dest('../webroot/libs/jstree'));
+    .pipe(dest('../webroot/libs/jstree'));
 }
 
 function jqueryTask() {
     return src([
         'node_modules/jquery/dist/jquery.min.js'
     ])
-            .pipe(dest('../webroot/libs/jquery'));
+    .pipe(dest('../webroot/libs/jquery'));
 }
 
 function bootstrapTask() {
@@ -55,7 +55,7 @@ function bootstrapTask() {
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js.map'       
     ])
-            .pipe(dest('../webroot/libs/bootstrap'));
+    .pipe(dest('../webroot/libs/bootstrap'));
 }
 
 function watchTask() {
@@ -66,9 +66,8 @@ function watchTask() {
     watch('../webroot/**/*.+(php|html|css|js)', bs.reload);
 }
 
-function defaultTask(cb) {
-    console.log('Нет действия по умолчанию.');
-    cb();
+function defaultTask() {
+    watchTask();
 }
 
 exports.bootstrap = bootstrapTask;
