@@ -69,8 +69,17 @@ class DeviceInfo implements \JsonSerializable {
             case 'thermostat.ac':
             case 'media_device':
             case 'media_device.tv':
+            case 'media_device.tv_box':
+            case 'media_device.receiver':
             case 'cooking':
+            case 'cooking.coffee_maker':
             case 'cooking.kettle':
+            case 'openable':
+            case 'openable.curtain':
+            case 'humidifier':
+            case 'purifier':
+            case 'vacuum_cleaner':
+            case 'washing_machine':
             case 'other':
                 $this->type='devices.types.'.$type;
                 break;
