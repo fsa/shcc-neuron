@@ -56,6 +56,9 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         if (is_null($this->weather)) {
             return 'Информация о погоде отсутствует';
         }
+        if ($this>$this->weather->meta->code!="299") {
+            return 'Ошибка: '.$this->weather->meta->code.' '.$this->weather->meta->message;
+        }
         return $this->getTemperature().'('.$this->getTempFeelsLike().')&deg;C, '.$this->getHumidity().'%, '.$this->getPressure().'&nbsp;мм.рт.ст., '.$this->weather->response->description->full.', ветер '.$this->weather->response->wind->speed->m_s.' м/с, направление '.$this->getWindDirection().' ('.$this->weather->response->wind->direction->degree.')';
     }
 
