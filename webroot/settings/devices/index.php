@@ -25,9 +25,17 @@ $devices->setRowCallback(function ($row) {
         $row->info='';
         $row->updated='';
     } else {
-        $row->info=$dev->getStateString();
-        $updated=$dev->getLastUpdate();
-        $row->updated=$updated?date('d.m.Y H:i:s', $updated):'Нет данных';
+        try {
+            $row->info=$dev->getStateString();
+        } catch (Exception $ex) {
+            $row->info='Программная ошибка: '.$ex->getMessage();
+        }
+        try {
+            $updated=$dev->getLastUpdate();
+            $row->updated=$updated?date('d.m.Y H:i:s', $updated):'Нет данных';
+        } catch (Exception $ex) {
+            $row->updated='Ошибка: '.$ex->getMessage();
+        }
     }
 });
 $devices->showTable(\SmartHome\Devices::getDevicesStmt());
