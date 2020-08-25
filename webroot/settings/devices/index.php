@@ -15,7 +15,7 @@ $devices->addField('description', 'Описание');
 $devices->addField('classname', 'Класс');
 $devices->addField('place', 'Место установки');
 $devices->addField('info', 'Информация об устройстве');
-$devices->addField('updated', 'Было активено');
+$devices->addField('updated', 'Было активно');
 $devices->addButton(new HTML\ButtonLink('Датчики', 'sensors/?id=%s'));
 $devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
 $devices->setRowStyleField('style');
