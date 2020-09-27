@@ -28,7 +28,7 @@ class ContentPage {
 </head>
 <body>
 <header class="container-fluid p-0">
-<nav class="navbar navbar-expand-md navbar-dark bg-primary" role="navigation">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary px-3" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
  
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
@@ -89,7 +89,7 @@ if(Auth::memberOf()) {
 
     public function CardsHeader(){
 ?>
-<div class="card-columns">
+<div class="row row-cols-1 row-cols-md-3 g-4">
 <?php
     }
 
@@ -101,7 +101,8 @@ if(Auth::memberOf()) {
     
     public function Card($title, $text, $state=null) {
 ?>
-<div class="card border-primary">
+<div class="col">
+<div class="card h-100">
 <div class="card-header bg-primary text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
@@ -112,6 +113,7 @@ if(Auth::memberOf()) {
 <?php
         }
 ?>
+</div>
 </div>
 </div>
 <?php

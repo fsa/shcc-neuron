@@ -117,10 +117,14 @@ function updateMessageLog(url, selector) {
                 }
                 document.querySelector(selector).innerHTML='Ошибка';
             }).then(result => {
+        let element=document.querySelector(selector);
+        if(!element) {
+            return;
+        }
         if (result.error) {
-            document.querySelector(selector).innerHTML=result.error;
+            element.innerHTML=result.error;
         } else {
-            document.querySelector(selector).innerHTML=result.join('<br>');
+            element.innerHTML=result.join('<br>');
         }
     });
 }
