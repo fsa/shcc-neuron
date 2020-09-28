@@ -31,25 +31,21 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 function setState(device_name, state, timestamp = 0) {
-    let style = false;
+    let style = '';
     if (timestamp === 0) {
         let datetime = new Date();
         state = datetime.toLocaleString() + ' ' + state;
-        style = true;
+        style = 'blue';
     } else {
         let datetime=new Date(timestamp);
         state = datetime.toLocaleString() + ' ' + state;
         if (new Date()-datetime>3600000) {
-            style = true;
+            style = 'red';
         }
     }
     document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item) => {
         setElementValue(item, state);
-        if (style === true) {
-            item.classList.add('text-danger');
-        } else {
-            item.classList.remove('text-danger');
-        }
+        item.style.color=style;
     });
 }
 
