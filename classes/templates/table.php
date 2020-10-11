@@ -10,7 +10,8 @@ class Table{
 
     public function showHeader(){
 ?>
-        <table class="table table-striped table-hover table-sm table-responsive">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
 <?php
         if (!is_null($this->caption)) {
 ?>
@@ -48,6 +49,7 @@ class Table{
         public function showFooter(){
 ?>
         </table>
+    </div>
 <?php
     }
 
