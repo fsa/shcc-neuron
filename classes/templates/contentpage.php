@@ -22,11 +22,11 @@ class ContentPage {
 <link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/bootstrap.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-<script src="/libs/jquery/jquery.min.js"></script>
+<!--script src="/libs/jquery/jquery.min.js"></script-->
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
-<body>
+<body data-no-jquery>
 <header class="container-fluid p-0">
 <nav class="navbar navbar-expand-md navbar-dark bg-primary px-3" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
@@ -89,7 +89,7 @@ if(Auth::memberOf()) {
 
     public function CardsHeader(){
 ?>
-<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row">
 <?php
     }
 
@@ -101,8 +101,8 @@ if(Auth::memberOf()) {
     
     public function Card($title, $text, $state=null) {
 ?>
-<div class="col">
-<div class="card h-100">
+<div class="col col-sm-6 col-md-4 col-lg-3 mb-4">
+<div class="card grid-item">
 <div class="card-header bg-primary text-white"><?=$title?></div>
 <div class="card-body">
 <p class="card-text"><?=$text?></p>
