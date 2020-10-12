@@ -35,12 +35,12 @@ function setState(device_name, state, timestamp = 0) {
     if (timestamp === 0) {
         let datetime = new Date();
         state = datetime.toLocaleString() + ' ' + state;
-        style = 'blue';
+        style = '#dc3545';
     } else {
         let datetime=new Date(timestamp);
         state = datetime.toLocaleString() + ' ' + state;
         if (new Date()-datetime>3600000) {
-            style = 'red';
+            style = '#ffc107';
         }
     }
     document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item) => {
