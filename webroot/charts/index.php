@@ -17,7 +17,7 @@ httpResponse::addHeader('<script src="/libs/highcharts/highstock.js"></script>')
 httpResponse::addHeader('<script src="/libs/highcharts/exporting.js"></script>');
 httpResponse::showHtmlHeader($name);
 ?>
-<script src="highstock.js"></script>
+<script src="/js/highstock.js"></script>
 <ul class="nav nav-pills justify-content-center" id="charts_list"></ul>
 <div style="width: 100%; height: 500px;" id="chart"></div>
 <?php
