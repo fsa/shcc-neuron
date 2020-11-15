@@ -17,6 +17,35 @@ class Server {
     private $client_id;
     private $state;
 
+    public static function grantAccess(array $scope=null): int {
+        $bearer=getenv('HTTP_AUTHORIZATION');
+        if (!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
+            header('WWW-Authenticate: Bearer realm="The access token required"');
+            httpResponse::error(401);
+            exit;
+        }
+        $token=self::fetchTokensByAccessToken($matches[1]);
+        if (!$token) {
+            header('WWW-Authenticate: Bearer error="invalid_token",error_description="Invalid access token"');
+            httpResponse::error(401);
+            exit;
+        }
+        if($token->expired) {
+            header('WWW-Authenticate: Bearer error="invalid_token",error_description="The access token expired"');
+            httpResponse::error(401);
+            exit;
+        }
+        if(!is_null($scope)) {
+            #TODO проверить права доступа
+            if(0) {
+                header('WWW-Authenticate: Bearer error="insufficient_scope",error_description="The request requires higher privileges than provided by the access token."');
+                httpResponse::error(403);
+                exit;
+            }
+        }
+        return $token->user_id;
+    }
+
     public function getResponseType(): bool {
         $response_type=filter_input(INPUT_GET, 'response_type');
         if ($response_type) {
