@@ -1,6 +1,10 @@
 "use strict";
+const device_names = new Set();
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[device_name]').forEach(item => {
+        device_names.add(item.getAttribute('device_name'));
+    });
     updatePage();
     document.querySelectorAll('.action-state').forEach(item => {
         item.addEventListener('click', (e) => {
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+    setInterval(() => updatePage(), 30000);
 }, false);
 
 function setState(device_name, state, timestamp = 0) {
@@ -72,10 +77,6 @@ function sendCommand(device_name, command) {
 }
 
 function updatePage() {
-    let device_names = new Set();
-    document.querySelectorAll('[device_name]').forEach(item => {
-        device_names.add(item.getAttribute('device_name'));
-    });
     device_names.forEach(item => {
         updateDeviceState(item);
     });
@@ -136,5 +137,3 @@ function setElementValue(e, value) {
         e.innerHTML = value;
     }
 }
-
-setInterval(() => updatePage(), 30000);
