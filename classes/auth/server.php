@@ -17,7 +17,9 @@ class Server {
     private $client_id;
     private $state;
 
-    public static function grantAccess(array $scope=null): int {
+    public static $token;
+
+    public static function grantAccess(array $scope=null): void {
         $bearer=getenv('HTTP_AUTHORIZATION');
         if (!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
             header('WWW-Authenticate: Bearer realm="The access token required"');
@@ -43,7 +45,11 @@ class Server {
                 exit;
             }
         }
-        return $token->user_id;
+        self::$token=$token;
+    }
+
+    public static function getUserId() {
+        return self::$token->user_id;
     }
 
     public function getResponseType(): bool {
@@ -271,9 +277,9 @@ class Server {
         }        
     }
 
-    public static function revoke($access_token): bool {
+    public static function revoke(): bool {
         $s=DB::prepare('DELETE FROM auth_tokens WHERE access_token=?');
-        $s->execute([$access_token]);
+        $s->execute([self::$token->access_token]);
         return ($s->rowCount()==1)?true:false;
     }
 
