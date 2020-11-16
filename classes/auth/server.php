@@ -107,9 +107,14 @@ class Server {
         $scope=filter_input(INPUT_GET, 'scope');
         $client=$this->fetchClient($client_id);
         if (!$client) {
-            httpResponse::json(['error'=>'unauthorized_client']);
+            httpResponse::showError('Неверный код клиента');
+        }
+        $allow_uris=json_decode($client->redirect_uris);
+        if(array_search($redirect_uri, $allow_uris)===false) {
+            httpResponse::showError('Адрес для перенаправления не яляется разрешённым.');
         }
         $user_id=Session::getUser()->id;
+        #TODO отобразить диалог выбора прав доступа
         $scope=User::checkScope($scope, $user_id);
         $code=$this->genCode();
         $s=DB::prepare('INSERT INTO auth_tokens (client_id, user_id, code, scope) VALUES (?, ?, ?, ?)');
@@ -250,7 +255,7 @@ class Server {
     }
 
     private function fetchClient($client_id) {
-        $s=DB::prepare('SELECT * FROM auth_server WHERE client_id=?');
+        $s=DB::prepare('SELECT id, client_id, client_secret, array_to_json(redirect_uris) AS redirect_uris, user_id FROM auth_server WHERE client_id=?');
         $s->execute([$client_id]);
         return $s->fetch(PDO::FETCH_OBJ);
     }
