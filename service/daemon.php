@@ -1,6 +1,6 @@
 <?php
-if (!sizeof($argv)==2) {
-    die('Usage: '.$argv[0].' daemon-class');
+if (sizeof($argv)!=2) {
+    die('Usage: '.$argv[0].' daemon-class'.PHP_EOL);
 }
 require_once 'autoloader.php';
 $daemon_class=$argv[1];
