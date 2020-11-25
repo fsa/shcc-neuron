@@ -3,20 +3,12 @@
     "description": "Контроллер умного дома SHCC.",
     "homepage": "https://shcc.ru/",
     "type": "project",
-    "version": "0.6.0",
-    "time": "2020-06-12",
     "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Sergey Fedotov",
             "email": "fsa@tavda.info",
             "homepage": "https://tavda.net/"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:fsa/shcc.git"
         }
     ],
     "require": {
