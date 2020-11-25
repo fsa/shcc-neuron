@@ -1,12 +1,17 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-25
+ */
+
 namespace SmartHome\Entity;
 
 class MeterHistory {
+
     public $id;
     public $meter_id;
-    public $place_id;
-    public $meter_unit_id;
     public $value;
     public $timestamp;
+
 }

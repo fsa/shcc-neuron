@@ -7,10 +7,11 @@
 
 namespace SmartHome\Entity;
 
-class Place {
+class IndicatorHistory {
 
     public $id;
-    public $pid;
-    public $name;
+    public $indicator_id;
+    public $value;
+    public $timestamp;
 
 }

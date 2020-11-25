@@ -1,22 +1,26 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-25
+ */
+
 namespace SmartHome\Entity;
 
 class Device {
-    public $id;
-    public $unique_name;
+
     public $uid;
+    public $hwid;
     public $description;
-    public $classname;
-    public $init_data;
+    public $entity;
     public $place_id;
-    public $disabled;
-    
+
     public function setInitData($data) {
-        $this->init_data=json_encode($data);
+        $this->entity=json_encode($data);
     }
-    
+
     public function getInitData() {
-        return json_decode($this->init_data,true);
+        return json_decode($this->entity, true);
     }
+
 }
