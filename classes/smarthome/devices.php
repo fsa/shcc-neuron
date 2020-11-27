@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-25
+ */
+
 namespace SmartHome;
 
 use DB,
@@ -13,22 +18,21 @@ class Devices {
         
     }
 
-    public static function get($uname) {
-        $s=DB::prepare('SELECT p.name AS place_name, d.* FROM devices d LEFT JOIN places p ON d.place_id=p.id WHERE d.unique_name=?');
-        $s->execute([$uname]);
-        $dev=$s->fetch(PDO::FETCH_OBJ);
-        if (!$dev) {
+    public static function get($uid) {
+        $s=DB::prepare('SELECT p.name AS place_name, d.* FROM devices d LEFT JOIN places p ON d.place_id=p.id WHERE d.uid=?');
+        $s->execute([$uid]);
+        $db_dev=$s->fetch(PDO::FETCH_OBJ);
+        if (!$db_dev) {
             return null;
         }
         $mem=new Device\MemoryStorage;
-        $device=$mem->getDevice($dev->uid);
+        $device=$mem->getDevice($db_dev->hwid);
         if (is_null($device)) {
-            $device=new $dev->classname;
-            if (!is_null($dev->init_data)) {
-                $device->init($dev->uid, json_decode($dev->init_data));
-            }
+            $entity=json_decode($db_dev->entity);
+            $device=new $entity->classname;
+            $device->init($db_dev->hwid, $entity->properties);
         }
-        $device->place_name=$dev->place_name;
+        $device->place_name=$db_dev->place_name;
         return $device;
     }
 
@@ -36,16 +40,16 @@ class Devices {
         $this->device=new Entity\Device;
     }
 
-    public function fetchDeviceById($id) {
-        $s=DB::prepare('SELECT * FROM devices WHERE id=?');
-        $s->execute([$id]);
+    public function fetchDeviceByUid($uid) {
+        $s=DB::prepare('SELECT * FROM devices WHERE uid=?');
+        $s->execute([$uid]);
         $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
         $this->device=$s->fetch();
     }
 
-    public function fetchDeviceByUid($uid) {
-        $s=DB::prepare('SELECT d.* FROM devices d WHERE d.uid=?');
-        $s->execute([$uid]);
+    public function fetchDeviceByHwid($hwid) {
+        $s=DB::prepare('SELECT * FROM devices WHERE hwid=?');
+        $s->execute([$hwid]);
         $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
         $this->device=$s->fetch();
     }
@@ -77,77 +81,58 @@ class Devices {
 
     public function update() {
         $this->exists(true);
-        return DB::update('devices', get_object_vars($this->device));
+        return DB::update('devices', get_object_vars($this->device), 'hwid');
     }
 
     public function insert() {
         $this->exists(true);
         $params=get_object_vars($this->device);
-        unset($params['id']);
-        $id=DB::insert('devices', $params);
-        $this->device->id=$id;
-        return $id;
+        $id=DB::insert('devices', $params, 'hwid');
     }
 
     public static function getDevicesStmt(): \PDOStatement {
-        $s=DB::query("SELECT d.id, d.unique_name, d.uid, d.description, d.classname, p.name AS place, CASE disabled WHEN true THEN 'table-danger' END AS style FROM devices d LEFT JOIN places p ON d.place_id=p.id ORDER BY d.uid");
+        $s=DB::query("SELECT d.uid, d.hwid, d.description, d.entity, p.name AS place_name FROM devices d LEFT JOIN places p ON d.place_id=p.id ORDER BY d.hwid");
         $s->setFetchMode(PDO::FETCH_OBJ);
         return $s;
     }
 
-    public static function getDevicesUids(): array {
-        $s=DB::query('SELECT uid FROM devices');
+    public static function getDevicesHwids(): array {
+        $s=DB::query('SELECT hwid FROM devices');
         return $s->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public static function getDeviceById($id): Entity\Device {
-        $s=DB::prepare('SELECT * FROM devices WHERE id=?');
+    public static function getDeviceByHwid($id): Entity\Device {
+        $s=DB::prepare('SELECT * FROM devices WHERE hwid=?');
         $s->execute([$id]);
         $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
         return $s->fetch();
     }
 
-    public static function getUniqueNameByUid($uid) {
-        $s=DB::prepare('SELECT unique_name FROM devices d WHERE d.uid=?');
-        $s->execute([$uid]);
+    public static function getUidByHwid($hwid) {
+        $s=DB::prepare('SELECT uid FROM devices WHERE hwid=?');
+        $s->execute([$hwid]);
         return $s->fetch(PDO::FETCH_COLUMN);
     }
 
     public static function refreshMemoryDevices(): void {
-        $stmt=DB::prepare('SELECT d.uid, d.classname, d.init_data FROM devices d WHERE d.disabled=false');
+        $stmt=DB::prepare('SELECT hwid, entity FROM devices ORDER BY hwid');
         $stmt->execute();
         $mem=new Device\MemoryStorage();
         $mem->lockMemory();
         while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
-            if ($mem->existsDevice($device->uid)) {
-                $device_obj=$mem->getDevice($device->uid);
+            $entity=json_decode($device->entity);
+            if ($mem->existsDevice($device->hwid)) {
+                $device_obj=$mem->getDevice($device->hwid);
+                if (!($device_obj instanceof $entity->classname)) {
+                    $device_obj=new $entity->classname;
+                }
             } else {
-                $device_obj=new $device->classname;
+                $device_obj=new $entity->classname;
             }
-            $data=json_decode($device->init_data, true);
-            if (!is_array($data)) {
-                $data=[];
-            }
-            $device_obj->init($device->uid, $data);
-            $mem->setDevice($device->uid, $device_obj);
+            $device_obj->init($device->hwid, $entity->properties);
+            $mem->setDevice($device->hwid, $device_obj);
         }
         $mem->releaseMemory();
-    }
-
-    public static function getMeters($uid) {
-        $stmt=DB::prepare('SELECT m.id, m.property, d.place_id, m.meter_unit_id FROM meters m LEFT JOIN devices d ON m.device_id=d.id WHERE d.uid=?');
-        $stmt->execute([$uid]);
-        $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
-        $stmt->closeCursor();
-        return $sensors;
-    }
-
-    public static function getIndicators(string $uid) {
-        $stmt=DB::prepare('SELECT i.id, i.property, d.place_id FROM indicators i LEFT JOIN devices d ON i.device_id=d.id WHERE d.uid=?');
-        $stmt->execute([$uid]);
-        $sensors=$stmt->fetchAll(PDO::FETCH_OBJ);
-        $stmt->closeCursor();
-        return $sensors;
     }
 
 }

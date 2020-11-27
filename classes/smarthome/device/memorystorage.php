@@ -95,16 +95,16 @@ class MemoryStorage {
     }
 
     public function fetch(): ?object {
-        $uid=array_shift($this->stmt);
-        if (is_null($uid)) {
+        $hwid=array_shift($this->stmt);
+        if (is_null($hwid)) {
             return null;
         }
-        $device=$this->getDevice($uid);
+        $device=$this->getDevice($hwid);
         $result=new \stdClass();
-        $result->obj=$device;
-        $result->uid=$uid;
-        $result->name=$device->getDescription();
-        $result->status=$device->getStateString();
+        $result->entity=$device;
+        $result->hwid=$hwid;
+        $result->description=$device->getDescription();
+        $result->state=$device->getStateString();
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Нет данных':date('d.m.Y H:i:s', $date);
         return $result;

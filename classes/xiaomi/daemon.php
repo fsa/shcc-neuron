@@ -13,10 +13,10 @@ class Daemon implements \SmartHome\DaemonInterface {
     */
     private $storage;
     private $socketserver;
-    private $process_url;
+    private $events_url;
     
-    public function __construct($process_url) {
-        $this->process_url=$process_url;
+    public function __construct($events_url) {
+        $this->events_url=$events_url;
     }
 
     public function getName() {
@@ -32,26 +32,31 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     public function iteration() {
         $pkt=$this->socketserver->getPacket();
-        $uid=$pkt->getSid();
-        if (is_null($uid)) {
+        $hwid=$pkt->getSid();
+        if (is_null($hwid)) {
             return;
         }
-        $uid=self::DAEMON_NAME.'_'.$uid;
+        $hwid=self::DAEMON_NAME.'_'.$hwid;
         $this->storage->lockMemory();
-        $device=$this->storage->getDevice($uid);
+        $device=$this->storage->getDevice($hwid);
         if(is_null($device)) {
             $device=$pkt->getDeviceObject();
             $device->update($pkt);
-            $this->storage->setDevice($uid, $device);
+            $this->storage->setDevice($hwid, $device);
             $this->storage->releaseMemory();
         } else {
             $device->update($pkt);
-            $this->storage->setDevice($uid, $device);
+            $this->storage->setDevice($hwid, $device);
             $this->storage->releaseMemory();
-            $actions=$device->getActions();
-            if (!is_null($actions)) {
-                $data=['uid'=>$uid,'data'=>$actions];
-                file_get_contents($this->process_url.'?'.http_build_query($data));
+            $events=$device->getEvents();
+            if ($events) {
+                file_get_contents($this->events_url, 0, stream_context_create([
+                    'http'=>[
+                        'method'=>'POST',
+                        'header'=>"Content-Type: application/json; charset=utf-8\r\n",
+                        'content' => json_encode(['hwid'=>$hwid, 'events'=>$events])
+                    ]
+                ]));
             }
         }
     }

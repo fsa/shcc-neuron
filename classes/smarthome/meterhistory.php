@@ -9,7 +9,7 @@ class MeterHistory {
 
     private $place_id;
     private $meter_id;
-    private $meter_unit_id;
+    private $unit_id;
     private $from;
     private $to;
 
@@ -17,9 +17,9 @@ class MeterHistory {
         
     }
 
-    public function setPlaceId($place_id, $meter_unit_id=null) {
+    public function setPlaceId($place_id, $unit_id=null) {
         $this->place_id=$place_id;
-        $this->meter_unit_id=$meter_unit_id;
+        $this->unit_id=$unit_id;
     }
 
     public function setMeterId($meter_id) {
@@ -46,7 +46,7 @@ class MeterHistory {
         if (!is_int($this->place_id) and!$this->meter_id) {
             throw new Exception('Не задано место или измерительный прибор');
         }
-        if (!$this->meter_id and!$this->meter_unit_id) {
+        if (!$this->meter_id and!$this->unit_id) {
             throw new Exception('Не задан тип измерительного прибора');
         }
         $params=[];
@@ -63,9 +63,9 @@ class MeterHistory {
             $where[]='meter_id=:meter_id';
             $params['meter_id']=$this->meter_id;
         }
-        if ($this->meter_unit_id) {
+        if ($this->unit_id) {
             $where[]='meter_unit_id=:meter_unit_id';
-            $params['meter_unit_id']=$this->meter_unit_id;
+            $params['meter_unit_id']=$this->unit_id;
         }
         if ($this->from) {
             $params['from']=date('c', $this->from);

@@ -9,19 +9,20 @@ httpResponse::showNavPills('../%s/', require '../sections.php', 'devices');
 <?php
 $devices=new HTML\Table;
 $devices->setCaption('Устройства умного дома');
-$devices->addField('unique_name', 'Имя');
-$devices->addField('uid', 'Идентификатор устройства');
+$devices->addField('uid', 'Имя');
+$devices->addField('hwid', 'Идентификатор устройства');
 $devices->addField('description', 'Описание');
 $devices->addField('classname', 'Класс');
-$devices->addField('place', 'Место установки');
+$devices->addField('place_name', 'Место установки');
 $devices->addField('info', 'Информация об устройстве');
 $devices->addField('updated', 'Было активно');
-$devices->addButton(new HTML\ButtonLink('Датчики', 'sensors/?id=%s'));
-$devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
-$devices->setRowStyleField('style');
+$devices->addButton(new HTML\ButtonLink('Датчики', 'sensors/?id=%s', 'hwid'));
+$devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s', 'hwid'));
 $devices->setRowCallback(function ($row) {
-    $dev=SmartHome\Devices::get($row->unique_name);
-    if(is_null($dev)) {
+    $entity=json_decode($row->entity);
+    $row->classname=$entity->classname;
+    $dev=SmartHome\Devices::get($row->uid);
+    if (is_null($dev)) {
         $row->info='';
         $row->updated='';
     } else {

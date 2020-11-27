@@ -7,7 +7,7 @@
 
 namespace SmartHome\Entity;
 
-class Meter {
+class Meter extends \Entity {
 
     public $id;
     public $uid;

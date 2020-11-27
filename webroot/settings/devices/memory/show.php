@@ -1,20 +1,20 @@
 <?php
 
-if (!isset($uid)) {
+if (!isset($hwid)) {
     die;
 }
 $sh=new SmartHome\Device\MemoryStorage;
-$mem_device=$sh->getDevice($uid);
+$mem_device=$sh->getDevice($hwid);
 $devices=new SmartHome\Devices;
-list($module,$id)=explode('_', $uid, 2);
+list($module,$id)=explode('_', $hwid, 2);
 $devices->fetchDeviceByUid($module,$id);
 $device=$devices->getDevice();
 if (!$device) {
     if($mem_device) {
-        httpResponse::redirection("../edit/?uid=$uid");
+        httpResponse::redirection("../edit/?hwid=$hwid");
         exit;
     } else {
-        httpResponse::showError("Устройство с идентификатором '$uid' не найдено.");
+        httpResponse::showError("Устройство с идентификатором '$hwid' не найдено.");
     }
 }
 httpResponse::showHtmlHeader();

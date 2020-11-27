@@ -204,7 +204,7 @@ class httpResponse {
     # Exceptions handlers
     public static function HtmlException($ex) {
         if (Settings::get('debug', false)) {
-            $message=$ex;
+            $message='<pre>'.$ex.'</pre>';
         } else {
             error_log($ex, 0);
             $message='Произошла программная ошибка на сервере.';

@@ -46,8 +46,14 @@ class Daemon implements \SmartHome\DaemonInterface {
             $this->storage->releaseMemory();
             $actions=$device->getActions();
             if (!is_null($actions)) {
-                $data=['uid'=>$uid, 'data'=>$actions];
-                file_get_contents($this->process_url.'?'.http_build_query($data));
+                $actions['uid']=$uid;
+                file_get_contents($this->process_url, 0, stream_context_create([
+                    'http'=>[
+                        'method'=>'POST',
+                        'header'=>"Content-Type: application/json; charset=utf-8\r\n",
+                        'content' => json_encode($actions)
+                    ]
+                ]));
             }
         }
     }

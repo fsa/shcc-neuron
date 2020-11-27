@@ -2,8 +2,8 @@
 
 require_once '../../../common.php';
 Auth\Session::grantAccess([]);
-$uid=filter_input(INPUT_GET, 'uid');
-if ($uid) {
+$hwid=filter_input(INPUT_GET, 'hwid');
+if ($hwid) {
     require_once 'show.php';
     exit;
 }
@@ -13,7 +13,7 @@ httpResponse::showHtmlHeader('Список устройств в памяти');
 <hr>
 <p><a href='../edit/'>Добавить вручную</a></p>
 <?php
-$db_devices=SmartHome\Devices::getDevicesUids();
+$db_devices=SmartHome\Devices::getDevicesHwids();
 $mem_list=SmartHome\Device\MemoryStorage::getDevicesUids();
 $mem_devices=array_flip($mem_list);
 foreach ($db_devices as $db_device) {
@@ -25,10 +25,10 @@ $devices=new SmartHome\Device\MemoryStorage();
 $devices->selectDeviceList($mem_list);
 $memdevitable=new HTML\Table();
 $memdevitable->setCaption('Новые устройства в сети');
-$memdevitable->addField('uid', 'ID');
-$memdevitable->addField('name', 'Описание');
-$memdevitable->addField('status', 'Информация');
+$memdevitable->addField('hwid', 'HWID');
+$memdevitable->addField('description', 'Описание');
+$memdevitable->addField('state', 'Информация');
 $memdevitable->addField('updated', 'Было активено');
-$memdevitable->addButton(new HTML\ButtonLink('Добавить', './?uid=%s', 'uid'));
+$memdevitable->addButton(new HTML\ButtonLink('Добавить', './?hwid=%s', 'hwid'));
 $memdevitable->showTable($devices);
 httpResponse::showHtmlFooter();

@@ -4,7 +4,7 @@ if (sizeof($argv)!=2) {
 }
 require_once 'autoloader.php';
 $daemon_class=$argv[1];
-$daemon=new $daemon_class(Settings::get('url').'/action/');
+$daemon=new $daemon_class(Settings::get('url').'/api/events/');
 $daemon_name=$daemon->getName();
 $log_dir=Settings::get('log_dir', '/var/log/shcc');
 $pid_dir=Settings::get('pid_dir', '/var/run/shcc');
