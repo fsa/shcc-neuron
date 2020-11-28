@@ -58,7 +58,7 @@ class MotionSensor extends AbstractDevice implements \SmartHome\SensorsInterface
             }
         }
         if ($this->voltage) {
-            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+            $result[]=sprintf('Батарея CR2450: %.3f В.',$this->voltage);
         }
         return join(' ',$result);
     }
