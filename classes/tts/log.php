@@ -1,9 +1,11 @@
 <?php
 
-namespace Tts;
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-28
+ */
 
-use DB,
-    PDO;
+namespace Tts;
 
 class Log {
 
@@ -18,12 +20,12 @@ class Log {
     public static function newMessage($message) {
         self::getInstance()->addMessage($message);
     }
-    
+
     public static function getLastMessages($num=10) {
         return self::getInstance()->getMessages();
     }
 
-    public static function getInstance():self {
+    public static function getInstance(): self {
         if (self::$_instance===null) {
             self::$_instance=new self;
         }
@@ -45,7 +47,7 @@ class Log {
     public function addMessage($message) {
         $log=shm_get_var($this->shm, 0);
         $log[]=date('H:i:s').' '.$message;
-        if(count($log)>self::LOGSIZE) {
+        if (count($log)>self::LOGSIZE) {
             array_shift($log);
         }
         shm_put_var($this->shm, 0, $log);
@@ -54,6 +56,5 @@ class Log {
     public function getMessages(): array {
         return shm_get_var($this->shm, 0);
     }
-
 
 }
