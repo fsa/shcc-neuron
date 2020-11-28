@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-28
+ */
 require_once '../../common.php';
 $host=Settings::get('daemon-ip', '127.0.0.1');
 if (!is_null($host)) {
@@ -8,25 +12,24 @@ if (!is_null($host)) {
     }
 }
 $request=file_get_contents('php://input');
-file_put_contents('json_'.date('Y_m_d').'.txt', print_r($request, true).PHP_EOL, FILE_APPEND | LOCK_EX);
 $json=json_decode($request);
-if(!$json) {
+if (!$json) {
     die('Wrong JSON');
 }
-if(!isset($json->hwid)) {
+if (!isset($json->hwid)) {
     die('Wrong HWID');
 }
-if(!isset($json->events)) {
+if (!isset($json->events)) {
     die('Wrong format');
 }
 $hwid=$json->hwid;
 $uid=SmartHome\Devices::getUidByHwid($hwid);
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
-if($uid) {
-    foreach ($json->events as $property=>$value) {
+if ($uid) {
+    foreach ($json->events as $property=> $value) {
         SmartHome\Meters::storeEvent($uid.'@'.$property, $value, $ts);
-        file_put_contents(date('Y_m_d').'.txt', print_r([$uid.'@'.$property, $value, $ts], true).PHP_EOL, FILE_APPEND | LOCK_EX);
+        SmartHome\Indicators::storeEvent($uid.'@'.$property, $value, $ts);
     }
 }
 $dir='../../custom/events/';

@@ -2,7 +2,7 @@
 
 /**
  * SHCC 0.7.0-dev
- * 2020-11-27
+ * 2020-11-28
  */
 
 namespace SmartHome;
@@ -17,7 +17,8 @@ class Meters {
         'humidity'=>['Относительная влажность', '%'],
         'pressure'=>['Атмосферное давление', 'мм.рт.ст.'],
         'wind_speed'=>['Скорость ветра', 'м/с'],
-        'wind_direction'=>['Направление ветра', '&deg']
+        'wind_direction'=>['Направление ветра', '&deg'],
+        'voltage'=>['Напряжение', 'В']
     ];
 
     public static function getUnitName($property) {
