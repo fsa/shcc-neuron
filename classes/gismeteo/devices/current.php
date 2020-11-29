@@ -6,12 +6,12 @@ use Settings,
     AppException,
     SmartHome\Device\MemoryStorage;
 
-class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface {
+class Current implements \SmartHome\DeviceInterface {
 
     public $weather;
 
     private $gismeteo;
-    private $uid;
+    private $hwid;
     private $api_key;
     private $city_id;
     private $updated;
@@ -20,20 +20,16 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         $this->updated=0;
     }
 
-    public function getDeviceIndicators(): array {
-        return [];
-    }
-
-    public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура воздуха, &deg;C', 'humidity'=>'Относительная влажность, %', 'pressure'=>'Атмосферное давление, мм.рт.ст.', 'wind_speed'=>'Скорость ветра, м/с', 'wind_direction'=>'Направление ветра, &deg;'];
+    public function getEventsList(): array {
+        return ['temperature', 'humidity', 'pressure', 'wind_speed', 'wind_direction'];
     }
 
     public function getDescription(): string {
         return 'Текущая погода с сайта Gismeteo.ru';
     }
 
-    public function getId(): string {
-        return $this->uid;
+    public function getHwid(): string {
+        return $this->hwid;
     }
 
     public function getState(): array {
@@ -52,7 +48,7 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
                 ];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         if (is_null($this->weather)) {
             return 'Информация о погоде отсутствует';
         }
@@ -79,7 +75,7 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
     }
 
     public function init($device_id, $init_data): void {
-        $this->uid=$device_id;
+        $this->hwid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
@@ -103,13 +99,13 @@ class Current implements \SmartHome\DeviceInterface, \SmartHome\SensorsInterface
         }
         $this->weather=$weather;
         $this->updated=$weather->response->date->unix;
-        $url=Settings::get('url').'/action/';
+        $url=Settings::get('url').'/api/events/';
         $actions=['temperature'=>$weather->response->temperature->air->C, 'humidity'=>$weather->response->humidity->percent, 'pressure'=>round($weather->response->pressure->h_pa*76000/101325, 2), 'wind_speed'=>$weather->response->wind->speed->m_s, 'wind_direction'=>$weather->response->wind->direction->degree];
-        $data=['module'=>$this->getModuleName(), 'uid'=>$this->uid, 'data'=>json_encode($actions), 'ts'=>$weather->response->date->unix];
+        $data=['module'=>$this->getModuleName(), 'uid'=>$this->hwid, 'data'=>json_encode($actions), 'ts'=>$weather->response->date->unix];
         file_get_contents($url.'?'.http_build_query($data));
         $storage=new MemoryStorage;
         $storage->lockMemory();
-        $storage->setDevice($this->uid, $this);
+        $storage->setDevice($this->hwid, $this);
         $storage->releaseMemory();
         return true;
     }

@@ -22,7 +22,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
     private $socket;
     private $updated;
     private $message_id=1;
-    private $actions=[];
+    private $events=[];
 
     public function __construct() {
         $this->updated=0;
@@ -107,7 +107,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->power=$value;
-        $this->actions['power']=$value;
+        $this->events['power']=$value;
     }
 
     private function setBrightValue($value) {
@@ -115,7 +115,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->bright=$value;
-        $this->actions['bright']=$value;
+        $this->events['bright']=$value;
     }
 
     private function setColorModeValue($value) {
@@ -123,7 +123,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->color_mode=$value;
-        $this->actions['color_mode']=$value;
+        $this->events['color_mode']=$value;
     }
 
     private function setCTValue($value) {
@@ -131,7 +131,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->ct=$value;
-        $this->actions['ct']=$value;
+        $this->events['ct']=$value;
     }
 
     private function setRGBValue($value) {
@@ -139,7 +139,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->rgb=$value;
-        $this->actions['rgb']=$value;
+        $this->events['rgb']=$value;
     }
 
     private function setHueValue($value) {
@@ -147,7 +147,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->hue=$value;
-        $this->actions['hue']=$value;
+        $this->events['hue']=$value;
     }
 
     private function setSatValue($value) {
@@ -155,15 +155,15 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             return;
         }
         $this->sat=$value;
-        $this->actions['sat']=$value;
+        $this->events['sat']=$value;
     }
 
     public function getActions() {
-        if (sizeof($this->actions)==0) {
+        if (sizeof($this->events)==0) {
             return null;
         }
-        $actions=json_encode($this->actions);
-        $this->actions=[];
+        $actions=json_encode($this->events);
+        $this->events=[];
         return $actions;
     }
 
@@ -382,7 +382,7 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         return 'yeelight';
     }
 
-    public function getId(): string {
+    public function getHwid(): string {
         return 'yeelight_'.$this->id;
     }
 
@@ -413,10 +413,10 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
             'power'=>$this->getPowerValue(),
             'bright'=>$this->getBrightValue(),
             'ct'=>$this->getCTValue()
-                ];
+        ];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         return 'Состояние: '.is_null($this->power)?'Нет данных':$this->power;
     }
 
@@ -513,6 +513,10 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
 
     public function getBrightness(): int {
         return $this->getBrightValue();
+    }
+
+    public function getEventsList(): array {
+        return [];
     }
 
 }
