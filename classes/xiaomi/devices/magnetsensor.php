@@ -1,12 +1,14 @@
 <?php
 
 /**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
  * Датчик двери/окна Xiaomi
  */
 
 namespace Xiaomi\Devices;
 
-class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
+class MagnetSensor extends AbstractDevice {
 
     private $status;
     private $open_timer;
@@ -31,14 +33,14 @@ class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface
         $last=$this->status;
         $this->status=$value;
         if ($last!=$value) {
-            $this->actions['status']=$value;
-            $this->actions['alarm']=$value!='close';
+            $this->events['status']=$value;
+            $this->events['alarm']=$value!='close';
         }
     }
     
     private function setNoClose(string $value) {
         $this->open_timer=$value;
-        $this->actions['no_close']=$value;
+        $this->events['no_close']=$value;
     }
 
     public function getStatus() {
@@ -57,7 +59,7 @@ class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface
                 ];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         $result=[];
         switch ($this->status) {
             case null:
@@ -80,12 +82,8 @@ class MagnetSensor extends AbstractDevice implements \SmartHome\SensorsInterface
         return join(' ',$result);
     }
 
-    public function getDeviceIndicators(): array {
-        return ['alarm'=>'Открытие'];
-    }
-
-    public function getDeviceMeters(): array {
-        return [];
+    public function getEventsList(): array {
+        return ['alarm', 'status', 'voltage'];
     }
 
 }

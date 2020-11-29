@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
+ */
+
 namespace Xiaomi\Devices;
 
 abstract class AbstractDevice implements \SmartHome\DeviceInterface {
@@ -9,20 +14,20 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     protected $voltage;
     protected $updated;
     protected $cmd;
-    protected $actions;
+    protected $events;
 
     public function __construct() {
-        $this->actions=[];
+        $this->events=[];
         $this->updated=0;
     }
 
-    public function init($device_id,$init_data): void {
+    public function init($device_id, $init_data): void {
         $this->sid=$device_id;
         foreach ($init_data as $key=> $value) {
             $this->$key=$value;
         }
     }
-    
+
     public function getInitDataList(): array {
         return [];
     }
@@ -30,9 +35,9 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     public function getInitDataValues(): array {
         return [];
     }
-    
+
     public function update(\Xiaomi\XiaomiPacket $pkt) {
-        $this->actions=[];
+        $this->events=[];
         $this->sid='xiaomi_'.$pkt->getSid();
         $this->cmd=$pkt->getCmd();
         $this->model=$pkt->getModel();
@@ -42,7 +47,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
                     $this->setVoltage($value);
                     break;
                 default:
-                    $this->updateParam($param,$value);
+                    $this->updateParam($param, $value);
             }
         }
         $this->updated=time();
@@ -52,23 +57,19 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
         $last=$this->voltage;
         $this->voltage=$value/1000;
         if ($this->voltage!=$last) {
-            $this->actions['voltage']=$this->voltage;
+            $this->events['voltage']=$this->voltage;
         }
     }
 
     public function getEvents() {
-        if (sizeof($this->actions)==0) {
+        if (sizeof($this->events)==0) {
             return null;
         }
-        return $this->actions;
+        return $this->events;
     }
 
-    public function getModuleName(): string {
-        return 'xiaomi';
-    }
-
-    public function getId(): string {
-        return $this->sid;
+    public function getHwid(): string {
+        return 'xiaomi_'.$this->sid;
     }
 
     public function getLastUpdate(): int {
@@ -78,10 +79,10 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     public function getVoltage() {
         return $this->voltage;
     }
-    
+
     protected function showUnknownParam($param, $value) {
-        printf('%s=>{%s=%s}',$this->getId(),$param,$value);
+        printf('%s=>{%s=%s}', $this->getId(), $param, $value);
     }
 
-    abstract protected function updateParam($param,$value);
+    abstract protected function updateParam($param, $value);
 }

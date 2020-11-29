@@ -1,4 +1,8 @@
 <?php
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
+ */
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
 httpResponse::showHtmlHeader('Устройтва');
@@ -27,7 +31,7 @@ $devices->setRowCallback(function ($row) {
         $row->updated='';
     } else {
         try {
-            $row->info=$dev->getStateString();
+            $row->info=(string) $dev;
         } catch (Exception $ex) {
             $row->info='Программная ошибка: '.$ex->getMessage();
         }

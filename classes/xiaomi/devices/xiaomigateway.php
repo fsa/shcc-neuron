@@ -1,12 +1,14 @@
 <?php
 
 /**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
  * Шлюз Xiaomi
  */
 
 namespace Xiaomi\Devices;
 
-class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterface, \SmartHome\Device\Capability\PowerInterface {
+class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capability\PowerInterface {
     
     const MULTICAST_ADDRESS='224.0.0.50';
     const MULTICAST_PORT=9898;
@@ -79,7 +81,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         $last=$this->illumination;
         $this->illumination=$value;
         if($last!=$this->illumination) {
-            $this->actions['illumination']=$value;
+            $this->events['illumination']=$value;
         }
     }
 
@@ -99,10 +101,10 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         $this->bright=hexdec($parts[0]);
         $this->rgb=$parts[1].$parts[2].$parts[3];
         if($last_bright!=$this->bright) {
-            $this->actions['bright']=$this->bright;
+            $this->events['bright']=$this->bright;
         }
         if($last_rgb!=$this->rgb) {
-            $this->actions['rgb']=$this->rgb;
+            $this->events['rgb']=$this->rgb;
         }
     }
 
@@ -169,7 +171,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
                 ];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         $result=[];
         if(!is_null($this->bright)) {
             $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';
@@ -180,12 +182,8 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\SensorsInterfac
         return join(' ',$result);
     }
 
-    public function getDeviceIndicators(): array {
-        return [];
-    }
-
-    public function getDeviceMeters(): array {
-        return ['illumination'=>'Датчик освещённости'];
+    public function getEventsList(): array {
+        return ['illumination'];
     }
 
     public function getPower(): bool {

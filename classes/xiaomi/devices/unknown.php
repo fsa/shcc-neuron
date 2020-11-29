@@ -1,24 +1,29 @@
 <?php
 
+/**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
+ */
+
 namespace Xiaomi\Devices;
 
 class Unknown extends AbstractDevice {
 
     private $params;
-    
+
     public function __construct() {
         $this->params=[];
         parent::__construct();
     }
 
-    protected function updateParam($param,$value) {
-        $this->actions[$param]=$value;
-        if(array_key_exists($param, $this->params)) {
-            if(array_search($value, $this->params[$param])===false) {
+    protected function updateParam($param, $value) {
+        $this->events[$param]=$value;
+        if (array_key_exists($param, $this->params)) {
+            if (array_search($value, $this->params[$param])===false) {
                 array_push($this->params[$param], $value);
             }
         } else {
-            $this->params[$param]=[$value];        
+            $this->params[$param]=[$value];
         }
     }
 
@@ -30,16 +35,12 @@ class Unknown extends AbstractDevice {
         return "Неизвестный тип устройства";
     }
 
-    public function getDeviceIndicators(): array {
-        return [];
-    }
-
-    public function getDeviceMeters(): array {
-        return [];
-    }
-
-    public function getStateString(): string {
+    public function __toString(): string {
         return $this->model.'=>'.json_encode($this->params);
+    }
+
+    public function getEventsList(): array {
+        return [];
     }
 
 }

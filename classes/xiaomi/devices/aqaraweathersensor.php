@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Датчик температуры, влажности и давления Aqara
  * SHCC 0.7.0-dev
  * 2020-11-25
+ * Датчик температуры, влажности и давления Aqara
  */
 
 namespace Xiaomi\Devices;
 
-class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
+class AqaraWeatherSensor extends AbstractDevice {
 
     private $temperature;
     private $humidity;
@@ -39,7 +39,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         $last=$this->temperature;
         $this->temperature=$value/100;
         if ($this->temperature!=$last) {
-            $this->actions['temperature']=$this->temperature;
+            $this->events['temperature']=$this->temperature;
         }
     }
 
@@ -51,7 +51,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         $last=$this->humidity;
         $this->humidity=$value/100;
         if ($this->humidity!=$last) {
-            $this->actions['humidity']=$this->humidity;
+            $this->events['humidity']=$this->humidity;
         }
     }
 
@@ -60,7 +60,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         $this->pressureKPa=$value;
         $this->pressure=round($value*760/101325, 2);
         if ($this->pressureKPa!=$last) {
-            $this->actions['pressure']=$this->pressure;
+            $this->events['pressure']=$this->pressure;
         }
     }
 
@@ -97,7 +97,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         return $state;
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         $result=[];
         if ($this->temperature) {
             $result[]=sprintf('Температура воздуха %+.1f &deg;C.', $this->temperature);
@@ -114,15 +114,7 @@ class AqaraWeatherSensor extends AbstractDevice implements \SmartHome\SensorsInt
         return join(' ', $result);
     }
 
-    public function getDeviceIndicators(): array {
-        return [];
-    }
-
-    public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура воздуха, &deg;C', 'humidity'=>'Относительная влажность, %', 'pressure'=>'Атмосферное давление, мм.рт.ст.'];
-    }
-
-    public function getDeviceEvents(): array {
+    public function getEventsList(): array {
         return [
             'temperature',
             'humidity',

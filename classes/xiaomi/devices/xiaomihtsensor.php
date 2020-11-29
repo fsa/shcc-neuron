@@ -1,17 +1,19 @@
 <?php
 
 /**
+ * SHCC 0.7.0-dev
+ * 2020-11-29
  * Датчик температуры и влажности Xiaomi
  */
 
 namespace Xiaomi\Devices;
 
-class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterface {
+class XiaomiHTSensor extends AbstractDevice {
 
     private $temperature;
     private $humidity;
 
-    protected function updateParam($param,$value) {
+    protected function updateParam($param, $value) {
         switch ($param) {
             case "temperature":
                 $this->setTemperature($value);
@@ -28,7 +30,7 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
         $last=$this->temperature;
         $this->temperature=$value/100;
         if ($this->temperature!=$last) {
-            $this->actions['temperature']=$this->temperature;
+            $this->events['temperature']=$this->temperature;
         }
     }
 
@@ -36,7 +38,7 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
         $last=$this->humidity;
         $this->humidity=$value/100;
         if ($this->humidity!=$last) {
-            $this->actions['humidity']=$this->humidity;
+            $this->events['humidity']=$this->humidity;
         }
     }
 
@@ -54,38 +56,34 @@ class XiaomiHTSensor extends AbstractDevice implements \SmartHome\SensorsInterfa
 
     public function getState(): array {
         $state=[];
-        if(!is_null($this->temperature)) {
-            $state['temperature']=round($this->temperature,1);
+        if (!is_null($this->temperature)) {
+            $state['temperature']=round($this->temperature, 1);
         }
-        if(!is_null($this->humidity)) {
+        if (!is_null($this->humidity)) {
             $state['humidity']=round($this->humidity);
         }
-        if(!is_null($this->voltage)) {
+        if (!is_null($this->voltage)) {
             $state['voltage']=$this->voltage;
         }
         return $state;
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         $result=[];
-        if($this->temperature) {
-            $result[]=sprintf('Температура воздуха %+.1f &deg;C.',$this->temperature);
+        if ($this->temperature) {
+            $result[]=sprintf('Температура воздуха %+.1f &deg;C.', $this->temperature);
         }
-        if($this->humidity) {
-            $result[]=sprintf('Относительная влажность %.1f%%.',$this->humidity);
+        if ($this->humidity) {
+            $result[]=sprintf('Относительная влажность %.1f%%.', $this->humidity);
         }
-        if($this->voltage) {
-            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+        if ($this->voltage) {
+            $result[]=sprintf('Батарея CR2032: %.3f В.', $this->voltage);
         }
-        return join(' ',$result);
+        return join(' ', $result);
     }
 
-    public function getDeviceIndicators(): array {
-        return [];
-    }
-
-    public function getDeviceMeters(): array {
-        return ['temperature'=>'Температура воздуха, &deg;C','humidity'=>'Относительная влажность, %'];
+    public function getEventsList(): array {
+        return ['temperature', 'humidity', 'voltage'];
     }
 
 }

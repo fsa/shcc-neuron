@@ -2,23 +2,23 @@
 
 /**
  * SHCC 0.7.0-dev
- * 2020-11-27
+ * 2020-11-29
  */
 
 namespace Xiaomi\Devices;
 
-class AqaraWirelessRemoteSwitch extends AbstractDevice implements \SmartHome\DeviceActionInterface {
+class AqaraWirelessRemoteSwitch extends AbstractDevice {
 
     protected function updateParam($param,$value) {
         switch ($param) {
             case "channel_0":
-                $this->actions[$this->oneButtonEvent($value).'@left']=1;
+                $this->events[$this->oneButtonEvent($value).'@left']=1;
                 break;
             case "channel_1":
-                $this->actions[$this->oneButtonEvent($value).'@right']=1;
+                $this->events[$this->oneButtonEvent($value).'@right']=1;
                 break;
             case "dual_channel":
-                $this->actions[$this->doubleButtonsEvent($value).'@both']=1;
+                $this->events[$this->doubleButtonsEvent($value).'@both']=1;
                 break;
             default:
                 $this->showUnknownParam($param, $value);
@@ -53,7 +53,7 @@ class AqaraWirelessRemoteSwitch extends AbstractDevice implements \SmartHome\Dev
                 ];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         $result=[];
         if($this->updated) {
             $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);
@@ -64,11 +64,7 @@ class AqaraWirelessRemoteSwitch extends AbstractDevice implements \SmartHome\Dev
         return join(' ',$result);
     }
 
-    public function getDeviceActions(): array {
-        return ['click'=>'Нажатие','double_click'=>'Двойной клик','long_click'=>'Долгое нажатие'];
-    }
-
-    public function getDeviceEvents(): array {
+    public function getEventsList(): array {
         return [
             'click@left',
             'double_click@left',
