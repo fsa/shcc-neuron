@@ -156,8 +156,9 @@ if(Auth::memberOf()) {
   </div>
 </div>
 <script>
-$(document).ready(function(){
-    $('#<?=$id?>').modal('show');
+document.addEventListener('DOMContentLoaded', function () {
+    let myModal = new bootstrap.Modal(document.getElementById('<?=$id?>'));
+    myModal.show();
 });
 </script>
 <?php
