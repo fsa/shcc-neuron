@@ -69,7 +69,7 @@ abstract class AbstractDevice implements \SmartHome\DeviceInterface {
     }
 
     public function getHwid(): string {
-        return 'xiaomi_'.$this->sid;
+        return $this->sid;
     }
 
     public function getLastUpdate(): int {
