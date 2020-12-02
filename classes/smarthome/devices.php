@@ -30,7 +30,9 @@ class Devices {
         if (is_null($device)) {
             $entity=json_decode($db_dev->entity);
             $device=new $entity->classname;
-            $device->init($db_dev->hwid, $entity->properties);
+            if(isset($entity->properties)) {
+                $device->init($db_dev->hwid, $entity->properties);
+            }
         }
         $device->place_name=$db_dev->place_name;
         return $device;
@@ -79,15 +81,22 @@ class Devices {
         }
     }
 
-    public function update() {
+    public function update($old_uid) {
         $this->exists(true);
-        return DB::update('devices', get_object_vars($this->device), 'hwid');
+        $values=get_object_vars($this->device);
+        $keys=array_keys($values);
+        foreach ($keys as &$key) {
+            $key=$key.'=:'.$key;
+        }
+        $values['old_uid']=$old_uid;
+        $stmt=DB::prepare('UPDATE devices SET '.join(',', $keys).' WHERE uid=:old_uid');
+        return $stmt->execute($values);
     }
 
     public function insert() {
         $this->exists(true);
         $params=get_object_vars($this->device);
-        $id=DB::insert('devices', $params, 'hwid');
+        return DB::insert('devices', $params, 'hwid');
     }
 
     public static function getDevicesStmt(): \PDOStatement {
@@ -103,6 +112,13 @@ class Devices {
 
     public static function getDeviceByHwid($id): Entity\Device {
         $s=DB::prepare('SELECT * FROM devices WHERE hwid=?');
+        $s->execute([$id]);
+        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
+        return $s->fetch();
+    }
+
+    public static function getDeviceByUid($id): Entity\Device {
+        $s=DB::prepare('SELECT * FROM devices WHERE uid=?');
         $s->execute([$id]);
         $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
         return $s->fetch();

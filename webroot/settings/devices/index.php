@@ -19,9 +19,9 @@ $devices->addField('description', 'Описание');
 $devices->addField('classname', 'Класс');
 $devices->addField('place_name', 'Место установки');
 $devices->addField('info', 'Информация об устройстве');
+$devices->addField('events', 'События');
 $devices->addField('updated', 'Было активно');
-$devices->addButton(new HTML\ButtonLink('Датчики', 'sensors/?id=%s', 'hwid'));
-$devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s', 'hwid'));
+$devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
 $devices->setRowCallback(function ($row) {
     $entity=json_decode($row->entity);
     $row->classname=$entity->classname;
@@ -42,6 +42,7 @@ $devices->setRowCallback(function ($row) {
             $row->updated='Ошибка: '.$ex->getMessage();
         }
     }
+    $row->events=join(', ', $dev->getEventsList());
 });
 $devices->showTable(\SmartHome\Devices::getDevicesStmt());
 ?>

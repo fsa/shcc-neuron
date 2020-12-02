@@ -19,24 +19,26 @@ if ($hwid) {
     }
     $init_data_list=$memdev->getInitDataList();
     $device=new SmartHome\Entity\Device;
+    $device->uid=$hwid;
     $device->hwid=$hwid;
-    $device->uid=null;
     $device->description=$memdev->getDescription();
-    $device->classname=get_class($memdev);
     $device->setInitData($memdev->getInitDataValues());
     $device->place_id=0;
+    $classname=get_class($memdev);
 } else {
     if ($uid) {
-        ## ByHwid
-        $device=SmartHome\Devices::getDeviceById($id);
-        $memdev=new $device->classname;
-        $init_data_list=$memdev->getInitDataList();
+        $device=SmartHome\Devices::getDeviceByUid($uid);
         if (!$device) {
             httpResponse::showError('Устройство не найдено в базе данных');
         }
+        $entity=json_decode($device->entity);
+        $memdev=new $entity->classname;
+        $init_data_list=$memdev->getInitDataList();
+        $classname=$entity->classname;
     } else {
         $device=new SmartHome\Entity\Device;
         $init_data_list=[];
+        $classname='';
     }
 }
 httpResponse::showHtmlHeader("Регистрация оборудования");
@@ -46,19 +48,22 @@ if ($hwid) {
 ?>
 <form method="POST" action="./">
 <?php
-Forms::inputString('uid', $device->hwid, 'Уникальное имя устройства в системе:');
+if($uid) {
+    Forms::inputHidden('old_uid', $device->uid);
+}
+Forms::inputString('uid', $device->uid, 'Уникальное имя устройства в системе:');
 Forms::inputString('hwid', $device->hwid, 'Уникальный идентификатор устройства*:');
-Forms::inputString('classname', $device->classname, 'Класс устройства*:');
+Forms::inputString('classname', $classname, 'Класс устройства*:');
 Forms::inputString('description', $device->description, 'Описание:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=> $name) {
-    Forms::inputString('init['.$param.']', isset($values[$param])?$values[$param]:'', $name);
+    Forms::inputString('properties['.$param.']', isset($values['properties'][$param])?$values['properties'][$param]:'', $name);
 }
 Forms::inputSelect('place_id', $device->place_id, 'Расположение:', \SmartHome\Places::getPlaceListStmt());
 ?>
 <p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
 <?php
-Forms::submitButton($device->uid?'Сохранить изменения':'Добавить новое устройство', $device->uid?'update':'insert');
+Forms::submitButton($uid?'Сохранить изменения':'Добавить новое устройство', $uid?'update':'insert');
 ?>
 </form>
 <?php

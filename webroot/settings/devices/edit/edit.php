@@ -9,9 +9,9 @@ $device->hwid=filter_input(INPUT_POST,'hwid');
 $device->description=filter_input(INPUT_POST,'description');
 $entity=new stdClass();
 $entity->classname=filter_input(INPUT_POST,'classname');
-$init=filter_input(INPUT_POST,'init',FILTER_DEFAULT,FILTER_REQUIRE_ARRAY);
-if(is_array($init)) {
-    $entity->properties=$init;
+$properties=filter_input(INPUT_POST,'properties',FILTER_DEFAULT,FILTER_REQUIRE_ARRAY);
+if(is_array($properties)) {
+    $entity->properties=$properties;
 }
 $device->entity=json_encode($entity);
 $device->place_id=filter_input(INPUT_POST,'place_id',FILTER_VALIDATE_INT);
@@ -27,7 +27,7 @@ switch ($action) {
         httpResponse::redirection('../');
         break;
     case 'update':
-        $devices->update();
+        $devices->update(filter_input(INPUT_POST,'old_uid'));
         httpResponse::storeNotification('Данные об устройстве обновлены');
         httpResponse::redirection('../');
         break;
