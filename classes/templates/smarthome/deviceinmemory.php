@@ -12,16 +12,12 @@ class DeviceInMemory {
         <th>Значение</th>
     </tr>
     <tr>
-        <td>Модуль</td>
-        <td><?=$device->getModuleName()?></td>
-    </tr>
-    <tr>
         <td>ID устройства</td>
-        <td><?=$device->getId()?></td>
+        <td><?=$device->getHwid()?></td>
     </tr>
     <tr>
         <td>Состояние</td>
-        <td><?=$device->getStateString()?></td>
+        <td><?=(string)$device?></td>
     </tr>
 <?php
 if($device instanceof \SmartHome\SensorsInterface) {

@@ -104,7 +104,7 @@ class MemoryStorage {
         $result->entity=$device;
         $result->hwid=$hwid;
         $result->description=$device->getDescription();
-        $result->state=$device->getStateString();
+        $result->state=(string)$device;
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Нет данных':date('d.m.Y H:i:s', $date);
         return $result;
