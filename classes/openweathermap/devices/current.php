@@ -4,7 +4,6 @@ namespace OpenWeatherMap\Devices;
 
 use Settings,
     OpenWeatherMap\Api,
-    AppException,
     SmartHome\Device\MemoryStorage;
 
 class Current implements \SmartHome\DeviceInterface {
@@ -74,16 +73,19 @@ class Current implements \SmartHome\DeviceInterface {
             $this->$key=$value;
         }
         if (is_null($this->api_key)) {
-            throw new AppException('Не указан ключ API');
+            return;
         }
         if (is_null($this->city_id)) {
-            throw new AppException('Не указан ID города.');
+            return;
         }
         $this->owm=new Api($this->api_key);
         $this->owm->setCityId($this->city_id);
     }
 
     public function update(): bool {
+        if(is_null($this->owm)) {
+            return false;
+        }
         $weather=$this->owm->fetchCurrent();
         if (is_null($weather)) {
             return false;
@@ -93,10 +95,15 @@ class Current implements \SmartHome\DeviceInterface {
         }
         $this->weather=$weather;
         $this->updated=$weather->dt;
-        $url=Settings::get('url').'/action/';
-        $actions=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
-        $data=['module'=>$this->getModuleName(), 'uid'=>$this->hwid, 'data'=>json_encode($actions), 'ts'=>$weather->dt];
-        file_get_contents($url.'?'.http_build_query($data));
+        $url=Settings::get('url').'/api/events/';
+        $events=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
+        file_get_contents($url, 0, stream_context_create([
+            'http'=>[
+                'method'=>'POST',
+                'header'=>"Content-Type: application/json; charset=utf-8\r\n",
+                'content' => json_encode(['hwid'=>$this->hwid, 'events'=>$events, 'ts'=>$weather->dt])
+            ]
+        ]));
         $storage=new MemoryStorage;
         $storage->lockMemory();
         $storage->setDevice($this->hwid, $this);
