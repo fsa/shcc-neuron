@@ -2,14 +2,15 @@
 
 namespace Yeelight;
 
-use DB;
+use DB,
+    SmartHome\MemoryStorage;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='yeelight';
 
     /**
-     *  @var \SmartHome\Device\MemoryStorage
+     *  @var \SmartHome\MemoryStorage
      */
     private $storage;
     private $socketserver;
@@ -24,7 +25,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new \SmartHome\Device\MemoryStorage;
+        $this->storage=new MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
         $this->socketserver->sendDiscover();
@@ -51,7 +52,7 @@ class Daemon implements \SmartHome\DaemonInterface {
                     'http'=>[
                         'method'=>'POST',
                         'header'=>"Content-Type: application/json; charset=utf-8\r\n",
-                        'content' => json_encode($actions)
+                        'content'=>json_encode($actions)
                     ]
                 ]));
             }

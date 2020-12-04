@@ -4,7 +4,7 @@ namespace Gismeteo\Devices;
 
 use Settings,
     AppException,
-    SmartHome\Device\MemoryStorage;
+    SmartHome\MemoryStorage;
 
 class Current implements \SmartHome\DeviceInterface {
 

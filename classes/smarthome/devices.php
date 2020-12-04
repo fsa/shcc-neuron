@@ -25,7 +25,7 @@ class Devices {
         if (!$db_dev) {
             return null;
         }
-        $mem=new Device\MemoryStorage;
+        $mem=new MemoryStorage;
         $device=$mem->getDevice($db_dev->hwid);
         if (is_null($device)) {
             $entity=json_decode($db_dev->entity);
@@ -133,7 +133,7 @@ class Devices {
     public static function refreshMemoryDevices(): void {
         $stmt=DB::prepare('SELECT hwid, entity FROM devices ORDER BY hwid');
         $stmt->execute();
-        $mem=new Device\MemoryStorage();
+        $mem=new MemoryStorage();
         $mem->lockMemory();
         while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
             $entity=json_decode($device->entity);

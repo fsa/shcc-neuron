@@ -2,19 +2,20 @@
 
 namespace Xiaomi;
 
-use DB;
+use DB,
+    SmartHome\MemoryStorage;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='xiaomi';
 
     /**
-    *  @var \SmartHome\Device\MemoryStorage
-    */
+     *  @var \SmartHome\MemoryStorage
+     */
     private $storage;
     private $socketserver;
     private $events_url;
-    
+
     public function __construct($events_url) {
         $this->events_url=$events_url;
     }
@@ -24,7 +25,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new \SmartHome\Device\MemoryStorage;
+        $this->storage=new MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
         DB::disconnect();
@@ -39,7 +40,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         $hwid=self::DAEMON_NAME.'_'.$hwid;
         $this->storage->lockMemory();
         $device=$this->storage->getDevice($hwid);
-        if(is_null($device)) {
+        if (is_null($device)) {
             $device=$pkt->getDeviceObject();
             $device->update($pkt);
             $this->storage->setDevice($hwid, $device);
@@ -54,7 +55,7 @@ class Daemon implements \SmartHome\DaemonInterface {
                     'http'=>[
                         'method'=>'POST',
                         'header'=>"Content-Type: application/json; charset=utf-8\r\n",
-                        'content' => json_encode(['hwid'=>$hwid, 'events'=>$events])
+                        'content'=>json_encode(['hwid'=>$hwid, 'events'=>$events])
                     ]
                 ]));
             }

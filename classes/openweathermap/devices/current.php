@@ -4,7 +4,7 @@ namespace OpenWeatherMap\Devices;
 
 use Settings,
     OpenWeatherMap\Api,
-    SmartHome\Device\MemoryStorage;
+    SmartHome\MemoryStorage;
 
 class Current implements \SmartHome\DeviceInterface {
 

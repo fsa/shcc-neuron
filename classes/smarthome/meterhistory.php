@@ -44,10 +44,10 @@ class MeterHistory {
 
     public function getHistory() {
         if (!is_int($this->place_id) and!$this->meter_id) {
-            throw new Exception('Не задано место или измерительный прибор');
+            httpResponse::showError('Не задано место или измерительный прибор');
         }
         if (!$this->meter_id and!$this->unit_id) {
-            throw new Exception('Не задан тип измерительного прибора');
+            httpResponse::showError('Не задан тип измерительного прибора');
         }
         $params=[];
         $where=[];

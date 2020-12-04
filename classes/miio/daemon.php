@@ -2,14 +2,15 @@
 
 namespace miIO;
 
-use DB;
+use DB,
+    SmartHome\MemoryStorage;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
     const DAEMON_NAME='miio';
 
     /**
-     *  @var \SmartHome\Device\MemoryStorage
+     *  @var \SmartHome\MemoryStorage
      */
     private $storage;
     private $socketserver;
@@ -25,7 +26,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new \SmartHome\Device\MemoryStorage;
+        $this->storage=new MemoryStorage;
         $this->tokens=Tokens::getTokens();
         $this->socketserver=new SocketServer();
         $this->socketserver->setBroadcastSocket();
@@ -44,7 +45,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         }
         $this->storage->lockMemory();
         $device=$this->storage->getDevice(self::DAEMON_NAME.'_'.$uid);
-        if(is_null($device)) {
+        if (is_null($device)) {
             $device=new GenericDevice;
             if (isset($this->tokens[$uid])) {
                 $device->setDeviceToken($this->tokens[$uid]);

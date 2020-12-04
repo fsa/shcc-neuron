@@ -12,7 +12,7 @@ use Templates\Forms;
 $uid=filter_input(INPUT_GET, 'uid');
 $hwid=filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
-    $sh=new SmartHome\Device\MemoryStorage;
+    $sh=new SmartHome\MemoryStorage;
     $memdev=$sh->getDevice($hwid);
     if (is_null($memdev)) {
         httpResponse::showError('Что-то пошло не так. Не найдено устройство в памяти.');

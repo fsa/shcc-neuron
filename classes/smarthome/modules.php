@@ -2,8 +2,6 @@
 
 namespace SmartHome;
 
-use AppException;
-
 class Modules {
 
     private $dirs;

@@ -3,7 +3,7 @@
 if (!isset($hwid)) {
     die;
 }
-$sh=new SmartHome\Device\MemoryStorage;
+$sh=new SmartHome\MemoryStorage;
 $mem_device=$sh->getDevice($hwid);
 $devices=new SmartHome\Devices;
 list($module,$id)=explode('_', $hwid, 2);
