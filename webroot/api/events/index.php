@@ -22,6 +22,7 @@ if (!isset($json->hwid)) {
 if (!isset($json->events)) {
     die('Wrong format');
 }
+fastcgi_finish_request();
 $hwid=$json->hwid;
 $uid=SmartHome\Devices::getUidByHwid($hwid);
 $events=$json->events;
@@ -31,9 +32,9 @@ if ($uid) {
         SmartHome\Meters::storeEvent($uid.'@'.$property, $value, $ts);
         SmartHome\Indicators::storeEvent($uid.'@'.$property, $value, $ts);
     }
-}
-$dir='../../custom/events/';
-if ($uid and file_exists($dir.$uid.'.php')) {
-    chdir($dir);
-    include $uid.'.php';
+    $dir='../../../custom/events/';
+    if (file_exists($dir.$uid.'.php')) {
+        chdir($dir);
+        include $uid.'.php';
+    }
 }
