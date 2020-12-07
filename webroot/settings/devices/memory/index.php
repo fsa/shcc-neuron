@@ -15,7 +15,7 @@ httpResponse::showHtmlHeader('Список устройств в памяти');
 <?php
 
 $db_devices=SmartHome\Devices::getDevicesHwids();
-$mem_list=SmartHome\MemoryStorage::getDevicesUids(); #HWID
+$mem_list=SmartHome\MemoryStorage::getDevicesHwids();
 $mem_devices=array_flip($mem_list);
 foreach ($db_devices as $db_device) {
     if (isset($mem_devices[$db_device])) {
@@ -36,7 +36,7 @@ $memdevitable->showTable(new class($mem_list) {
 
     public function __construct($list) {
         $this->list=$list;
-        $this->mem=new \SmartHome\MemoryStorage; # - Device
+        $this->mem=new \SmartHome\MemoryStorage;
     }
 
     public function fetch() {

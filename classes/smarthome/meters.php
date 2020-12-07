@@ -40,20 +40,25 @@ class Meters {
     }
 
     public static function storeEvent($property, $value, $ts=null): bool {
-        $s=DB::prepare('SELECT id FROM meters WHERE device_property=? AND history=true');
+        $s=DB::prepare('SELECT id, uid, history FROM meters WHERE device_property=?');
         $s->execute([$property]);
-        $id=$s->fetch(PDO::FETCH_COLUMN);
-        if (!$id) {
+        $row=$s->fetch(PDO::FETCH_OBJ);
+        if (!$row) {
+            return false;
+        }
+        $mem=new MemoryStorage;
+        $mem->setSensor($row->uid, $value, $ts);
+        if ($row->history!='t') {
             return false;
         }
         if (is_null($ts)) {
             $s=DB::prepare('INSERT INTO meter_history (meter_id, value) VALUES (?, ?)');
-            $s->execute([$id, $value]);
+            $s->execute([$row->id, $value]);
         } else {
             #TODO: проверить отсутствие записи с указанным ts
             $s=DB::prepare('INSERT INTO meter_history (meter_id, value, timestamp) VALUES (?, ?, ?)');
             $datetime=date('c', $ts);
-            $s->execute([$id, $value, $datetime]);
+            $s->execute([$row->id, $value, $datetime]);
         }
         return true;
     }

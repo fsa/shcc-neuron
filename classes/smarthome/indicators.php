@@ -32,10 +32,15 @@ class Indicators {
     }
 
     public static function storeEvent($property, $value, $ts=null): bool {
-        $s=DB::prepare('SELECT id FROM indicators WHERE device_property=? AND history=true');
+        $s=DB::prepare('SELECT id, uid, history FROM indicators WHERE device_property=?');
         $s->execute([$property]);
-        $id=$s->fetch(PDO::FETCH_COLUMN);
-        if (!$id) {
+        $row=$s->fetch(PDO::FETCH_COLUMN);
+        if (!$row) {
+            return false;
+        }
+        $mem=new MemoryStorage;
+        $mem->setSensor($row->uid, $value, $ts);
+        if ($row->history!='t') {
             return false;
         }
         if (is_null($ts)) {
