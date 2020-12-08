@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function updatePage() {
     updateSensorsState();
+    let datetime = new Date();
+    document.querySelector('#page_last_update').innerHTML=datetime.toLocaleString();
 }
 
 function updateSensorsState() {

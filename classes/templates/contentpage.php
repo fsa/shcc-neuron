@@ -20,9 +20,8 @@ class ContentPage {
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#527779">
 <link rel="manifest" href="/manifest.json">
-<link rel="stylesheet" href="/bootstrap.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-<!--script src="/libs/jquery/jquery.min.js"></script-->
+<link rel="stylesheet" href="/bootstrap.css">
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
 <?=$this->header?>
 </head>
@@ -167,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
     public function Footer() {
 ?>
 </main>
-<footer class="footer container-fluid bg-primary p-3 text-white"><?=date('d.m.Y H:i:s')?></footer>
+    <footer class="footer container-fluid bg-primary p-3 text-white"><span id="page_last_update"><?=date('d.m.Y H:i:s')?></span></footer>
 </body>
 </html>
 <?php        
