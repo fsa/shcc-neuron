@@ -23,7 +23,7 @@ $meters->setRowCallback(function ($row) use ($mem) {
     $row->unit_name=\SmartHome\Meters::getUnitName($row->unit);
     $state=$mem->getSensor($row->uid);
     if($state) {
-        $row->updates=date('d.m.Y H:i:s', $state->ts).'<br>Значение: '.$state->value;
+        $row->updates=date('d.m.Y H:i:s', $state->ts).'<br>Значение: '.$state->value.' '.\SmartHome\Meters::getUnit($row->unit);
     } else {
         $row->updates='Нет данных';
     }
