@@ -20,7 +20,7 @@
         "defaults"
     ],
     "devDependencies": {
-        "bootstrap": "^5.0.0-alpha3",
+        "bootstrap": "^5.0.0-beta1",
         "browser-sync": "^2.26.13",
         "gulp": "^4.0.2",
         "gulp-autoprefixer": "^7.0.1",
