@@ -63,4 +63,9 @@ class Meters {
         return true;
     }
 
+    public static function getMeters() {
+        $s=DB::query('SELECT * FROM meters ORDER BY uid');
+        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Meter::class);
+        return $s;
+    }
 }
