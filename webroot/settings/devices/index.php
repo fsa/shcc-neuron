@@ -17,7 +17,6 @@ $devices->addField('uid', 'Имя');
 $devices->addField('hwid', 'Идентификатор устройства');
 $devices->addField('description', 'Описание');
 $devices->addField('classname', 'Класс');
-$devices->addField('place_name', 'Место установки');
 $devices->addField('info', 'Информация об устройстве');
 $devices->addField('events', 'События');
 $devices->addField('updated', 'Было активно');
