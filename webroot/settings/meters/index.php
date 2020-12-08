@@ -14,17 +14,20 @@ $mem=new \SmartHome\MemoryStorage;
 $meters=new HTML\Table;
 $meters->setCaption('Датчики');
 $meters->addField('uid', 'Имя');
+$meters->addField('value', 'Значение');
+$meters->addField('updates', 'Обновлено');
+$meters->addField('unit_name', 'Величина');
 $meters->addField('description', 'Описание');
-$meters->addField('unit_name', 'Единица измерения');
 $meters->addField('device_property', 'Источник данных');
-$meters->addField('updates', 'Было обновлено');
 #$meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) use ($mem) {
     $row->unit_name=\SmartHome\Meters::getUnitName($row->unit);
     $state=$mem->getSensor($row->uid);
     if($state) {
-        $row->updates=date('d.m.Y H:i:s', $state->ts).'<br>Значение: '.$state->value.' '.\SmartHome\Meters::getUnit($row->unit);
+        $row->value=$state->value.' '.\SmartHome\Meters::getUnit($row->unit);
+        $row->updates=date('d.m.Y H:i:s', $state->ts);
     } else {
+        $row->value='---';
         $row->updates='Нет данных';
     }
 });
