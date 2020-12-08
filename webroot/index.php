@@ -2,7 +2,6 @@
 
 require_once 'common.php';
 Auth\Session::grantAccess();
-httpResponse::addHeader('<script src="/js/controllers.js"></script>');
 httpResponse::showHtmlHeader('Панель управления');
 chdir('../custom/dashboard/');
 include_once '../functions.php';
