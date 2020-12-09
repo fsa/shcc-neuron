@@ -6,7 +6,7 @@
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
 httpResponse::showHtmlHeader('Датчики');
-httpResponse::showNavPills('../%s/', require '../sections.php', 'devices');
+httpResponse::showNavPills('../%s/', require '../sections.php', 'meters');
 ?>
 <hr>
 <?php
