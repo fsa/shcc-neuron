@@ -1,14 +1,11 @@
-$theme-colors: (
-    "primary":    #527779,
-    "secondary":  #bfd1d3,
-    "success":    #64778d,
-    "info":       #ecfdff,
-    "warning":    #a25b4b,
-    "danger":     #dc3545,
-    "light":      #f8f9fa,
-    "dark":       #212529
-);
-
+$primary:    #527779;
+$secondary:  #bfd1d3;
+$success:    #64778d;
+$info:       #ecfdff;
+$warning:    #a25b4b;
+$danger:     #dc3545;
+$light:      #f8f9fa;
+$dark:       #212529;
 // scss-docs-start import-stack
 // Configuration
 @import "functions";
