@@ -223,16 +223,33 @@ echo password_hash('password', PASSWORD_DEFAULT);
 
 ## Обеспечение автоматического запуска необходимых процессов на системе с systemd
 
-Если на вашей системе используется systemd, то вы можете воспользоваться заготовками. При стандартном расположении в папке /var/www/shcc необходимости редактировать файлы примеров отсутствуют. Создайте копию файлов из папки service/systemd/sample в папке service/systemd. После этого создайте символические ссылки на полученные файлы service и timer в каталог /lib/systemd/system/.
+Для запуска демонов и ежеминутного скрипта имеются готовые юниты для systemd. При стандартном расположении в папке /var/www/shcc необходимости настраивать сервисы нет. Создайте символические ссылки на файлы service и timer в каталог /lib/systemd/system/.
 ``` bash
 # cd /var/www/shcc/service/systemd
-# cp sample/shcc.service ./
-# cp sample/shcc-minutely.service ./
-# cp sample/shcc-minutely.timer ./
 # ln -s shcc.service /lib/systemd/system/
 # ln -s shcc-minutely.service /lib/systemd/system/
 # ln -s shcc-minutely.timer /lib/systemd/system/
 ```
+Если вы используете иной путь расположения shcc или используете своего пользователя для запуска скриптов, то выполните настройку:
+```bash
+# systemctrl edit shcc.service
+# systemctrt edit shcc-minutely.service
+```
+В открывшемся редакторе введите следующий код для shcc.service:
+```
+[Service]
+WorkingDirectory=/home/my_user/www/shcc/service
+User=my_user
+Group=my_user
+```
+И для shcc-minutely.service:
+```
+[Service]
+WorkingDirectory=/home/my_user/www/shcc/custom
+User=my_user
+Group=my_user
+```
+В оба файла в качестве WorkingDirectory нужно указать путь до папки service или custom, а в качестве User и Group имя пользователя и группу, от имени которого должен работаь сервис.
 
 Теперь вы можете активировать и запустит требуемые юниты:
 ```bash
