@@ -145,7 +145,7 @@ class Devices {
             } else {
                 $device_obj=new $entity->classname;
             }
-            $device_obj->init($device->hwid, $entity->properties);
+            $device_obj->init($device->hwid, $entity->properties??[]);
             $mem->setDevice($device->hwid, $device_obj);
         }
         $mem->releaseMemory();
