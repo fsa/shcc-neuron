@@ -2,9 +2,6 @@
 /settings.php
 /config/*.conf
 /src/node_modules/*
-/service/systemd/shcc.service
-/service/systemd/shcc-minutely.service
-/service/systemd/shcc-minutely.timer
 /custom/*
 !/custom/backup/
 /custom/backup/*.sql

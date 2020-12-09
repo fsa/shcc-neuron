@@ -27,14 +27,14 @@ function start() {
     $daemons['TTS']='Tts';
     foreach ($daemons as $name=> $class) {
         if (class_exists($class)) {
-            echo "Starting '$name' daemon.".PHP_EOL;
+            echo "Starting '$name' module daemon.".PHP_EOL;
             exec("php -f daemon.php \"$class\"");
         }
     }
 }
 
 function stop() {
-    $dir=__DIR__.'/pid/';
+    $dir=getenv('RUNTIME_DIRECTORY')==''?'/var/run/shcc':getenv('RUNTIME_DIRECTORY');
     $files=scandir($dir);
     foreach ($files as $pidfile) {
         if (substr($pidfile,-4,4)!='.pid') {

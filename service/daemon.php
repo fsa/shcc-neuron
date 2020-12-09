@@ -6,8 +6,8 @@ require_once 'autoloader.php';
 $daemon_class=$argv[1];
 $daemon=new $daemon_class(Settings::get('url').'/api/events/');
 $daemon_name=$daemon->getName();
-$log_dir=Settings::get('log_dir', '/var/log/shcc');
-$pid_dir=Settings::get('pid_dir', '/var/run/shcc');
+$log_dir=getenv('LOGS_DIRECTORY')==''?'/var/log/shcc':getenv('LOGS_DIRECTORY');
+$pid_dir=getenv('RUNTIME_DIRECTORY')==''?'/var/run/shcc':getenv('RUNTIME_DIRECTORY');
 $pid_file=$pid_dir.'/'.$daemon_name.'.pid';
 if (isDaemonActive($pid_file)) {
     echo "Daemon \"$daemon_name\" already active.".PHP_EOL;

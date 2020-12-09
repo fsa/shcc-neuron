@@ -1,8 +1,0 @@
-[Unit]
-Description=SHCC minutely script
-
-[Service]
-WorkingDirectory=/var/www/shcc/custom/
-ExecStart=/var/www/shcc/custom/minutely.sh
-User=www-data
-Group=www-data

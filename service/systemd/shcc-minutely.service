@@ -1,0 +1,8 @@
+[Unit]
+Description=SHCC minutely script
+
+[Service]
+WorkingDirectory=/var/www/shcc/custom
+ExecStart=timeout 30 /usr/bin/php -q -f minutely.php
+User=www-data
+Group=www-data
