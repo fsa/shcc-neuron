@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function updatePage() {
     updateSensorsState();
+    updateMessageLog('/api/tts/messages/', '#tts_message_log');
+    updateMessageLog('/api/system/state/', '#system_state');
     let datetime = new Date();
     document.querySelector('#page_last_update').innerHTML=datetime.toLocaleString();
 }
@@ -53,6 +55,26 @@ function setLastUpdate(sensor, state, timestamp = 0) {
     document.querySelectorAll('[sensor-lastupdate="' + sensor + '"]').forEach((item) => {
         setElementValue(item, state);
         item.style.color = style;
+    });
+}
+
+function updateMessageLog(url, selector) {
+    fetch(url
+    ).then(response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        document.querySelector(selector).innerHTML='Ошибка';
+    }).then(result => {
+        let element=document.querySelector(selector);
+        if(!element) {
+            return;
+        }
+        if (result.error) {
+            element.innerHTML=result.error;
+        } else {
+            element.innerHTML=result.join('<br>');
+        }
     });
 }
 
