@@ -82,6 +82,21 @@ if(Auth::memberOf()) {
 <?php
     }
 
+    public function NavTabs(string $url, array $buttons, $current=null) {
+?>
+<ul class="nav nav-tabs justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
+<?php
+    foreach ($buttons as $id=> $name) {
+?>
+<li class="nav-item">
+    <a class="nav-link<?=($id==$current)?' active':''?>" href="<?=sprintf($url, $id)?>"><?=$name?></a>
+</li>
+<?php
+    }
+    ?>
+</ul>
+<?php
+    }
 
     public function CardsHeader(){
 ?>

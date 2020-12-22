@@ -6,7 +6,7 @@
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
 httpResponse::showHtmlHeader('Устройтва');
-httpResponse::showNavPills('../%s/', require '../sections.php', 'devices');
+httpResponse::showNavTabs('../%s/', require '../sections.php', 'devices');
 ?>
 <hr>
 <p><a href="memory/">Добавить новое устройство</a></p>

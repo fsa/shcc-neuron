@@ -33,7 +33,6 @@ if(!isset($params)) {
 }
 use Templates\Forms;
 httpResponse::showHtmlHeader('Яндекс');
-httpResponse::showNavPills('../../%s/', require '../../sections.php', 'modules');
 ?>
 <p><a href="../">Вернуться к списку модулей</a></p>
 <hr>

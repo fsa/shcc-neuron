@@ -6,7 +6,7 @@
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
 httpResponse::showHtmlHeader('Датчики');
-httpResponse::showNavPills('../%s/', require '../sections.php', 'meters');
+httpResponse::showNavTabs('../%s/', require '../sections.php', 'meters');
 ?>
 <p><a href="edit/" class="btn btn-primary">Создать новый датчик</a></p>
 <?php

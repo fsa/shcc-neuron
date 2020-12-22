@@ -21,7 +21,7 @@ if($action) {
     httpResponse::showError('Неизвестный тип действия');
 }
 httpResponse::showHtmlHeader('Модули');
-httpResponse::showNavPills('../%s/', require '../sections.php', 'modules');
+httpResponse::showNavTabs('../%s/', require '../sections.php', 'modules');
 ?>
 <hr>
 <?php
