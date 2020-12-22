@@ -12,6 +12,7 @@ if (!is_null($host)) {
     }
 }
 $request=file_get_contents('php://input');
+Logger::debug('events', $request);
 $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');

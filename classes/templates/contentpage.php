@@ -36,9 +36,6 @@ class ContentPage {
  
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="/charts/">Графики</a>
-    </li>
 <?php
 if(Auth::memberOf([])) {
 ?>
@@ -97,20 +94,34 @@ if(Auth::memberOf()) {
 </div>
 <?php
     }
-    
+
     public function Card($title, $text, $state=null) {
+        $this->CardHeader($title);
+?>
+<p class="card-text"><?=$text?></p>
+<?php
+        if(!is_null($state)) {
+            $this->CardState($state);
+        }
+        $this->CardFooter();
+    }
+
+    public function CardHeader($title) {
 ?>
 <div class="col">
 <div class="card h-100">
 <div class="card-header bg-primary text-white"><?=$title?></div>
 <div class="card-body">
-<p class="card-text"><?=$text?></p>
 <?php
-        if(!is_null($state)) {
+    }
+
+    public function CardState($state) {
 ?>
 <p class="card-text"><small class="text-muted"><?=$state?></small></p>
 <?php
-        }
+    }
+    
+    public function CardFooter() {
 ?>
 </div>
 </div>

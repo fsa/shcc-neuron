@@ -2,6 +2,7 @@
 /settings.php
 /config/*.conf
 /src/node_modules/*
+/logs/*
 /custom/*
 !/custom/backup/
 /custom/backup/*.sql

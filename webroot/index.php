@@ -2,7 +2,6 @@
 
 require_once 'common.php';
 Auth\Session::grantAccess();
-httpResponse::showHtmlHeader('Панель управления');
 chdir('../custom/dashboard/');
 include_once '../functions.php';
 $page=filter_input(INPUT_GET,'page');
@@ -23,4 +22,3 @@ if(!$page) {
         echo "<p>Неверное имя страницы</p>";        
     }
 }
-httpResponse::showHtmlFooter();

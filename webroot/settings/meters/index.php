@@ -8,7 +8,7 @@ Auth\Session::grantAccess([]);
 httpResponse::showHtmlHeader('Датчики');
 httpResponse::showNavPills('../%s/', require '../sections.php', 'meters');
 ?>
-<hr>
+<p><a href="edit/" class="btn btn-primary">Создать новый датчик</a></p>
 <?php
 $mem=new \SmartHome\MemoryStorage;
 $meters=new HTML\Table;
@@ -19,7 +19,7 @@ $meters->addField('updates', 'Обновлено');
 $meters->addField('unit_name', 'Величина');
 $meters->addField('description', 'Описание');
 $meters->addField('device_property', 'Источник данных');
-#$meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
+$meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) use ($mem) {
     $row->unit_name=\SmartHome\Meters::getUnitName($row->unit);
     $state=$mem->getSensor($row->uid);
