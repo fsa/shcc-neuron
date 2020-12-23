@@ -161,21 +161,21 @@ if(Auth::memberOf()) {
                 $style_class='bg-'.$style.' text-dark';
                 break;
             default:
-                $style_class='bg-info text-dark';
+                $style_class='bg-primary text-white';
         }
 ?>
-<div class="modal" tabindex="-1" role="dialog" id="<?=$id?>">
+<div class="modal" tabindex="-1" id="<?=$id?>">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header <?=$style_class?>">
         <h5 class="modal-title"><?=$title?></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body"><?=$message?></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
       </div>
     </div>
   </div>
