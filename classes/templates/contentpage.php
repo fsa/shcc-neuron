@@ -30,7 +30,7 @@ class ContentPage {
 <nav class="navbar navbar-expand-md navbar-dark bg-primary px-3" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
  
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
 <span class="navbar-toggler-icon"></span>
 </button>
  
