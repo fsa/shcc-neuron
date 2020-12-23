@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-    // boolean
     document.querySelectorAll('.action-boolean').forEach(item => {
         item.addEventListener('change', (e) => {
             if (e.target) {
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-    //integer
     document.querySelectorAll('.action-integer').forEach(item => {
         item.addEventListener('change', (e) => {
             if (e.target) {
@@ -120,18 +118,18 @@ function updateDeviceState(device_name) {
         if (response.status === 200) {
             return response.json();
         }
-        //setState(device_name, 'Ошибка');
+        setState(device_name, 'Ошибка');
         console.log(response);
     }).then(result => {
         if (result.error) {
-            //setState(device_name, result.error);
+            setState(device_name, result.error);
         } else {
             for (var key in result.properties) {
                 document.querySelectorAll('[device_name="' + device_name + '"][device_property="' + key + '"]').forEach((item) => {
                     setElementValue(item, result.properties[key]);
                 });
             }
-            //setState(device_name, result.last_update > 0 ? '': 'Нет данных', result.last_update*1000);
+            setState(device_name, result.last_update > 0 ? '': 'Нет данных', result.last_update*1000);
         }
     });
 }
@@ -147,14 +145,33 @@ function sendCommand(device_name, command) {
         if (response.status === 200) {
             return response.json();
         }
-        //setState(device_name, 'Ошибка');
+        setState(device_name, 'Ошибка');
         console.log(response);
     }).then(result => {
         if (result.error) {
-            //setState(device_name, result.error);
+            setState(device_name, result.error);
         } else {
-            //setState(device_name, '', Date.now());
+            setState(device_name, '', Date.now());
         }
+    });
+}
+
+function setState(device_name, state, timestamp = 0) {
+    let style = '';
+    if (timestamp === 0) {
+        let datetime = new Date();
+        state = datetime.toLocaleString() + ' ' + state;
+        style = '#dc3545';
+    } else {
+        let datetime=new Date(timestamp);
+        state = datetime.toLocaleString() + ' ' + state;
+        if (new Date()-datetime>3600000) {
+            style = '#ffc107';
+        }
+    }
+    document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item) => {
+        setElementValue(item, state);
+        item.style.color=style;
     });
 }
 
