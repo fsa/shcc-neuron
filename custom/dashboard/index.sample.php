@@ -4,7 +4,7 @@
  * Вы можете создать файл * index.php в этом же каталоге и он будет подключен
  * вместо данного файла. 
  */
-httpResponse::addHeader('<script src="/js/sensors.js"></script>');
+httpResponse::addHeader('<script src="/js/dashboard.js"></script>');
 httpResponse::showHtmlHeader('Панель управления');
 httpResponse::showCardsHeader();
 httpResponse::showCardHeader('Настройте внешний вид');
