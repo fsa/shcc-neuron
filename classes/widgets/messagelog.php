@@ -7,7 +7,7 @@ use httpResponse;
 class MessageLog {
 
     public static function show() {
-        httpResponse::showCard('Последние голосовые сообщения', '<span id="tts_message_log"></span>');
+        httpResponse::showCard('Последние голосовые сообщения', '<span messages="tts"></span>');
     }
 
 }
