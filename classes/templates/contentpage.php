@@ -37,6 +37,13 @@ class ContentPage {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
 <?php
+foreach(\Settings::get('dashboard', []) as $url=>$name) {
+?>
+    <li class="nav-item">
+        <a class="nav-link" href="/?page=<?=$url?>"><?=$name?></a>
+    </li>
+<?php
+}
 if(Auth::memberOf([])) {
 ?>
     <li class="nav-item">
