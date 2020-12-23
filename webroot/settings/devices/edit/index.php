@@ -57,7 +57,7 @@ Forms::inputString('classname', $classname, 'Класс устройства*:')
 Forms::inputString('description', $device->description, 'Описание:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=> $name) {
-    Forms::inputString('properties['.$param.']', isset($values['properties'][$param])?$values['properties'][$param]:'', $name);
+    Forms::inputString('properties['.$param.']', isset($values[$param])?$values[$param]:'', $name);
 }
 Forms::inputSelect('place_id', $device->place_id, 'Расположение:', \SmartHome\Places::getPlaceListStmt());
 ?>

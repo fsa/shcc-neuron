@@ -36,23 +36,22 @@ class Daemon implements \SmartHome\DaemonInterface {
         $pkt=$this->socketserver->getPacket();
         $p=$pkt->getParams();
         if (isset($p['id'])) {
-            $uid=self::DAEMON_NAME.'_'.$p['id'];
+            $hwid=self::DAEMON_NAME.'_'.$p['id'];
             $this->storage->lockMemory();
-            $device=$this->storage->getDevice($uid);
+            $device=$this->storage->getDevice($hwid);
             if (is_null($device)) {
                 $device=new GenericDevice();
             }
             $device->updateState($p);
-            $this->storage->setDevice($uid, $device);
+            $this->storage->setDevice($hwid, $device);
             $this->storage->releaseMemory();
-            $actions=$device->getActions();
-            if (!is_null($actions)) {
-                $actions['uid']=$uid;
+            $events=$device->getActions();
+            if (!is_null($events)) {
                 file_get_contents($this->process_url, 0, stream_context_create([
                     'http'=>[
                         'method'=>'POST',
                         'header'=>"Content-Type: application/json; charset=utf-8\r\n",
-                        'content'=>json_encode($actions)
+                        'content'=>json_encode(['hwid'=>$hwid, 'events'=>$events])
                     ]
                 ]));
             }
