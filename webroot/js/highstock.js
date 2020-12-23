@@ -1,7 +1,4 @@
 `use strict`;
-let units,unit;
-let seriesOptions=[];
-let chart;
 
 Highcharts.setOptions({
     lang: {
@@ -26,6 +23,37 @@ Highcharts.setOptions({
     colors: ['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    let list_element=document.querySelector('#charts_list');
+    sensors.forEach((sensor, id) => {
+        let unit=sensor.name;
+        list_element.innerHTML+=`<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${unit}</a></li>`;
+    });
+    document.querySelectorAll('[sensor_id]').forEach(item => {
+        item.addEventListener('click', (e) => {
+            refreshPage(item.getAttribute('sensor_id'));
+            return true;
+        });
+    });
+    refreshPage(location.hash.substr(1));
+});
+
+function refreshPage(chart_id) {
+    if(!chart_id) {
+        chart_id=0;
+    }
+    document.querySelectorAll(`[sensor_id]`).forEach(item => {
+        if(item.getAttribute('sensor_id')==chart_id) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+    if(sensors[chart_id]) {
+        createChart(sensors[chart_id]);
+    }
+}
+
 function HtmlDecode(s) {
   const el = document.createElement("div");
   el.innerHTML = s;
@@ -33,10 +61,7 @@ function HtmlDecode(s) {
 }
 
 function createChart(unit) {
-    let title=HtmlDecode(unit.name);
     let units=HtmlDecode(unit.unit);
-    let minimal=Number(unit.minimal);
-    let maximal=Number(unit.maximal);
     chart=Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -78,22 +103,14 @@ function createChart(unit) {
                 enabled: true,
                         color: '#00572b'
             },
-            events: {
-                afterSetExtremes: afterSetExtremes
-            },
             ordinal: false
         },
         yAxis: {
-            title: {
-                text: title
-            },
             labels: {
                 formatter: function () {
                 return this.value + ' ' + units;
                 }
-            },
-            softMin: minimal,
-            softMax: maximal
+            }
         },
         tooltip: {
             split: true,
@@ -115,87 +132,17 @@ function createChart(unit) {
         },
         legend: {
             enabled: true
-        },
-        series: seriesOptions
+        }
     });
-};
-
-
-function afterSetExtremes(e) {
-    chart.showLoading();
-    seriesCounter = 0;
-    for (let i in unit.places) {
-        place=unit.places[i];
-        let from=new Date(e.min).toJSON();
-        let to=new Date(e.max).toJSON();
-        fetch(`/api/meter/history/?place=${place.id}&unit=${unit.id}&from=${from}&to=${to}`)
+    unit.sensors.forEach(item => {
+        fetch(`/api/meter/history/?uid=${item}`)
         .then(response => {
             if (response.status === 200) {
                 return response.json();
             }
-        }).then(data => {
-            seriesOptions[seriesCounter] = {
-                name: place.name || 'Неизвестно',
-                data: data
-            };
-            seriesCounter += 1;
-            if (seriesCounter === unit.places.length) {
-                chart.hideLoading();
-            }
+        }).then(sensor => {
+            console.log(sensor);
+            chart.addSeries(sensor);
         });
-    }
-}
-
-let chart_id = parseInt(location.hash.substr(1),10);
-if(isNaN(chart_id)) {
-    chart_id=1;
-}
-fetch('/api/meter/units/')
-.then(response => {
-    if (response.status === 200) {
-        return response.json();
-    }
-}).then(units => {
-    let list_element=document.querySelector('#charts_list');
-    for (let id in units) {
-        let unit=units[id];
-        let node=document.createElement('li');
-        node.classList.add("nav-item");
-        node.innerHTML=`<a class="nav-link${id==chart_id?' active':''}" href="./?unit=${id}#${id}" onClick="startChart(${id})">${unit.name}</a>`;
-        list_element.appendChild(node);
-    }
-});
-//startChart(chart_id);
-fetch('/api/meter/places/?unit='+chart_id)
-.then(response => {
-    if (response.status === 200) {
-        return response.json();
-    }
-}).then(mp => {
-    unit=mp;
-    let seriesCounter = 0;
-    for (let i in mp.places) {
-        let place=mp.places[i];
-        seriesOptions[seriesCounter] = {
-            name: place.name || 'Неизвестно',
-            data: []
-        };
-        seriesCounter += 1;
-    };
-    createChart(mp);
-    seriesCounter=0;
-    for (let i in mp.places) {
-        let place=mp.places[i];
-        let serie_id=seriesCounter;
-        fetch(`/api/meter/history/?place=${place.id}&unit=${mp.id}`)
-            .then(res => res.ok && res.json())
-            .then(data => {
-                chart.series[serie_id].setData(data);
-            }).catch(error => console.error(error.message));
-        seriesCounter += 1;
-    };
-});
-
-function success(date) {
-    console.log(this.url);
-}
+    });
+};

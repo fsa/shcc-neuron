@@ -63,6 +63,30 @@ class Meters {
         return true;
     }
 
+    public static function getHistory(string $uid, $from=null, $to=null) {
+        $s=DB::prepare('SELECT * FROM meters WHERE uid=?');
+        $s->execute([$uid]);
+        $meter=$s->fetch(PDO::FETCH_OBJ);
+        if(!$meter) {
+            return [];
+        }
+        $params=["meter_id"=>$meter->id];
+        if ($from) {
+            $params['from']=date('c', $from);
+            if ($to) {
+                $period=' AND timestamp BETWEEN :from AND :to';
+                $params['to']=date('c', $to);
+            } else {
+                $period=' AND timestamp>=:from';
+            }
+        } else {
+            $period='';
+        }
+        $stmt=DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000 AS ts,value FROM meter_history WHERE meter_id=:meter_id'.$period.' ORDER BY timestamp');
+        $stmt->execute($params);
+        return ['name'=> $meter->description, 'unit'=>self::UNITS[$meter->unit][1], 'data'=>$stmt->fetchAll(PDO::FETCH_NUM)];
+    }
+
     public static function getMeters() {
         $s=DB::query('SELECT * FROM meters ORDER BY uid');
         $s->setFetchMode(PDO::FETCH_CLASS, Entity\Meter::class);
