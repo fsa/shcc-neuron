@@ -1,7 +1,7 @@
 [Unit]
 Description=SHCC daemon
-After=network.target nginx.service php-fpm@7.4.service postgresql-12.service
-Requires=network.target nginx.service php-fpm@7.4.service postgresql-12.service
+After=network-online.target nginx.service php-fpm.service postgresql.service
+Requires=network-online.target nginx.service php-fpm.service postgresql.service
 
 [Service]
 Type=forking
