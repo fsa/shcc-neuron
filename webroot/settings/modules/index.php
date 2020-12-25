@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHCC 0.7.0
+ * 2020-12-25
+ */
+
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
 $action=filter_input(INPUT_GET,'action');
@@ -20,11 +25,8 @@ if($action) {
     }
     httpResponse::showError('Неизвестный тип действия');
 }
+httpResponse::setTemplate(\Templates\PageSettings::class);
 httpResponse::showHtmlHeader('Модули');
-httpResponse::showNavTabs('../%s/', require '../sections.php', 'modules');
-?>
-<hr>
-<?php
 $active_daemons=SmartHome\Daemons::getActive();
 $devices=new HTML\Table;
 $devices->addField('name','Наименование');

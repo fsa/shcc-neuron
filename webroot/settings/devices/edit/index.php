@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * SHCC 0.7.0
+ * 2020-12-25
+ */
+
 require_once '../../../common.php';
 Auth\Session::grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
@@ -41,6 +47,7 @@ if ($hwid) {
         $classname='';
     }
 }
+httpResponse::setTemplate(\Templates\PageSettings::class);
 httpResponse::showHtmlHeader("Регистрация оборудования");
 if ($hwid) {
     Templates\SmartHome\DeviceInMemory::show($memdev);
@@ -57,9 +64,8 @@ Forms::inputString('classname', $classname, 'Класс устройства*:')
 Forms::inputString('description', $device->description, 'Описание:');
 $values=$device->getInitData();
 foreach ($init_data_list as $param=> $name) {
-    Forms::inputString('properties['.$param.']', isset($values[$param])?$values[$param]:'', $name);
+    Forms::inputString('properties['.$param.']', isset($values['properties'][$param])?$values['properties'][$param]:'', $name);
 }
-Forms::inputSelect('place_id', $device->place_id, 'Расположение:', \SmartHome\Places::getPlaceListStmt());
 ?>
 <p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
 <?php

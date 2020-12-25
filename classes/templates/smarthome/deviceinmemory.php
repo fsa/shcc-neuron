@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHCC 0.7.0
+ * 2020-12-25
+ */
+
 namespace Templates\SmartHome;
 
 class DeviceInMemory {
@@ -19,28 +24,6 @@ class DeviceInMemory {
         <td>Состояние</td>
         <td><?=(string)$device?></td>
     </tr>
-<?php
-if($device instanceof \SmartHome\SensorsInterface) {
-?>
-    <tr>
-        <td>Аналоговые датчики</td>
-        <td><?=join('<br>',$device->getDeviceMeters())?></td>
-    </tr>
-    <tr>
-        <td>Цифровые датчики</td>
-        <td><?=join('<br>',$device->getDeviceIndicators())?></td>
-    </tr>
-<?php
-}
-if($device instanceof \SmartHome\DeviceActionInterface) {
-?>
-    <tr>
-        <td>События от устройства</td>
-        <td><?=join('<br>',$device->getDeviceActions())?></td>
-    </tr>
-<?php
-}
-?>
 </table>
 <?php
     }

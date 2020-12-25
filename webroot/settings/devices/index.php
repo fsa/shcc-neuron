@@ -5,11 +5,10 @@
  */
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
+httpResponse::setTemplate(\Templates\PageSettings::class);
 httpResponse::showHtmlHeader('Устройтва');
-httpResponse::showNavTabs('../%s/', require '../sections.php', 'devices');
 ?>
-<hr>
-<p><a href="memory/">Добавить новое устройство</a></p>
+<p><a href="memory/" class="btn btn-primary">Добавить новое устройство</a></p>
 <?php
 $devices=new HTML\Table;
 $devices->setCaption('Устройства умного дома');

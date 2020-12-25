@@ -2,11 +2,9 @@
 
 require_once '../common.php';
 Auth\Session::grantAccess([]);
+httpResponse::setTemplate(\Templates\PageSettings::class);
 httpResponse::showHtmlHeader('Настройки');
-$menu=require './sections.php';
-foreach ($menu as $path=>$name) {
 ?>
-<p><a href="<?=$path?>/"><?=$name?></a></p>
+<p>Настройки.</p>
 <?php
-}
 httpResponse::showHtmlFooter();

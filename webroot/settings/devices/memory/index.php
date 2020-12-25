@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHCC 0.7.0
+ * 2020-12-25
+ */
+
 require_once '../../../common.php';
 Auth\Session::grantAccess([]);
 $hwid=filter_input(INPUT_GET, 'hwid');
@@ -7,6 +12,7 @@ if ($hwid) {
     require_once 'show.php';
     exit;
 }
+httpResponse::setTemplate(\Templates\PageSettings::class);
 httpResponse::showHtmlHeader('Список устройств в памяти');
 ?>
 <p><a href="../">Вернуться к списку устройств</a></p>
