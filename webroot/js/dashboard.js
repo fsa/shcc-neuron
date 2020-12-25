@@ -183,6 +183,7 @@ function setElementValue(e, value) {
             e.value = value;
         }
     } else {
-        e.innerHTML = value;
+        let round=e.getAttribute('round');
+        e.innerHTML = (round===null)?value:value.toFixed(round);
     }
 }
