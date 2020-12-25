@@ -141,8 +141,9 @@ function createChart(unit) {
                 return response.json();
             }
         }).then(sensor => {
-            console.log(sensor);
-            chart.addSeries(sensor);
+            if(sensor.data && sensor.data.length>0) {
+                chart.addSeries(sensor);
+            }
         });
     });
 };
