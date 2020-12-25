@@ -1,6 +1,6 @@
 <?php
 /**
- * SHCC 0.7.0-dev
+ * SHCC 0.7.0
  * 2020-12-24
  */
 use Templates\Forms;
