@@ -1,4 +1,5 @@
 `use strict`;
+const colors=['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 
 Highcharts.setOptions({
     lang: {
@@ -20,7 +21,7 @@ Highcharts.setOptions({
     time: {
         timezoneOffset: - 420
     },
-    colors: ['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+    colors: colors
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -134,7 +135,7 @@ function createChart(unit) {
             enabled: true
         }
     });
-    unit.sensors.forEach(item => {
+    unit.sensors.forEach((item, i) => {
         fetch(`/api/meter/history/?uid=${item}`)
         .then(response => {
             if (response.status === 200) {
@@ -142,6 +143,7 @@ function createChart(unit) {
             }
         }).then(sensor => {
             if(sensor.data && sensor.data.length>0) {
+                sensor.color=colors[i];
                 chart.addSeries(sensor);
             }
         });
