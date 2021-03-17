@@ -1,0 +1,17 @@
+[Unit]
+Description=SHCC module daemon "%I"
+PartOf=shcc.target
+
+[Service]
+Type=forking
+WorkingDirectory=/var/www/shcc/service
+User=www-data
+Group=www-data
+RuntimeDirectory=shcc
+LogsDirectory=shcc
+CacheDirectory=shcc
+ExecStart=/usr/bin/php -f daemon.php %I\\Daemon
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
