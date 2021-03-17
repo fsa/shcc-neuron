@@ -2,8 +2,11 @@
 
 const {src, dest, watch, series, parallel} = require('gulp'),
     sass = require('gulp-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cssnano = require('gulp-cssnano'),
+    postcss = require('gulp-postcss'),
+    postcssProcessors = [
+        require('autoprefixer')(),
+        require('cssnano')()
+    ],
     bs = require('browser-sync').create();
 
 function scssTask() {
@@ -13,9 +16,10 @@ function scssTask() {
             outputStyle: 'expanded',
             includePaths: ["node_modules/bootstrap/scss/"]
         }
-    ))
-    .pipe(autoprefixer())
-    .pipe(cssnano())
+    ).on('error', function(err){
+        log.error(err.message);
+    }))
+    .pipe(postcss(postcssProcessors))
     .pipe(dest('../webroot'))
     .pipe(bs.stream());
 };
