@@ -12,7 +12,7 @@ if ($hwid) {
     require_once 'show.php';
     exit;
 }
-httpResponse::setTemplate(\Templates\PageSettings::class);
+httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Список устройств в памяти');
 ?>
 <p><a href="../">Вернуться к списку устройств</a></p>

@@ -5,7 +5,7 @@
  */
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
-httpResponse::setTemplate(\Templates\PageSettings::class);
+httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Устройтва');
 ?>
 <p><a href="memory/" class="btn btn-primary">Добавить новое устройство</a></p>

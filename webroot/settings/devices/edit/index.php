@@ -47,7 +47,7 @@ if ($hwid) {
         $classname='';
     }
 }
-httpResponse::setTemplate(\Templates\PageSettings::class);
+httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader("Регистрация оборудования");
 if ($hwid) {
     Templates\SmartHome\DeviceInMemory::show($memdev);

@@ -1,7 +1,7 @@
 <?php
 
 require_once '../common.php';
-httpResponse::setModeJson();
+httpResponse::setJsonExceptionHandler();
 $request_id=getenv('HTTP_X_REQUEST_ID');
 $request_content=file_get_contents('php://input');
 $path=getenv('PATH_INFO');

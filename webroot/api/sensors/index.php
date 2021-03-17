@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../common.php';
-httpResponse::setModeJson();
+httpResponse::setJsonExceptionHandler();
 $request=file_get_contents('php://input');
 $json=json_decode($request);
 $response=[];

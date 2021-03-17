@@ -5,7 +5,7 @@
  */
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
-httpResponse::setTemplate(\Templates\PageSettings::class);
+httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Датчики');
 ?>
 <p><a href="edit/" class="btn btn-primary">Создать новый датчик</a></p>

@@ -17,6 +17,19 @@ $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
 }
+if(isset($json->shcc)) {
+    switch ($json->shcc) {
+        case 'init_devices':
+            SmartHome\Devices::refreshMemoryDevices();
+            break;
+        case 'init_tts':
+            new Tts\Queue();
+            break;
+        default:
+            die('Wrong internal command');
+    }
+    httpResponse::json(['ok'=>true]);
+}
 if (!isset($json->hwid)) {
     die('Wrong HWID');
 }

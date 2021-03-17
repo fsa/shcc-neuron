@@ -25,7 +25,7 @@ if($action) {
     }
     httpResponse::showError('Неизвестный тип действия');
 }
-httpResponse::setTemplate(\Templates\PageSettings::class);
+httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Модули');
 $active_daemons=SmartHome\Daemons::getActive();
 $devices=new HTML\Table;
