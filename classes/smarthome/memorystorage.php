@@ -19,6 +19,9 @@ class MemoryStorage {
         $memsize=Settings::get('device_memory_storage', self::MEMSIZE);
         $file=ftok(__FILE__, self::PROJ);
         $this->shm=shm_attach($file, $memsize, self::CHMOD);
+        if($this->shm===false) {
+            throw new \AppException('Не удалось инициализировать разделяемую память. Дальнейшая работа с устройствами невозможна.');
+        }
         $this->sem=sem_get($file, 1, self::CHMOD);
         if (shm_has_var($this->shm, 0)) {
             return;
@@ -26,7 +29,7 @@ class MemoryStorage {
         sem_acquire($this->sem);
         $devices=[0=>'device_list'];
         if (!shm_put_var($this->shm, 0, $devices)) {
-            throw new \AppException('Не удалось инициализировать разделяемую память. Дальнейшая работа с устройствами невозможна.');
+            throw new \AppException('Не удалось записать значение в разделяемую память. Дальнейшая работа с устройствами невозможна.');
         }
         sem_release($this->sem);
     }

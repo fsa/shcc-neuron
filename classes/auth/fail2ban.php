@@ -3,13 +3,12 @@
 namespace Auth;
 
 use DB,
-    PDO,
-    Settings;
+    PDO;
 
 class Fail2Ban {
 
     public static function addFail($login) {
-        if (Settings::get('fail2ban', false)) {
+        if (!getenv('FAIL2BAN')) {
             return;
         }
         $ip=getenv('REMOTE_ADDR');
@@ -18,7 +17,7 @@ class Fail2Ban {
     }
 
     public static function ipIsBlocked(): bool {
-        if (Settings::get('fail2ban', false)) {
+        if (!getenv('FAIL2BAN')) {
             return false;
         }
         $ip=getenv('REMOTE_ADDR');
@@ -32,7 +31,7 @@ class Fail2Ban {
     }
 
     public static function loginIsBlocked($login): bool {
-        if (Settings::get('fail2ban', false)) {
+        if (!getenv('FAIL2BAN')) {
             return false;
         }
         $s=DB::prepare("SELECT count(*) FROM auth_fail2ban WHERE fail_time+INTERVAL '5 minutes'>NOW() AND login=?");

@@ -41,6 +41,21 @@ class Forms {
 <?php
     }
 
+    public static function inputPassword($name, $value, $label=null) {
+?>
+<div class="form-group">
+<?php
+        if(!is_null($label)) {
+?>
+    <label for="<?= $name ?>"><?= $label ?></label>
+<?php
+        }
+?>
+    <input class="form-control" type="password" name="<?= $name ?>" id="<?= $name ?>" value="<?= htmlspecialchars($value) ?>">
+</div>
+<?php
+    }
+
     public static function textarea($name, $value, $label=null) {
 ?>
 <div class="form-group">

@@ -7,33 +7,41 @@ use Auth\Session as Auth;
 class ContentPage {
 
     public $title;
+    public $context;
     public $header;
-    public $site_info;
+    public $notify;
 
     public function header() {
+        $title=is_null($this->title)?$this->context['title']:$this->title.' :: '.$this->context['title'];
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<title><?=is_null($this->title)?$this->site_info['title']:$this->title.' :: '.$this->site_info['title']?></title>
+<title><?=$title?></title>
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#527779">
 <link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="/bootstrap.css">
 <script src="/libs/bootstrap/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
 <?=$this->header?>
 </head>
 <body>
+<?php
+        if($this->notify) {
+            $this->Notify('Информация', $this->notify);
+        }
+?>
 <header class="container-fluid p-0">
 <nav class="navbar navbar-expand-md navbar-dark bg-primary px-3" role="navigation">
 <a class="navbar-brand" href="/" role="banner">SHCC</a>
- 
+
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Переключить навигацию">
 <span class="navbar-toggler-icon"></span>
 </button>
- 
+
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
 <?php
@@ -69,10 +77,10 @@ if(Auth::memberOf()) {
 </div>
 </nav>
 </header>
-<main role="main" class="container-fluid p-3">
+<main role="main" class="container-fluid py-3">
 <?php
     }
-
+    
     public function NavPills(string $url, array $buttons, $current=null) {
 ?>
 <ul class="nav nav-pills justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
@@ -116,7 +124,7 @@ if(Auth::memberOf()) {
 </div>
 <?php
     }
-
+    
     public function Card($title, $text, $state=null) {
         $this->CardHeader($title);
 ?>
@@ -141,8 +149,8 @@ if(Auth::memberOf()) {
 ?>
 <p class="card-text"><small class="text-muted"><?=$state?></small></p>
 <?php
-    }
-    
+        }
+
     public function CardFooter() {
 ?>
 </div>
@@ -151,7 +159,7 @@ if(Auth::memberOf()) {
 <?php
     }
     
-    public function Popup($id, $message, $title, $style=null) {
+    public function Popup($message, $title, $style=null) {
         switch ($style) {
             case 'primary':
             case 'secondary':
@@ -171,14 +179,12 @@ if(Auth::memberOf()) {
                 $style_class='bg-primary text-white';
         }
 ?>
-<div class="modal" tabindex="-1" id="<?=$id?>">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal" tabindex="-1" autoopen="on">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header <?=$style_class?>">
         <h5 class="modal-title"><?=$title?></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
       <div class="modal-body"><?=$message?></div>
       <div class="modal-footer">
@@ -187,12 +193,24 @@ if(Auth::memberOf()) {
     </div>
   </div>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    let myModal = new bootstrap.Modal(document.getElementById('<?=$id?>'));
-    myModal.show();
-});
-</script>
+<?php
+    }
+
+    private function Notify(string $title, string $text) {
+?>
+<div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 1050">
+  <div class="toast-container position-absolute top-0 end-0 p-3">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-secondary text-white">
+      <strong class="me-auto"><?=$title?></strong>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <?=$text?>
+    </div>
+    </div>
+  </div>
+</div>
 <?php
     }
 

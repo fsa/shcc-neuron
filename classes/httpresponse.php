@@ -2,16 +2,12 @@
 
 class httpResponse {
 
-    const MODE_JSON=1;
-    const MODE_HTML=2;
-    const MODE_HTML_POPUP=3;
-
     private static $template;
+    private static $context;
     private static $last_modified;
     private static $etag;
     private static $title;
-    private static $popup_id=0;
-    private static $mode;
+    private static $message_id;
 
     # Ответ HTML
     public static function getTemplate() {
@@ -21,8 +17,12 @@ class httpResponse {
         return self::$template;
     }
 
-    public static function setTemplate(string $template) {
-        self::$template=new $template;
+    public static function setTemplate(object $template) {
+        self::$template=$template;
+    }
+
+    public static function setContext(array $context) {
+        self::$context=$context;
     }
 
     public static function setLastModified(string $timestamp) {
@@ -48,23 +48,24 @@ class httpResponse {
     }
 
     public static function showHtmlHeader($title=null) {
-        self::$mode=self::MODE_HTML_POPUP;
         $template=self::getTemplate();
         $template->title=$title;
-        $template->site_info=Settings::get('site');
-        if (!is_null(self::$last_modified)) {
+        $template->context=self::$context;
+        if (isset(self::$last_modified)) {
             header("Last-Modified: ".substr(gmdate('r', self::$last_modified), 0, -5).'GMT');
         }
-        if (!is_null(self::$etag)) {
+        if (isset(self::$etag)) {
             header("ETag: ".self::$etag);
         }
         self::disableBrowserCache();
-        $template->Header();
-        $notification=filter_input(INPUT_COOKIE, 'notification');
-        if ($notification) {
-            setcookie('notification', '', time()-3600, '/');
-            $template->Popup('popupNotify', $notification, 'Информация');
+        $notification=filter_input(INPUT_COOKIE,'notification');
+        if($notification) {
+            $template->notify=$notification;
+            setcookie('notification','',time()-3600,'/');
         }
+        $template->Header();
+        set_exception_handler([__CLASS__, 'HtmlException']);
+        self::$message_id=0;
     }
 
     public static function showHtmlFooter() {
@@ -79,6 +80,7 @@ class httpResponse {
     public static function showLoginForm(string $redirect_url=null) {
         $template=new \Templates\Login();
         $template->title='Вход в систему';
+        $template->context=self::$context;
         if ($redirect_url) {
             $template->redirect_uri=$redirect_url;
             $template->url='/login/';
@@ -102,59 +104,35 @@ class httpResponse {
     # Информация для пользователя
     public static function showPopup(string $message, string $title, string $style=null) {
         $template=self::getTemplate();
-        $template->Popup('popupMessage'.self::$popup_id, $message, $title, $style);
-        self::$popup_id++;
+        $template->Popup($message, $title, $style);
     }
 
     public static function showMessagePage(string $message, string $title, string $style=null) {
         $template=new \Templates\Message();
         $template->style=$style;
         $template->title=$title;
-        $template->site_info=Settings::get('site');
+        $template->context=self::$context;
         $template->message=$message;
         self::disableBrowserCache();
         $template->show();
     }
 
     public static function showError(string $message) {
-        switch (self::$mode) {
-            case self::MODE_JSON:
-                self::json(['error'=>$message]);
-                exit;
-            case self::MODE_HTML_POPUP:
-                self::showPopup($message, 'Ошибка', 'danger');
-                self::showHtmlFooter();
-                return;
-            default:
-                self::showMessagePage($message, 'Ошибка', 'danger');
+        if(isset(self::$message_id)) {
+            self::showPopup('popupMessage'.self::$message_id, $message, 'Ошибка', 'danger');
+            self::showHtmlFooter();
+        } else {
+            self::showMessagePage($message, 'Ошибка', 'danger');
         }
         exit;
     }
 
     public static function showInformation(string $message) {
-        switch (self::$mode) {
-            case self::MODE_JSON:
-                self::json(['error'=>$message]);
-                exit;
-            case self::MODE_HTML_POPUP:
-                self::showPopup($message, 'Информация', 'info');
-                return;
-            default:
-                self::showMessagePage($message, 'Информация', 'info');
-        }
-    }
-
-    public static function showAccessError(bool $is_logged) {
-        switch (self::$mode) {
-            case self::MODE_JSON:
-                self::json(['error'=>$is_logged?'Доступ запрещён.':'Не выполнен вход.']);
-                exit;
-            default:
-                if($is_logged) {
-                    self::showError('Доступ запрещён.');
-                } else {
-                    self::showLoginForm(getenv('REQUEST_METHOD')=='GET'?getenv('REQUEST_URI'):'/');
-                }
+        if(isset(self::$message_id)) {
+            self::showPopup('popupMessage'.self::$message_id, $message, 'Информация', 'info');
+            self::$message_id++;
+        } else {
+            self::showMessagePage($message, 'Информация', 'info');
         }
     }
 
@@ -202,29 +180,61 @@ class httpResponse {
     }
 
     # Exceptions handlers
+    public static function HtmlPageException($ex) {
+        $class=get_class($ex);
+        $class_parts=explode('\\', $class);
+        if(end($class_parts)=='UserException') {
+            $message=(string)$ex;
+        } else if(end($class_parts)=='AuthException') {
+            self::showLoginForm(getenv('REQUEST_METHOD')=='GET'?getenv('REQUEST_URI'):'/');
+            exit;
+        } else if(end($class_parts)=='AccessException') {
+            $message='Доступ запрещён. <a href="/">Перейти на главную страницу</a>.';
+        } else if (getenv('DEBUG')) {
+            $message=(string)$ex;
+            error_log($ex, 0);
+        } else {
+            error_log($ex, 0);
+            httpResponse::error(500);
+        }
+        self::showMessagePage($message, 'Ошибка', 'danger');
+        exit;
+    }
+
     public static function HtmlException($ex) {
-        if (Settings::get('debug', false)) {
-            $message='<pre>'.$ex.'</pre>';
+        if (getenv('DEBUG')) {
+            $message=(string)$ex;
         } else {
             error_log($ex, 0);
             $message='Произошла программная ошибка на сервере.';
         }
-        self::showError($message);
+        self::showPopup($message, '500', 'danger');
+        self::showHtmlFooter();
+        exit;
     }
 
     public static function JsonException($ex) {
-        error_log($ex, 0);
-        self::showError('Произошла программная ошибка на сервере.');
+        $class=get_class($ex);
+        $class_parts=explode('\\', $class);
+        if(end($class_parts)=='UserException') {
+            self::json(['error'=>(string)$ex]);
+            exit;
+        } else if(end($class_parts)=='AuthException') {
+            httpResponse::error(401);
+        } else if(end($class_parts)=='AccessException') {
+            httpResponse::error(403);
+        } else {
+            error_log($ex, 0);
+            httpResponse::error(500);
+        }
     }
 
-    # Установка режимов и подключение обработчиков ошибок
-    public static function setModeHtml() {
-        self::$mode=self::MODE_HTML;
-        set_exception_handler([__CLASS__, 'HtmlException']);
+    # Подключение обработчиков ошибок
+    public static function setExceptionHandler() {
+        set_exception_handler([__CLASS__, 'HtmlPageException']);
     }
 
-    public static function setModeJson() {
-        self::$mode=self::MODE_JSON;
+    public static function setJsonExceptionHandler() {
         set_exception_handler([__CLASS__, 'JsonException']);
     }
 

@@ -3,13 +3,12 @@
 namespace Auth;
 
 use DB,
-    PDO,
-    Settings,
-    httpResponse;
+    PDO;
 
 class Session {
 
     private static $_instance;
+    private static $cookie;
     private $user;
 
     public static function grantAccess(array $scope=null): void {
@@ -17,8 +16,10 @@ class Session {
         if ($auth->checkAccess($scope)) {
             return;
         }
-        httpResponse::showAccessError(!is_null($auth->user->getLogin()));
-        die;
+        if(!is_null($auth->user->getLogin())) {
+            throw new AccessException();
+        }
+        throw new AuthException();
     }
 
     public static function memberOf(array $scope=null): bool {
@@ -27,9 +28,9 @@ class Session {
     }
 
     public static function login(UserInterface $user): void {
-        $session=Settings::get('session');
-        session_name($session['name']);
-        session_set_cookie_params(0, $session['path'], getenv('HTTP_HOST'), false, true);
+        $session=self::getCookieConfig();
+        session_name($session['session']);
+        session_set_cookie_params($session['params']);
         self::$_instance=new self;
         self::$_instance->user=$user;
         session_start();
@@ -40,13 +41,15 @@ class Session {
 
     public static function logout(): void {
         self::destroy();
-        $session=Settings::get('session');
-        session_name($session['name']);
-        session_set_cookie_params(0, $session['path'], getenv('HTTP_HOST'), false, true);
+        $session=self::getCookieConfig();
+        session_name($session['session']);
+        session_set_cookie_params($session['params']);
         session_start();
         $_SESSION=[];
         session_destroy();
-        setcookie($session['name'], '', time()-42000, $session['path'], getenv('HTTP_HOST'), false, true);
+        $params=$session['params'];
+        $params['lifetime']=1;
+        setcookie($session['session'], $params);
     }
 
     public static function getUser(): UserInterface {
@@ -62,10 +65,10 @@ class Session {
     }
 
     private function setCurrentUser() {
-        $session=Settings::get('session');
-        session_name($session['name']);
-        session_set_cookie_params(0, $session['path'], getenv('HTTP_HOST'), false, true);
-        $session_cookie=filter_input(INPUT_COOKIE, $session['name']);
+        $session=self::getCookieConfig();
+        session_name($session['session']);
+        session_set_cookie_params($session['params']);
+        $session_cookie=filter_input(INPUT_COOKIE, $session['session']);
         if ($session_cookie) {
             session_start();
             if (isset($_SESSION['user'])) {
@@ -80,7 +83,7 @@ class Session {
                 session_commit();
                 return;
             }
-            setcookie($session['name'], '', time()-42000, $session['path'], getenv('HTTP_HOST'), false, true);
+            setcookie($session['session'], '', 1, $session['path'], $session['host'], false, true);
             session_destroy();
         } else {
             $user=$this->refresh();
@@ -96,7 +99,7 @@ class Session {
     }
 
     private function checkAccess(?array $scope): bool {
-        $admins=Settings::get('admins', []);
+        $admins=getenv('SITE_ADMINS')?explode(',', getenv('SITE_ADMINS')):[];
         if (array_search($this->user->getLogin(), $admins)!==false) {
             return true;
         }
@@ -170,13 +173,13 @@ class Session {
     }
     
     private static function dbInsertSession(string $uid, string $token, UserInterface $user) {
-        $session=Settings::get('session');
+        $session=self::getCookieConfig();
         $s=DB::prepare('INSERT INTO auth_sessions (uid, token, user_entity, expires, ip, browser) VALUES (?,?,?,?,?,?)');
         $s->execute([$uid, $token, serialize($user), date('c',time()+$session['time']), getenv('REMOTE_ADDR'), getenv('HTTP_USER_AGENT')]);
     }
     
     private static function dbUpdateSession(string $uid, string $new_token, UserInterface $user) {
-        $session=Settings::get('session');
+        $session=self::getCookieConfig();
         $s=DB::prepare('UPDATE auth_sessions SET token=?, user_entity=?, expires=?, ip=?, browser=? WHERE uid=?');
         $s->execute([$new_token, serialize($user), date('c',time()+$session['time']), getenv('REMOTE_ADDR'), getenv('HTTP_USER_AGENT'), $uid]);
     }
@@ -197,29 +200,44 @@ class Session {
     }
 
     private static function setUidCookie(string $uid): void {
-        $cookie=Settings::get('session');
-        setcookie($cookie['uid'], $uid, time()+$cookie['time'], $cookie['path'], getenv('HTTP_HOST'), false, true);
+        $cookie=self::getCookieConfig();
+        $params=$cookie['params'];
+        $params['expires']=time()+$cookie['time'];
+        setcookie($cookie['uid'], $uid, $params);
     }
     
     private static function setTokenCookie(string $token): void {
-        $cookie=Settings::get('session');
-        setcookie($cookie['token'], $token, time()+$cookie['time'], $cookie['path'], getenv('HTTP_HOST'), false, true);
+        $cookie=self::getCookieConfig();
+        $params=$cookie['params'];
+        $params['expires']=time()+$cookie['time'];
+        setcookie($cookie['token'], $token, $params);
     }
     
     private static function getUidCookie(): ?string {
-        $cookie=Settings::get('session');
+        $cookie=self::getCookieConfig();
         return filter_input(INPUT_COOKIE, $cookie['uid']);
     }
 
     private static function getTokenCookie(): ?string {
-        $cookie=Settings::get('session');
+        $cookie=self::getCookieConfig();
         return filter_input(INPUT_COOKIE, $cookie['token']);
     }
 
     private static function dropCookie(): void {
-        $cookie=Settings::get('session');
-        setcookie($cookie['uid'],'',time()-3600, $cookie['path'], getenv('HTTP_HOST'), false, true);
-        setcookie($cookie['token'],'',time()-3600, $cookie['path'], getenv('HTTP_HOST'), false, true);
+        $cookie=self::getCookieConfig();
+        $params=$cookie['params'];
+        $params['lifetime']=1;
+        setcookie($cookie['uid'], '', $params);
+        setcookie($cookie['token'], '', $params);
+    }
+
+    private static function getCookieConfig(): array {
+        if(isset(self::$cookie)) {
+            return self::$cookie;
+        }
+        $name=getenv('COOKIE_NAME')?getenv('COOKIE_NAME'):'neuron';
+        self::$cookie=['session'=>$name.'-session', 'uid'=>$name.'-uid', 'token'=>$name.'-token', 'time'=>getenv('COOKIE_TIME')?getenv('COOKIE_TIME'):2592000, 'params'=>['path'=>getenv('COOKIE_PATH')?getenv('COOKIE_PATH'):'/', 'domain'=>getenv('COOKIE_DOMAIN')?getenv('COOKIE_DOMAIN'):'', 'secure'=>false, 'httponly'=>true, 'samesite'=>'Strict']];
+        return self::$cookie;
     }
 
 }

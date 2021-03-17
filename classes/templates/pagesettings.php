@@ -16,7 +16,8 @@ class PageSettings extends ContentPage {
         $pages=[
             'devices'=>'Устройства',
             'meters'=>'Датчики',
-            'modules'=>'Модули'
+            'modules'=>'Модули',
+            'users'=>'Пользователи'
         ];
         $uri=explode('/',getenv('REQUEST_URI'));
         httpResponse::showNavTabs('/settings/%s/', $pages, $uri[2]);

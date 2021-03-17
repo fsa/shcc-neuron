@@ -5,7 +5,7 @@ namespace Templates;
 class Message {
 
     public $title;
-    public $site_info;
+    public $context;
     public $style;
     public $header;
     public $message;
@@ -41,7 +41,7 @@ class Message {
 </head>
 <body bgcolor="white">
 <div class="container">
-<h1><?=$this->site_info['title']?></h1>
+<h1><?=$this->context['title']?></h1>
 <div class="card">
 <div class="card-header <?=$style_class?>"><?=$this->title?></div>
 <div class="card-body"><?=$this->message?></div>
