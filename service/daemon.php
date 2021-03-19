@@ -32,7 +32,7 @@ if(!$state->daemon) {
 $daemon_class=$state->class;
 if(!class_exists($daemon_class)) {
     echo "Daemon class \"$daemon_class\" not exists.".PHP_EOL;
-    exit(4);
+    exit(0);
 }
 $daemon=new $daemon_class($url.'/api/events/');
 $daemon_name=$daemon->getName();
