@@ -1,0 +1,14 @@
+[Unit]
+Description=SHCC module daemon "%I"
+PartOf=shcc.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/shcc/service
+User=www
+Group=www
+LogsDirectory=shcc
+CacheDirectory=shcc
+ExecStart=/usr/bin/php -f daemon.php %I
+Restart=on-failure
+RestartSec=30s

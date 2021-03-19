@@ -1,8 +1,8 @@
 # Установка системы
 
-Для установки SHCC подойдёт любой дистрибутив Linux в котором имеются необходимые версии PHP, PostgreSQL и nginx. Кроме этого, рекомендуется использовать систему инициализации systemd, но это необязательно, нужно будет обеспечить запуск демонов при старте системы и ежеминутный запуск shell-скрипта.
+Для установки SHCC подойдёт любой дистрибутив Linux в котором имеются необходимые версии PHP, PostgreSQL и nginx. Кроме этого, требуется использовать систему инициализации systemd, либо обеспечить запуск необходимых сервисов и cron заданий самостоятально.
 
-Рекомендуемым вариантом установки является Ubuntu 18.04 LTS, т.к. в состав ещё репозиториев включены все необходимые компоненты. Все команды для установки системы приведены для Ubuntu.
+Рекомендуемым вариантом установки является Ubuntu 20.04 или Fedora 33, т.к. в состав их репозиториев включены все необходимые компоненты. Все команды для установки системы приведены для Ubuntu.
 
 ## Установка PostgreSQL
 
@@ -48,6 +48,11 @@ $ sudo apt install nginx php-fpm php-pgsql
 server {
     listen	80 default_server;
 
+    # https
+    listen 443 ssl http2 default_server;
+    ssl_certificate /etc/letsencrypt/live/shcc.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/shcc.example.com/privkey.pem;
+
     server_name  shcc.example.com;
     
     charset utf-8;
@@ -74,34 +79,27 @@ server {
 	include fastcgi_params;
     }
 
-    include acme;
-
-    # https
-    listen 443 ssl http2 default_server;
-    ssl_certificate /etc/letsencrypt/live/shcc.example.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/shcc.example.com/privkey.pem;
-
-    add_header Strict-Transport-Security max-age=15768000;
+    include acme.conf;
 
 }
 ```
 Вместо shcc.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети.
 
-Запуск php производится с помощью upstream php-fpm, который необходимо указать в секции http основного файла конфигурации nginx /etc/nginx/nginx.conf: 
+Запуск php производится с помощью upstream php-fpm. Сделать это можно создав файл /etc/nginx/conf.d/php-fpm.conf:
 ```
-    upstream php-fpm {
-	server unix:/run/php/php7.2-fpm.sock;
-    }
+upstream php-fpm {
+    server unix:/run/php/php7.4-fpm.sock;
+}
 ```
-Адрес unix-сокета должен совпадать с указанным в файле конфигурации php-fpm, например, /etc/php/7.2/fpm/pool.d/www.conf для php версии 7.2 (значение listen). Вы можете использовать и другие способы взаимодействия веб-сервера и php-fpm, например, связь через TCP/IP. В любом случае, настройки nginx и php-fpm должны указывать на один и тот же объект.
+Адрес unix-сокета должен совпадать с указанным в файле конфигурации php-fpm, например, /etc/php/7.4/fpm/pool.d/www.conf для php версии 7.4 (значение listen). Вы можете использовать и другие способы взаимодействия веб-сервера и php-fpm, например, связь через TCP/IP. В любом случае, настройки nginx и php-fpm должны указывать на один и тот же объект.
 
-Обратите внимание на часть файла после комментария https. Эти команды нужны для использования протокола https и при начальной настройке могут вызвать ошибки при запуске сервера. Чтобы этого избежать закомментируйте директивы listen 443..., ssl_..., add_header. После получения сертификатов их можно будет раскомментировать.
+Обратите внимание на часть файла после комментария https. Эти команды нужны для использования протокола https и при начальной настройке могут вызвать ошибки при запуске сервера. Чтобы этого избежать закомментируйте директивы listen 443..., ssl_.... После получения сертификатов их можно будет раскомментировать.
 
-Ещё один требуемый файл - acme. Если вы не планируете использовать сертификаты от Let's Encrypt можете просто закомментировать include acme; в файле конфигурации виртуального хоста.
+Ещё один требуемый файл - acme.conf. Если вы не планируете использовать сертификаты от Let's Encrypt можете просто закомментировать include acme.conf; в файле конфигурации виртуального хоста.
 
-Для удобства получения бесплатных сертификатов https создаём файл /etc/nginx/acme со следующим содержимым:
+Для удобства получения бесплатных сертификатов https создаём файл /etc/nginx/acme.conf со следующим содержимым:
 ```
-location ~ /.well-known/acme-challenge/(.*) {
+location /.well-known/acme-challenge {
     default_type "text/plain";
     root /var/www/letsencrypt;
     allow all;
@@ -109,7 +107,7 @@ location ~ /.well-known/acme-challenge/(.*) {
 ```
 Также необходимо будет создать папку /var/www/letsencrypt и задать для неё владельца и группу веб-сервера (www-data). Эту папку нужно будет указывать в параметрах certbot при получении сертификата для своего домена.
 
-Для настройки https также желательно добавить в секцию http файла конфигурации nginx /etc/nginx/nginx.conf параметры ssl. Пример параметров конфигурации https приведён ниже:
+Для настройки https также можно добавить в секцию http файла конфигурации nginx /etc/nginx/nginx.conf параметры ssl. Пример актуального списка параметров конфигурации https на момент написания документации приведён ниже:
 ```
     ssl_protocols TLSv1.3 TLSv1.2;
     ssl_prefer_server_ciphers on;
@@ -226,41 +224,34 @@ echo password_hash('password', PASSWORD_DEFAULT);
 Для запуска демонов и ежеминутного скрипта имеются готовые юниты для systemd. При стандартном расположении в папке /var/www/shcc необходимости настраивать сервисы нет. Создайте символические ссылки на файлы service и timer в каталог /lib/systemd/system/.
 ``` bash
 # cd /var/www/shcc/service/systemd
-# ln -s shcc.service /lib/systemd/system/
+# ln -s shcc.target /lib/systemd/system/
+# ln -s shcc@.service /lib/systemd/system/
 # ln -s shcc-minutely.service /lib/systemd/system/
 # ln -s shcc-minutely.timer /lib/systemd/system/
 ```
 Если вы используете иной путь расположения shcc или используете своего пользователя для запуска скриптов, то выполните настройку:
 ```bash
-# systemctrl edit shcc.service
+# systemctrl edit shcc@.service
 # systemctrt edit shcc-minutely.service
 ```
-В открывшемся редакторе введите следующий код для shcc.service:
+В открывшемся редакторе создайте секцию [Service] и уажите рабочий каталог, а также пользователя и группу, от имени которых необходимо запускать сервисы. Например, код для shcc@.service:
 ```
 [Service]
 WorkingDirectory=/home/my_user/www/shcc/service
 User=my_user
 Group=my_user
 ```
-И для shcc-minutely.service:
+Для shcc-minutely.service:
 ```
 [Service]
 WorkingDirectory=/home/my_user/www/shcc/custom
 User=my_user
 Group=my_user
 ```
-В оба файла в качестве WorkingDirectory нужно указать путь до папки service или custom, а в качестве User и Group имя пользователя и группу, от имени которого должен работаь сервис.
 
-Теперь вы можете активировать и запустит требуемые юниты:
+Теперь можно активировать и запустить требуемые сервисы:
 ```bash
-# systemctl enable shcc.service
-Created symlink /etc/systemd/system/multi-user.target.wants/shcc.service → /var/www/shcc/service/systemd/shcc.service.
-Created symlink /etc/systemd/system/shcc.service → /var/www/shcc/service/systemd/shcc.service.
-# systemctl enable shcc-minutely.timer
-Created symlink /etc/systemd/system/timers.target.wants/shcc-minutely.timer → /var/www/shcc/service/systemd/shcc-minutely.timer.
-Created symlink /etc/systemd/system/shcc-minutely.timer → /var/www/shcc/systemd/shcc-minutely.timer.
-# systemctl start shcc.service
-# systemctl start shcc-minutely.timer
+# systemctl enable --now shcc.target
 ```
 
 ## Включение голосовых оповещений
