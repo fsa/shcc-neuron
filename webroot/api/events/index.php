@@ -17,19 +17,6 @@ $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
 }
-if(isset($json->shcc)) {
-    switch ($json->shcc) {
-        case 'init_devices':
-            SmartHome\Devices::refreshMemoryDevices();
-            break;
-        case 'init_tts':
-            new Tts\Queue();
-            break;
-        default:
-            die('Wrong internal command');
-    }
-    httpResponse::json(['ok'=>true]);
-}
 if (!isset($json->hwid)) {
     die('Wrong HWID');
 }
@@ -38,14 +25,10 @@ if (!isset($json->events)) {
 }
 fastcgi_finish_request();
 $hwid=$json->hwid;
-$uid=SmartHome\Devices::getUidByHwid($hwid);
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
+$uid=SmartHome\Devices::storeEvents($hwid, $events, $ts);
 if ($uid) {
-    foreach ($json->events as $property=> $value) {
-        SmartHome\Meters::storeEvent($uid.'@'.$property, $value, $ts);
-        SmartHome\Indicators::storeEvent($uid.'@'.$property, $value, $ts);
-    }
     $dir='../../../custom/events/';
     if (file_exists($dir.$uid.'.php')) {
         chdir($dir);

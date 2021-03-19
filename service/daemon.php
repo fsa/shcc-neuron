@@ -1,61 +1,51 @@
 <?php
 if (sizeof($argv)!=2) {
-    die('Usage: '.$argv[0].' daemon-class'.PHP_EOL);
+    die('Usage: '.$argv[0].' module_name'.PHP_EOL);
 }
 require_once 'autoloader.php';
-$daemon_class=$argv[1];
-$daemon=new $daemon_class(Settings::get('url').'/api/events/');
+$module=$argv[1];
+$url=Settings::get('url');
+$response=file_get_contents($url.'/api/daemon/', 0, stream_context_create([
+    'http'=>[
+        'method'=>'POST',
+        'header'=>"Content-Type: application/json; charset=utf-8\r\n",
+        'content'=>json_encode(['module'=>$module])
+    ]
+]));
+if($response===false) {
+    echo "Error getting module daemon \"$module\" state.".PHP_EOL;
+    exit(1);
+}
+$state=json_decode($response);
+if($state===false) {
+    echo "Module daemon \"$module\" json responce error.".PHP_EOL;
+    exit(2);
+}
+if(!isset($state->daemon)) {
+    echo "Responce error getting module daemon \"$module\".".PHP_EOL;
+    exit(3);
+}
+if(!$state->daemon) {
+    echo "Module daemon \"$module\" is disabled.".PHP_EOL;
+    exit(0);
+}
+$daemon_class=$state->class;
+if(!class_exists($daemon_class)) {
+    echo "Daemon class \"$daemon_class\" not exists.".PHP_EOL;
+    exit(4);
+}
+$daemon=new $daemon_class($url.'/api/events/');
 $daemon_name=$daemon->getName();
 $log_dir=getenv('LOGS_DIRECTORY')==''?'/var/log/shcc':getenv('LOGS_DIRECTORY');
-$pid_dir=getenv('RUNTIME_DIRECTORY')==''?'/var/run/shcc':getenv('RUNTIME_DIRECTORY');
-$pid_file=$pid_dir.'/'.$daemon_name.'.pid';
-if (isDaemonActive($pid_file)) {
-    echo "Daemon \"$daemon_name\" already active.".PHP_EOL;
-    exit;
-}
-$child_pid=pcntl_fork();
-if ($child_pid==-1) {
-    die;
-} elseif ($child_pid) {
-    echo "Daemon \"$daemon_name\" started.".PHP_EOL;
-    exit;
-}
-posix_setsid();
-file_put_contents($pid_file,getmypid());
 ini_set('error_log',$log_dir.'/error.log');
-fclose(STDIN);
-fclose(STDOUT);
-fclose(STDERR);
-$STDIN=fopen('/dev/null','r');
-$STDOUT=fopen($log_dir.'/'.$daemon_name.'.log','ab');
-$STDERR=fopen($log_dir.'/'.$daemon_name.'_error.log','ab');
-
+echo "Starting '$module' module daemon.".PHP_EOL;
 $daemon->prepare();
-$stop_server=false;
-while (!$stop_server) {
+while (1) {
     try {
         $daemon->iteration();
     } catch (Exception $ex) {
         error_log(date('c').PHP_EOL.print_r($ex,true));
-        $daemon->finish();
-        sleep(15);
-        $daemon->prepare();
+        break;
     }
 }
 $daemon->finish();
-unlink($pid_file);
-exit;
-
-function isDaemonActive($pid_file) {
-    if (!is_file($pid_file)) {
-        return false;
-    }
-    $pid=file_get_contents($pid_file);
-    if (posix_kill($pid,0)) {
-        return true;
-    }
-    if (!unlink($pid_file)) {
-        exit(-1);
-    }
-    return false;
-}

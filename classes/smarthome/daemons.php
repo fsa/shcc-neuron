@@ -2,19 +2,25 @@
 
 namespace SmartHome;
 
-use AppException;
-
 class Daemons {
 
     public static function getActive() {
         return self::getVar();
     }
 
+    public static function getClass($name) {
+        $daemons=self::getVar();
+        if(array_search($name, $daemons)!==false) {
+            return null;
+        }
+        return $daemons[$name];
+    }
+
     public static function enable($name) {
         $daemons=self::getVar();
         $daemon_class=$name.'\\Daemon';
         if(!class_exists($daemon_class)) {
-            throw new AppException('Ошибка при активации демона. Класс демона не найден!');
+            throw new UserException('Ошибка при активации демона. Класс демона не найден!');
         }
         $daemons[$name]=$daemon_class;
         self::setVar($daemons);
@@ -23,7 +29,7 @@ class Daemons {
     public static function disable($name) {
         $daemons=self::getVar();
         if(array_search($name, $daemons)!==false) {
-            throw new AppException('Демон не требует отключения, т.к. уже отключен.');
+            throw new UserException('Демон не требует отключения, т.к. уже отключен.');
         }
         unset($daemons[$name]);
         self::setVar($daemons);

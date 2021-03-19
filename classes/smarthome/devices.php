@@ -130,6 +130,18 @@ class Devices {
         return $s->fetch(PDO::FETCH_COLUMN);
     }
 
+    public static function getAllDevicesEntity() {
+        $stmt=DB::query('SELECT hwid, entity FROM devices ORDER BY hwid');
+        $devices=[];
+        while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
+            $entity=json_decode($device->entity);
+            $device_obj=new $entity->classname;
+            $device_obj->init($device->hwid, $entity->properties??[]);
+            $devices[$device->hwid]=$device_obj;
+        }
+        return $devices;
+    }
+
     public static function refreshMemoryDevices(): void {
         $stmt=DB::prepare('SELECT hwid, entity FROM devices ORDER BY hwid');
         $stmt->execute();
@@ -151,4 +163,14 @@ class Devices {
         $mem->releaseMemory();
     }
 
+    public static function storeEvents($hwid, $events, $ts=null) {
+        $uid=self::getUidByHwid($hwid);
+        if ($uid) {
+            foreach ($events as $property=> $value) {
+                Meters::storeEvent($uid.'@'.$property, $value, $ts);
+                Indicators::storeEvent($uid.'@'.$property, $value, $ts);
+            }
+        }
+        return $uid;
+    }
 }
