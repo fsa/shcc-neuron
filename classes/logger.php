@@ -25,7 +25,7 @@ class Logger {
             $timestamp=time();
         }
         $data=($value instanceof string)?$value:print_r($value, true);
-        file_put_contents(__DIR__.'/../logs/'.$name.'/'.$level.'_'.date('Y_m_d', $timestamp).'.log', date('H:i:s', $timestamp).'=>'.$data.PHP_EOL, FILE_APPEND|LOCK_EX);
+        error_log(date('H:i:s', $timestamp).'=>'.$data.PHP_EOL, 3, __DIR__.'/../logs/'.$name.'/'.$level.'_'.date('Y_m_d', $timestamp).'.log');
     }
 
 }
