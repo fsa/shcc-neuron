@@ -1,8 +1,9 @@
 <?php
 
-namespace Yeelight;
+namespace SmartHome\Module\Yeelight;
 
-use SmartHome\MemoryStorage;
+use SmartHome\MemoryStorage,
+    Yeelight\SocketServer;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
@@ -16,7 +17,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $process_url;
 
     public function __construct($params) {
-        $this->process_url=$params['process_url'];
+        $this->process_url=$params['events_url'];
     }
 
     public function getName() {

@@ -1,9 +1,10 @@
 <?php
 
-namespace miIO;
+namespace SmartHome\Module\miIO;
 
-use DB,
-    SmartHome\MemoryStorage;
+use SmartHome\MemoryStorage,
+    miIO\SocketServer,
+    miIO\GenericDevice;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
@@ -18,7 +19,8 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $tokens=[];
 
     public function __construct($params) {
-        $this->process_url=$params['process_url'];
+        $this->process_url=$params['events_url'];
+        $this->tokens=$params['tokens'];
     }
 
     public function getName() {
@@ -27,11 +29,9 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     public function prepare() {
         $this->storage=new MemoryStorage;
-        $this->tokens=Tokens::getTokens();
         $this->socketserver=new SocketServer();
         $this->socketserver->setBroadcastSocket();
         SocketServer::sendDiscovery();
-        DB::disconnect();
     }
 
     public function iteration() {

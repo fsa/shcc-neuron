@@ -1,25 +1,21 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2020-12-25
- */
-
 require_once '../../common.php';
 Auth\Session::grantAccess([]);
-$action=filter_input(INPUT_GET,'action');
-if($action) {
+$modules=new SmartHome\Modules;
+$action=filter_input(INPUT_GET, 'action');
+if ($action) {
     $name=filter_input(INPUT_GET, 'name');
-    if(!$name) {
+    if (!$name) {
         httpResponse::showError('Не указано имя демона');
     }
     switch ($action) {
         case 'enable':
-            SmartHome\Daemons::enable($name);
+            $modules->enableDaemon($name);
             httpResponse::storeNotification('Демон модуля '.$name.' будет включен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
         case 'disable':
-            SmartHome\Daemons::disable($name);
+            $modules->disableDaemon($name);
             httpResponse::storeNotification('Демон модуля '.$name.' будет выключен при следующем запуске сервиса SHCC.');
             httpResponse::redirection('./');
     }
@@ -27,15 +23,15 @@ if($action) {
 }
 httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Модули');
-$active_daemons=SmartHome\Daemons::getActive();
 $devices=new HTML\Table;
-$devices->addField('name','Наименование');
+$devices->addField('name', 'Наименование');
 $devices->addField('description', 'Описание');
-$devices->addField('daemon', 'Демон');
+$devices->addField('daemon_onoff', 'Демон');
 $devices->addField('settings', 'Настройки');
-$devices->setRowCallback(function ($row) use ($active_daemons) {
-    $row->daemon=class_exists($row->name.'\\Daemon')?(array_search($row->name.'\\Daemon', $active_daemons)===false?'<a href="./?action=enable&name='.$row->name.'">Включить</a>':'<a href="./?action=disable&name='.$row->name.'">Выключить</a>'):'---';
+$devices->setRowCallback(function ($row) use ($modules) {
+    $row->daemon_onoff=class_exists($row->daemon)?($modules->isDaemonActive(strtolower($row->name))?'<a href="./?action=disable&name='.strtolower($row->name).'">Выключить</a>':'<a href="./?action=enable&name='.strtolower($row->name).'">Включить</a>'):'---';
     $row->settings=isset($row->settings)?'<a href="'.strtolower($row->name).'/">Настроить</a>':'---';
 });
-$devices->showTable(new SmartHome\Modules);
+$modules->query();
+$devices->showTable($modules);
 httpResponse::showHtmlFooter();

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2021-03-19
- */
 require_once '../../common.php';
 $host=Settings::get('daemon-ip', '127.0.0.1');
 if (!is_null($host)) {
@@ -14,20 +10,18 @@ if (!is_null($host)) {
 $request=file_get_contents('php://input');
 $json=json_decode($request);
 if (!$json) {
-    die('Wrong JSON');
+    httpResponse::json(['error'=>'Неверный JSON']);
 }
 if (!isset($json->module)) {
-    die('Wrong HWID');
+    httpResponse::json(['error'=>'Неверное имя модуля']);
 }
 # Инициализация разделяемой памяти
 $mem=new SmartHome\MemoryStorage;
-$class=SmartHome\Daemons::getClass($json->module);
-if($class) {
-    httpResponse::json(['daemon'=>true, 'class'=>$class]);
-} else {
-    if(class_exists($json->module.'\\Daemon')) {
-        httpResponse::json(['daemon'=>false]);
-    } else {
-        httpResponse::json(['daemon'=>null]);
-    }
+$modules=new SmartHome\Modules;
+if(!$modules->isModuleExists($json->module)) {
+    httpResponse::json(['daemon'=>null]);
 }
+if($modules->isDaemonActive($json->module)) {
+    httpResponse::json(['daemon'=>true, 'class'=>$modules->getDaemonClass($json->module)]);
+}
+httpResponse::json(['daemon'=>false]);

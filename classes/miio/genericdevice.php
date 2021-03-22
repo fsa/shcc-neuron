@@ -25,16 +25,20 @@ class GenericDevice implements \SmartHome\DeviceInterface {
         return "Неизвестное устройство";
     }
 
-    public function getId(): string {
-        return $this->uid;
-    }
-
     public function getState(): array {
         return ['locatation'=>$this->location];
     }
 
-    public function getStateString(): string {
+    public function __toString(): string {
         return sprintf('Токен: %s. Адрес: %s', $this->token?'указан':'не указан', $this->location)??'Нет данных';
+    }
+
+    public function getEventsList(): array {
+        return [];
+    }
+
+    public function getHwid(): string {
+        return $this->uid;
     }
 
     public function getInitDataList(): array {
@@ -47,14 +51,6 @@ class GenericDevice implements \SmartHome\DeviceInterface {
 
     public function getLastUpdate(): int {
         return $this->updated??0;
-    }
-
-    public function getModuleName(): string {
-        return "miio";
-    }
-
-    public function getActions() {
-        return null;
     }
 
     public function init($device_id, $init_data): void {

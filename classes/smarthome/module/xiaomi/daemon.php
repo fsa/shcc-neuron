@@ -1,8 +1,9 @@
 <?php
 
-namespace Xiaomi;
+namespace SmartHome\Module\Xiaomi;
 
-use SmartHome\MemoryStorage;
+use SmartHome\MemoryStorage,
+    Xiaomi\SocketServer;
 
 class Daemon implements \SmartHome\DaemonInterface {
 

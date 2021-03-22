@@ -1,6 +1,9 @@
 <?php
 
-namespace Tts;
+namespace SmartHome\Module\Tts;
+
+use SmartHome\TtsInterface,
+    Tts\Queue;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
@@ -21,7 +24,7 @@ class Daemon implements \SmartHome\DaemonInterface {
             if($tts!==false) {
                 $this->tts_provider=unserialize($tts);
             }
-            if(!($this->tts_provider instanceof \SmartHome\TtsInterface)) {
+            if(!($this->tts_provider instanceof TtsInterface)) {
                 $this->tts_provider=null;
             }
         }
