@@ -2,8 +2,6 @@
 
 namespace Tts;
 
-use Settings;
-
 class Daemon implements \SmartHome\DaemonInterface {
 
     const PLAY_SOUND_CMD='mpg123 -q %s';
@@ -16,20 +14,19 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $pre_sound;
     private $play_sound_cmd;
 
-    public function __construct($process_url) {
+    public function __construct($params) {
         $tts_config_file=__DIR__.'/../../config/tts.conf';
         if(file_exists($tts_config_file)) {
             $tts=file_get_contents($tts_config_file);
             if($tts!==false) {
                 $this->tts_provider=unserialize($tts);
             }
-            if(!($this->tts_provider instanceof TtsInterface)) {
+            if(!($this->tts_provider instanceof \SmartHome\TtsInterface)) {
                 $this->tts_provider=null;
             }
         }
-        $settings=Settings::get('tts');
-        $this->pre_sound=isset($settings['pre_sound'])?$settings['pre_sound']:self::PRE_SOUND;
-        $this->play_sound_cmd=isset($settings['play_sound_cmd'])?$settings['play_sound_cmd']:self::PLAY_SOUND_CMD;
+        $this->pre_sound=isset($params['pre_sound'])?$params['pre_sound']:self::PRE_SOUND;
+        $this->play_sound_cmd=isset($params['play_sound_cmd'])?$params['play_sound_cmd']:self::PLAY_SOUND_CMD;
     }
 
     public function getName() {
@@ -46,6 +43,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     public function iteration() {
         $message=$this->queue->receiveMessage();
         if($message) {
+            echo 'In: '.$message;
             $this->playVoice($message);
         } else {
             error_log(print_r($this->queue,true));
@@ -62,6 +60,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         if(is_null($this->tts_provider)) {
             return;
         }
+        echo 'Play: '.$text;
         $voice_file=$this->tts_provider->getVoiceFile($text);
         if(time()-$this->last_message_time>self::PRE_SOUND_PERIOD) {
             $this->playMp3(__DIR__.'/../../custom/sound/'.$this->pre_sound);

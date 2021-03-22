@@ -2,8 +2,7 @@
 
 namespace Yeelight;
 
-use DB,
-    SmartHome\MemoryStorage;
+use SmartHome\MemoryStorage;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
@@ -16,8 +15,8 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $socketserver;
     private $process_url;
 
-    public function __construct($process_url) {
-        $this->process_url=$process_url;
+    public function __construct($params) {
+        $this->process_url=$params['process_url'];
     }
 
     public function getName() {
@@ -29,7 +28,6 @@ class Daemon implements \SmartHome\DaemonInterface {
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
         $this->socketserver->sendDiscover();
-        DB::disconnect();
     }
 
     public function iteration() {

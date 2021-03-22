@@ -1,6 +1,6 @@
 <?php
 
-namespace Tts;
+namespace SmartHome;
 
 interface TtsInterface {
 

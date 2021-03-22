@@ -36,14 +36,14 @@ class Log {
         $file=ftok(__FILE__, self::PROJ);
         $this->shm=shm_attach($file, self::MEMSIZE, self::CHMOD);
         if ($this->shm===false) {
-            throw new \AppException('Не удалось инициализировать лог TTS сообщений.');
+            throw new UserException('Не удалось инициализировать лог TTS сообщений.');
         }
         if (shm_has_var($this->shm, 0)) {
             return;
         }
         $log=[];
         if (!shm_put_var($this->shm, 0, $log)) {
-            throw new \AppException('Не удалось добавить сообщение лог TTS.');
+            throw new UserException('Не удалось добавить сообщение лог TTS.');
         }
     }
 

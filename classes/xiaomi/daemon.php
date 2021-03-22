@@ -2,8 +2,7 @@
 
 namespace Xiaomi;
 
-use DB,
-    SmartHome\MemoryStorage;
+use SmartHome\MemoryStorage;
 
 class Daemon implements \SmartHome\DaemonInterface {
 
@@ -16,8 +15,8 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $socketserver;
     private $events_url;
 
-    public function __construct($events_url) {
-        $this->events_url=$events_url;
+    public function __construct($params) {
+        $this->events_url=$params['events_url'];
     }
 
     public function getName() {
@@ -28,7 +27,6 @@ class Daemon implements \SmartHome\DaemonInterface {
         $this->storage=new MemoryStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
-        DB::disconnect();
     }
 
     public function iteration() {

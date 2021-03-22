@@ -17,8 +17,8 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $process_url;
     private $tokens=[];
 
-    public function __construct($process_url) {
-        $this->process_url=$process_url;
+    public function __construct($params) {
+        $this->process_url=$params['process_url'];
     }
 
     public function getName() {

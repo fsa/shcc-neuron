@@ -34,10 +34,10 @@ if(!class_exists($daemon_class)) {
     echo "Daemon class \"$daemon_class\" not exists.".PHP_EOL;
     exit(0);
 }
-$daemon=new $daemon_class($url.'/api/events/');
+$params=Settings::get(strtolower($module),[]);
+$params['process_url']=$url.'/api/events/';
+$daemon=new $daemon_class($params);
 $daemon_name=$daemon->getName();
-$log_dir=getenv('LOGS_DIRECTORY')==''?'/var/log/shcc':getenv('LOGS_DIRECTORY');
-ini_set('error_log',$log_dir.'/error.log');
 echo "Starting '$module' module daemon.".PHP_EOL;
 $daemon->prepare();
 while (1) {

@@ -13,7 +13,7 @@ namespace Yandex;
   & [speed=<скорость речи>]
   & [emotion=<good|neutral|evil>]
  */
-class TtsApi implements \Tts\TtsInterface {
+class TtsApi implements \SmartHome\TtsInterface {
 
     const YANDEX_TTS_API_URL='https://tts.voicetech.yandex.net/generate';
     const CHMOD=0750;
