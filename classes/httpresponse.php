@@ -173,8 +173,7 @@ class httpResponse {
             ];
             $message=$codes[$code];
         }
-        $header=sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message);
-        header($header, true);
+        header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message), true, $code);
         echo $message;
         exit;
     }
@@ -202,7 +201,14 @@ class httpResponse {
     }
 
     public static function HtmlException($ex) {
-        if (getenv('DEBUG')) {
+        $class=get_class($ex);
+        $class_parts=explode('\\', $class);
+        if(end($class_parts)=='UserException') {
+            $message=(string)$ex;
+            self::showPopup($message, 'Ошибка', 'danger');
+            self::showHtmlFooter();
+            exit;
+        } else if (getenv('DEBUG')) {
             $message=(string)$ex;
         } else {
             error_log($ex, 0);

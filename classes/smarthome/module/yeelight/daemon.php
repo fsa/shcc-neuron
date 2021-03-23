@@ -3,6 +3,7 @@
 namespace SmartHome\Module\Yeelight;
 
 use SmartHome\MemoryStorage,
+    Yeelight\GenericDevice,
     Yeelight\SocketServer;
 
 class Daemon implements \SmartHome\DaemonInterface {
