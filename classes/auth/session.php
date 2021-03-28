@@ -148,6 +148,7 @@ class Session {
         }
         $new_token=self::genRandomString(32);
         self::dbUpdateSession($uid, $new_token, $user);
+        self::setUidCookie($uid);
         self::setTokenCookie($new_token);
         return $user;
     }
@@ -171,13 +172,13 @@ class Session {
         }
         return $string;
     }
-    
+
     private static function dbInsertSession(string $uid, string $token, UserInterface $user) {
         $session=self::getCookieConfig();
         $s=DB::prepare('INSERT INTO auth_sessions (uid, token, user_entity, expires, ip, browser) VALUES (?,?,?,?,?,?)');
         $s->execute([$uid, $token, serialize($user), date('c',time()+$session['time']), getenv('REMOTE_ADDR'), getenv('HTTP_USER_AGENT')]);
     }
-    
+
     private static function dbUpdateSession(string $uid, string $new_token, UserInterface $user) {
         $session=self::getCookieConfig();
         $s=DB::prepare('UPDATE auth_sessions SET token=?, user_entity=?, expires=?, ip=?, browser=? WHERE uid=?');
@@ -194,7 +195,7 @@ class Session {
         $s=DB::prepare('DELETE FROM auth_sessions WHERE uid=?');
         $s->execute([$uid]);
     }
-    
+
     private static function dbDeleteExpiredSession() {
         DB::query('DELETE FROM auth_sessions WHERE expires<NOW()');
     }
@@ -205,14 +206,14 @@ class Session {
         $params['expires']=time()+$cookie['time'];
         setcookie($cookie['uid'], $uid, $params);
     }
-    
+
     private static function setTokenCookie(string $token): void {
         $cookie=self::getCookieConfig();
         $params=$cookie['params'];
         $params['expires']=time()+$cookie['time'];
         setcookie($cookie['token'], $token, $params);
     }
-    
+
     private static function getUidCookie(): ?string {
         $cookie=self::getCookieConfig();
         return filter_input(INPUT_COOKIE, $cookie['uid']);
