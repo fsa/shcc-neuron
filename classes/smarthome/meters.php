@@ -82,7 +82,7 @@ class Meters {
         } else {
             $period='';
         }
-        $stmt=DB::prepare('SELECT EXTRACT(EPOCH FROM timestamp)*1000 AS ts,value FROM meter_history WHERE meter_id=:meter_id'.$period.' ORDER BY timestamp');
+        $stmt=DB::prepare('SELECT ROUND(EXTRACT(EPOCH FROM timestamp)*1000) AS ts,value FROM meter_history WHERE meter_id=:meter_id'.$period.' ORDER BY timestamp');
         $stmt->execute($params);
         return ['name'=> $meter->description, 'unit'=>self::UNITS[$meter->unit][1], 'data'=>$stmt->fetchAll(PDO::FETCH_NUM)];
     }
