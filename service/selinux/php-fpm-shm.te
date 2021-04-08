@@ -1,0 +1,11 @@
+
+module php-fpm-shm 1.0;
+
+require {
+	type unconfined_service_t;
+	type httpd_t;
+	class shm { associate read unix_read unix_write write };
+}
+
+#============= httpd_t ==============
+allow httpd_t unconfined_service_t:shm { associate read unix_read unix_write write };
