@@ -183,6 +183,9 @@ class httpResponse {
         $class=get_class($ex);
         $class_parts=explode('\\', $class);
         if(end($class_parts)=='UserException') {
+            $message=$ex->getMessage();
+        } else if (end($class_parts)=='AppException') {
+            $message='Программная ошибка: '.$ex->getMessage();
             $message=(string)$ex;
         } else if(end($class_parts)=='AuthException') {
             self::showLoginForm(getenv('REQUEST_METHOD')=='GET'?getenv('REQUEST_URI'):'/');
@@ -201,14 +204,7 @@ class httpResponse {
     }
 
     public static function HtmlException($ex) {
-        $class=get_class($ex);
-        $class_parts=explode('\\', $class);
-        if(end($class_parts)=='UserException') {
-            $message=(string)$ex;
-            self::showPopup($message, 'Ошибка', 'danger');
-            self::showHtmlFooter();
-            exit;
-        } else if (getenv('DEBUG')) {
+        if (getenv('DEBUG')) {
             $message=(string)$ex;
         } else {
             error_log($ex, 0);
@@ -223,7 +219,10 @@ class httpResponse {
         $class=get_class($ex);
         $class_parts=explode('\\', $class);
         if(end($class_parts)=='UserException') {
-            self::json(['error'=>(string)$ex]);
+            self::json(['error'=>$ex->getMessage()]);
+            exit;
+        } else if (end($class_parts)=='AppException') {
+            self::json(['error'=>'Server error: '.$ex->getMessage()]);
             exit;
         } else if(end($class_parts)=='AuthException') {
             httpResponse::error(401);

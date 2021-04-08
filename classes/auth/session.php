@@ -33,7 +33,9 @@ class Session {
         session_set_cookie_params($session['params']);
         self::$_instance=new self;
         self::$_instance->user=$user;
-        session_start();
+        if (!session_start()) {
+            throw new AppException('session_start failed.');
+        }
         $_SESSION['user']=$user;
         session_commit();
         self::start($user);
@@ -44,7 +46,9 @@ class Session {
         $session=self::getCookieConfig();
         session_name($session['session']);
         session_set_cookie_params($session['params']);
-        session_start();
+        if (!session_start()) {
+            throw new AppException('session_start failed.');
+        }
         $_SESSION=[];
         session_destroy();
         $params=$session['params'];
@@ -70,7 +74,9 @@ class Session {
         session_set_cookie_params($session['params']);
         $session_cookie=filter_input(INPUT_COOKIE, $session['session']);
         if ($session_cookie) {
-            session_start();
+            if (!session_start()) {
+                throw new AppException('session_start failed.');
+            }
             if (isset($_SESSION['user'])) {
                 $this->user=$_SESSION['user'];
                 session_commit();
@@ -88,7 +94,9 @@ class Session {
         } else {
             $user=$this->refresh();
             if ($user) {
-                session_start();
+                if (!session_start()) {
+                    throw new AppException('session_start failed.');
+                }
                 $this->user=$user;
                 $_SESSION['user']=$user;
                 session_commit();
