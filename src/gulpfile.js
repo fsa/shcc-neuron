@@ -1,7 +1,7 @@
 'use strict';
 
 const {src, dest, watch, series, parallel} = require('gulp'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-dart-sass'),
     postcss = require('gulp-postcss'),
     postcssProcessors = [
         require('autoprefixer')(),
