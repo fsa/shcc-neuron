@@ -31,7 +31,7 @@ class MemoryStorage {
         if (!shm_put_var($this->shm, 0, $devices)) {
             throw new UserException('Не удалось записать значение в разделяемую память. Дальнейшая работа с устройствами невозможна.');
         }
-        $devices_entity=SmartHome\Devices::getAllDevicesEntity();
+        $devices_entity=Devices::getAllDevicesEntity();
         foreach($devices_entity as $hwid=>$entity) {
             $this->setDevice($hwid, $entity);
         }
