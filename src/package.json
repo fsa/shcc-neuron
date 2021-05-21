@@ -21,9 +21,9 @@
     ],
     "devDependencies": {
         "autoprefixer": "^10.2.5",
-        "bootstrap": "^5.0.0",
+        "bootstrap": "^5.0.1",
         "browser-sync": "^2.26.14",
-        "cssnano": "^5.0.2",
+        "cssnano": "^5.0.3",
         "gulp": "^4.0.2",
         "gulp-concat": "^2.6.1",
         "gulp-dart-sass": "^1.0.2",
@@ -34,7 +34,7 @@
         "jstree": "^3.3.11",
         "masonry-layout": "^4.2.2",
         "popper.js": "^1.16.1",
-        "postcss": "^8.2.15"
+        "postcss": "^8.3.0"
     },
     "dependencies": {}
 }
