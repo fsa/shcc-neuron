@@ -10,7 +10,7 @@ $minute=date('i');
 $hour=date('H');
 $time=date('H:i');
 
-function say($text) {
+function say($text, $priority=0) {
     \Tts\Log::newMessage($text);
     global $mute;
     if ($mute) {
@@ -18,6 +18,14 @@ function say($text) {
     }
     $tts=new Tts\Queue();
     $tts->addMessage($text);
+    $telegram=Settings::get('telegram');
+    if(!$telegram or !isset($telegram['log_channel'])) {
+        return;
+    }
+    Telegram\Query::init($telegram['token']);
+    $api=new Telegram\SendMessage($telegram['log_channel'], $text);
+    $api->disable_notification=($priority==0);
+    $api->httpPostJson();
 }
 
 function getDevivce($name) {
