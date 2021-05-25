@@ -60,7 +60,7 @@ abstract class Query {
            'Content-Type: application/json',
            'Content-Length: ' . strlen($query))
         );
-        curl_setopt($ch, CURLOPT_CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
         $result=curl_exec($ch);
         curl_close($ch);
