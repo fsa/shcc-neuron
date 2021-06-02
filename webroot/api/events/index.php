@@ -30,14 +30,15 @@ $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
 $uid=SmartHome\Devices::storeEvents($hwid, $events, $ts);
 if ($uid) {
-    chdir(CUSTOM_DIR);
-    foreach ($events as $event=> $value) {
-        onEventAction($uid, $event, $value, $ts);
-    }
-}
-
-function onEventAction($uid, $event, $value, $ts) {
-    if (file_exists($uid.'-'.$event.'.php')) {
-        include $uid.'-'.$event.'.php';
+    if (file_exists(CUSTOM_DIR.$uid.'.php')) {
+        chdir(CUSTOM_DIR);
+        $eventsListener=require $uid.'.php';
+        $eventsListener->uid=$uid;
+        foreach ($events as $event=> $value) {
+            $method='on_event_'.$event;
+            if (method_exists($eventsListener, $method)) {
+                $eventsListener->$method($value, $ts);
+            }
+        }
     }
 }
