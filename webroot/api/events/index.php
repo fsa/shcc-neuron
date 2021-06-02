@@ -4,6 +4,7 @@
  * SHCC 0.7.0
  * 2020-11-28
  */
+define('CUSTOM_DIR', '../../../custom/events/');
 require_once '../../common.php';
 $host=Settings::get('daemon-ip', '127.0.0.1');
 if (!is_null($host)) {
@@ -29,9 +30,14 @@ $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
 $uid=SmartHome\Devices::storeEvents($hwid, $events, $ts);
 if ($uid) {
-    $dir='../../../custom/events/';
-    if (file_exists($dir.$uid.'.php')) {
-        chdir($dir);
-        include $uid.'.php';
+    chdir(CUSTOM_DIR);
+    foreach ($events as $event=> $value) {
+        onEventAction($uid, $event, $value, $ts);
+    }
+}
+
+function onEventAction($uid, $event, $value, $ts) {
+    if (file_exists($uid.'-'.$event.'.php')) {
+        include $uid.'-'.$event.'.php';
     }
 }
