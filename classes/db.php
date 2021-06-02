@@ -20,8 +20,9 @@ class DB {
         $config=Settings::get('pdo');
         self::$pdo=new PDO($config['dsn'], $config['username'], $config['password']);
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        foreach ($config['init'] AS $query) {
-            self::$pdo->query($query);
+        $tz=getenv('TZ');
+        if ($tz) {
+            self::$pdo->query("SET TIMEZONE=\"$tz\"");
         }
         return self::$pdo;
     }
