@@ -12,10 +12,21 @@ abstract class Query {
 
     protected static $token;
     protected static $proxy;
+    protected static $config;
 
-    public static function init(string $token, string $proxy=null) {
-        self::$token=$token;
-        self::$proxy=$proxy;
+    public static function init(array $config) {
+        if(!isset($config['token'])) {
+            throw new Exception('Token not set.');
+        }
+        self::$token=$config['token'];
+        if(isset($config['proxy'])) {
+            self::$proxy=$config['proxy'];
+        }
+        self::$config=$config;
+    }
+
+    public static function getConfigVar($name) {
+        return isset(self::$config[$name])?self::$config[$name]:null;
     }
 
     public function getActionName(): string {
