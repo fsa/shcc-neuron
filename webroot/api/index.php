@@ -18,6 +18,13 @@ if (isset($json->sensors)) {
         $response['sensors'][]=$meter;
     }
 }
+if (isset($json->devices)) {
+    $response['devices']=[];
+    foreach ($json->devices as $device_name) {
+        $device=SmartHome\Devices::get($device_name);
+        $response['devices'][]=['name'=>$device_name, 'state'=>$device?$device->getState():false, 'last_update'=>$device->getLastUpdate()];
+    }
+}
 if (isset($json->messages)) {
     $response['messages']=[];
     foreach ($json->messages as $messages) {

@@ -1,10 +1,10 @@
 "use strict";
 let request;
-const device_names = new Set();
 
 document.addEventListener('DOMContentLoaded', function () {
     const sensors = new Set();
     const text_messages = new Set();
+    const device_names = new Set();
     const request_body={};
     document.querySelectorAll('[sensor]').forEach(item => {
         sensors.add(item.getAttribute('sensor'));
@@ -12,16 +12,19 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('[messages]').forEach(item => {
         text_messages.add(item.getAttribute('messages'));
     });
+    document.querySelectorAll('[device_name]').forEach(item => {
+        device_names.add(item.getAttribute('device_name'));
+    });
     if(sensors.size) {
         request_body.sensors=Array.from(sensors);
     }
     if(text_messages.size) {
         request_body.messages=Array.from(text_messages);
     }
+    if(device_names.size) {
+        request_body.devices=Array.from(device_names);
+    }
     request=JSON.stringify(request_body);
-    document.querySelectorAll('[device_name]').forEach(item => {
-        device_names.add(item.getAttribute('device_name'));
-    });
     document.querySelectorAll('.action-state').forEach(item => {
         item.addEventListener('click', (e) => {
             if (e.target) {
@@ -69,13 +72,12 @@ function updatePage() {
         if(result.messages) {
             updateTextMessages(result.messages);
         }
+        if(result.devices) {
+            updateDevices(result.devices);
+        }
         let datetime = new Date();
         document.querySelector('#page_last_update').innerHTML=datetime.toLocaleString();
     });
-    device_names.forEach(item => {
-        updateDeviceState(item);
-    });
-
 }
 
 function updateSensors(sensors) {
@@ -90,6 +92,17 @@ function updateSensors(sensors) {
 function updateTextMessages(messages) {
     messages.forEach(function (message) {
         document.querySelector('[messages="' + message.name + '"]').innerHTML=message.content.join('<br>');
+    });
+}
+
+function updateDevices(devices) {
+    devices.forEach(function (device) {
+        for (var key in device.state) {
+            document.querySelectorAll('[device_name="' + device.name + '"][device_property="' + key + '"]').forEach((item) => {
+                setElementValue(item, device.state[key]);
+            });
+        }
+        setState(device.name, device.last_update > 0 ? '': 'Нет данных', device.last_update*1000);
     });
 }
 
