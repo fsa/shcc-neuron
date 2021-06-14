@@ -102,7 +102,7 @@ function updateDevices(devices) {
                 setElementValue(item, device.state[key]);
             });
         }
-        setState(device.name, device.last_update > 0 ? '': 'Нет данных', device.last_update*1000);
+        setState(device.name, device.last_update > 0 ? '': 'Устройство ' + device.name + ' не найдено', device.last_update*1000);
     });
 }
 
@@ -122,28 +122,6 @@ function setLastUpdate(sensor, state, timestamp = 0) {
     document.querySelectorAll('[sensor-lastupdate="' + sensor + '"]').forEach((item) => {
         setElementValue(item, state);
         item.style.color = style;
-    });
-}
-
-function updateDeviceState(device_name) {
-    fetch('/api/device/?name=' + device_name
-    ).then(response => {
-        if (response.status === 200) {
-            return response.json();
-        }
-        setState(device_name, 'Ошибка');
-        console.log(response);
-    }).then(result => {
-        if (result.error) {
-            setState(device_name, result.error);
-        } else {
-            for (var key in result.properties) {
-                document.querySelectorAll('[device_name="' + device_name + '"][device_property="' + key + '"]').forEach((item) => {
-                    setElementValue(item, result.properties[key]);
-                });
-            }
-            setState(device_name, result.last_update > 0 ? '': 'Нет данных', result.last_update*1000);
-        }
     });
 }
 

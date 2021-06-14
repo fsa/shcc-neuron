@@ -22,7 +22,11 @@ if (isset($json->devices)) {
     $response['devices']=[];
     foreach ($json->devices as $device_name) {
         $device=SmartHome\Devices::get($device_name);
-        $response['devices'][]=['name'=>$device_name, 'state'=>$device?$device->getState():false, 'last_update'=>$device->getLastUpdate()];
+        if($device) {
+            $response['devices'][]=['name'=>$device_name, 'state'=>$device->getState(), 'last_update'=>$device->getLastUpdate()];
+        } else {
+            $response['devices'][]=['name'=>$device_name, 'state'=>null, 'last_update'=>null];
+        }
     }
 }
 if (isset($json->messages)) {
