@@ -44,12 +44,13 @@ $params['events_url']=$url.'/api/events/';
 $daemon=new $daemon_class($params);
 $daemon_name=$daemon->getName();
 echo "Starting '$module' module daemon.".PHP_EOL;
+openlog("shcc@$module", LOG_PID | LOG_ODELAY, LOG_USER);
 $daemon->prepare();
 while (1) {
     try {
         $daemon->iteration();
     } catch (Exception $ex) {
-        error_log(date('c').PHP_EOL.print_r($ex, true));
+        syslog(LOG_ERR, print_r($ex, true));
         break;
     }
 }

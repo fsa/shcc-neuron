@@ -6,3 +6,4 @@ WorkingDirectory=/var/www/shcc/custom
 ExecStart=timeout 30 /usr/bin/php -q -f minutely.php
 User=www
 Group=www
+SyslogIdentifier=shcc-minutely
