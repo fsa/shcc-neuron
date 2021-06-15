@@ -1,5 +1,5 @@
 [Unit]
-Wants=shcc-minutely.timer shcc@Xiaomi.service shcc@Yeelight.service shcc@miIO.service shcc@Tts.service
+Wants=shcc-minutely.timer shcc@xiaomi.service shcc@yeelight.service shcc@miio.service shcc@tts.service
 After=nginx.service php-fpm.service postgresql.service
 Requires=nginx.service php-fpm.service postgresql.service
 
