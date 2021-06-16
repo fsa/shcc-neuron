@@ -21,7 +21,13 @@ $modules=new SmartHome\Modules;
 if(!$modules->isModuleExists($json->module)) {
     httpResponse::json(['daemon'=>null]);
 }
-if($modules->isDaemonActive($json->module)) {
-    httpResponse::json(['daemon'=>true, 'class'=>$modules->getDaemonClass($json->module)]);
+if(!$modules->isDaemonActive($json->module)) {
+    httpResponse::json(['daemon'=>false]);
 }
-httpResponse::json(['daemon'=>false]);
+$response=['daemon'=>true, 'class'=>$modules->getDaemonClass($json->module)];
+$tz=getenv('TZ');
+if ($tz) {
+    $response['timezone']=$tz;
+}
+$response['params']=Settings::get(strtolower($json->module), []);
+httpResponse::json($response);

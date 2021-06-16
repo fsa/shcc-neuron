@@ -7,3 +7,4 @@ ExecStart=timeout 30 /usr/bin/php -q -f minutely.php
 User=www
 Group=www
 SyslogIdentifier=shcc-minutely
+EnvironmetFile=-/etc/sysconfig/shcc

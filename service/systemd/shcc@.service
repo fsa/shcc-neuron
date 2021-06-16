@@ -12,3 +12,4 @@ ExecStart=/usr/bin/php -f daemon.php %I
 Restart=on-failure
 RestartSec=30s
 SyslogIdentifier=shcc@%I
+EnvironmetFile=-/etc/sysconfig/shcc
