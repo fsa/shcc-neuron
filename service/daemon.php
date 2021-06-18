@@ -47,7 +47,7 @@ if (!class_exists($daemon_class)) {
 if (isset($state->timezone)) {
     date_default_timezone_set($state->timezone);
 }
-$params=$state->params;
+$params=(array)$state->params;
 $params['events_url']=$url.'/api/events/';
 $daemon=new $daemon_class($params);
 $daemon_name=$daemon->getName();

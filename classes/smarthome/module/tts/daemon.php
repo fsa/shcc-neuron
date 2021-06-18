@@ -18,7 +18,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $play_sound_cmd;
 
     public function __construct($params) {
-        $tts_config_file=__DIR__.'/../../config/tts.conf';
+        $tts_config_file=__DIR__.'/../../../../config/tts.conf';
         if(file_exists($tts_config_file)) {
             $tts=file_get_contents($tts_config_file);
             if($tts!==false) {
@@ -46,10 +46,9 @@ class Daemon implements \SmartHome\DaemonInterface {
     public function iteration() {
         $message=$this->queue->receiveMessage();
         if($message) {
-            echo 'In: '.$message;
             $this->playVoice($message);
         } else {
-            error_log(print_r($this->queue,true));
+            syslog(LOG_WARNING, __FILE__.':'.__LINE__.'TTS Queue: '.print_r($this->queue, true));
             sleep(30);
             $this->queue=new Queue();
         }
@@ -63,10 +62,10 @@ class Daemon implements \SmartHome\DaemonInterface {
         if(is_null($this->tts_provider)) {
             return;
         }
-        echo 'Play: '.$text;
+        syslog(LOG_DEBUG, __FILE__.':'.__LINE__.'TTS Play Voice: '.$text);
         $voice_file=$this->tts_provider->getVoiceFile($text);
         if(time()-$this->last_message_time>self::PRE_SOUND_PERIOD) {
-            $this->playMp3(__DIR__.'/../../custom/sound/'.$this->pre_sound);
+            $this->playMp3(__DIR__.'/../../../../custom/sound/'.$this->pre_sound);
         }
         $this->playMp3($voice_file);
         $this->last_message_time=time();        
