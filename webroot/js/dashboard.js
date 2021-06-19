@@ -64,8 +64,11 @@ function updatePage() {
         if (response.status === 200) {
             return response.json();
         }
-        alert('Ошибка при получении данных');
+        return {error: 'Ошибка при получении данных с сервера, код ответа ' + response.status};
     }).then(result => {
+        if(result.error) {
+            result={messages: [{name: "state", content: [result.error]}]};
+        }
         if(result.sensors) {
             updateSensors(result.sensors);
         }
@@ -75,9 +78,13 @@ function updatePage() {
         if(result.devices) {
             updateDevices(result.devices);
         }
-        let datetime = new Date();
-        document.querySelector('#page_last_update').innerHTML=datetime.toLocaleString();
+        updateLastUpdateTime();
     });
+}
+
+function updateLastUpdateTime() {
+    let datetime = new Date();
+    document.querySelector('#page_last_update').innerHTML=datetime.toLocaleString();
 }
 
 function updateSensors(sensors) {
