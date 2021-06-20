@@ -64,22 +64,29 @@ function updatePage() {
         if (response.status === 200) {
             return response.json();
         }
-        return {error: 'Ошибка при получении данных с сервера, код ответа ' + response.status};
+        return {error: 'Сервер некорректно ответиз на запрос, код состояния HTTP ' + response.status + '.'};
     }).then(result => {
         if(result.error) {
-            result={messages: [{name: "state", content: [result.error]}]};
-        }
-        if(result.sensors) {
-            updateSensors(result.sensors);
-        }
-        if(result.messages) {
-            updateTextMessages(result.messages);
-        }
-        if(result.devices) {
-            updateDevices(result.devices);
+            showRequestError(result.error);
+        } else {
+            if(result.sensors) {
+                updateSensors(result.sensors);
+            }
+            if(result.messages) {
+                updateTextMessages(result.messages);
+            }
+            if(result.devices) {
+                updateDevices(result.devices);
+            }
         }
         updateLastUpdateTime();
+    }).catch ( () => {
+        showRequestError('Ошибка при получении данных с сервера.');
     });
+}
+
+function showRequestError(text) {
+    document.querySelector('[messages="state"]').innerHTML=text;
 }
 
 function updateLastUpdateTime() {
@@ -109,7 +116,7 @@ function updateDevices(devices) {
                 setElementValue(item, device.state[key]);
             });
         }
-        setState(device.name, device.last_update > 0 ? '': 'Устройство ' + device.name + ' не найдено', device.last_update*1000);
+        setState(device.name, device.last_update > 0 ? '': 'Устройство ' + device.name + ' недоступно', device.last_update*1000);
     });
 }
 
