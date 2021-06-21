@@ -11,18 +11,21 @@ $hour=date('H');
 $time=date('H:i');
 
 function say($text, $priority=0) {
-    \Tts\Log::newMessage($text);
+    Tts\Log::newMessage($text);
     global $mute;
     if ($mute) {
         return;
     }
     $tts=new Tts\Queue();
     $tts->addMessage($text);
+}
+
+function telegram($text, $priority=0) {
     $telegram=Settings::get('telegram');
     if(!$telegram or !isset($telegram['log_channel'])) {
         return;
     }
-    Telegram\Query::init($telegram['token']);
+    Telegram\Query::init($telegram);
     $api=new Telegram\SendMessage($telegram['log_channel'], $text);
     $api->disable_notification=($priority==0);
     $api->httpPostJson();
@@ -38,14 +41,6 @@ function getVar($name) {
 
 function setVar($name, $value) {
     SmartHome\Vars::set($name, $value);
-}
-
-function getOject($name) {
-    return SmartHome\Vars::getObject($name);
-}
-
-function setObject($name, $object) {
-    SmartHome\Vars::setObject($name, $object);
 }
 
 function getJson($name) {

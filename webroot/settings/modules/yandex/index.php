@@ -18,19 +18,9 @@ switch ($action) {
         httpResponse::showError('Неверное действие');
 }
 
-if(file_exists($tts_file)) {
-    $tts=unserialize(file_get_contents($tts_file));
-    if($tts instanceof Yandex\TtsApi) {
-        $params=$tts->getParams();
-    }
-}
-if(!isset($params)) {
-    $params=[
-        'key'=>SmartHome\Vars::get('yandex.tts_key')??'',
-        'speaker'=>SmartHome\Vars::get('yandex.tts_voice')??'oksana',
-        'emotion'=>SmartHome\Vars::get('yandex.tts_emotion')??'neutral'
-    ];
-}
+$key=SmartHome\Vars::get('Yandex.TTS.Key')??'';
+$speaker=SmartHome\Vars::get('Yandex.TTS.Voice')??'oksana';
+$emotion=SmartHome\Vars::get('Yandex.TTS.Emotion')??'neutral';
 use Templates\Forms;
 httpResponse::showHtmlHeader('Яндекс');
 ?>
@@ -38,9 +28,9 @@ httpResponse::showHtmlHeader('Яндекс');
 <hr>
 <form method="POST" action="./">
 <?php
-Forms::inputString('api_key', $params['key'], 'Ключ API:');
-Forms::inputSelectArray('voice', $params['speaker'], 'Голос', ['jane'=>'Джейн (жен.)', 'oksana'=>'Оксана (жен.)', 'alyss'=>'Элис (жен.)', 'omazh'=>'Омаж (жен.)', 'zahar'=>'Захар (муж.)', 'ermil'=>'Ермил (муж.)']);
-Forms::inputSelectArray('emotion', $params['emotion'], 'Эмоциональная окраска голоса', ['good'=>'радостный, доброжелательный', 'evil'=>'раздраженный', 'neutral'=>'нейтральный']);
+Forms::inputString('key', $key, 'Ключ API:');
+Forms::inputSelectArray('speaker', $speaker, 'Голос', ['jane'=>'Джейн (жен.)', 'oksana'=>'Оксана (жен.)', 'alyss'=>'Элис (жен.)', 'omazh'=>'Омаж (жен.)', 'zahar'=>'Захар (муж.)', 'ermil'=>'Ермил (муж.)']);
+Forms::inputSelectArray('emotion', $emotion, 'Эмоциональная окраска голоса', ['good'=>'радостный, доброжелательный', 'evil'=>'раздраженный', 'neutral'=>'нейтральный']);
 Forms::submitButton('Установить синтезатор TTS', 'setup');
 Forms::submitButton('Отключить синтез речи', 'remove', 'btn-danger');
 ?>

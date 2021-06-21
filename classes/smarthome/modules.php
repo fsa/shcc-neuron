@@ -2,6 +2,8 @@
 
 namespace SmartHome;
 
+use Settings;
+
 class Modules {
 
     private $modules;
@@ -36,6 +38,15 @@ class Modules {
             return $this->modules[$name]->daemon;
         }
         return null;
+    }
+
+    public function getDaemonSettings($name) {
+        $params=Settings::get(strtolower($name), []);
+        if(isset($this->modules[$name]->daemon_settings)) {
+            $params=array_merge($this->modules[$name]->daemon_settings, $params);
+        }
+        return $params;
+
     }
 
     public function enableDaemon($name) {

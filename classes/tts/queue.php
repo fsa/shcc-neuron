@@ -36,6 +36,7 @@ class Queue {
         $queue_stat=msg_stat_queue($this->queue);
         # Защита от переполнения сообщений при падении сервиса TTS
         if($queue_stat['msg_qnum']>15) {
+            syslog(LOG_WARNING, 'TTS Drop message: '.$text);
             return false;
         }
         return msg_send($this->queue, 1, $text, false);

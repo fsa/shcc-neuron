@@ -24,10 +24,9 @@ if(!$modules->isModuleExists($json->module)) {
 if(!$modules->isDaemonActive($json->module)) {
     httpResponse::json(['daemon'=>false]);
 }
-$response=['daemon'=>true, 'class'=>$modules->getDaemonClass($json->module)];
+$response=['daemon'=>true, 'class'=>$modules->getDaemonClass($json->module), 'settings'=>$modules->getDaemonSettings($json->module)];
 $tz=getenv('TZ');
 if ($tz) {
     $response['timezone']=$tz;
 }
-$response['params']=Settings::get(strtolower($json->module), []);
 httpResponse::json($response);

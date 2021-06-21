@@ -20,12 +20,13 @@ class TtsApi implements \SmartHome\TtsInterface {
 
     private $params;
 
-    public function __construct($api_key) {
-        $this->params['key']=$api_key;
-        $this->params['format']='mp3';
-        $this->params['lang']='ru_RU';
-        $this->params['speaker']='jane';
-        $this->params['emotion']='neutral';
+    public function __construct(array $params) {
+        $this->params=array_merge([
+            'key'=>'',
+            'format'=>'mp3',
+            'lang'=>'ru-RU',
+            'speaker'=>'jane'
+        ],$params);
     }
     
     public function setSpeaker($name) {
@@ -39,7 +40,7 @@ class TtsApi implements \SmartHome\TtsInterface {
                 $this->params['speaker']=$name;
                 break;
             default:
-                throw new Exception('Неверно указано имя говорящего.');
+                throw new UserException('Неверно указано имя говорящего.');
         }
     }
     
@@ -51,12 +52,8 @@ class TtsApi implements \SmartHome\TtsInterface {
                 $this->params['emotion']=$name;
                 break;
             default:
-                throw new Exception('Неверно указано имя эмоции.');
+                throw new UserException('Неверно указано имя эмоции.');
         }
-    }
-
-    public function getParams(): array {
-        return $this->params;
     }
 
     public function getUrl($text) {
@@ -83,7 +80,7 @@ class TtsApi implements \SmartHome\TtsInterface {
         }
         $realpath=realpath($filename);
         if(!$realpath) {
-            throw new Exception('Не найден файл для воспроизведения');
+            throw new UserException('Не найден файл для воспроизведения');
         }
         return $realpath;
     }

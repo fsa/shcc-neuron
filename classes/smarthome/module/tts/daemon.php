@@ -7,29 +7,23 @@ use SmartHome\TtsInterface,
 
 class Daemon implements \SmartHome\DaemonInterface {
 
-    const PLAY_SOUND_CMD='mpg123 -q %s';
-    const PRE_SOUND='notification.mp3';
-    const PRE_SOUND_PERIOD=5;
-
     private $tts_provider;
     private $queue;
     private $last_message_time;
     private $pre_sound;
+    private $pre_sound_period;
     private $play_sound_cmd;
 
     public function __construct($params) {
-        $tts_config_file=__DIR__.'/../../../../config/tts.conf';
-        if(file_exists($tts_config_file)) {
-            $tts=file_get_contents($tts_config_file);
-            if($tts!==false) {
-                $this->tts_provider=unserialize($tts);
-            }
+        if(isset($params['provider'])) {
+            $class_name=$params['provider']->class;
+            $this->tts_provider=new $class_name((array)$params['provider']->properties);
             if(!($this->tts_provider instanceof TtsInterface)) {
                 $this->tts_provider=null;
             }
         }
-        $this->pre_sound=isset($params['pre_sound'])?$params['pre_sound']:self::PRE_SOUND;
-        $this->play_sound_cmd=isset($params['play_sound_cmd'])?$params['play_sound_cmd']:self::PLAY_SOUND_CMD;
+        $this->pre_sound=$params['pre_sound'];
+        $this->play_sound_cmd=$params['play_sound_cmd'];
     }
 
     public function getName() {
@@ -64,7 +58,7 @@ class Daemon implements \SmartHome\DaemonInterface {
         }
         syslog(LOG_DEBUG, __FILE__.':'.__LINE__.'TTS Play Voice: '.$text);
         $voice_file=$this->tts_provider->getVoiceFile($text);
-        if(time()-$this->last_message_time>self::PRE_SOUND_PERIOD) {
+        if(time()-$this->last_message_time>$this->pre_sound_period) {
             $this->playMp3(__DIR__.'/../../../../custom/sound/'.$this->pre_sound);
         }
         $this->playMp3($voice_file);
