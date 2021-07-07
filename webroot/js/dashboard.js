@@ -80,8 +80,8 @@ function updatePage() {
             }
         }
         updateLastUpdateTime();
-    }).catch ( () => {
-        showRequestError('Ошибка при получении данных с сервера.');
+    }).catch ( (ex) => {
+        showRequestError('Ошибка при получении данных с сервера: ' + ex);
     });
 }
 
@@ -99,7 +99,7 @@ function updateSensors(sensors) {
         document.querySelectorAll('[sensor="' + sensor.uid + '"]').forEach((item) => {
             setElementValue(item, sensor.value);
         });
-        setLastUpdate(sensor.uid, '', sensor.ts * 1000);
+        setLastUpdateSensor(sensor.uid, '', sensor.ts * 1000);
     });
 }
 
@@ -116,24 +116,32 @@ function updateDevices(devices) {
                 setElementValue(item, device.state[key]);
             });
         }
-        setState(device.name, device.last_update > 0 ? '': 'Устройство ' + device.name + ' недоступно', device.last_update*1000);
+        setLastUpdateDevice(device.name, device.last_update > 0 ? '': 'Устройство ' + device.name + ' недоступно', device.last_update*1000);
     });
 }
 
-function setLastUpdate(sensor, state, timestamp = 0) {
+function setLastUpdateSensor(sensor, state, timestamp = 0) {
+    setLastUpdateElements(document.querySelectorAll('[sensor-lastupdate="' + sensor + '"]'), state, timestamp);
+}
+
+function setLastUpdateDevice(device_name, state, timestamp = 0) {
+    setLastUpdateElements(document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]'), state, timestamp);
+}
+
+function setLastUpdateElements(elements, state, timestamp = 0) {
     let style = '';
     if (timestamp === 0) {
         let datetime = new Date();
-        state = datetime.toLocaleString() + ' ' + state;
+        state = formatDateTime(datetime) + ' ' + state;
         style = '#dc3545';
     } else {
         let datetime = new Date(timestamp);
-        state = datetime.toLocaleString() + ' ' + state;
+        state = formatDateTime(datetime) + ' ' + state;
         if (new Date() - datetime > 3600000) {
             style = '#ffc107';
         }
     }
-    document.querySelectorAll('[sensor-lastupdate="' + sensor + '"]').forEach((item) => {
+    elements.forEach((item) => {
         setElementValue(item, state);
         item.style.color = style;
     });
@@ -150,33 +158,14 @@ function sendCommand(device_name, command) {
         if (response.status === 200) {
             return response.json();
         }
-        setState(device_name, 'Ошибка');
+        setLastUpdateDevice(device_name, 'Ошибка');
         console.log(response);
     }).then(result => {
         if (result.error) {
-            setState(device_name, result.error);
+            setLastUpdateDevice(device_name, result.error);
         } else {
-            setState(device_name, '', Date.now());
+            setLastUpdateDevice(device_name, '', Date.now());
         }
-    });
-}
-
-function setState(device_name, state, timestamp = 0) {
-    let style = '';
-    if (timestamp === 0) {
-        let datetime = new Date();
-        state = datetime.toLocaleString() + ' ' + state;
-        style = '#dc3545';
-    } else {
-        let datetime=new Date(timestamp);
-        state = datetime.toLocaleString() + ' ' + state;
-        if (new Date()-datetime>3600000) {
-            style = '#ffc107';
-        }
-    }
-    document.querySelectorAll('[device_name="' + device_name + '"][device_property="last_update"]').forEach((item) => {
-        setElementValue(item, state);
-        item.style.color=style;
     });
 }
 
@@ -191,4 +180,8 @@ function setElementValue(e, value) {
         let round=e.getAttribute('round');
         e.innerHTML = (round===null)?value:value.toFixed(round);
     }
+}
+
+function formatDateTime(datetime) {
+    return datetime.toLocaleString();
 }
