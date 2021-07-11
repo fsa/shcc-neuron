@@ -89,7 +89,9 @@ class Session {
                 session_commit();
                 return;
             }
-            setcookie($session['session'], '', 1, $session['path'], $session['host'], false, true);
+            $params=$session['params'];
+            $params['expires']=1;
+            setcookie($session['session'], '', $params);
             session_destroy();
         } else {
             $user=$this->refresh();
@@ -235,7 +237,7 @@ class Session {
     private static function dropCookie(): void {
         $cookie=self::getCookieConfig();
         $params=$cookie['params'];
-        $params['lifetime']=1;
+        $params['expires']=1;
         setcookie($cookie['uid'], '', $params);
         setcookie($cookie['token'], '', $params);
     }
