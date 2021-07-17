@@ -143,6 +143,15 @@ class httpResponse {
         exit;
     }
 
+    public static function jsonString(?string $response) {
+        if(is_null($response)) {
+            self::error(404);
+        }
+        header('Content-Type: application/json');
+        echo $response;
+        exit;
+    }
+
     # Коды ответов <>200
     public static function redirection($location, $code=302, $message=null) {
         if (is_null($message)) {
