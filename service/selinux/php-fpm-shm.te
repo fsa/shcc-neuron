@@ -4,8 +4,15 @@ module php-fpm-shm 1.0;
 require {
 	type unconfined_service_t;
 	type httpd_t;
+	class sem { associate read unix_read unix_write write };
 	class shm { associate read unix_read unix_write write };
+	class msg send;
+	class msgq { associate getattr unix_read unix_write write };
+
 }
 
 #============= httpd_t ==============
+allow httpd_t unconfined_service_t:sem { associate read unix_read unix_write write };
 allow httpd_t unconfined_service_t:shm { associate read unix_read unix_write write };
+allow httpd_t unconfined_service_t:msg send;
+allow httpd_t unconfined_service_t:msgq { associate getattr unix_read unix_write write };
