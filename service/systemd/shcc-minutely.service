@@ -2,9 +2,6 @@
 Description=SHCC minutely script
 
 [Service]
-WorkingDirectory=/var/www/shcc/custom
-ExecStart=timeout 30 /usr/bin/php -q -f minutely.php
-User=www
-Group=www
-SyslogIdentifier=shcc-minutely
-EnvironmetFile=-/etc/sysconfig/shcc
+ExecStart=/usr/bin/curl -sS ${SERVER_URL}/api/timer/
+Environment="SERVER_URL=http://127.0.0.1"
+EnvironmentFile=-/etc/sysconfig/shcc
