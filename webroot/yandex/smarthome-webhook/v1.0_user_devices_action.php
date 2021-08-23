@@ -3,11 +3,11 @@
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/post-action-docpage/
  */
 if (!isset($request_id)) {die;}
-\Auth\Server::grantAccess();
+\Auth\Bearer::grantAccess();
 $request=json_decode($request_content);
 $devices=[];
 foreach ($request->payload->devices as $device) {
-    $yandex_device=Yandex\SmartHome\Devices::getByUid($device->id, Auth\Server::getUserId());
+    $yandex_device=Yandex\SmartHome\Devices::getByUid($device->id, Auth\Bearer::getUserId());
     if (!$yandex_device) {
         continue;
     }
