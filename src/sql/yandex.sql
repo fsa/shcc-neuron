@@ -4,7 +4,6 @@ CREATE TABLE yandex_devices (
     uid varchar(64) NOT NULL,
     name varchar(64),
     description text,
-    place_id bigint REFERENCES places(id),
     type varchar(64) NOT NULL,
     capabilities jsonb NOT NULL,
     device_id bigint REFERENCES devices(id)

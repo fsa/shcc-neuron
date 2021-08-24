@@ -19,9 +19,9 @@ class Devices {
     }
 
     public static function get($uid) {
-        $s=DB::prepare('SELECT p.name AS place_name, d.* FROM devices d LEFT JOIN places p ON d.place_id=p.id WHERE d.uid=?');
+        $s=DB::prepare('SELECT * FROM devices WHERE uid=?');
         $s->execute([$uid]);
-        $db_dev=$s->fetch(PDO::FETCH_OBJ);
+        $db_dev=$s->fetchObject();
         if (!$db_dev) {
             return null;
         }
@@ -34,7 +34,6 @@ class Devices {
                 $device->init($db_dev->hwid, $entity->properties);
             }
         }
-        $device->place_name=$db_dev->place_name;
         return $device;
     }
 
@@ -100,7 +99,7 @@ class Devices {
     }
 
     public static function getDevicesStmt(): \PDOStatement {
-        $s=DB::query("SELECT d.uid, d.hwid, d.description, d.entity, p.name AS place_name FROM devices d LEFT JOIN places p ON d.place_id=p.id ORDER BY d.hwid");
+        $s=DB::query("SELECT uid, hwid, description, entity FROM devices d ORDER BY hwid");
         $s->setFetchMode(PDO::FETCH_OBJ);
         return $s;
     }

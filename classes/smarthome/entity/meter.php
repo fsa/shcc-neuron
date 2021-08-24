@@ -13,7 +13,6 @@ class Meter extends \Entity {
 
     public $id;
     public $uid;
-    public $place_id;
     public $description;
     public $unit;
     public $device_property;

@@ -11,7 +11,7 @@ while ($device=$yandex_devices->fetch()) {
     $smarthome_device=\SmartHome\Devices::get($device->unique_name);
     $entity=new \Yandex\SmartHome\DeviceInfo($device->uid);
     $entity->setName($device->name);
-    $entity->setRoom($device->room);
+    #$entity->setRoom($device->room);
     $entity->setType($device->type);
     $entity->setDescription($device->description);
     foreach (json_decode($device->capabilities) as $capability=> $value) {

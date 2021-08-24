@@ -13,7 +13,6 @@ class Device {
     public $hwid;
     public $description;
     public $entity;
-    public $place_id;
 
     public function setInitData($data) {
         $this->entity=json_encode($data);

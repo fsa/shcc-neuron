@@ -11,7 +11,6 @@ class Indicator {
 
     public $id;
     public $uid;
-    public $place_id;
     public $description;
     public $device_property;
     public $history;
