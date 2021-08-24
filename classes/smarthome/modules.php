@@ -97,6 +97,15 @@ class Modules {
         return array_shift($this->fetch_modules);
     }
 
+    public function fetchObject() {
+        $module=array_shift($this->fetch_modules);
+        return $module?(object)$module:null;
+    }
+
+    public function rowCount() {
+        return count($this->modules);
+    }
+
     public function closeCursor() {
         $this->fetch_modules=null;
     }

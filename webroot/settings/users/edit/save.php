@@ -3,16 +3,17 @@
 if (!isset($action)) {
     die;
 }
-$user=Auth\UserEntity::getEntity('id');
+$user=UserDB\UserEntity::getEntity('uuid');
 $user->inputPostString('login');
 $user->inputPostString('password');
 $user->inputPostString('name');
 $user->inputPostString('email');
 $user->inputPostChecboxArray('scope');
+$user->inputPostChecboxArray('groups');
 $user->inputPostCheckbox('disabled');
-$id=$user->id;
+$uuid=$user->uuid;
 $user->upsert();
-if ($id) {
+if ($uuid) {
     httpResponse::storeNotification("Пользователь $user->login изменён.");
 } else {
     httpResponse::storeNotification("Пользователь $user->login создан.");

@@ -4,7 +4,7 @@
  * 2020-11-29
  */
 require_once '../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Устройтва');
 ?>

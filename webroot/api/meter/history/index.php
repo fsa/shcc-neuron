@@ -1,7 +1,7 @@
 <?php
 require_once '../../../common.php';
 httpResponse::setJsonExceptionHandler();
-Auth\Session::grantAccess();
+Session::grantAccess();
 $uid=filter_input(INPUT_GET,'uid');
 $from=filter_input(INPUT_GET,'from');
 $to=filter_input(INPUT_GET,'to');

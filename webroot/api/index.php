@@ -2,7 +2,7 @@
 
 require_once '../common.php';
 httpResponse::setJsonExceptionHandler();
-Auth\Session::grantAccess(['control']);
+Session::grantAccess(['control']);
 $request=file_get_contents('php://input');
 $json=json_decode($request);
 $response=[];

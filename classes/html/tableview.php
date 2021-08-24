@@ -1,12 +1,29 @@
 <?php
 
-namespace Templates;
+namespace HTML;
 
-class Table {
+class TableView implements DBQueryTemplate {
 
     public $fields=[];
+    public $buttons=[];
     public $caption;
     public $style_row;
+
+    public function setCaption(string $caption) {
+        $this->caption=$name;
+    }
+
+    public function setStyleField(string $name) {
+        $this->style_row=$name;
+    }
+
+    public function addField($name, $description) {
+        $this->fields[$name]=$description;
+    }
+
+    public function addButton($button) {
+        $this->buttons[]=$button;
+    }
 
     public function showHeader(){
 ?>
@@ -21,7 +38,11 @@ class Table {
 ?>
     <tr>
 <?php
-        foreach ($this->fields as $description) {
+        $fields=$this->fields;
+        if(sizeof($this->buttons)) {
+            $fields['buttons']='Действия';
+        }
+        foreach ($fields as $description) {
 ?>
         <th class="table-bordered"><?=$description?></th>
 <?php
@@ -39,6 +60,11 @@ class Table {
         foreach (array_keys($this->fields) as $name) {
 ?>
             <td><?=$row->$name?></td>
+<?php
+        }
+        if(sizeof($this->buttons)) {
+?>
+            <td><?=$this->getButtons($row)?></td>
 <?php
         }
 ?>
@@ -59,6 +85,17 @@ class Table {
     </table>
 </div>
 <?php
+    }
+
+    private function getButtons($row) {
+        $buttons=[];
+        foreach ($this->buttons AS $button) {
+            $value=$row->{$button->getParamField()};
+            if (!is_null($value)) {
+                $buttons[]=$button->getHtml($value);
+            }
+        }
+        return join('<br>', $buttons);
     }
 
 }

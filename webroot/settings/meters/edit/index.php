@@ -6,7 +6,7 @@
 use Templates\Forms;
 
 require_once '../../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $action=filter_input(INPUT_POST,'action');
 if($action) {
     require 'action.php';

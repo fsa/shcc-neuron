@@ -6,7 +6,7 @@ class Table {
 
     private $caption;
     private $fields=[];
-    privaTE $rowCallback;
+    private $rowCallback;
     private $buttons=[];
     private $buttons_separator='<br>';
     private $template;
@@ -40,9 +40,9 @@ class Table {
         $this->rowCallback=$func;
     }
 
-    public function showTable($statement): bool {
-        if (!($row=$statement->fetch())) {
-            return false;
+    public function showTable($statement): int {
+        if (!($row=$statement->fetchObject())) {
+            return 0;
         }
         $template=is_null($this->template)?new \Templates\Table():new $this->template;
         $template->caption=$this->caption;
@@ -60,9 +60,9 @@ class Table {
                 call_user_func($this->rowCallback, $row);
             }
             $template->showRow($row);
-        } while ($row=$statement->fetch());
+        } while ($row=$statement->fetchObject());
         $template->showFooter();
-        return true;
+        return $statement->rowCount();
     }
 
     private function getButtons($row) {

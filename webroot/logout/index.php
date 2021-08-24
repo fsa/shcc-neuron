@@ -1,5 +1,5 @@
 <?php
 
 require_once '../common.php';
-Auth\Session::logout();
+Session::drop();
 httpResponse::redirection('../');

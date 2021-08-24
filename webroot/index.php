@@ -1,7 +1,7 @@
 <?php
 
 require_once 'common.php';
-Auth\Session::grantAccess();
+Session::grantAccess();
 chdir('../custom/dashboard/');
 include_once '../functions.php';
 $page=filter_input(INPUT_GET,'page');

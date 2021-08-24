@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $modules=new SmartHome\Modules;
 $action=filter_input(INPUT_GET, 'action');
 if ($action) {
@@ -29,7 +29,7 @@ $devices->addField('description', 'Описание');
 $devices->addField('daemon_onoff', 'Демон');
 $devices->addField('settings', 'Настройки');
 $devices->setRowCallback(function ($row) use ($modules) {
-    $row->daemon_onoff=class_exists($row->daemon)?($modules->isDaemonActive(strtolower($row->name))?'<a href="./?action=disable&name='.strtolower($row->name).'">Выключить</a>':'<a href="./?action=enable&name='.strtolower($row->name).'">Включить</a>'):'---';
+    $row->daemon_onoff=isset($row->daemon)?($modules->isDaemonActive(strtolower($row->name))?'<a href="./?action=disable&name='.strtolower($row->name).'">Выключить</a>':'<a href="./?action=enable&name='.strtolower($row->name).'">Включить</a>'):'---';
     $row->settings=isset($row->settings)?'<a href="'.strtolower($row->name).'/">Настроить</a>':'---';
 });
 $modules->query();

@@ -1,38 +1,58 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
 if ($action) {
-    switch ($action) {
-        case 'save':
-            require 'save.php';
-            break;
-        case 'create':
-            require 'create.php';
-            break;
-    }
+    require 'save.php';
     exit;
 }
 use Templates\Forms;
-$id=filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-if($id) {
-    $user=Auth\UserEntity::fetch($id);
-} else {
-    $user=new Auth\UserEntity;
-}
+$user=UserDB\UserEntity::getEntity('uuid', INPUT_GET);
 httpResponse::setTemplate(new Templates\PageSettings);
 httpResponse::showHtmlHeader('Редактировать пользователя '.$user->login);
 Forms::formHeader('POST', './');
-Forms::inputHidden('id', $user->id);
+if($user->uuid) {
+    Forms::inputHidden('uuid', $user->uuid);
+}
 Forms::inputString('login', $user->login, 'Логин');
 Forms::inputPassword('password', '', 'Пароль (оставьте поле пустым, если его не нужно менять)');
+if(password_needs_rehash($user->password_hash, PASSWORD_DEFAULT, ['cost'=>12])) {
+?>
+<p class="text-danger">Хеш пароля не соответствует текущим требованиям безопаности. Рекомендуется обновить хеш.</p>
+<?php
+}
 Forms::inputString('name', $user->name, 'Имя пользователя');
 Forms::inputString('email', $user->email, 'Электронная почта');
-foreach (Settings::get('user_groups', []) as $group=>$title) {
-    Forms::inputCheckbox('scope['.$group.']', $user->memberOf($group), $title);
+?>
+<br>
+<div class="card">
+<div class="card-header">Права доступа:</div>
+<?php
+foreach (UserDB\ScopeEntity::getScopes() as $scope=>$title) {
+    Forms::inputCheckbox('scope['.$scope.']', $user->memberOfScope($scope), $title);
 }
 Forms::inputCheckbox('disabled', $user->disabled, 'Пользователь заблокирован');
-Forms::submitButton($user->id?'Сохранить изменения':'Создать', 'save');
+?>
+</div>
+<?php
+$groups=UserDB\GroupEntity::getGroups();
+if(count($groups)) {
+?>
+<br>
+<div class="card">
+<div class="card-header">Группы доступа:</div>
+<?php
+foreach ($groups as $group=>$title) {
+    Forms::inputCheckbox('groups['.$group.']', $user->memberOfGroup($group), $title);
+}
+?>
+</div>
+<?php
+}
+?>
+<br>
+<?php
+Forms::submitButton($user->uuid?'Сохранить':'Создать', 'save');
 Forms::formFooter();
 httpResponse::showHtmlFooter();

@@ -2,7 +2,7 @@
 
 require_once '../../common.php';
 httpResponse::setJsonExceptionHandler();
-Auth\Session::grantAccess(['control']);
+Session::grantAccess(['control']);
 $device_name=filter_input(INPUT_GET, 'name');
 if(!$device_name) {
     httpResponse::error(400);

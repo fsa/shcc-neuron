@@ -6,7 +6,7 @@
  */
 
 require_once '../../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
 if ($action) {
     require 'edit.php';
@@ -29,7 +29,6 @@ if ($hwid) {
     $device->hwid=$hwid;
     $device->description=$memdev->getDescription();
     $device->setInitData($memdev->getInitDataValues());
-    $device->place_id=0;
     $classname=get_class($memdev);
 } else {
     if ($uid) {

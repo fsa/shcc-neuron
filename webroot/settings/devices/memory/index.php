@@ -6,7 +6,7 @@
  */
 
 require_once '../../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $hwid=filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
     require_once 'show.php';

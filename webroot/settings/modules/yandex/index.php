@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../../common.php';
-Auth\Session::grantAccess([]);
+Session::grantAccess([]);
 $tts_file='../../../../config/tts.conf';
 $action=filter_input(INPUT_POST,'action');
 switch ($action) {

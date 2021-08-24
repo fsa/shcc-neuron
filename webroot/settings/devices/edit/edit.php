@@ -14,10 +14,6 @@ if(is_array($properties)) {
     $entity->properties=$properties;
 }
 $device->entity=json_encode($entity);
-$device->place_id=filter_input(INPUT_POST,'place_id',FILTER_VALIDATE_INT);
-if(!$device->place_id) {
-    $device->place_id=null;
-}
 $devices=new \SmartHome\Devices;
 $devices->setDevice($device);
 switch ($action) {
