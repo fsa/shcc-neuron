@@ -16,20 +16,20 @@ $meters->setCaption('Датчики');
 $meters->addField('uid', 'Имя');
 $meters->addField('value', 'Значение');
 $meters->addField('updates', 'Обновлено');
-$meters->addField('unit_name', 'Величина');
+$meters->addField('property_name', 'Величина');
 $meters->addField('description', 'Описание');
 $meters->addField('device_property', 'Источник данных');
 $meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) use ($mem) {
-    $row->unit_name=\SmartHome\Meters::getUnitName($row->unit);
+    $row->property_name=\SmartHome\Sensors::getPropertyName($row->property);
     $state=$mem->getSensor($row->uid);
     if($state) {
-        $row->value=$state->value.' '.\SmartHome\Meters::getUnit($row->unit);
+        $row->value=$state->value.' '.\SmartHome\Sensors::getPropertyUnit($row->property);
         $row->updates=date('d.m.Y H:i:s', $state->ts);
     } else {
         $row->value='---';
         $row->updates='Нет данных';
     }
 });
-$meters->showTable(\SmartHome\Meters::getMeters());
+$meters->showTable(\SmartHome\Sensors::getAll());
 httpResponse::showHtmlFooter();

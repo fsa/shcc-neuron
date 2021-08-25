@@ -7,8 +7,7 @@
 
 namespace SmartHome;
 
-use DB,
-    PDO;
+use DB;
 
 class Devices {
 
@@ -44,14 +43,14 @@ class Devices {
     public function fetchDeviceByUid($uid) {
         $s=DB::prepare('SELECT * FROM devices WHERE uid=?');
         $s->execute([$uid]);
-        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
+        $s->setFetchMode(\PDO::FETCH_CLASS, Entity\Device::class);
         $this->device=$s->fetch();
     }
 
     public function fetchDeviceByHwid($hwid) {
         $s=DB::prepare('SELECT * FROM devices WHERE hwid=?');
         $s->execute([$hwid]);
-        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
+        $s->setFetchMode(\PDO::FETCH_CLASS, Entity\Device::class);
         $this->device=$s->fetch();
     }
 
@@ -100,39 +99,39 @@ class Devices {
 
     public static function getDevicesStmt(): \PDOStatement {
         $s=DB::query("SELECT uid, hwid, description, entity FROM devices d ORDER BY hwid");
-        $s->setFetchMode(PDO::FETCH_OBJ);
+        $s->setFetchMode(\PDO::FETCH_OBJ);
         return $s;
     }
 
     public static function getDevicesHwids(): array {
         $s=DB::query('SELECT hwid FROM devices');
-        return $s->fetchAll(PDO::FETCH_COLUMN);
+        return $s->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public static function getDeviceByHwid($id): Entity\Device {
         $s=DB::prepare('SELECT * FROM devices WHERE hwid=?');
         $s->execute([$id]);
-        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
+        $s->setFetchMode(\PDO::FETCH_CLASS, Entity\Device::class);
         return $s->fetch();
     }
 
     public static function getDeviceByUid($id): Entity\Device {
         $s=DB::prepare('SELECT * FROM devices WHERE uid=?');
         $s->execute([$id]);
-        $s->setFetchMode(PDO::FETCH_CLASS, Entity\Device::class);
+        $s->setFetchMode(\PDO::FETCH_CLASS, Entity\Device::class);
         return $s->fetch();
     }
 
     public static function getUidByHwid($hwid) {
         $s=DB::prepare('SELECT uid FROM devices WHERE hwid=?');
         $s->execute([$hwid]);
-        return $s->fetch(PDO::FETCH_COLUMN);
+        return $s->fetchColumn();
     }
 
     public static function getAllDevicesEntity() {
         $stmt=DB::query('SELECT hwid, entity FROM devices ORDER BY hwid');
         $devices=[];
-        while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
+        while ($device=$stmt->fetchObject()) {
             $entity=json_decode($device->entity);
             $device_obj=new $entity->classname;
             $device_obj->init($device->hwid, $entity->properties??[]);
@@ -146,7 +145,7 @@ class Devices {
         $stmt->execute();
         $mem=new MemoryStorage();
         $mem->lockMemory();
-        while ($device=$stmt->fetch(\PDO::FETCH_OBJ)) {
+        while ($device=$stmt->fetchObject()) {
             $entity=json_decode($device->entity);
             if ($mem->existsDevice($device->hwid)) {
                 $device_obj=$mem->getDevice($device->hwid);
@@ -166,8 +165,7 @@ class Devices {
         $uid=self::getUidByHwid($hwid);
         if ($uid) {
             foreach ($events as $property=> $value) {
-                Meters::storeEvent($uid.'@'.$property, $value, $ts);
-                Indicators::storeEvent($uid.'@'.$property, $value, $ts);
+                Sensors::storeEvent($uid, $property, $value, $ts);
             }
         }
         return $uid;

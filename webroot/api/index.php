@@ -8,14 +8,13 @@ $json=json_decode($request);
 $response=[];
 if (isset($json->sensors)) {
     $response['sensors']=[];
-    $mem=new \SmartHome\MemoryStorage;
-    foreach ($json->sensors as $sensor) {
-        $meter=$mem->getSensor($sensor);
-        if(is_null($meter)) {
+    foreach ($json->sensors as $uid) {
+        $sensor=SmartHome\Sensors::get($uid);
+        if(is_null($sensor)) {
             continue;
         }
-        $meter->uid=$sensor;
-        $response['sensors'][]=$meter;
+        $sensor->uid=$uid;
+        $response['sensors'][]=$sensor;
     }
 }
 if (isset($json->devices)) {

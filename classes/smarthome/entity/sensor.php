@@ -7,20 +7,20 @@
 
 namespace SmartHome\Entity;
 
-class Meter extends \Entity {
+class Sensor extends \Entity {
 
-    const TABLENAME='meters';
+    const TABLENAME='sensors';
 
     public $id;
     public $uid;
     public $description;
-    public $unit;
+    public $property;
     public $device_property;
     public $history;
 
     protected function getColumnValues(): array {
         $values=get_object_vars($this);
-        $values['history']=$this->history?'true':'false';
+        #TODO проверить существование таблицы с именем $values['history'];
         return $values;
     }
 

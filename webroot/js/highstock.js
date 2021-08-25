@@ -136,7 +136,7 @@ function createChart(unit) {
         }
     });
     unit.sensors.forEach((item, i) => {
-        fetch(`/api/meter/history/?uid=${item}`)
+        fetch(`/api/history/?uid=${item}`)
         .then(response => {
             if (response.status === 200) {
                 return response.json();

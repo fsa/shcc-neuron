@@ -3,12 +3,12 @@
 if(!isset($action)) {
     die;
 }
-$entity=SmartHome\Entity\Meter::getEntity('id');
+$entity=SmartHome\Entity\Sensor::getEntity('id');
 $entity->inputPostString('uid');
 $entity->inputPostString('description');
-$entity->inputPostString('unit');
+$entity->inputPostString('property');
 $entity->inputPostString('device_property');
-$entity->inputPostCheckbox('history');
+$entity->inputPostString('history');
 switch ($action) {
     case 'create':
         $entity->insert();
