@@ -2,7 +2,7 @@
 
 namespace Templates;
 
-use Auth\Session as Auth;
+use Session;
 
 class ContentPage {
 
@@ -52,14 +52,14 @@ foreach(\Settings::get('dashboard', []) as $url=>$name) {
     </li>
 <?php
 }
-if(Auth::memberOf([])) {
+if(Session::memberOf([])) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/settings/">Настройки</a>
     </li>
 <?php
 }
-if(Auth::memberOf()) {
+if(Session::memberOf()) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/logout/">Выход</a>
