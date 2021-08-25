@@ -79,26 +79,21 @@ class Session {
         session_name($this->cookie_session);
         session_set_cookie_params($this->cookie_params);
         $session_cookie=filter_input(INPUT_COOKIE, $this->cookie_session);
-        syslog(LOG_DEBUG, 'Start -> Начало поиска сессии. ');
         if ($session_cookie) {
-            syslog(LOG_DEBUG, 'Попытка восстановления PHP сессии из cookie '.$session_cookie);
             $this->phpSessionStart();
             if ($this->getPhpSessionUser()) {
                 session_commit();
-                syslog(LOG_DEBUG, 'Finish -> Использован пользователь из PHP сессии.');
                 return;
             }
             if ($this->restorePhpSession()) {
                 $this->setPhpSessionUser();
                 session_commit();
-                syslog(LOG_DEBUG, 'Finish -> Восстановлен пользователь из сессии в БД (PHP сессия не сработала).');
                 return;
             }
             $this->dropPhpSessionCookie();
             $this->dropLongSessionCookie();
             unset($_SESSION['user']);
             session_commit();
-            syslog(LOG_DEBUG, 'Finish -> Пользователь не опознан, сессии сброшены.');
             return;
         }
         if ($this->restorePhpSession()) {
@@ -106,7 +101,6 @@ class Session {
             $this->setPhpSessionUser();
             $_SESSION['drop_token']=filter_input(INPUT_COOKIE, $this->cookie_uid);
             session_commit();
-            syslog(LOG_DEBUG, 'Finish -> Восстановлен пользователь из сессии в БД.');
             return;
         }
     }
@@ -116,7 +110,6 @@ class Session {
             $this->user=$_SESSION['user'];
             return true;
         }
-        syslog(LOG_DEBUG, 'При восстановлении PHP сессии в ней не найден пользователь.');
         return false;
     }
 
@@ -125,22 +118,17 @@ class Session {
     }
 
     private function restorePhpSession() {
-        syslog(LOG_DEBUG, 'Восстановление пользователя из сессии в БД.');
         $uid=filter_input(INPUT_COOKIE, $this->cookie_uid);
         if (!$uid) {
-            syslog(LOG_DEBUG, 'Отсутствует UID пользователя в cookie.');
             return false;
         }
-        syslog(LOG_DEBUG, 'Найден UID сессии в cookie.');
         $db_session=$this->session_storage->select($uid);
         if (!$db_session) {
-            syslog(LOG_DEBUG, 'UID сессии не найден в БД, сбрасываем сессию в cookie.');
             $this->dropLongSessionCookie();
             return false;
         }
         $token=filter_input(INPUT_COOKIE, $this->cookie_token);
         if ($db_session->token!=$token) {
-            syslog(LOG_DEBUG, 'Токен сессии не соответствует, сбрасываем сессию в cookie, удаляем сессию из БД.');
             $this->session_storage->delete($uid);
             $this->dropLongSessionCookie();
             return false;
@@ -148,7 +136,6 @@ class Session {
         $class_name=$db_session->class;
         $user=new $class_name(...$db_session->args);
         if (!$user->validate()) {
-            syslog(LOG_DEBUG, 'Пользователь не прошёл валидацию.');
             $this->session_storage->delete($uid);
             $this->dropLongSessionCookie();
             return false;
@@ -157,7 +144,6 @@ class Session {
         $new_token=$this->generateRandomString();
         $this->session_storage->update($uid, ['token'=>$new_token, 'class'=>get_class($this->user), 'args'=>$this->user->getConstructorArgs()], $this->cookie_time);
         $this->setCookie($uid, $new_token);
-        syslog(LOG_DEBUG, 'Пользователь восстановлен. Присвоен новый токен для сессии '.$uid);
         return true;
     }
 
