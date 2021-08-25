@@ -59,7 +59,6 @@ class Sensors {
         if (is_null($sensor->history)) {
             return false;
         }
-        syslog(LOG_DEBUG, 'Запись данных сенсора '.$sensor->uid.' в таблицу '.$sensor->history);
         if (is_null($ts)) {
             $s=DB::prepare('INSERT INTO '.$sensor->history.' (sensor_id, value) VALUES (?, ?)');
             $s->execute([$sensor->id, $value]);
