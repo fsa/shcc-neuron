@@ -8,6 +8,7 @@ class Login {
     public $url='./';
     public $redirect_uri='';
     public $header;
+    public $context;
 
     public function show() {
 ?>
@@ -22,6 +23,7 @@ class Login {
 </head>
 <body>
 <div class="container">
+<h1><?=$this->context['title']?></h1>
 <div class="card">
 <div class="card-header"><?=$this->title?></div>
 <div class="card-body">
@@ -30,12 +32,12 @@ class Login {
 <div class="form-group">
 <label for="inputLogin">Логин</label>
 <input type="login" name="login" class="form-control" id="inputLogin" aria-describedby="loginHelp" placeholder="Введите имя пользователя">
-<!--small id="loginHelp" class="form-text text-muted">We'll never share your email with anyone else.</small-->
 </div>
 <div class="form-group">
 <label for="inputPassword">Пароль</label>
 <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Введите пароль">
 </div>
+<br>
 <button type="submit" class="btn btn-primary">Войти</button>
 </form>
 </div>

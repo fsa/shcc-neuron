@@ -8,4 +8,4 @@ if($tz=getenv('TZ')) {
     date_default_timezone_set($tz);
 }
 httpResponse::setExceptionHandler();
-httpResponse::setContext(Settings::get('site'));
+httpResponse::setContext(Settings::get('site', ['title'=>'SHCC']));
