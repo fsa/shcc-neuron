@@ -1,9 +1,5 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2020-11-28
- */
 define('CUSTOM_DIR', '../../../custom/events/');
 require_once '../../common.php';
 $host=Settings::get('daemon-ip', '127.0.0.1');
@@ -13,7 +9,7 @@ if (!is_null($host)) {
     }
 }
 $request=file_get_contents('php://input');
-syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event: '.$request);
+#syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event: '.$request);
 $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
