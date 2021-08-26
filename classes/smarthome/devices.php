@@ -161,13 +161,4 @@ class Devices {
         $mem->releaseMemory();
     }
 
-    public static function storeEvents($hwid, $events, $ts=null) {
-        $uid=self::getUidByHwid($hwid);
-        if ($uid) {
-            foreach ($events as $property=> $value) {
-                Sensors::storeEvent($uid, $property, $value, $ts);
-            }
-        }
-        return $uid;
-    }
 }

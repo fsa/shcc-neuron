@@ -48,6 +48,12 @@ class Sensors {
         return $sensor?json_decode($sensor):null;
     }
 
+    public static function storeEvents($device_uid, $events, $ts=null) {
+        foreach ($events as $property=> $value) {
+            self::storeEvent($device_uid, $property, $value, $ts);
+        }
+    }
+
     public static function storeEvent($device_uid, $property, $value, $ts=null): bool {
         $s=DB::prepare('SELECT id, uid, history FROM sensors WHERE device_property=?');
         $s->execute([$device_uid.'@'.$property]);
@@ -60,14 +66,12 @@ class Sensors {
             return false;
         }
         if (is_null($ts)) {
-            $s=DB::prepare('INSERT INTO '.$sensor->history.' (sensor_id, value) VALUES (?, ?)');
-            $s->execute([$sensor->id, $value]);
-        } else {
-            #TODO: проверить отсутствие записи с указанным ts
-            $s=DB::prepare('INSERT INTO '.$sensor->history.' (sensor_id, value, timestamp) VALUES (?, ?, ?)');
-            $datetime=date('c', $ts);
-            $s->execute([$sensor->id, $value, $datetime]);
+            $ts=time();
         }
+        #TODO: проверить отсутствие записи с указанным ts
+        $s=DB::prepare('INSERT INTO '.$sensor->history.' (sensor_id, value, timestamp) VALUES (?, ?, ?)');
+        $datetime=date('c', $ts);
+        $s->execute([$sensor->id, $value, $datetime]);
         return true;
     }
 

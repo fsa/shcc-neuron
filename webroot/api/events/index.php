@@ -21,20 +21,25 @@ if (!isset($json->events)) {
     die('Wrong format');
 }
 fastcgi_finish_request();
-$hwid=$json->hwid;
+$uid=SmartHome\Devices::getUidByHwid($json->hwid);
+if (!$uid) {
+    exit;
+}
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
-$uid=SmartHome\Devices::storeEvents($hwid, $events, $ts);
-if ($uid) {
-    if (file_exists(CUSTOM_DIR.$uid.'.php')) {
-        chdir(CUSTOM_DIR);
-        $eventsListener=require $uid.'.php';
-        $eventsListener->uid=$uid;
-        foreach ($events as $event=> $value) {
-            $method='on_event_'.$event;
-            if (method_exists($eventsListener, $method)) {
-                $eventsListener->$method($value, $ts);
-            }
+try {
+    SmartHome\Sensors::storeEvents($uid, $events, $ts);
+} catch (\Exception $ex) {
+    syslog(LOG_ERR, 'Ошибка при сохранении данных с датчиков:'.PHP_EOL.$ex);
+}
+if (file_exists(CUSTOM_DIR.$uid.'.php')) {
+    chdir(CUSTOM_DIR);
+    $eventsListener=require $uid.'.php';
+    $eventsListener->uid=$uid;
+    foreach ($events as $event=> $value) {
+        $method='on_event_'.$event;
+        if (method_exists($eventsListener, $method)) {
+            $eventsListener->$method($value, $ts);
         }
     }
 }
