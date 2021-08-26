@@ -90,48 +90,6 @@ class MemoryStorage {
         return $key!==false;
     }
 
-    public function setSensor(string $uid, $value, $ts=null): void {
-        if (is_null($this->lock)) {
-            sem_acquire($this->sem);
-        }
-        $devices=shm_get_var($this->shm, 0);
-        $key=array_search('s_'.$uid, $devices);
-        if ($key===false) {
-            $key=sizeof($devices);
-            $devices[$key]='s_'.$uid;
-            shm_put_var($this->shm, 0, $devices);
-        }
-        shm_put_var($this->shm, $key, (object) ["value"=>$value, "ts"=>is_null($ts)?time():$ts]);
-        if (is_null($this->lock)) {
-            sem_release($this->sem);
-        }
-    }
-
-    public function getSensor(string $uid) {
-        if (is_null($this->lock)) {
-            sem_acquire($this->sem);
-        }
-        $devices=shm_get_var($this->shm, 0);
-        $key=array_search('s_'.$uid, $devices);
-        $sensor=($key===false)?null:shm_get_var($this->shm, $key);
-        if (is_null($this->lock)) {
-            sem_release($this->sem);
-        }
-        return $sensor;
-    }
-
-    public function existsSensor(string $uid): bool {
-        if (is_null($this->lock)) {
-            sem_acquire($this->sem);
-        }
-        $devices=shm_get_var($this->shm, 0);
-        $key=array_search('s_'.$uid, $devices);
-        if (is_null($this->lock)) {
-            sem_release($this->sem);
-        }
-        return $key!==false;
-    }
-
     public static function getDevicesHwids() {
         $mem=new self;
         $mem->lockMemory();
