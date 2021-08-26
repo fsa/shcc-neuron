@@ -11,7 +11,7 @@ $hour=date('H');
 $time=date('H:i');
 
 function say($text, $priority=0) {
-    Tts\Log::newMessage($text);
+    Tts\Queue::addLogMessage($text);
     global $mute;
     if ($mute) {
         return;

@@ -2,58 +2,38 @@
 
 namespace Tts;
 
+use DBRedis;
+
 class Queue {
 
-    const PROJ='a';
-    const CHMOD=0600;
-    const MAX_MESSAGE_SIZE=1024;
-
-    private $queue;
+    const NAME='shcc:tts_queue';
+    const MAX_SIZE=10;
+    const LOG_NAME='shcc:messages';
+    const LOG_SIZE=10;
 
     public function __construct() {
-        if(msg_queue_exists(ftok(__FILE__,self::PROJ))) {
-            $this->getQueue();
-        }
-    }
-
-    public function getQueue() {
-        $this->queue=msg_get_queue(ftok(__FILE__,self::PROJ),self::CHMOD);
     }
 
     public function dropQueue() {
-        if(is_null($this->queue)) {
-            return;
-        }
-        if(msg_remove_queue($this->queue)) {
-            $this->queue=null;
-        }
+        DBRedis::del(self::NAME);
     }
 
     public function addMessage($text) {
-        if(is_null($this->queue)) {
-            return false;
+        DBRedis::lPush(self::NAME, json_encode(['ts'=>time(), 'text'=>$text]));
+        if(DBRedis::lLen(self::NAME)>self::MAX_SIZE) {
+            $msg=DBRedis::rPop(self::NAME);
+            syslog(LOG_NOTICE, __FILE__.':'.__LINE__.' TTS Drop queue message: '.$msg[1]);
         }
-        $queue_stat=msg_stat_queue($this->queue);
-        # Защита от переполнения сообщений при падении сервиса TTS
-        if($queue_stat['msg_qnum']>15) {
-            syslog(LOG_WARNING, 'TTS Drop message: '.$text);
-            return false;
-        }
-        return msg_send($this->queue, 1, $text, false);
     }
-    
-    public function receiveMessage() {
-        $res=msg_receive($this->queue,1,$msgtype,self::MAX_MESSAGE_SIZE,$message,false);
-        if($res===false) {
-            return false;
+
+    public static function addLogMessage($message) {
+        DBRedis::lPush(self::LOG_NAME, date('H:i:s').' '.$message);
+        if (DBREdis::lLen(self::LOG_NAME)>self::LOG_SIZE) {
+            DBRedis::rPop(self::LOG_NAME);
         }
-        return $message;
     }
-    
-    public function dropOldMessage() {
-        $queue_stat=msg_stat_queue($this->queue);
-        if(time()-$queue_stat['msg_stime']>180) {
-            while($this->receiveMessage());
-        }
+
+    public static function getLogMessages() {
+        return DBRedis::lRange(self::LOG_NAME, 0, -1);
     }
 }
