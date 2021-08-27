@@ -23,7 +23,7 @@ class Daemon implements \SmartHome\DaemonInterface {
             }
         }
         $this->pre_sound=$params['pre_sound'];
-        $this->pre_sound_period=$params['pre_sound_pediod'];
+        $this->pre_sound_period=$params['pre_sound_period'];
         $this->play_sound_cmd=$params['play_sound_cmd'];
     }
 
