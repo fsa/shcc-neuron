@@ -17,8 +17,14 @@ class DB {
         if (self::$pdo) {
             return self::$pdo;
         }
-        $config=Settings::get('pdo');
-        self::$pdo=new PDO($config['dsn'], $config['username'], $config['password']);
+        $dburl=getenv('DATABASE_URL');
+        if (!$dburl) {
+            throw new Exception('Database is not configured.');
+        }
+        $db=parse_url($dburl);
+        self::$pdo=new PDO("pgsql:".sprintf(
+                "host=%s;port=%s;user=%s;password=%s;dbname=%s",
+                $db["host"], $db["port"]??5432, $db["user"], $db["pass"], ltrim($db["path"], "/")));
         self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $tz=getenv('TZ');
         if ($tz) {
