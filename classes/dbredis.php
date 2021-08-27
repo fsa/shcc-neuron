@@ -20,7 +20,7 @@ class DBRedis {
         $port=getenv('REDIS_PORT')?getenv('REDIS_PORT'):6379;
         self::$redis=new Redis();
         self::$redis->connect($host, $port);
-        if(getenv('REDIS_PASSWORD')) {
+        if(getenv('REDIS_AUTH')) {
             if(!self::$redis->auth(getenv('REDIS_AUTH'))) {
                 throw new AppException('Redis Auth Failed');
             }
