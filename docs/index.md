@@ -12,6 +12,8 @@
 
 [Установка системы](install.md)
 
+[Переменные окружения](environment.md)
+
 [Файл конфигурации settings.php](settings.md)
 
 [Пользовательские скрипты](userscripts.md)
