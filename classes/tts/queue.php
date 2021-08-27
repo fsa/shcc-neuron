@@ -27,7 +27,7 @@ class Queue {
     }
 
     public static function addLogMessage($message) {
-        DBRedis::lPush(self::LOG_NAME, date('H:i:s').' '.$message);
+        DBRedis::lPush(self::LOG_NAME, date('H:i').' '.$message);
         if (DBREdis::lLen(self::LOG_NAME)>self::LOG_SIZE) {
             DBRedis::rPop(self::LOG_NAME);
         }
