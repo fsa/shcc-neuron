@@ -35,7 +35,7 @@ postgres=# \l
 
 Установите веб-сервер и php с необходимыми модулями с помощью команды:
 ```bash
-$ sudo apt install nginx php-fpm php-pgsql
+$ sudo apt install nginx php-fpm php-pgsql php-redis
 ```
 
 Для настройки веб-сервера nginx создайте файл конфигурации виртуального хоста. При настройках по умолчанию это можно сделать двумя способами:
@@ -69,6 +69,7 @@ server {
         fastcgi_index index.php;
 	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
+        include conf.d/shcc_params;
     }
 
     location ^~ /alice-webhook {
@@ -77,13 +78,21 @@ server {
 	fastcgi_param SCRIPT_FILENAME $document_root/alice-webhook/index.php;
 	fastcgi_param PATH_INFO $fastcgi_path_info;
 	include fastcgi_params;
+        include conf.d/shcc_params;
     }
 
     include acme.conf;
 
 }
 ```
-Вместо shcc.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети.
+Файл с [переменными окружения](environment.md) /etc/nginx/conf.d/shcc_params:
+```
+fastcgi_param DATABASE_URL "postgres://shcc:PASSWORD@localhost/shcc";
+fastcgi_param SESSION_NAME shcc;
+fastcgi_param SITE_ADMINS my_user;
+fastcgi_param TZ Asia/Uekaterinburg;
+```
+Вместо shcc.example.com укажите свой домен, который вы планируете использовать для доступа к умному дому из сети, в DATABASE_URL вместо PASSWORD укажите пароль для пользователя shcc БД.
 
 Запуск php производится с помощью upstream php-fpm. Сделать это можно создав файл /etc/nginx/conf.d/php-fpm.conf:
 ```
@@ -149,10 +158,7 @@ SHCC рекомендуется размещать в папке /var/www/shcc. 
 ```bash
 # cp settings.sample.php settings.php
 ```
-Отредактируйте полученный файл указав желаемые настройки. Обратите внимание на:
-1. реквизиты доступа к базе данных; нужно указать имя базы данных, пользователя и пароль;
-2. секцию home, где задаётся ваше местоположение и город;
-3. ваш часовой пояс.
+Отредактируйте полученный файл указав желаемые настройки.
 
 ## Создание базы данных
 
