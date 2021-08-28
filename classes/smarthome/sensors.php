@@ -70,6 +70,9 @@ class Sensors {
         if (is_null($ts)) {
             $ts=time();
         }
+        if(is_bool($value)) {
+            $value=intval($value);
+        }
         #TODO: проверить отсутствие записи с указанным ts
         $s=DB::prepare('INSERT INTO '.$sensor->history.' (sensor_id, value, timestamp) VALUES (?, ?, ?)');
         $datetime=date('c', $ts);
