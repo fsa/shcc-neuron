@@ -23,7 +23,11 @@ $meters->setRowCallback(function ($row) {
     $row->property_name=SmartHome\Sensors::getPropertyName($row->property);
     $state=SmartHome\Sensors::get($row->uid);
     if($state) {
-        $row->value=$state->value.' '.SmartHome\Sensors::getPropertyUnit($row->property);
+        if(is_bool($state->value)) {
+            $state->value=$state->value?'да':'нет';
+        }
+        $unit=SmartHome\Sensors::getPropertyUnit($row->property);
+        $row->value=$unit?$state->value.' '.$unit:$state->value;
         $row->updates=date('d.m.Y H:i:s', $state->ts);
     } else {
         $row->value='---';
