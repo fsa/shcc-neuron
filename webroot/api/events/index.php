@@ -9,7 +9,7 @@ if (!is_null($host)) {
     }
 }
 $request=file_get_contents('php://input');
-#syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event: '.$request);
+syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event: '.$request);
 $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
@@ -37,7 +37,7 @@ if (file_exists(CUSTOM_DIR.$uid.'.php')) {
     $eventsListener=require $uid.'.php';
     $eventsListener->uid=$uid;
     foreach ($events as $event=> $value) {
-        $method='on_event_'.$event;
+        $method='on_event_'.str_replace('@', '_', $event);
         if (method_exists($eventsListener, $method)) {
             $eventsListener->$method($value, $ts);
         }
