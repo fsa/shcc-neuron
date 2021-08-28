@@ -18,7 +18,8 @@ class Sensors {
         'click'=>['Клик', null],
         'double_click'=>['Двойной клик', null],
         'long_press'=>['Длительное нажатие', null],
-        'long_press_release'=>['Завершение долгого нажатия', null]
+        'long_press_release'=>['Завершение долгого нажатия', null],
+        'alarm'=>['Тревога', null]
     ];
     const STORAGE_NAME='shcc:sensors';
 
