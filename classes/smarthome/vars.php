@@ -2,20 +2,18 @@
 
 namespace SmartHome;
 
-use DB,
-    PDO;
+use DBRedis;
 
 class Vars {
 
+    const REDIS_KEY='shcc:vars';
+
     public static function get($name) {
-        $s=DB::prepare('SELECT value FROM variables WHERE name=?');
-        $s->execute([$name]);
-        return $s->fetch(PDO::FETCH_COLUMN);
+        return DBRedis::hget(self::REDIS_KEY, $name);
     }
 
     public static function set($name, $value) {
-        $s=DB::prepare('INSERT INTO variables (name,value) VALUES (?,?) ON CONFLICT (name) DO UPDATE SET value=?');
-        $s->execute([$name, $value, $value]);
+        DBRedis::hset(self::REDIS_KEY, $name, $value);
     }
 
     public static function getJson($name, $array=true) {
@@ -28,8 +26,7 @@ class Vars {
     }
 
     public static function drop($name) {
-        $s=DB::prepare('DELETE FROM variables WHERE name=?');
-        $s->execute([$name]);
+        return DBRedis::del(self::REDIS_KEY, $name);
     }
 
 }
