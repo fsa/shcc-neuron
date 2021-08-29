@@ -20,6 +20,9 @@ class Sensor extends \Entity {
 
     protected function getColumnValues(): array {
         $values=get_object_vars($this);
+        if(!$values['history']) {
+            $values['history']=null;
+        }
         #TODO проверить существование таблицы с именем $values['history'];
         return $values;
     }
