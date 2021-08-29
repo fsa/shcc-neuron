@@ -143,7 +143,9 @@ function setLastUpdateElements(elements, state, timestamp = 0) {
     }
     elements.forEach((item) => {
         setElementValue(item, state);
-        item.style.color = style;
+        if(item.classList.contains('warning-colors')) {
+            item.style.color = style;
+        }
     });
 }
 
