@@ -15,9 +15,13 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $storage;
     private $socketserver;
     private $events_url;
+    private $ip;
+    private $port;
 
     public function __construct($params) {
         $this->events_url=$params['events_url'];
+        $this->ip=$params['ip'];
+        $this->port=$params['port'];
     }
 
     public function getName() {
@@ -26,7 +30,7 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     public function prepare() {
         $this->storage=new MemoryStorage;
-        $this->socketserver=new SocketServer();
+        $this->socketserver=new SocketServer($this->ip, $this->port);
         $this->socketserver->run();
     }
 
@@ -62,7 +66,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function finish() {
-        return;
     }
+
 
 }

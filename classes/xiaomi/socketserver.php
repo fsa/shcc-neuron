@@ -15,7 +15,6 @@ class SocketServer {
     
     public function run() {
         $this->stream=stream_socket_server("udp://0.0.0.0:".$this->port,$errno,$errstr,STREAM_SERVER_BIND);
-        
         if (!$this->stream) {
             throw new Exception("$errstr ($errno)");
         }
