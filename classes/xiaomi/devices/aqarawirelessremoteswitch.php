@@ -12,13 +12,13 @@ class AqaraWirelessRemoteSwitch extends AbstractDevice {
     protected function updateParam($param,$value) {
         switch ($param) {
             case "channel_0":
-                $this->events[$this->oneButtonEvent($value).'@left']=1;
+                $this->events[$this->oneButtonEvent($value).'@left']=true;
                 break;
             case "channel_1":
-                $this->events[$this->oneButtonEvent($value).'@right']=1;
+                $this->events[$this->oneButtonEvent($value).'@right']=true;
                 break;
             case "dual_channel":
-                $this->events[$this->doubleButtonsEvent($value).'@both']=1;
+                $this->events[$this->doubleButtonsEvent($value).'@both']=true;
                 break;
             default:
                 $this->showUnknownParam($param, $value);
