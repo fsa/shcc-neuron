@@ -170,6 +170,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
 
     public function getState(): array {
         return [
+            'power'=>$this->bright!=0,
             'bright'=>$this->bright,
             'illumination'=>$this->illumination
                 ];
