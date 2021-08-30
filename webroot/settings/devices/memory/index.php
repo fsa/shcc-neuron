@@ -45,7 +45,7 @@ $memdevitable->showTable(new class($mem_list) {
         $this->mem=new \SmartHome\MemoryStorage;
     }
 
-    public function fetch() {
+    public function fetchObject() {
         $hwid=array_shift($this->list);
         if (is_null($hwid)) {
             return null;
