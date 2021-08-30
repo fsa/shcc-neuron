@@ -52,7 +52,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
         }
         $cmd_data['key']=$this->makeSignature();
         $data=['cmd'=>'write'];
-        $data['sid']=$this->sid;
+        $data['sid']=trim($this->sid, 'xiaomi_');
         $data['short_id']=0;
         $data['model']=$this->model;
         $data['data']=json_encode($cmd_data);
@@ -147,7 +147,11 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
         $stream=$this->getStream();
         stream_socket_sendto($stream,$message,0,$this->ip.':'.self::MULTICAST_PORT);
     }
-    
+
+    public function sendCommand($command) {
+        $this->sendMessage($this->prepareCommand($command));;
+    }
+
     public function getBright() {
         return $this->bright;
     }
@@ -199,11 +203,11 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
     }
 
     public function setPowerOff() {
-        $this->sendMessage($this->prepareCommand(['rgb'=>hexdec('64FFFFFF')]));
+        $this->sendCommand(['rgb'=>hexdec('FFFFFF')]);
     }
 
     public function setPowerOn() {
-        $this->sendMessage($this->prepareCommand(['rgb'=>hexdec('FFFFFF')]));
+        $this->sendCommand(['rgb'=>hexdec('64FFFFFF')]);
     }
 
 }
