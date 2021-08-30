@@ -15,8 +15,8 @@ if (!$json) {
 if (!isset($json->module)) {
     httpResponse::json(['error'=>'Неверное имя модуля']);
 }
-# Инициализация разделяемой памяти
-$mem=new SmartHome\MemoryStorage;
+$redis=new SmartHome\DeviceStorage;
+$redis->init(\SmartHome\Devices::getAllDevicesEntity());
 $modules=new SmartHome\Modules;
 if(!$modules->isModuleExists($json->module)) {
     httpResponse::json(['daemon'=>null]);

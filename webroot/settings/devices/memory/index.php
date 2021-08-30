@@ -1,10 +1,5 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2020-12-25
- */
-
 require_once '../../../common.php';
 Session::grantAccess([]);
 $hwid=filter_input(INPUT_GET, 'hwid');
@@ -21,11 +16,11 @@ httpResponse::showHtmlHeader('Список устройств в памяти');
 <?php
 
 $db_devices=SmartHome\Devices::getDevicesHwids();
-$mem_list=SmartHome\MemoryStorage::getDevicesHwids();
-$mem_devices=array_flip($mem_list);
+$storage_hwids=SmartHome\DeviceStorage::getDevicesHwids();
+$mem_devices=array_flip($storage_hwids);
 foreach ($db_devices as $db_device) {
     if (isset($mem_devices[$db_device])) {
-        unset($mem_list[$mem_devices[$db_device]]);
+        #unset($storage_hwids[$mem_devices[$db_device]]);
     }
 }
 $memdevitable=new HTML\Table();
@@ -35,14 +30,16 @@ $memdevitable->addField('description', 'Описание');
 $memdevitable->addField('state', 'Информация');
 $memdevitable->addField('updated', 'Было активено');
 $memdevitable->addButton(new HTML\ButtonLink('Добавить', './?hwid=%s', 'hwid'));
-$memdevitable->showTable(new class($mem_list) {
+$memdevitable->showTable(new class($storage_hwids) {
 
     private $list;
     private $mem;
+    private $count;
 
     public function __construct($list) {
         $this->list=$list;
-        $this->mem=new \SmartHome\MemoryStorage;
+        $this->count=count($list);
+        $this->mem=new \SmartHome\DeviceStorage;
     }
 
     public function fetchObject() {
@@ -50,7 +47,7 @@ $memdevitable->showTable(new class($mem_list) {
         if (is_null($hwid)) {
             return null;
         }
-        $device=$this->mem->getDevice($hwid);
+        $device=$this->mem->get($hwid);
         $result=new \stdClass();
         $result->entity=$device;
         $result->hwid=$hwid;
@@ -59,6 +56,10 @@ $memdevitable->showTable(new class($mem_list) {
         $date=$device->getLastUpdate();
         $result->updated=$date==0?'Нет данных':date('d.m.Y H:i:s', $date);
         return $result;
+    }
+
+    public function rowCount() {
+        return $this->count;
     }
 });
 httpResponse::showHtmlFooter();

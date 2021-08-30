@@ -1,10 +1,5 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2020-12-25
- */
-
 require_once '../../../common.php';
 Session::grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
@@ -18,8 +13,8 @@ use Templates\Forms;
 $uid=filter_input(INPUT_GET, 'uid');
 $hwid=filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
-    $sh=new SmartHome\MemoryStorage;
-    $memdev=$sh->getDevice($hwid);
+    $sh=new SmartHome\DeviceStorage;
+    $memdev=$sh->get($hwid);
     if (is_null($memdev)) {
         httpResponse::showError('Что-то пошло не так. Не найдено устройство в памяти.');
     }

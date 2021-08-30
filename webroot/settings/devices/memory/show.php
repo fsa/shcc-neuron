@@ -1,15 +1,9 @@
 <?php
-
-/**
- * SHCC 0.7.0
- * 2020-12-25
- */
-
 if (!isset($hwid)) {
     die;
 }
-$sh=new SmartHome\MemoryStorage;
-$mem_device=$sh->getDevice($hwid);
+$sh=new SmartHome\DeviceStorage;
+$mem_device=$sh->get($hwid);
 if($mem_device) {
     httpResponse::redirection("../edit/?hwid=$hwid");
 } else {

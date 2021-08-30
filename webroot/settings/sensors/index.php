@@ -1,8 +1,5 @@
 <?php
-/**
- * SHCC 0.7.0
- * 2020-11-29
- */
+
 require_once '../../common.php';
 Session::grantAccess([]);
 httpResponse::setTemplate(new Templates\PageSettings);
@@ -21,7 +18,7 @@ $meters->addField('device_property', 'Источник данных');
 $meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) {
     $row->property_name=SmartHome\Sensors::getPropertyName($row->property);
-    $state=SmartHome\Sensors::get($row->uid);
+    $state=SmartHome\SensorStorage::get($row->uid);
     if($state) {
         if(is_bool($state->value)) {
             $state->value=$state->value?'да':'нет';

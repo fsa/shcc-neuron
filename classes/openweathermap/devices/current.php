@@ -4,7 +4,7 @@ namespace OpenWeatherMap\Devices;
 
 use Settings,
     OpenWeatherMap\Api,
-    SmartHome\MemoryStorage;
+    SmartHome\DeviceStorage;
 
 class Current implements \SmartHome\DeviceInterface {
 
@@ -95,7 +95,7 @@ class Current implements \SmartHome\DeviceInterface {
         }
         $this->weather=$weather;
         $this->updated=$weather->dt;
-        $url=Settings::get('url').'/api/events/';
+        $url=Settings::get('url', 'http://127.0.0.1').'/api/events/';
         $events=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
         file_get_contents($url, 0, stream_context_create([
             'http'=>[
@@ -104,10 +104,8 @@ class Current implements \SmartHome\DeviceInterface {
                 'content' => json_encode(['hwid'=>$this->hwid, 'events'=>$events, 'ts'=>$weather->dt])
             ]
         ]));
-        $storage=new MemoryStorage;
-        $storage->lockMemory();
-        $storage->setDevice($this->hwid, $this);
-        $storage->releaseMemory();
+        $storage=new DeviceStorage;
+        $storage->set($this->hwid, $this);
         return true;
     }
 

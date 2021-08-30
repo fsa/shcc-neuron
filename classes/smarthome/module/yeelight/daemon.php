@@ -2,7 +2,7 @@
 
 namespace SmartHome\Module\Yeelight;
 
-use SmartHome\MemoryStorage,
+use SmartHome\DeviceStorage,
     Yeelight\GenericDevice,
     Yeelight\SocketServer;
 
@@ -11,7 +11,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     const DAEMON_NAME='yeelight';
 
     /**
-     *  @var \SmartHome\MemoryStorage
+     *  @var \SmartHome\DeviceStorage
      */
     private $storage;
     private $socketserver;
@@ -26,7 +26,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new MemoryStorage;
+        $this->storage=new DeviceStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->run();
         $this->socketserver->sendDiscover();
@@ -37,14 +37,13 @@ class Daemon implements \SmartHome\DaemonInterface {
         $p=$pkt->getParams();
         if (isset($p['id'])) {
             $hwid=self::DAEMON_NAME.'_'.$p['id'];
-            $this->storage->lockMemory();
-            $device=$this->storage->getDevice($hwid);
+            #TODO добавить блокировки
+            $device=$this->storage->get($hwid);
             if (is_null($device)) {
                 $device=new GenericDevice();
             }
             $device->updateState($p);
-            $this->storage->setDevice($hwid, $device);
-            $this->storage->releaseMemory();
+            $this->storage->set($hwid, $device);
             $events=$device->getActions();
             if (!is_null($events)) {
                 file_get_contents($this->process_url, 0, stream_context_create([

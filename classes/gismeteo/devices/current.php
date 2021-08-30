@@ -4,7 +4,7 @@ namespace Gismeteo\Devices;
 
 use Settings,
     AppException,
-    SmartHome\MemoryStorage;
+    SmartHome\DeviceStorage;
 
 class Current implements \SmartHome\DeviceInterface {
 
@@ -99,14 +99,12 @@ class Current implements \SmartHome\DeviceInterface {
         }
         $this->weather=$weather;
         $this->updated=$weather->response->date->unix;
-        $url=Settings::get('url').'/api/events/';
+        $url=Settings::get('url', 'http://127.0.0.1').'/api/events/';
         $actions=['temperature'=>$weather->response->temperature->air->C, 'humidity'=>$weather->response->humidity->percent, 'pressure'=>round($weather->response->pressure->h_pa*76000/101325, 2), 'wind_speed'=>$weather->response->wind->speed->m_s, 'wind_direction'=>$weather->response->wind->direction->degree];
         $data=['module'=>$this->getModuleName(), 'uid'=>$this->hwid, 'data'=>json_encode($actions), 'ts'=>$weather->response->date->unix];
         file_get_contents($url.'?'.http_build_query($data));
-        $storage=new MemoryStorage;
-        $storage->lockMemory();
-        $storage->setDevice($this->hwid, $this);
-        $storage->releaseMemory();
+        $storage=new DeviceStorage;
+        $storage->set($this->hwid, $this);
         return true;
     }
 

@@ -2,7 +2,7 @@
 
 namespace SmartHome\Module\Xiaomi;
 
-use SmartHome\MemoryStorage,
+use SmartHome\DeviceStorage,
     Xiaomi\SocketServer;
 
 class Daemon implements \SmartHome\DaemonInterface {
@@ -10,7 +10,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     const DAEMON_NAME='xiaomi';
 
     /**
-     *  @var \SmartHome\MemoryStorage
+     *  @var \SmartHome\DeviceStorage
      */
     private $storage;
     private $socketserver;
@@ -29,7 +29,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new MemoryStorage;
+        $this->storage=new DeviceStorage;
         $this->socketserver=new SocketServer($this->ip, $this->port);
         $this->socketserver->run();
     }
@@ -41,17 +41,15 @@ class Daemon implements \SmartHome\DaemonInterface {
             return;
         }
         $hwid=self::DAEMON_NAME.'_'.$hwid;
-        $this->storage->lockMemory();
-        $device=$this->storage->getDevice($hwid);
+        #TODO добавить блокировки
+        $device=$this->storage->get($hwid);
         if (is_null($device)) {
             $device=$pkt->getDeviceObject();
             $device->update($pkt);
-            $this->storage->setDevice($hwid, $device);
-            $this->storage->releaseMemory();
+            $this->storage->set($hwid, $device);
         } else {
             $device->update($pkt);
-            $this->storage->setDevice($hwid, $device);
-            $this->storage->releaseMemory();
+            $this->storage->set($hwid, $device);
             $events=$device->getEvents();
             if ($events) {
                 file_get_contents($this->events_url, 0, stream_context_create([

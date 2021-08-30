@@ -1,10 +1,5 @@
 <?php
 
-/**
- * SHCC 0.7.0
- * 2020-11-25
- */
-
 namespace SmartHome;
 
 use DB;
@@ -24,8 +19,8 @@ class Devices {
         if (!$db_dev) {
             return null;
         }
-        $mem=new MemoryStorage;
-        $device=$mem->getDevice($db_dev->hwid);
+        $storage=new DeviceStorage;
+        $device=$storage->get($db_dev->hwid);
         if (is_null($device)) {
             $entity=json_decode($db_dev->entity);
             $device=new $entity->classname;
@@ -138,27 +133,6 @@ class Devices {
             $devices[$device->hwid]=$device_obj;
         }
         return $devices;
-    }
-
-    public static function refreshMemoryDevices(): void {
-        $stmt=DB::prepare('SELECT hwid, entity FROM devices ORDER BY hwid');
-        $stmt->execute();
-        $mem=new MemoryStorage();
-        $mem->lockMemory();
-        while ($device=$stmt->fetchObject()) {
-            $entity=json_decode($device->entity);
-            if ($mem->existsDevice($device->hwid)) {
-                $device_obj=$mem->getDevice($device->hwid);
-                if (!($device_obj instanceof $entity->classname)) {
-                    $device_obj=new $entity->classname;
-                }
-            } else {
-                $device_obj=new $entity->classname;
-            }
-            $device_obj->init($device->hwid, $entity->properties??[]);
-            $mem->setDevice($device->hwid, $device_obj);
-        }
-        $mem->releaseMemory();
     }
 
 }

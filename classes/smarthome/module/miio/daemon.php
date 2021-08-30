@@ -2,7 +2,7 @@
 
 namespace SmartHome\Module\miIO;
 
-use SmartHome\MemoryStorage,
+use SmartHome\DeviceStorage,
     miIO\SocketServer,
     miIO\GenericDevice;
 
@@ -11,7 +11,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     const DAEMON_NAME='miio';
 
     /**
-     *  @var \SmartHome\MemoryStorage
+     *  @var \SmartHome\DeviceStorage
      */
     private $storage;
     private $socketserver;
@@ -28,7 +28,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new MemoryStorage;
+        $this->storage=new DeviceStorage;
         $this->socketserver=new SocketServer();
         $this->socketserver->setBroadcastSocket();
         SocketServer::sendDiscovery();
@@ -43,21 +43,19 @@ class Daemon implements \SmartHome\DaemonInterface {
         if ($uid=='ffffffffffffffff') {
             return;
         }
-        $this->storage->lockMemory();
-        $device=$this->storage->getDevice(self::DAEMON_NAME.'_'.$uid);
+        #TODO добавить блокировки
+        $device=$this->storage->get(self::DAEMON_NAME.'_'.$uid);
         if (is_null($device)) {
             $device=new GenericDevice;
             if (isset($this->tokens[$uid])) {
                 $device->setDeviceToken($this->tokens[$uid]);
                 $device->update($pkt);
             }
-            $this->storage->setDevice(self::DAEMON_NAME.'_'.$uid, $device);
-            $this->storage->releaseMemory();
+            $this->storage->set(self::DAEMON_NAME.'_'.$uid, $device);
         } else {
             $device->update($pkt);
-            $this->storage->setDevice(self::DAEMON_NAME.'_'.$uid, $device);
+            $this->storage->set(self::DAEMON_NAME.'_'.$uid, $device);
             $this->storage->releaseMemory();
-            $actions=$device->getActions();
             if (!is_null($actions)) {
                 $data=['uid'=>self::DAEMON_NAME.'_'.$uid, 'data'=>$actions];
                 file_get_contents($this->process_url.'?'.http_build_query($data));
