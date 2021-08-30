@@ -282,15 +282,15 @@ class Session {
             }
 
             public function insert(string $uid, $data, int $session_time) {
-                DBRedis::setEx($this->name.'_session:'.$uid, $session_time, json_encode($data));
+                DBRedis::setEx($this->name.':session:'.$uid, $session_time, json_encode($data));
             }
 
             public function update(string $uid, $data, int $session_time) {
-                DBRedis::setEx($this->name.'_session:'.$uid, $session_time, json_encode($data));
+                DBRedis::setEx($this->name.':session:'.$uid, $session_time, json_encode($data));
             }
 
             public function select($uid) {
-                $session=DBRedis::get($this->name.'_session:'.$uid);
+                $session=DBRedis::get($this->name.':session:'.$uid);
                 if(!$session) {
                     return null;
                 }
@@ -298,7 +298,7 @@ class Session {
             }
 
             public function delete($uid) {
-                DBRedis::del($this->name.'_session:'.$uid);
+                DBRedis::del($this->name.':session:'.$uid);
             }
         };
     }
