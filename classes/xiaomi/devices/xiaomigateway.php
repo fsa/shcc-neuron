@@ -121,17 +121,17 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
         $this->stream=stream_socket_server("udp://0.0.0.0:".self::MULTICAST_PORT,$errno,$errstr,STREAM_SERVER_BIND);
 
         if (!$this->stream) {
-            throw new Exception("$errstr ($errno)");
+            throw new AppException("$errstr ($errno)");
         }
         $socket=socket_import_stream($this->stream);
         if (!$socket) {
-            throw new Exception('Unable to import stream.');
+            throw new AppException('Unable to import stream.');
         }
         if (!socket_set_option($socket,SOL_SOCKET,SO_REUSEADDR,1)) {
-            throw new Exception('Unable to enable SO_REUSEADDR');
+            throw new AppException('Unable to enable SO_REUSEADDR');
         }
         if (!socket_set_option($socket,IPPROTO_IP,MCAST_JOIN_GROUP,['group'=>self::MULTICAST_ADDRESS,'interface'=>0])) {
-            throw new Exception('Unable to join multicast group');
+            throw new AppException('Unable to join multicast group');
         }
         return $this->stream;
     }
