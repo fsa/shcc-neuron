@@ -31,7 +31,7 @@ function telegram($text, $priority=0) {
     $api->httpPostJson();
 }
 
-function getDevivce($name) {
+function getDevice($name) {
     return SmartHome\Devices::get($name);
 }
 
