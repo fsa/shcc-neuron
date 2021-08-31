@@ -50,3 +50,15 @@ function getJson($name) {
 function setJson($name, $object) {
     SmartHome\Vars::setJson($name, $object);
 }
+
+function log_info($message) {
+    syslog(LOG_INFO, $message);
+}
+
+function log_debug($message) {
+    syslog(LOG_DEBUG, $message);
+}
+
+function log_error($message) {
+    syslog(LOG_ERR, $message);
+}
