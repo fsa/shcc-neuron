@@ -60,6 +60,10 @@ class Daemon implements \SmartHome\DaemonInterface {
             return;
         }
         $voice_file=$this->tts_provider->getVoiceFile($text);
+        if(is_null($voice_file)) {
+            syslog(LOG_NOTICE, __FILE__.':'.__LINE__.' $voice_file is null');
+            return;
+        }
         if (time()-$this->last_message_time>$this->pre_sound_period) {
             $this->playMp3(__DIR__.'/../../../../custom/sound/'.$this->pre_sound);
             #syslog(LOG_INFO, 'TTS Attension');

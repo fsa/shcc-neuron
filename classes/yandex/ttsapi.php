@@ -80,7 +80,7 @@ class TtsApi implements \SmartHome\TtsInterface {
         }
         $realpath=realpath($filename);
         if(!$realpath) {
-            throw new UserException('Не найден файл для воспроизведения');
+            return null;
         }
         return $realpath;
     }
