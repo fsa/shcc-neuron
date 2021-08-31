@@ -95,6 +95,8 @@ class Current implements \SmartHome\DeviceInterface {
         }
         $this->weather=$weather;
         $this->updated=$weather->dt;
+        $storage=new DeviceStorage;
+        $storage->set($this->hwid, $this);
         $url=Settings::get('url', 'http://127.0.0.1').'/api/events/';
         $events=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
         file_get_contents($url, 0, stream_context_create([
@@ -104,8 +106,6 @@ class Current implements \SmartHome\DeviceInterface {
                 'content' => json_encode(['hwid'=>$this->hwid, 'events'=>$events, 'ts'=>$weather->dt])
             ]
         ]));
-        $storage=new DeviceStorage;
-        $storage->set($this->hwid, $this);
         return true;
     }
 
