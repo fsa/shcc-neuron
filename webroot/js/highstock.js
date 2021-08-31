@@ -104,7 +104,8 @@ function createChart(unit) {
                 enabled: true,
                         color: '#00572b'
             },
-            ordinal: false
+            ordinal: false,
+            max: new Date().getTime()
         },
         yAxis: {
             labels: {
