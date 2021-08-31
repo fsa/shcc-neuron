@@ -29,7 +29,7 @@ if ($minute==0) {
 # Получение текущего прогноза погоды и озвучивание температуры
 # Требуется создание устройства openweathermap
 #if ($minute%30==0) {
-#    $owmd=getDevivce('openweathermap');
+#    $owmd=getDevice('openweathermap');
 #    $owmyes=$owmd->update();
 #}
 #if ($minute==0) {
