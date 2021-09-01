@@ -2,6 +2,21 @@
 
 class httpResponse {
 
+    const HTTP_STATUS_CODES=[
+        301=>'Moved Permanently',
+        302=>'Moved Temporarily',
+        304=>'Not Modified',
+        400=>'Bad Request',
+        401=>'Unauthorized',
+        402=>'Payment Required',
+        403=>'Forbidden',
+        404=>'Not Found',
+        405=>'Method Not Allowed',
+        429=>'Too Many Requests',
+        500=>'Internal Server Error',
+        503=>'Service Unavailable'
+    ];
+
     private static $template;
     private static $context;
     private static $last_modified;
@@ -10,6 +25,7 @@ class httpResponse {
     private static $message_id;
 
     # Ответ HTML
+
     public static function getTemplate() {
         if (is_null(self::$template)) {
             self::$template=new Templates\ContentPage;
@@ -58,10 +74,10 @@ class httpResponse {
             header("ETag: ".self::$etag);
         }
         self::disableBrowserCache();
-        $notification=filter_input(INPUT_COOKIE,'notification');
-        if($notification) {
+        $notification=filter_input(INPUT_COOKIE, 'notification');
+        if ($notification) {
             $template->notify=$notification;
-            setcookie('notification','',time()-3600,'/');
+            setcookie('notification', '', time()-3600, '/');
         }
         $template->Header();
         set_exception_handler([__CLASS__, 'HtmlException']);
@@ -102,6 +118,7 @@ class httpResponse {
     }
 
     # Информация для пользователя
+
     public static function showPopup(string $message, string $title, string $style=null) {
         $template=self::getTemplate();
         $template->Popup($message, $title, $style);
@@ -118,7 +135,7 @@ class httpResponse {
     }
 
     public static function showError(string $message) {
-        if(isset(self::$message_id)) {
+        if (isset(self::$message_id)) {
             self::showPopup('popupMessage'.self::$message_id, $message, 'Ошибка', 'danger');
             self::showHtmlFooter();
         } else {
@@ -128,7 +145,7 @@ class httpResponse {
     }
 
     public static function showInformation(string $message) {
-        if(isset(self::$message_id)) {
+        if (isset(self::$message_id)) {
             self::showPopup('popupMessage'.self::$message_id, $message, 'Информация', 'info');
             self::$message_id++;
         } else {
@@ -137,6 +154,7 @@ class httpResponse {
     }
 
     # Ответ JSON
+
     public static function json($response, $options=JSON_UNESCAPED_UNICODE) {
         header('Content-Type: application/json');
         echo json_encode($response, $options);
@@ -144,7 +162,7 @@ class httpResponse {
     }
 
     public static function jsonString(?string $response) {
-        if(is_null($response)) {
+        if (is_null($response)) {
             self::error(404);
         }
         header('Content-Type: application/json');
@@ -153,14 +171,10 @@ class httpResponse {
     }
 
     # Коды ответов <>200
+
     public static function redirection($location, $code=302, $message=null) {
         if (is_null($message)) {
-            $codes=[
-                301=>'Moved Permanently',
-                302=>'Moved Temporarily',
-                304=>'Not Modified'
-            ];
-            $message=$codes[$code];
+            $message=self::HTTP_STATUS_CODES[$code];
         }
         $header=sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message);
         header($header, true);
@@ -171,16 +185,7 @@ class httpResponse {
 
     public static function error($code, $message=null) {
         if (is_null($message)) {
-            $codes=[
-                400=>'Bad Request',
-                401=>'Unauthorized',
-                403=>'Forbidden',
-                404=>'Not Found',
-                429=>'Too Many Requests',
-                500=>'Internal Server Error',
-                503=>'Service Unavailable'
-            ];
-            $message=$codes[$code];
+            $message=self::HTTP_STATUS_CODES[$code];
         }
         header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message), true, $code);
         echo $message;
@@ -188,33 +193,46 @@ class httpResponse {
     }
 
     # Exceptions handlers
+
     public static function HtmlPageException($ex) {
         $class=get_class($ex);
         $class_parts=explode('\\', $class);
-        if(end($class_parts)=='UserException') {
-            $message=$ex->getMessage();
+        if (end($class_parts)=='UserException') {
+            self::showMessagePage($ex->getMessage(), 'Ошибка', 'primary');
         } else if (end($class_parts)=='AppException') {
-            $message='Программная ошибка: '.$ex->getMessage();
-            $message=(string)$ex;
-        } else if(end($class_parts)=='AuthException') {
-            self::showLoginForm(getenv('REQUEST_METHOD')=='GET'?getenv('REQUEST_URI'):'/');
-            exit;
-        } else if(end($class_parts)=='AccessException') {
-            $message='Доступ запрещён. <a href="/">Перейти на главную страницу</a>.';
+            $code=$ex->getCode();
+            switch ($code) {
+                case 401:
+                    self::showLoginForm(getenv('REQUEST_METHOD')=='GET'?getenv('REQUEST_URI'):'/');
+                    exit;
+                case 403:
+                    self::showMessagePage('У вас отсутствуют необходиме права доступа. <a href="/">Перейти на главную страницу</a>.', 'Доступ запрещён', 'danger');
+                    exit;
+                case 400:
+                case 402:
+                case 403:
+                case 404:
+                case 405:
+                case 429:
+                    self::showMessagePage(self::HTTP_STATUS_CODES[$code], $code, 'warning');
+                    exit;
+                default:
+                    self::showMessagePage($ex->getMessage(), 'Программная ошибка', 'danger');
+                    exit;
+            }
         } else if (getenv('DEBUG')) {
-            $message=(string)$ex;
             error_log($ex, 0);
+            self::showMessagePage((string) $ex, 'Отладочная информация об ошибке', 'danger');
         } else {
             error_log($ex, 0);
-            httpResponse::error(500);
+            self::error(500);
         }
-        self::showMessagePage($message, 'Ошибка', 'danger');
         exit;
     }
 
     public static function HtmlException($ex) {
         if (getenv('DEBUG')) {
-            $message=(string)$ex;
+            $message=(string) $ex;
         } else {
             error_log($ex, 0);
             $message='Произошла программная ошибка на сервере.';
@@ -227,23 +245,30 @@ class httpResponse {
     public static function JsonException($ex) {
         $class=get_class($ex);
         $class_parts=explode('\\', $class);
-        if(end($class_parts)=='UserException') {
+        if (end($class_parts)=='UserException') {
             self::json(['error'=>$ex->getMessage()]);
             exit;
         } else if (end($class_parts)=='AppException') {
+            switch ($ex->getCode()) {
+                case 400:
+                case 401:
+                case 402:
+                case 403:
+                case 404:
+                case 405:
+                case 429:
+                    self::error($ex->getCode());
+            }
             self::json(['error'=>'Server error: '.$ex->getMessage()]);
             exit;
-        } else if(end($class_parts)=='AuthException') {
-            httpResponse::error(401);
-        } else if(end($class_parts)=='AccessException') {
-            httpResponse::error(403);
         } else {
             error_log($ex, 0);
-            httpResponse::error(500);
+            self::error(500);
         }
     }
 
     # Подключение обработчиков ошибок
+
     public static function setExceptionHandler() {
         set_exception_handler([__CLASS__, 'HtmlPageException']);
     }

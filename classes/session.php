@@ -34,9 +34,9 @@ class Session {
             return;
         }
         if (is_null($session->user)) {
-            throw new AuthException();
+            throw new AppException(null, 401);
         }
-        throw new AccessException();
+        throw new AppException(null, 403);
     }
 
     public static function memberOf(array $scope=null): bool {
