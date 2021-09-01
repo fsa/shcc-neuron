@@ -16,11 +16,11 @@ class Message {
             case 'secondary':
             case 'success':
             case 'danger':
-            case 'info':
             case 'dark':
+            case 'warning':
                 $style_class='bg-'.$this->style.' text-white';
                 break;
-            case 'warning':
+            case 'info':
             case 'light':
             case 'white':
             case 'transparent':
