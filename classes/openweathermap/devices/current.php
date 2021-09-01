@@ -2,8 +2,8 @@
 
 namespace OpenWeatherMap\Devices;
 
-use Settings,
-    OpenWeatherMap\Api,
+use OpenWeatherMap\Api,
+    SmartHome\Devices,
     SmartHome\DeviceStorage;
 
 class Current implements \SmartHome\DeviceInterface {
@@ -97,15 +97,9 @@ class Current implements \SmartHome\DeviceInterface {
         $this->updated=$weather->dt;
         $storage=new DeviceStorage;
         $storage->set($this->hwid, $this);
-        $url=Settings::get('url', 'http://127.0.0.1').'/api/events/';
-        $events=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg];
-        file_get_contents($url, 0, stream_context_create([
-            'http'=>[
-                'method'=>'POST',
-                'header'=>"Content-Type: application/json; charset=utf-8\r\n",
-                'content' => json_encode(['hwid'=>$this->hwid, 'events'=>$events, 'ts'=>$weather->dt])
-            ]
-        ]));
+        $events=['temperature'=>$weather->main->temp, 'humidity'=>$weather->main->humidity, 'pressure'=>round($weather->main->pressure*76000/101325, 2), 'wind_speed'=>$this->weather->wind->speed, 'wind_direction'=>$this->weather->wind->deg, 'weather'=>json_encode($weather, JSON_UNESCAPED_UNICODE)];
+        $uid=Devices::getUidByHwid($this->hwid);
+        Devices::processEvents($uid, $events, $weather->dt);
         return true;
     }
 

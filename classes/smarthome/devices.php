@@ -135,4 +135,38 @@ class Devices {
         return $devices;
     }
 
+    public static function storeEvents($uid, $events, $ts=null) {
+        foreach ($events as $property=> $value) {
+            Sensors::storeEvent($uid, $property, $value, $ts);
+        }
+    }
+
+    public static function execEventsCustomScripts($uid, $events, $ts=null) {
+        $custom_dir=__DIR__.'/../../custom/events/';
+        if (!file_exists($custom_dir.$uid.'.php')) {
+            return;
+        }
+        chdir($custom_dir);
+        $eventsListener=require $uid.'.php';
+        $eventsListener->uid=$uid;
+        foreach ($events as $event=> $value) {
+            $method='on_event_'.str_replace('@', '_', $event);
+            if (method_exists($eventsListener, $method)) {
+                $eventsListener->$method($value, $ts);
+            }
+        }
+    }
+
+    public static function processEvents($uid, $events, $ts=null) {
+        try {
+            self::storeEvents($uid, $events, $ts);
+        } catch (\Exception $ex) {
+            syslog(LOG_ERR, 'Ошибка при сохранении данных с датчиков:'.PHP_EOL.$ex);
+        }
+        try {
+            self::execEventsCustomScripts($uid, $events, $ts);
+        } catch (\Exception $ex) {
+            syslog(LOG_ERR, 'Ошибка при выполнении пользовательского скрипта events/'.$uid.'.php:'.PHP_EOL.$ex);
+        }
+    }
 }

@@ -22,6 +22,12 @@ $meters->setRowCallback(function ($row) {
     if($state) {
         if(is_bool($state->value)) {
             $state->value=$state->value?'да':'нет';
+        } else if(is_string($state->value)) {
+            if(strlen($state->value)>18) {
+                $state->value='<span title="'.htmlspecialchars($state->value).'">'.htmlspecialchars(mb_substr($state->value, 0, 15)).'...</span>';
+            } else {
+                $state->value=htmlspecialchars($state->value);
+            }
         }
         $unit=SmartHome\Sensors::getPropertyUnit($row->property);
         $row->value=$unit?$state->value.' '.$unit:$state->value;

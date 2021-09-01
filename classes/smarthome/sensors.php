@@ -18,7 +18,8 @@ class Sensors {
         'double_click'=>['Двойной клик', null],
         'long_press'=>['Длительное нажатие', null],
         'long_press_release'=>['Завершение долгого нажатия', null],
-        'alarm'=>['Тревога', null]
+        'alarm'=>['Тревога', null],
+        'string'=>['Произвольная строка',null]
     ];
 
     public static function getPropertyName($property) {
@@ -37,12 +38,6 @@ class Sensors {
 
     public static function getProperties() {
         return self::PROPERTIES;
-    }
-
-    public static function storeEvents($device_uid, $events, $ts=null) {
-        foreach ($events as $property=> $value) {
-            self::storeEvent($device_uid, $property, $value, $ts);
-        }
     }
 
     public static function storeEvent($device_uid, $property, $value, $ts=null): bool {
