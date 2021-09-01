@@ -1,10 +1,10 @@
 <?php
 
-namespace Tts;
+namespace SmartHome;
 
 use DBRedis;
 
-class Queue {
+class TtsQueue {
 
     const NAME='shcc:tts_queue';
     const MAX_SIZE=10;

@@ -36,7 +36,7 @@ if (isset($json->messages)) {
                 $response['messages'][]=['name'=>'state', 'content'=>getState()];
                 break;
             case 'tts':
-                $response['messages'][]=['name'=>'tts', 'content'=>Tts\Queue::getLogMessages()];
+                $response['messages'][]=['name'=>'tts', 'content'=>SmartHome\TtsQueue::getLogMessages()];
                 break;
         }
     }

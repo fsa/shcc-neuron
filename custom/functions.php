@@ -11,12 +11,12 @@ $hour=date('H');
 $time=date('H:i');
 
 function say($text, $priority=0) {
-    Tts\Queue::addLogMessage($text);
+    \SmartHome\TtsQueue::addLogMessage($text);
     global $mute;
     if ($mute) {
         return;
     }
-    $tts=new Tts\Queue();
+    $tts=new \SmartHome\TtsQueue();
     $tts->addMessage($text);
 }
 

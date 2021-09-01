@@ -3,7 +3,7 @@
 namespace SmartHome\Module\Tts;
 
 use SmartHome\TtsInterface,
-    Tts\Queue,
+    SmartHome\TtsQueue,
     DBRedis;
 
 class Daemon implements \SmartHome\DaemonInterface {
@@ -36,7 +36,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function iteration() {
-        $json=DBRedis::brPop(Queue::NAME, 30);
+        $json=DBRedis::brPop(TtsQueue::NAME, 30);
         if (!$json) {
             return;
         }
