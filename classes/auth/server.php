@@ -8,7 +8,8 @@ namespace Auth;
 
 use DB,
     PDO,
-    httpResponse;
+    httpResponse,
+    Session;
 
 class Server {
 
@@ -113,7 +114,7 @@ class Server {
         if(array_search($redirect_uri, $allow_uris)===false) {
             httpResponse::showError('Адрес для перенаправления не яляется разрешённым.');
         }
-        $user_id=Session::getUser()->id;
+        $user_id=Session::getUserId();
         #TODO отобразить диалог выбора прав доступа
         $scope=User::checkScope($scope, $user_id);
         $code=$this->genCode();
