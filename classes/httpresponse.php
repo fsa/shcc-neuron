@@ -214,7 +214,7 @@ class httpResponse {
                 case 404:
                 case 405:
                 case 429:
-                    self::showMessagePage(self::HTTP_STATUS_CODES[$code], $code, 'warning');
+                    self::showMessagePage($ex->getMessage()??self::HTTP_STATUS_CODES[$code], $code, 'warning');
                     exit;
                 default:
                     self::showMessagePage($ex->getMessage(), 'Программная ошибка', 'danger');
@@ -257,7 +257,7 @@ class httpResponse {
                 case 404:
                 case 405:
                 case 429:
-                    self::error($ex->getCode());
+                    self::error($ex->getCode(), $ex->getMessage());
             }
             self::json(['error'=>'Server error: '.$ex->getMessage()]);
             exit;
