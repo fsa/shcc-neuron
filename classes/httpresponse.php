@@ -222,7 +222,7 @@ class httpResponse {
             }
         } else if (getenv('DEBUG')) {
             error_log($ex, 0);
-            self::showMessagePage((string) $ex, 'Отладочная информация об ошибке', 'danger');
+            self::showMessagePage('<pre>'.(string) $ex.'</pre>', 'Отладочная информация об ошибке', 'danger');
         } else {
             error_log($ex, 0);
             self::error(500);
