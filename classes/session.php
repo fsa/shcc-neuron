@@ -47,7 +47,7 @@ class Session {
     public static function getUserId() {
         $session=self::getInstance();
         if(isset($session->user)) {
-            return $session->user->getUserId();
+            return $session->user->getId();
         }
         return null;
     }
