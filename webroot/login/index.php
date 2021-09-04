@@ -7,7 +7,7 @@ if (Auth\Fail2Ban::ipIsBlocked()) {
 }
 $login=filter_input(INPUT_POST, 'login');
 $password=filter_input(INPUT_POST, 'password');
-if (!$login or!$password) {
+if ($login===false and $password===false) {
     httpResponse::showLoginForm('/');
     exit;
 }
