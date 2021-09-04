@@ -1,5 +1,6 @@
 [Unit]
 Description=SHCC module daemon "%I"
+After=nginx.service php-fpm.service postgresql.service
 PartOf=shcc.target
 
 [Service]
