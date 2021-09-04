@@ -191,7 +191,7 @@ class Session {
         $_SESSION[self::REVOKE_TOKEN]=$token;
         $new_token=$this->generateRandomString();
         $this->session_storage->revokeAdd($token, $new_token, $this->cookie_time);
-        $this->session_storage->set($new_token, ['old_token'=>$token, 'class'=>get_class($user), 'args'=>$user->getConstructorArgs()], $this->cookie_time);
+        $this->session_storage->set($new_token, ['old_token'=>$token, 'class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
         $this->setCookie($new_token);
         return true;
     }
@@ -206,7 +206,7 @@ class Session {
         $_SESSION[self::USER]=$user;
         session_commit();
         $token=$this->generateRandomString();
-        $this->session_storage->set($token, ['class'=>get_class($user), 'args'=>$user->getConstructorArgs()], $this->cookie_time);
+        $this->session_storage->set($token, ['class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
         $this->setCookie($token);
     }
 
