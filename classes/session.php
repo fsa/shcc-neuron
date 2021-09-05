@@ -59,7 +59,7 @@ class Session {
     }
 
     private function __construct() {
-        $name=getenv('SESSION_NAME')?getenv('SESSION_NAME'):'neuron';
+        $name=getenv('APP_NAME')?getenv('APP_NAME'):'neuron';
         $this->cookie_session=$name.'_session';
         $this->cookie_token=$name.'_token';
         $this->cookie_time=getenv('SESSION_TIME')?getenv('SESSION_TIME'):2592000;
@@ -233,8 +233,8 @@ class Session {
         if (is_null($scope)) {
             return true;
         }
-        if(getenv('SITE_ADMINS')) {
-            $admins=explode(',', getenv('SITE_ADMINS'));
+        if(getenv('APP_ADMINS')) {
+            $admins=explode(',', getenv('APP_ADMINS'));
             if (array_search($this->user->login, $admins)!==false) {
                 return true;
             }
