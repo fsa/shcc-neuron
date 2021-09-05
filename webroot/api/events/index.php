@@ -8,7 +8,7 @@ if (!is_null($host)) {
     }
 }
 $request=file_get_contents('php://input');
-syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event:'.PHP_EOL.$request);
+syslog(LOG_DEBUG, __FILE__.':'.__LINE__.' Daemon event: '.$request);
 $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
