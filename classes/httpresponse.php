@@ -156,7 +156,7 @@ class httpResponse {
     # Ответ JSON
 
     public static function json($response, $options=JSON_UNESCAPED_UNICODE) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json;charset=UTF-8');
         echo json_encode($response, $options);
         exit;
     }
@@ -165,7 +165,7 @@ class httpResponse {
         if (is_null($response)) {
             self::error(404);
         }
-        header('Content-Type: application/json');
+        header('Content-Type: application/json;charset=UTF-8');
         echo $response;
         exit;
     }
@@ -189,6 +189,18 @@ class httpResponse {
         }
         header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message), true, $code);
         echo $message;
+        exit;
+    }
+
+    public static function errorJson($code, $response, $message=null, $options=JSON_UNESCAPED_UNICODE) {
+        if (is_null($message)) {
+            $message=self::HTTP_STATUS_CODES[$code];
+        }
+        header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message), true, $code);
+        header('Content-Type: application/json;charset=UTF-8');
+        header('Cache-Control: no-store');
+        header('Pragma: no-cache');
+        echo json_encode($response, $options);
         exit;
     }
 
