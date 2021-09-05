@@ -7,143 +7,139 @@
 namespace Auth;
 
 use DB,
-    PDO,
-    httpResponse,
-    Session;
+    DBRedis;
 
 class Server {
 
+    const CODE_EXPIRED_IN=3600;
     const ACCESS_TOKEN_EXPIRED_IN=3600;
+    const REFRESH_TOKEN_EXPIRED_IN=2592000;
 
-    private $client_id;
-    private $state;
+    private $storage;
 
-    public static $token;
+    public static $client;
 
     public static function grantAccess(array $scope=null): void {
         $bearer=getenv('HTTP_AUTHORIZATION');
         if (!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
             header('WWW-Authenticate: Bearer realm="The access token required"');
-            httpResponse::error(401);
-            exit;
+            throw new AppException('The access token required', 401);
         }
         $token=self::fetchTokensByAccessToken($matches[1]);
         if (!$token) {
             header('WWW-Authenticate: Bearer error="invalid_token",error_description="Invalid access token"');
-            httpResponse::error(401);
-            exit;
+            throw new AppException('Invalid access token', 401);
         }
         if($token->expired) {
             header('WWW-Authenticate: Bearer error="invalid_token",error_description="The access token expired"');
-            httpResponse::error(401);
-            exit;
+            throw new AppException('The access token expired', 401);
         }
         if(!is_null($scope)) {
             #TODO проверить права доступа
             if(0) {
                 header('WWW-Authenticate: Bearer error="insufficient_scope",error_description="The request requires higher privileges than provided by the access token."');
-                httpResponse::error(403);
-                exit;
+                throw new AppException('The request requires higher privileges than provided by the access token.', 403);
             }
         }
-        self::$token=$token;
+        self::$client=$token;
     }
 
     public static function getUserId() {
-        return self::$token->user_id;
+        return self::$client->user_id;
     }
 
-    public function getResponseType(): bool {
-        $response_type=filter_input(INPUT_GET, 'response_type');
-        if ($response_type) {
-            $this->state=filter_input(INPUT_GET, 'state');
-            $this->client_id=filter_input(INPUT_GET, 'client_id');
-            if (!$this->client_id) {
-                httpResponse::showError('Не указан идентифиатор клиента');
+    public function __construct() {
+        $name=$name=getenv('APP_NAME')?getenv('APP_NAME'):'neuron';
+        $this->storage=new class($name) {
+            private $name;
+
+            public function __construct($name) {
+                $this->name=$name;
             }
-            switch ($response_type) {
-                case 'code':
-                    $this->requestGetCode();
-                    break;
-                case 'token':
-                    $this->requestGetToken();
-                    break;
-                default:
-                    httpResponse::showError('Не поддерживаемый тип запроса');
+
+            public function addCode($code, $data) {
+                DBRedis::setEx($this->name.':oauth:code:'.$code, Server::CODE_EXPIRED_IN, json_encode($data));
             }
-            return true;
-        }
-        return false;
+
+            public function getCode($code) {
+                $code_info=json_decode(DBRedis::get($this->name.':oauth:code:'.$code));
+                DBRedis::del($this->name.':oauth:code'.$code);
+                return $code_info?$code_info:null;
+            }
+        };
     }
 
-    public function getGrantType(): bool {
-        $grant_type=filter_input(INPUT_POST, 'grant_type');
-        if ($grant_type) {
-            $this->client_id=filter_input(INPUT_POST, 'client_id');
-            switch ($grant_type) {
-                case 'authorization_code':
-                    $this->requestPostAuthorizationCode();
-                    break;
-                case 'password':
-                    $this->requestPostPassword();
-                    break;
-                case 'client_credentials':
-                    $this->requestClientCredentials();
-                    break;
-                case 'refresh_token':
-                    $this->requestPostRefreshToken();
-                    break;
-                default:
-                    httpResponse::json(['error'=>'unsupported_response_type']);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private function requestGetCode() {
-        Session::grantAccess();
+    /**
+     * GET response_type=code
+     */
+    public function requestTypeCode($user, array $valid_scope=[]) {
         $client_id=filter_input(INPUT_GET, 'client_id');
         $redirect_uri=filter_input(INPUT_GET, 'redirect_uri');
         $scope=filter_input(INPUT_GET, 'scope');
+        $state=filter_input(INPUT_GET, 'state');
         $client=$this->fetchClient($client_id);
+        $response_state=($state!==false)?['state'=>$state]:['state'=>'test'];
+        if($redirect_uri!==false) {
+            $allow_uris=json_decode($client->redirect_uris);
+            if($allow_uris and array_search($redirect_uri, $allow_uris)===false) {
+                return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'redirect_uri is incorrect'],$response_state));
+            }
+        } else {
+            return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'redirect_uri is missing'],$response_state));
+        }
         if (!$client) {
-            httpResponse::showError('Неверный код клиента');
+            return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'client_id is incorrect'],$response_state));
         }
-        $allow_uris=json_decode($client->redirect_uris);
-        if(array_search($redirect_uri, $allow_uris)===false) {
-            httpResponse::showError('Адрес для перенаправления не яляется разрешённым.');
+        if($scope!==false) {
+            foreach (explode(',', $scope) as $item) {
+                if (array_search($item, $valid_scope)===false) {
+                    return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_scope', 'error_description'=>'The requested scope is invalid'],$response_state));
+                }
+            } 
+        } else {
+            $scope=null;
         }
-        $user_id=Session::getUserId();
-        #TODO отобразить диалог выбора прав доступа
-        $scope=User::checkScope($scope, $user_id);
         $code=$this->genCode();
-        $s=DB::prepare('INSERT INTO auth_tokens (client_id, user_id, code, scope) VALUES (?, ?, ?, ?)');
-        $s->execute([$client->id, $user_id, $code, $scope]);
-        $s->closeCursor();
-        $params=[
-            'code'=>$code,
-            'state'=>$this->state
-        ];
-        httpResponse::redirection($redirect_uri.'?'.http_build_query($params), 302, 'Found');
+        $this->storage->addCode($code, [$client->uuid, $user->getId(), $scope]);
+        return $redirect_uri.'?'.http_build_query(array_merge(['code'=>$code],$response_state));
     }
 
-    private function requestGetToken() {
-        httpResponse::showError('Запрос токена не реализован.');
+    /**
+     * GET response_type=token
+     */
+    public function requestTypeToken() {
+        throw new AppException('Запрос токена не реализован.', 405);
     }
 
-    private function requestPostAuthorizationCode() {
+    /**
+     * POST grant_type=authorization_code
+     */
+    public function grantTypeAuthorizationCode() {
         $code=filter_input(INPUT_POST, 'code');
         $redirect_uri=filter_input(INPUT_POST, 'redirect_uri');
-        $s=DB::prepare('SELECT t.code, t.scope, s.client_id, s.client_secret, CASE WHEN redirect_uris IS NULL THEN TRUE ELSE ?=ANY (s.redirect_uris) END AS safe_uri FROM auth_tokens t LEFT JOIN auth_server s ON t.client_id=s.id WHERE code=? AND access_token IS NULL');
-        $s->execute([$redirect_uri, $code]);
-        $auth_tokens=$s->fetch(PDO::FETCH_OBJ);
-        $s->closeCursor();
-        if (!$auth_tokens) {
-            httpResponse::json(['error'=>'invalid_grant']);
-        }
         $client_id=filter_input(INPUT_POST, 'client_id');
         $client_secret=filter_input(INPUT_POST, 'client_secret');
+        $client=$this->fetchClient($client_id);
+        if($redirect_uri!==false) {
+            $allow_uris=json_decode($client->redirect_uris);
+            if($allow_uris and array_search($redirect_uri, $allow_uris)===false) {
+                return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'redirect_uri is incorrect'],$response_state));
+            }
+        } else {
+            return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'redirect_uri is missing'],$response_state));
+        }
+        if (!$client) {
+            return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'client_id is incorrect'],$response_state));
+        }
+
+        
+        $s=DB::prepare('SELECT t.code, t.scope, s.client_id, s.client_secret, CASE WHEN redirect_uris IS NULL THEN TRUE ELSE ?=ANY (s.redirect_uris) END AS safe_uri FROM oauth_tokens t LEFT JOIN oauth_clients s ON t.client_uuid=s.uuid WHERE code=? AND access_token IS NULL');
+        $s->execute([$redirect_uri, $code]);
+        $auth_tokens=$s->fetchObject();
+        $s->closeCursor();
+        if (!$auth_tokens) {
+            throw new AppException('invalid_grant',400);
+        }
         if (
             $auth_tokens->client_id!=$client_id or
             $auth_tokens->client_secret!=$client_secret or!$auth_tokens->safe_uri
@@ -151,85 +147,62 @@ class Server {
             $s=DB::prepare('DELETE FROM auth_tokens WHERE code=?');
             $s->execute([$code]);
             $s->closeCursor();
-            httpResponse::json(['error'=>'invalid_grant']);
+            throw new AppException('invalid_grant',400);
         }
         $access_token=$this->genAccessToken();
         $refresh_token=$this->genRefreshToken();
-        $s=DB::prepare('UPDATE auth_tokens SET access_token=?, refresh_token=?, updated=NOW() WHERE code=? AND access_token IS NULL');
+        $s=DB::prepare('UPDATE oauth_tokens SET access_token=?, token_expires_on=NOW()+interval \''.self::ACCESS_TOKEN_EXPIRED_IN.' seconds\', refresh_token=?, updated=NOW() WHERE code=? AND access_token IS NULL');
         $s->execute([$access_token, $refresh_token, $code]);
-        $s->closeCursor();
-        httpResponse::json([
+        return [
             "access_token"=>$access_token,
             "token_type"=>"bearer",
             "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
             "refresh_token"=>$refresh_token,
             "scope"=>$auth_tokens->scope
-        ]);
+        ];
     }
 
-    private function requestPostPassword() {
-        $login=filter_input(INPUT_POST, 'username');
-        $password=filter_input(INPUT_POST, 'password');
-        $scope=filter_input(INPUT_POST, 'scope');
-        $user=User::authenticate($login,$password);
-        if(is_null($user)) {
-            Fail2Ban::addFail($login);
-            httpResponse::error(401);  
-        }
-        if(Fail2Ban::ipIsBlocked() or Fail2Ban::loginIsBlocked($login)) {
-            httpResponse::error(429);
-        }
-        $scope=User::checkScope($scope, $user->getId());
-        $code=$this->genCode();
-        $access_token=$this->genAccessToken();
-        $refresh_token=$this->genRefreshToken();
-        $s=DB::prepare('INSERT INTO auth_tokens (user_id, code, access_token, refresh_token, scope) VALUES (?,?,?,?,?)');
-        $s->execute([$user->getId(),$code, $access_token, $refresh_token,$scope]);
-        $s->closeCursor();        
-        httpResponse::json([
-            "access_token"=>$access_token,
-            "token_type"=>"bearer",
-            "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
-            "refresh_token"=>$refresh_token,
-            "scope"=>$scope
-        ]);
+    /**
+     * POST grant_type=password
+     */
+    public function grantTypePassword() {
+        throw new AppException('POST запрос grant_type=password не реализован.', 405);
     }
 
-    private function requestPostRefreshToken() {
+    /**
+     * POST grant_type=refresh_token
+     */
+    public function grantTypeRefreshToken() {
         $client_id=filter_input(INPUT_POST, 'client_id');
         $client_secret=filter_input(INPUT_POST, 'client_secret');
         $client=$this->fetchClient($client_id);
         if (!$client or $client->client_secret!=$client_secret) {
-            httpResponse::json(['error'=>'unauthorized_client']);
+            throw new AppException('unauthorized_client', 401);
         }
         $old_refresh_token=filter_input(INPUT_POST, 'refresh_token');
-        $scope=filter_input(INPUT_POST, 'scope'); #TODO ?
         $access_token=$this->genAccessToken();
         $refresh_token=$this->genRefreshToken();
-        $token=self::fetchTokensByRefreshToken($old_refresh_token);
+        $token=$this->fetchTokensByRefreshToken($old_refresh_token);
         if(!$token) {
-            httpResponse::json(['error'=>'invalid_grant']);            
+            throw new AppException('invalid_grant', 400);
         }
-        if(is_null($scope)) {
-            $s=DB::prepare('UPDATE auth_tokens SET access_token=?, updated=NOW(), refresh_token=? WHERE refresh_token=?');
-            $s->execute([$access_token, $refresh_token, $old_refresh_token]);
-        } else {
-            $scope=User::checkScope($scope, $token->user_id);
-            $s=DB::prepare('UPDATE auth_tokens SET access_token=?, updated=NOW(), refresh_token=?, scope=? WHERE refresh_token=?');
-            $s->execute([$access_token, $refresh_token, $scope, $old_refresh_token]);          
-        }
-        $s->closeCursor();
-        httpResponse::json([
+        $s=DB::prepare('UPDATE oauth_tokens SET access_token=?, token_expires_on=NOW()+interval \''.self::ACCESS_TOKEN_EXPIRED_IN.' seconds\', updated=NOW(), refresh_token=? WHERE refresh_token=? RETURNING scope');
+        $s->execute([$access_token, $refresh_token, $old_refresh_token]);
+        $scope=$s->fetchColumn();
+        return [
             "access_token"=>$access_token,
             "token_type"=>"bearer",
             "expires_in"=>self::ACCESS_TOKEN_EXPIRED_IN,
             "refresh_token"=>$refresh_token,
             "scope"=>$scope
-        ]);
+        ];
     }
 
-    private function requestPostClientCredentials() {
-        httpResponse::json(['error'=>'unsupported_response_type']);
+    /**
+     * POST grant_type=client_credentials
+     */
+    public function grantTypeClientCredentials() {
+        throw new AppException('Запрос ClientCredentials не реализован.', 405);
     }
 
     private function genCode(): string {
@@ -256,21 +229,21 @@ class Server {
     }
 
     private function fetchClient($client_id) {
-        $s=DB::prepare('SELECT id, client_id, client_secret, array_to_json(redirect_uris) AS redirect_uris, user_id FROM auth_server WHERE client_id=?');
+        $s=DB::prepare('SELECT uuid, client_id, client_secret, array_to_json(redirect_uris) AS redirect_uris FROM oauth_clients WHERE client_id=?');
         $s->execute([$client_id]);
-        return $s->fetch(PDO::FETCH_OBJ);
+        return $s->fetchObject();
     }
     
     public static function fetchTokensByAccessToken($access_token) {
-        $s=DB::prepare('SELECT *, (updated+expires_in<NOW()) AS expired FROM auth_tokens WHERE access_token=?');
+        $s=DB::prepare('SELECT *, (updated_on<NOW()) AS expired FROM oauth_tokens WHERE access_token=?');
         $s->execute([$access_token]);
-        return $s->fetch(PDO::FETCH_OBJ);
+        return $s->fetchObject();
     }
 
-    public static function fetchTokensByRefreshToken($refresh_token) {
-        $s=DB::prepare('SELECT * FROM auth_tokens WHERE refresh_token=?');
+    public function fetchTokensByRefreshToken($refresh_token) {
+        $s=DB::prepare('SELECT * FROM oauth_tokens WHERE refresh_token=?');
         $s->execute([$refresh_token]);
-        return $s->fetch(PDO::FETCH_OBJ);
+        return $s->fetchObject();
     }
     
     public static function refreshAccessToken($old_access_token) {
@@ -278,8 +251,8 @@ class Server {
         $refresh_token=$this->genRefreshToken();
         $s=DB::prepare('UPDATE auth_tokens SET access_token=?, updated=NOW() WHERE access_token=?');
         $s->execute([$access_token, $refresh_token, $old_access_token]);
-        if ($s->rowCount()!=1) {
-            httpResponse::json(['error'=>'invalid_grant']);
+        if ($s->rowCount()==0) {
+            throw new AppException('invalid_grant', 400);
         }        
     }
 
