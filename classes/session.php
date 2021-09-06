@@ -59,9 +59,10 @@ class Session {
     }
 
     private function __construct() {
-        $name=getenv('APP_NAME')?getenv('APP_NAME'):'neuron';
-        $this->cookie_session=$name.'_session';
-        $this->cookie_token=$name.'_token';
+        $app_name=getenv('APP_NAME')?getenv('APP_NAME'):'neuron';
+        $name=getenv('SESSION_NAME')?getenv('SESSION_NAME').'_':'';
+        $this->cookie_session=$name.'session';
+        $this->cookie_token=$name.'token';
         $this->cookie_time=getenv('SESSION_TIME')?getenv('SESSION_TIME'):2592000;
         $this->cookie_params=[
             'path'=>getenv('SESSION_PATH')?getenv('SESSION_PATH'):'/',
@@ -70,7 +71,189 @@ class Session {
             'httponly'=>true,
             'samesite'=>'Strict'
         ];
-        $this->session_storage=new class ($name) {
+        $this->session_storage=$this->getSessionSrotrage($app_name);
+        session_name($this->cookie_session);
+        session_set_cookie_params($this->cookie_params);
+        $session_cookie=filter_input(INPUT_COOKIE, $this->cookie_session);
+        if ($session_cookie) {
+            $this->phpSessionStart();
+            if (isset($_SESSION[self::REVOKE_TOKEN])) {
+                $this->revokeToken($_SESSION[self::REVOKE_TOKEN]);
+                unset($_SESSION[self::REVOKE_TOKEN]);
+            }
+            if (isset($_SESSION[self::USER])) {
+                $this->user=$_SESSION[self::USER];
+            }
+            if ($this->user) {
+                $this->phpSessionCommit();
+                return;
+            }
+            if ($this->restorePhpSession()) {
+                return;
+            }
+            $this->phpSessionCookieDrop();
+            $this->sessionCookieDrop();
+            unset($_SESSION[self::USER]);
+            $this->phpSessionCommit();
+            return;
+        }
+        if ($this->restorePhpSession()) {
+            return;
+        }
+    }
+
+    private function revokeToken($token) {
+        $current_token=filter_input(INPUT_COOKIE, $this->cookie_token);
+        foreach($this->session_storage->revokeGet($token) as $revoke_token) {
+            if($revoke_token!=$current_token) {
+                $this->session_storage->del($revoke_token);
+            }
+        }
+        $this->session_storage->del($token);
+        $this->session_storage->revokeDel($token);
+    }
+
+    private function restorePhpSession() {
+        $token=filter_input(INPUT_COOKIE, $this->cookie_token);
+        if (!$token) {
+            return false;
+        }
+        $session=$this->session_storage->get($token);
+        if (!$session) {
+            $this->sessionCookieDrop();
+            return false;
+        }
+        if(isset($session->old_token)) {
+            $this->revokeToken($session->old_token);
+            unset($session->old_token);
+            $this->session_storage->set($token, $session, $this->cookie_time);
+        }
+        if(!isset($session->class) or !isset($session->args)) {
+            $this->sessionCookieDrop();
+            $this->session_storage->del($token);
+            return false;
+        }
+        $class_name=$session->class;
+        $user=new $class_name(...$session->args);
+        if (!$user->validate()) {
+            $this->sessionCookieDrop();
+            $this->session_storage->del($token);
+            return false;
+        }
+        $this->phpSessionStart();
+        $this->user=$user;
+        $_SESSION[self::USER]=$user;
+        $_SESSION[self::REVOKE_TOKEN]=$token;
+        $this->phpSessionCommit();
+        $new_token=$this->generateRandomString();
+        $this->session_storage->revokeAdd($token, $new_token, $this->cookie_time);
+        $this->session_storage->set($new_token, ['old_token'=>$token, 'class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
+        $this->sessionCookieSet($new_token);
+        return true;
+    }
+
+    private function login($user) {
+        $old_token=filter_input(INPUT_COOKIE, $this->cookie_token);
+        if ($old_token) {
+            $this->session_storage->del($old_token);
+        }
+        $this->phpSessionStart();
+        $this->user=$user;
+        $_SESSION[self::USER]=$user;
+        $_SESSION[self::USER.'2']=$user;
+        $this->phpSessionCommit();
+        $token=$this->generateRandomString();
+        $this->session_storage->set($token, ['class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
+        $this->sessionCookieSet($token);
+    }
+
+    private function logout() {
+        $this->user=null;
+        $session_cookie=filter_input(INPUT_COOKIE, $this->cookie_session);
+        if ($session_cookie) {
+            $this->phpSessionStart();
+            $_SESSION=[];
+            $this->phpSessionCommit();
+            $this->phpSessionCookieDrop();
+        }
+        $token=filter_input(INPUT_COOKIE, $this->cookie_token);
+        if ($token) {
+            $this->session_storage->del($token);
+            $this->sessionCookieDrop();
+        }
+    }
+
+    private function checkAccess(?array $scope): bool {
+        if (is_null($this->user)) {
+            return false;
+        }
+        if (is_null($scope)) {
+            return true;
+        }
+        if(getenv('APP_ADMINS')) {
+            $admins=explode(',', getenv('APP_ADMINS'));
+            if (array_search($this->user->login, $admins)!==false) {
+                return true;
+            }
+        }
+        if (isset($this->user->scope)) {
+            foreach ($scope AS $item) {
+                if (array_search($item, $this->user->scope)!==false) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private function generateRandomString(int $length=32): string {
+        $symbols='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
+        $max_index=strlen($symbols)-1;
+        $string='';
+        for ($i=0; $i<$length; $i++) {
+            $string.=$symbols[rand(0, $max_index)];
+        }
+        return $string;
+    }
+
+    private function phpSessionStart() {
+        if (session_status()==PHP_SESSION_ACTIVE) {
+            return;
+        }
+        if (!session_start()) {
+            throw new AppException('session_start() failed');
+        }
+    }
+
+    private function phpSessionCommit() {
+        if (session_status()!=PHP_SESSION_ACTIVE) {
+            return;
+        }
+        if (!session_commit()) {
+            throw new AppException('session_commit() failed');
+        }
+    }
+
+    private function phpSessionCookieDrop(): void {
+        $params=$this->cookie_params;
+        $params['expires']=1;
+        setcookie($this->cookie_session, '', $params);
+    }
+
+    private function sessionCookieSet(string $token): void {
+        $params=$this->cookie_params;
+        $params['expires']=time()+$this->cookie_time;
+        setcookie($this->cookie_token, $token, $params);
+    }
+
+    private function sessionCookieDrop(): void {
+        $params=$this->cookie_params;
+        $params['expires']=1;
+        setcookie($this->cookie_token, '', $params);
+    }
+
+    private function getSessionSrotrage($name) {
+        return new class ($name) {
             private $name;
 
             public function __construct($name) {
@@ -111,176 +294,6 @@ class Session {
                 DBRedis::del($this->name.':session:revoke:'.$token);
             }
         };
-        session_name($this->cookie_session);
-        session_set_cookie_params($this->cookie_params);
-        $session_cookie=filter_input(INPUT_COOKIE, $this->cookie_session);
-        if ($session_cookie) {
-            $this->phpSessionStart();
-            if(isset($_SESSION[self::REVOKE_TOKEN])) {
-                $this->revokeToken($_SESSION[self::REVOKE_TOKEN]);
-                unset($_SESSION[self::REVOKE_TOKEN]);
-            }
-            if ($this->getPhpSessionUser()) {
-                session_commit();
-                return;
-            }
-            if ($this->restorePhpSession()) {
-                session_commit();
-                return;
-            }
-            $this->dropPhpSessionCookie();
-            $this->dropLongSessionCookie();
-            unset($_SESSION[self::USER]);
-            session_commit();
-            return;
-        }
-        if ($this->restorePhpSession()) {
-            $_SESSION[self::REVOKE_TOKEN]=filter_input(INPUT_COOKIE, $this->cookie_token);
-            session_commit();
-            return;
-        }
-    }
-
-    private function getPhpSessionUser(): bool {
-        if (isset($_SESSION[self::USER])) {
-            $this->user=$_SESSION[self::USER];
-            return true;
-        }
-        return false;
-    }
-
-    private function revokeToken($token) {
-        $current_token=filter_input(INPUT_COOKIE, $this->cookie_token);
-        foreach($this->session_storage->revokeGet($token) as $revoke_token) {
-            if($revoke_token!=$current_token) {
-                $this->session_storage->del($revoke_token);
-            }
-        }
-        $this->session_storage->del($token);
-        $this->session_storage->revokeDel($token);
-    }
-
-    private function restorePhpSession() {
-        $token=filter_input(INPUT_COOKIE, $this->cookie_token);
-        if (!$token) {
-            return false;
-        }
-        $session=$this->session_storage->get($token);
-        if (!$session) {
-            $this->dropLongSessionCookie();
-            return false;
-        }
-        if(isset($session->old_token)) {
-            $this->revokeToken($session->old_token);
-        }
-        if(!isset($session->class) or !isset($session->args)) {
-            $this->session_storage->del($token);
-            $this->dropLongSessionCookie();
-            return false;
-        }
-        $class_name=$session->class;
-        $user=new $class_name(...$session->args);
-        if (!$user->validate()) {
-            $this->session_storage->del($token);
-            $this->dropLongSessionCookie();
-            return false;
-        }
-        $this->phpSessionStart();
-        $this->user=$user;
-        $_SESSION[self::USER]=$user;
-        $_SESSION[self::REVOKE_TOKEN]=$token;
-        $new_token=$this->generateRandomString();
-        $this->session_storage->revokeAdd($token, $new_token, $this->cookie_time);
-        $this->session_storage->set($new_token, ['old_token'=>$token, 'class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
-        $this->setCookie($new_token);
-        return true;
-    }
-
-    private function login($user) {
-        $old_token=filter_input(INPUT_COOKIE, $this->cookie_token);
-        if ($old_token) {
-            $this->session_storage->del($old_token);
-        }
-        $this->phpSessionStart();
-        $this->user=$user;
-        $_SESSION[self::USER]=$user;
-        session_commit();
-        $token=$this->generateRandomString();
-        $this->session_storage->set($token, ['class'=>get_class($user), 'args'=>$user->getConstructorArgs(), 'browser'=>getenv('HTTP_USER_AGENT'), 'ip'=>getenv('REMOTE_ADDR')], $this->cookie_time);
-        $this->setCookie($token);
-    }
-
-    private function logout() {
-        $this->user=null;
-        $session_cookie=filter_input(INPUT_COOKIE, $this->cookie_session);
-        if ($session_cookie) {
-            $this->phpSessionStart();
-            unset($_SESSION[self::USER]);
-            session_commit();
-        }
-        $this->dropPhpSessionCookie();
-        $token=filter_input(INPUT_COOKIE, $this->cookie_token);
-        if ($token) {
-            $this->session_storage->del($token);
-            $this->dropLongSessionCookie();
-        }
-    }
-
-    private function checkAccess(?array $scope): bool {
-        if (is_null($this->user)) {
-            return false;
-        }
-        if (is_null($scope)) {
-            return true;
-        }
-        if(getenv('APP_ADMINS')) {
-            $admins=explode(',', getenv('APP_ADMINS'));
-            if (array_search($this->user->login, $admins)!==false) {
-                return true;
-            }
-        }
-        if (isset($this->user->scope)) {
-            foreach ($scope AS $item) {
-                if (array_search($item, $this->user->scope)!==false) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private function generateRandomString(int $length=32): string {
-        $symbols='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
-        $max_index=strlen($symbols)-1;
-        $string='';
-        for ($i=0; $i<$length; $i++) {
-            $string.=$symbols[rand(0, $max_index)];
-        }
-        return $string;
-    }
-
-    private function setCookie(string $token): void {
-        $params=$this->cookie_params;
-        $params['expires']=time()+$this->cookie_time;
-        setcookie($this->cookie_token, $token, $params);
-    }
-
-    private function phpSessionStart() {
-        if (!session_start()) {
-            throw new AppException('session_start() failed');
-        }
-    }
-
-    private function dropLongSessionCookie(): void {
-        $params=$this->cookie_params;
-        $params['expires']=1;
-        setcookie($this->cookie_token, '', $params);
-    }
-
-    private function dropPhpSessionCookie(): void {
-        $params=$this->cookie_params;
-        $params['expires']=1;
-        setcookie($this->cookie_session, '', $params);
     }
 
 }
