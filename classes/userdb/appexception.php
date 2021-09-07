@@ -1,6 +1,6 @@
 <?php
 
-namespace Auth;
+namespace UserDB;
 
 class AppException extends \Exception {
     
