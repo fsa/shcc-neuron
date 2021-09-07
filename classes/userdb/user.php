@@ -2,8 +2,7 @@
 
 namespace UserDB;
 
-use DB,
-    PDOStatement;
+use DB;
 
 class User {
 
@@ -23,7 +22,7 @@ class User {
         return new self($user->uuid);
     }
 
-    public static function stmtGetAll(): PDOStatement {
+    public static function stmtGetAll(): \PDOStatement {
         $s=DB::query('SELECT * FROM users ORDER BY login');
         return $s;
     }
@@ -47,10 +46,6 @@ class User {
         return $this->uuid;
     }
 
-    public function getUuid() {
-        return $this->uuid;
-    }
-
     public function getLogin() {
         return $this->login;
     }
@@ -61,6 +56,10 @@ class User {
 
     public function getEmail() {
         return $this->email;
+    }
+
+    public function getScope() {
+        return $this->scope;
     }
 
     public function validate() {
