@@ -1,8 +1,5 @@
 <?php
 
-use DBRedis,
-    AppException;
-
 class Session {
 
     private static $_session;
@@ -36,7 +33,7 @@ class Session {
         if ($session->checkAccess($scope)) {
             return;
         }
-        if (is_null($session->user)) {
+        if (is_null($session->session)) {
             throw new AppException(null, 401);
         }
         throw new AppException(null, 403);
