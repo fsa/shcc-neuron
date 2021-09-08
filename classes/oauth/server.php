@@ -4,7 +4,7 @@
  * OAuth 2.0 Server
  */
 
-namespace Auth;
+namespace OAuth;
 
 use DB,
     DBRedis;

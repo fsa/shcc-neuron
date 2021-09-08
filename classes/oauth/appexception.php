@@ -1,6 +1,6 @@
 <?php
 
-namespace Auth;
+namespace OAuth;
 
 class AppException extends \Exception {
     
