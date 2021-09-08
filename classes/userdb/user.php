@@ -70,4 +70,32 @@ class User {
         return [$this->uuid];
     }
 
+    #Fail2ban
+    public static function addFail($login) {
+        $ip=getenv('REMOTE_ADDR');
+        $s=DB::prepare('INSERT INTO user_fail2ban (login, ip, fail_time) VALUES (?,?,NOW())');
+        $s->execute([$login, $ip]);
+    }
+
+    public static function ipIsBlocked(): bool {
+        $ip=getenv('REMOTE_ADDR');
+        $s=DB::prepare("SELECT count(*) FROM user_fail2ban WHERE fail_time+INTERVAL '5 minutes'>NOW() AND ip=?");
+        $s->execute([$ip]);
+        $count=$s->fetch(PDO::FETCH_COLUMN);
+        if ($count>50) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function loginIsBlocked($login): bool {
+        $s=DB::prepare("SELECT count(*) FROM user_fail2ban WHERE fail_time+INTERVAL '5 minutes'>NOW() AND login=?");
+        $s->execute([$login]);
+        $count=$s->fetch(PDO::FETCH_COLUMN);
+        if ($count>500) {
+            return true;
+        }
+        return false;
+    }
+
 }

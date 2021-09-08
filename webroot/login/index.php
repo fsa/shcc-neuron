@@ -1,7 +1,8 @@
 <?php
 
 require_once '../common.php';
-if (Auth\Fail2Ban::ipIsBlocked()) {
+$fail2ban=getenv('FAIL2BAN')!==false;
+if ($fail2ban and UserDB\User::ipIsBlocked()) {
     httpResponse::showError('Ваш IP заблокирован');
     exit;
 }
@@ -11,13 +12,15 @@ if ($login===false and $password===false) {
     httpResponse::showLoginForm('/');
     exit;
 }
-if (Auth\Fail2Ban::loginIsBlocked($login)) {
+if ($fail2ban and UserDB\User::loginIsBlocked($login)) {
     httpResponse::showError('Пользователь заблокирован');
     exit;
 }
 $user=UserDB\User::login($login, $password);
 if (!$user) {
-    Auth\Fail2Ban::addFail($login);
+    if($fail2ban) {
+        UserDB\User::addFail($login);
+    }
     httpResponse::showError('Неверное имя пользователя или пароль!');
     exit;
 }
