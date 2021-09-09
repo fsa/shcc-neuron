@@ -3,13 +3,12 @@
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/get-devices-docpage/
  */
 if(!isset($request_id)) {die;}
-Auth\Server::grantAccess();
+OAuth\Server::grantAccess();
 $user_id='anonymous';
-$yandex_devices=Yandex\SmartHome\Devices::get(Auth\Server::getUserId());
+$yandex_devices=Yandex\SmartHome\Devices::get();
 $devices=[];
-while ($device=$yandex_devices->fetch()) {
-    $smarthome_device=\SmartHome\Devices::get($device->unique_name);
-    $entity=new \Yandex\SmartHome\DeviceInfo($device->uid);
+while ($device=$yandex_devices->fetchObject()) {
+    $entity=new \Yandex\SmartHome\DeviceInfo($device->uuid);
     $entity->setName($device->name);
     #$entity->setRoom($device->room);
     $entity->setType($device->type);

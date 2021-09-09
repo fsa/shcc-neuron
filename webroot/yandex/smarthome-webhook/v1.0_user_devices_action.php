@@ -3,7 +3,7 @@
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/post-action-docpage/
  */
 if (!isset($request_id)) {die;}
-\Auth\Server::grantAccess();
+OAuth\Server::grantAccess();
 $request=json_decode($request_content);
 $devices=[];
 foreach ($request->payload->devices as $device) {
