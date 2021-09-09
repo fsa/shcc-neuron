@@ -192,11 +192,8 @@ class httpResponse {
         exit;
     }
 
-    public static function errorJson($code, $response, $message=null, $options=JSON_UNESCAPED_UNICODE) {
-        if (is_null($message)) {
-            $message=self::HTTP_STATUS_CODES[$code];
-        }
-        header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, $message), true, $code);
+    public static function errorJson($code, $response, $options=JSON_UNESCAPED_UNICODE) {
+        header(sprintf('%s %d %s', getenv('SERVER_PROTOCOL'), $code, self::HTTP_STATUS_CODES[$code]), true, $code);
         header('Content-Type: application/json;charset=UTF-8');
         header('Cache-Control: no-store');
         header('Pragma: no-cache');
@@ -269,7 +266,8 @@ class httpResponse {
                 case 404:
                 case 405:
                 case 429:
-                    self::error($ex->getCode(), $ex->getMessage());
+                    self::errorJson($ex->getCode(), $ex->getMessage());
+                    exit;
             }
             self::json(['error'=>'Server error: '.$ex->getMessage()]);
             exit;
