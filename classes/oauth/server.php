@@ -54,7 +54,7 @@ class Server {
     /**
      * GET response_type=code
      */
-    public function requestTypeCode($user_id, array $valid_scope=[]) {
+    public function requestTypeCode($user_id, array $valid_scope=null) {
         $client_id=filter_input(INPUT_GET, 'client_id');
         $redirect_uri=filter_input(INPUT_GET, 'redirect_uri');
         $scope=filter_input(INPUT_GET, 'scope');
@@ -72,12 +72,12 @@ class Server {
         if (!$client) {
             return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_request', 'error_description'=>'client_id is incorrect'],$response_state));
         }
-        if($scope!==false) {
+        if(!is_null($valid_scope) and $scope) {
             foreach (explode(',', $scope) as $item) {
                 if (array_search($item, $valid_scope)===false) {
                     return $redirect_uri.'?'.http_build_query(array_merge(['error'=>'invalid_scope', 'error_description'=>'The requested scope is invalid'],$response_state));
                 }
-            } 
+            }
         } else {
             $scope=null;
         }
