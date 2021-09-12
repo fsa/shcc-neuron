@@ -42,8 +42,7 @@ class Server {
             header('WWW-Authenticate: Bearer realm="'.self::$realm.'"');
             throw new AppException('The access token required', 401);
         }
-        $storage=self::getStorage(getenv('APP_NAME')?getenv('APP_NAME'):'neuron');
-        $token_info=$storage->getAccessToken($list[1]);
+        $token_info=(new self)->storage->getAccessToken($list[1]);
         if (!$token_info) {
             header('WWW-Authenticate: Bearer realm="'.self::$realm.'",error="invalid_token",error_description="Invalid access token"');
             throw new AppException('Invalid access token', 401);

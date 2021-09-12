@@ -197,7 +197,11 @@ class httpResponse {
         header('Content-Type: application/json;charset=UTF-8');
         header('Cache-Control: no-store');
         header('Pragma: no-cache');
-        echo json_encode($response, $options);
+        if(is_string($response)) {
+            echo $response;
+        } else {
+            echo json_encode($response, $options);
+        }
         exit;
     }
 
