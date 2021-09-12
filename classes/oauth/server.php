@@ -18,28 +18,48 @@ class Server {
     private $storage;
 
     public static $client;
+    private static $realm;
+
+    public static function setRealm($realm) {
+        self::$realm=$realm;
+    }
 
     public static function grantAccess(array $scope=null): void {
+        if(!self::$realm) {
+            self::$realm=getenv('APP_NAME')?getenv('APP_NAME'):'neuron';
+        }
         $bearer=getenv('HTTP_AUTHORIZATION');
-        if (!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
-            header('WWW-Authenticate: Bearer realm="The access token required"');
+        if(!$bearer) {
+            header('WWW-Authenticate: Bearer realm="'.self::$realm.'"');
+            throw new AppException('Unauthorized', 401);
+        }
+        $list=explode(' ', $bearer);
+        if(sizeof($list)!=2) {
+            header('WWW-Authenticate: Bearer realm="'.self::$realm.'"');
+            throw new AppException('Unauthorized', 401);
+        }
+        if(!strcasecmp($bearer, 'Bearer')) {
+            header('WWW-Authenticate: Bearer realm="'.self::$realm.'"');
             throw new AppException('The access token required', 401);
         }
         $storage=self::getStorage(getenv('APP_NAME')?getenv('APP_NAME'):'neuron');
-        $token_info=$storage->getAccessToken($matches[1]);
+        $token_info=$storage->getAccessToken($list[1]);
         if (!$token_info) {
-            header('WWW-Authenticate: Bearer error="invalid_token",error_description="Invalid access token"');
+            header('WWW-Authenticate: Bearer realm="'.self::$realm.'",error="invalid_token",error_description="Invalid access token"');
             throw new AppException('Invalid access token', 401);
         }
-        if(!is_null($scope)) {
-            foreach(explode(',', $token_info->scope) as $item) {
-                if(array_search($item, $scope)===false) {
-                    header('WWW-Authenticate: Bearer error="insufficient_scope",error_description="The request requires higher privileges than provided by the access token."');
-                    throw new AppException('The request requires higher privileges than provided by the access token.', 403);
-                }
+        if(is_null($scope)) {
+            self::$client=$token_info;
+            return;
+        }
+        foreach(explode(',', $token_info->scope) as $item) {
+            if(array_search($item, $scope)!==false) {
+                self::$client=$token_info;
+                return;
             }
         }
-        self::$client=$token_info;
+        header('WWW-Authenticate: Bearer realm="'.self::$realm.'",error="insufficient_scope",error_description="The request requires higher privileges than provided by the access token."');
+        throw new AppException('The request requires higher privileges than provided by the access token.', 403);
     }
 
     public static function getUserId() {
