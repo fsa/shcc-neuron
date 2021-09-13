@@ -3,7 +3,7 @@
 if (sizeof($argv)!=2) {
     die('Usage: '.$argv[0].' module_name'.PHP_EOL);
 }
-set_include_path(__DIR__.'/../classes/');
+set_include_path(__DIR__.'/../webroot/classes/');
 spl_autoload_extensions('.php');
 spl_autoload_register();
 $module=$argv[1];
