@@ -283,7 +283,7 @@ class httpResponse {
 
     # Подключение обработчиков ошибок
 
-    public static function setExceptionHandler() {
+    public static function setHtmlExceptionHandler() {
         set_exception_handler([__CLASS__, 'HtmlPageException']);
     }
 

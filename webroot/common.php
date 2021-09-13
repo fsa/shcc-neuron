@@ -5,8 +5,8 @@ spl_autoload_extensions('.php');
 spl_autoload_register();
 ini_set('syslog.filter', 'raw');
 openlog("shcc", LOG_PID | LOG_ODELAY, LOG_USER);
-if($tz=getenv('TZ')) {
-    date_default_timezone_set($tz);
+if(getenv('TZ')) {
+    date_default_timezone_set(getenv('TZ'));
 }
-httpResponse::setExceptionHandler();
+httpResponse::setHtmlExceptionHandler();
 httpResponse::setContext(Settings::get('site', ['title'=>'SHCC']));
