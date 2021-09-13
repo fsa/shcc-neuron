@@ -10,7 +10,7 @@ class Settings {
     }
 
     private function __construct() {
-        $this->settings=require __DIR__.'/../settings.php';
+        $this->settings=require __DIR__.'/../../settings.php';
     }
 
     public static function getInstance() {
