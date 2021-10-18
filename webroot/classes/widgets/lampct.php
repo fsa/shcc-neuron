@@ -5,7 +5,7 @@ namespace Widgets;
 use httpResponse;
 
 class LampCT {
-    public function show($title, $device_name) {
+    public static function show($title, $device_name) {
         $body=<<< EOS
 <label for="{$device_name}_bright">Яркость</label>
 <input type="range" class="form-range action-integer" min="1" max="100" device_name="{$device_name}" device_property="bright" id="{$device_name}_bright">
