@@ -2,7 +2,7 @@
     "name": "shcc",
     "version": "0.6.0",
     "description": "Контроллер умного дома SHCC",
-    "homepage": "https://github.com/fsa/shcc",
+    "homepage": "https://shcc.ru",
     "bugs": {
         "email": "support@tavda.net"
     },
@@ -30,11 +30,6 @@
         "gulp-postcss": "^9.0.1",
         "gulp-rename": "^2.0.0",
         "highcharts": "^9.2.2",
-        "jquery": "^3.6.0",
-        "jstree": "^3.3.12",
-        "masonry-layout": "^4.2.2",
-        "popper.js": "^1.16.1",
         "postcss": "^8.3.9"
-    },
-    "dependencies": {}
+    }
 }
