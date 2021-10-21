@@ -129,11 +129,14 @@ function createChart(unit) {
                 }
             },
             series: {
-                showInNavigator: true
+                showInNavigator: false
             }
         },
         legend: {
             enabled: true
+        },
+        navigator: {
+            enabled: false
         }
     });
     unit.sensors.forEach((item, i) => {
