@@ -2,6 +2,7 @@
 /settings.php
 /config/*.conf
 /src/node_modules/*
+/src/package-lock.json
 /logs/*
 /custom/*
 !/custom/backup/
