@@ -24,25 +24,20 @@ Highcharts.setOptions({
     colors: colors
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    let list_element = document.querySelector('#charts_list');
-    sensors.forEach((sensor, id) => {
-        let unit = sensor.name;
-        list_element.innerHTML += `<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${unit}</a></li>`;
-    });
-    refreshPage(Number.parseInt(location.hash.substring(1)));
-});
-window.addEventListener('hashchange', () => {
+document.addEventListener('DOMContentLoaded', initPage);
+addEventListener('hashchange', () => {
     location.reload();
 });
 
-function refreshPage(chart_id) {
+function initPage() {
+    let list_element = document.querySelector('#charts_list');
+    let chart_id = Number.parseInt(location.hash.substring(1));
     if (!chart_id) {
         chart_id = 0;
     }
-    if (chart_id > sensors.length) {
-        alert('Неверный адрес страницы');
-    }
+    configs.forEach((config, id) => {
+        list_element.innerHTML += `<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${config.name}</a></li>`;
+    });
     document.querySelectorAll(`[sensor_id]`).forEach(item => {
         if (item.getAttribute('sensor_id') == chart_id) {
             item.classList.add('active');
@@ -50,8 +45,10 @@ function refreshPage(chart_id) {
             item.classList.remove('active');
         }
     });
-    if (sensors[chart_id]) {
-        createChart(sensors[chart_id]);
+    if (configs[chart_id]) {
+        createChart(configs[chart_id]);
+    } else {
+        alert('Неверный адрес страницы');
     }
 }
 
@@ -61,8 +58,8 @@ function HtmlDecode(s) {
     return el.innerText;
 }
 
-function createChart(unit) {
-    let units = HtmlDecode(unit.unit);
+function createChart(config) {
+    let units = HtmlDecode(config.unit);
     chart = Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
@@ -139,7 +136,7 @@ function createChart(unit) {
             enabled: false
         }
     });
-    unit.sensors.forEach((item, i) => {
+    config.sensors.forEach((item, i) => {
         fetch(`/api/history/?uid=${item}`)
             .then(response => {
                 if (response.status === 200) {
