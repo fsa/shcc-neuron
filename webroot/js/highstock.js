@@ -30,13 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let unit=sensor.name;
         list_element.innerHTML+=`<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${unit}</a></li>`;
     });
-    document.querySelectorAll('[sensor_id]').forEach(item => {
-        item.addEventListener('click', (e) => {
-            refreshPage(item.getAttribute('sensor_id'));
-            return true;
-        });
-    });
     refreshPage(location.hash.substr(1));
+});
+window.addEventListener('hashchange', () => {
+    location.reload();
 });
 
 function refreshPage(chart_id) {
