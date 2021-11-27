@@ -1,5 +1,5 @@
 `use strict`;
-const colors=['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
+const colors = ['#527779', '#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'];
 
 Highcharts.setOptions({
     lang: {
@@ -25,42 +25,45 @@ Highcharts.setOptions({
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    let list_element=document.querySelector('#charts_list');
+    let list_element = document.querySelector('#charts_list');
     sensors.forEach((sensor, id) => {
-        let unit=sensor.name;
-        list_element.innerHTML+=`<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${unit}</a></li>`;
+        let unit = sensor.name;
+        list_element.innerHTML += `<li class="nav-item"><a class="nav-link" sensor_id="${id}" href="#${id}">${unit}</a></li>`;
     });
-    refreshPage(location.hash.substr(1));
+    refreshPage(Number.parseInt(location.hash.substring(1)));
 });
 window.addEventListener('hashchange', () => {
     location.reload();
 });
 
 function refreshPage(chart_id) {
-    if(!chart_id) {
-        chart_id=0;
+    if (!chart_id) {
+        chart_id = 0;
+    }
+    if (chart_id > sensors.length) {
+        alert('Неверный адрес страницы');
     }
     document.querySelectorAll(`[sensor_id]`).forEach(item => {
-        if(item.getAttribute('sensor_id')==chart_id) {
+        if (item.getAttribute('sensor_id') == chart_id) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
         }
     });
-    if(sensors[chart_id]) {
+    if (sensors[chart_id]) {
         createChart(sensors[chart_id]);
     }
 }
 
 function HtmlDecode(s) {
-  const el = document.createElement("div");
-  el.innerHTML = s;
-  return el.innerText;
+    const el = document.createElement("div");
+    el.innerHTML = s;
+    return el.innerText;
 }
 
 function createChart(unit) {
-    let units=HtmlDecode(unit.unit);
-    chart=Highcharts.stockChart('chart', {
+    let units = HtmlDecode(unit.unit);
+    chart = Highcharts.stockChart('chart', {
         rangeSelector: {
             selected: 0,
             buttons: [{
@@ -75,7 +78,7 @@ function createChart(unit) {
                 type: 'day',
                 count: 6,
                 text: '6д'
-            },{
+            }, {
                 type: 'month',
                 count: 1,
                 text: '1м'
@@ -99,7 +102,7 @@ function createChart(unit) {
             type: 'datetime',
             crosshair: {
                 enabled: true,
-                        color: '#00572b'
+                color: '#00572b'
             },
             ordinal: false,
             max: new Date().getTime()
@@ -107,7 +110,7 @@ function createChart(unit) {
         yAxis: {
             labels: {
                 formatter: function () {
-                return this.value + ' ' + units;
+                    return this.value + ' ' + units;
                 }
             }
         },
@@ -138,15 +141,15 @@ function createChart(unit) {
     });
     unit.sensors.forEach((item, i) => {
         fetch(`/api/history/?uid=${item}`)
-        .then(response => {
-            if (response.status === 200) {
-                return response.json();
-            }
-        }).then(sensor => {
-            if(sensor.data && sensor.data.length>0) {
-                sensor.color=colors[i];
-                chart.addSeries(sensor);
-            }
-        });
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            }).then(sensor => {
+                if (sensor.data && sensor.data.length > 0) {
+                    sensor.color = colors[i];
+                    chart.addSeries(sensor);
+                }
+            });
     });
 };
