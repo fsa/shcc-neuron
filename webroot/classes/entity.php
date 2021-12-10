@@ -61,7 +61,8 @@ abstract class Entity {
 
 
     public function inputPostChecboxArray($param) {
-        $this->$param=array_keys(filter_input(INPUT_POST, $param, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
+        $values= filter_input(INPUT_POST, $param, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+        $this->$param=is_array($values)?array_keys($values):null;
     }
 
     public static function getEntity($param, $method=INPUT_POST): self {
