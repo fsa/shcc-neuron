@@ -197,60 +197,60 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         return $this->sendCommand('get_prop', $params);
     }
 
-    public function sendSetCtAbx(int $ct_value, int $duratin=0): int {
-        return $this->sendCommand('set_ct_abx', [$ct_value, $this->getEffect($duratin), $duratin]);
+    public function sendSetCtAbx(int $ct_value, int $duration=0): int {
+        return $this->sendCommand('set_ct_abx', [$ct_value, $this->getEffect($duration), $duration]);
     }
 
     /**
      * 
      * @param int $ct_value цветовая температура (1700-6500К)
-     * @param int $duratin
+     * @param int $duration
      * @return int
      */
-    public function sendBgSetCtAbx(int $ct_value, int $duratin=0): int {
-        return $this->sendCommand('bg_set_ct_abx', [$ct_value, $this->getEffect($duratin), $duratin]);
+    public function sendBgSetCtAbx(int $ct_value, int $duration=0): int {
+        return $this->sendCommand('bg_set_ct_abx', [$ct_value, $this->getEffect($duration), $duration]);
     }
 
-    public function sendSetRGB(string $rgb, int $duratin=0): int {
-        return $this->sendCommand('set_rgb', [hexdec($rgb), $this->getEffect($duratin), $duratin]);
+    public function sendSetRGB(string $rgb, int $duration=0): int {
+        return $this->sendCommand('set_rgb', [hexdec($rgb), $this->getEffect($duration), $duration]);
     }
 
-    public function sendBgSetRGB(string $rgb, int $duratin=0): int {
-        return $this->sendCommand('bg_set_rgb', [hexdec($rgb), $this->getEffect($duratin), $duratin]);
+    public function sendBgSetRGB(string $rgb, int $duration=0): int {
+        return $this->sendCommand('bg_set_rgb', [hexdec($rgb), $this->getEffect($duration), $duration]);
     }
 
-    public function sendSetHSV(int $hue, int $sat, int $duratin=0): int {
-        return $this->sendCommand('set_hsv', [$hue, $sat, $this->getEffect($duratin), $duratin]);
+    public function sendSetHSV(int $hue, int $sat, int $duration=0): int {
+        return $this->sendCommand('set_hsv', [$hue, $sat, $this->getEffect($duration), $duration]);
     }
 
-    public function sendBgSetHSV(int $hue, int $sat, int $duratin=0): int {
-        return $this->sendCommand('bg_set_hsv', [$hue, $sat, $this->getEffect($duratin), $duratin]);
+    public function sendBgSetHSV(int $hue, int $sat, int $duration=0): int {
+        return $this->sendCommand('bg_set_hsv', [$hue, $sat, $this->getEffect($duration), $duration]);
     }
 
-    public function sendSetBright(int $bright, int $duratin=0): int {
-        return $this->sendCommand('set_bright', [$bright, $this->getEffect($duratin), $duratin]);
+    public function sendSetBright(int $bright, int $duration=0): int {
+        return $this->sendCommand('set_bright', [$bright, $this->getEffect($duration), $duration]);
     }
 
-    public function sendBgSetBright(int $bright, int $duratin=0): int {
-        return $this->sendCommand('bg_set_bright', [$bright, $this->getEffect($duratin), $duratin]);
+    public function sendBgSetBright(int $bright, int $duration=0): int {
+        return $this->sendCommand('bg_set_bright', [$bright, $this->getEffect($duration), $duration]);
     }
 
-    public function sendSetPower(bool $on, int $duratin=0, $mode=0): int {
+    public function sendSetPower(bool $on, int $duration=0, $mode=0): int {
         $param=[];
         $param[]=$on?'on':'off';
-        $param[]=$this->getEffect($duratin);
-        $param[]=$duratin;
+        $param[]=$this->getEffect($duration);
+        $param[]=$duration;
         if ($mode!=0) {
             $param[]=$mode;
         }
         return $this->sendCommand('set_power', $param);
     }
 
-    public function sendBgSetPower(bool $on, int $duratin=0, $mode=0): int {
+    public function sendBgSetPower(bool $on, int $duration=0, $mode=0): int {
         $param=[];
         $param[]=$on?'on':'off';
-        $param[]=$this->getEffect($duratin);
-        $param[]=$duratin;
+        $param[]=$this->getEffect($duration);
+        $param[]=$duration;
         if ($mode!=0) {
             $param[]=$mode;
         }
