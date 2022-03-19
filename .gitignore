@@ -1,10 +1,10 @@
 /nbproject/private/
 /settings.php
 /config/*.conf
-/src/node_modules/*
-/src/package-lock.json
-/logs/*
-/custom/*
+/node_modules/
+/package-lock.json
+/logs/
+/custom/
 !/custom/backup/
 /custom/backup/*.sql
 !/custom/lib.php

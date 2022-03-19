@@ -6,7 +6,7 @@ const { src, dest, watch, series, parallel } = require("gulp"),
     bs = require("browser-sync").create();
 
 function scssTask() {
-    return src("scss/**/*.+(scss|sass)")
+    return src("src/scss/**/*.+(scss|sass)")
         .pipe(
             sass({
                 outputStyle: "expanded",
@@ -16,7 +16,7 @@ function scssTask() {
             })
         )
         .pipe(postcss())
-        .pipe(dest("../webroot"))
+        .pipe(dest("./webroot"))
         .pipe(bs.stream());
 }
 
@@ -28,22 +28,22 @@ function highchartsTask() {
         "node_modules/highcharts/highcharts.js.map",
         "node_modules/highcharts/modules/exporting.js",
         "node_modules/highcharts/modules/exporting.js.map",
-    ]).pipe(dest("../webroot/libs/highcharts"));
+    ]).pipe(dest("./webroot/libs/highcharts"));
 }
 
 function bootstrapTask() {
     return src([
         "node_modules/bootstrap/dist/js/bootstrap.min.js",
         "node_modules/bootstrap/dist/js/bootstrap.min.js.map",
-    ]).pipe(dest("../webroot/libs/bootstrap"));
+    ]).pipe(dest("./webroot/libs/bootstrap"));
 }
 
 function watchTask() {
     bs.init({
         proxy: "shcc.localhost",
     });
-    watch("scss/**/*.+(scss|sass)", scssTask);
-    watch("../webroot/**/*.+(php|html|css|js)", bs.reload);
+    watch("src/scss/**/*.+(scss|sass)", scssTask);
+    watch("./webroot/**/*.+(php|html|css|js)", bs.reload);
 }
 
 function defaultTask() {
