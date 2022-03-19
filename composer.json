@@ -6,18 +6,19 @@
     "license": "GPL-3.0-or-later",
     "authors": [
         {
-            "name": "Sergey Fedotov",
+            "name": "Sergei Fedotov",
             "email": "fsa@tavda.info",
             "homepage": "https://tavda.net/"
         }
     ],
     "require": {
-        "php" : "^7.4",
+        "php": "^7.4||^8.0",
         "ext-curl": "*",
         "ext-PDO": "*",
         "ext-pdo_pgsql": "*",
         "ext-session": "*",
         "ext-sysvsem": "*",
-        "ext-sysvshm": "*"
+        "ext-sysvshm": "*",
+        "ext-mbstring": "*"
     }
 }
