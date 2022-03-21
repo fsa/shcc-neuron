@@ -1,7 +1,7 @@
 module.exports = {
     plugins: [
         require("autoprefixer"),
-        require("css-mqpacker"),
+        require("node-css-mqpacker"),
         require("cssnano"),
     ],
 };
