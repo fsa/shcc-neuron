@@ -8,5 +8,4 @@ openlog("shcc", LOG_PID | LOG_ODELAY, LOG_USER);
 if(getenv('TZ')) {
     date_default_timezone_set(getenv('TZ'));
 }
-httpResponse::setHtmlExceptionHandler();
-httpResponse::setContext(Settings::get('site', ['title'=>'SHCC']));
+httpResponse::setHtmlExceptionHandler(Settings::get('site', ['title'=>'SHCC']));

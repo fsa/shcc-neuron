@@ -21,7 +21,6 @@ class httpResponse {
     private static $context;
     private static $last_modified;
     private static $etag;
-    private static $title;
     private static $message_id;
 
     # Ответ HTML
@@ -46,7 +45,7 @@ class httpResponse {
     }
 
     public static function setETag(string $etag) {
-        self::$etag;
+        self::$etag=$etag;
     }
 
     public static function addHeader(string $header) {
@@ -283,7 +282,8 @@ class httpResponse {
 
     # Подключение обработчиков ошибок
 
-    public static function setHtmlExceptionHandler() {
+    public static function setHtmlExceptionHandler(array $context=null) {
+        self::$context=$context;
         set_exception_handler([__CLASS__, 'HtmlPageException']);
     }
 
