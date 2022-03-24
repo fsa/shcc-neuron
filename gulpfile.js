@@ -3,7 +3,11 @@
 const { src, dest, watch, series, parallel } = require("gulp"),
     sass = require("gulp-dart-sass"),
     postcss = require("gulp-postcss"),
-    browserSync = require("browser-sync").create();
+    browserSync = require("browser-sync").create(),
+    autoprefixer = require("autoprefixer"),
+    mqpacker = require("node-css-mqpacker"),
+    cssnano = require("cssnano");
+;
 
 function scssTask() {
     return src("src/scss/**/*.+(scss|sass)")
@@ -15,7 +19,11 @@ function scssTask() {
                 log.error(err.message);
             })
         )
-        .pipe(postcss())
+        .pipe(postcss([
+            autoprefixer(),
+            mqpacker(),
+            cssnano()
+        ]))
         .pipe(dest("webroot"))
         .pipe(browserSync.stream());
 }
