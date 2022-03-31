@@ -1,7 +1,7 @@
 {
     "name": "fsa/shcc",
-    "description": "Контроллер умного дома SHCC.",
-    "homepage": "https://shcc.ru/",
+    "description": "Контроллер умного дома SHCC",
+    "homepage": "https://tavda.net/shcc",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -14,9 +14,7 @@
     "require": {
         "php": "^7.4||^8.0",
         "ext-curl": "*",
-        "ext-PDO": "*",
         "ext-pdo_pgsql": "*",
-        "ext-session": "*",
         "ext-sysvsem": "*",
         "ext-sysvshm": "*",
         "ext-mbstring": "*",
