@@ -19,6 +19,7 @@
         "ext-session": "*",
         "ext-sysvsem": "*",
         "ext-sysvshm": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-redis": "*"
     }
 }
