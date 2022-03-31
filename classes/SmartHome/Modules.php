@@ -11,12 +11,12 @@ class Modules {
 
     public function __construct() {
         $this->modules=[];
-        $this->dirs=scandir(__DIR__.'/module/');
+        $this->dirs=scandir(__DIR__.'/Module/');
         while ($entry=array_shift($this->dirs)) {
             if($entry=='.' or $entry=='..') {
                 continue;
             }
-            $filename=__DIR__.'/module/'.$entry.'/moduleinfo.php';
+            $filename=__DIR__.'/Module/'.$entry.'/ModuleInfo.php';
             if(file_exists($filename)) {
                 $module=(object) require $filename;
                 $this->modules[strtolower($module->name)]=$module;
