@@ -17,11 +17,11 @@ class DB {
         if (self::$pdo) {
             return self::$pdo;
         }
-        $dburl=getenv('DATABASE_URL');
-        if (!$dburl) {
+        $url=getenv('DATABASE_URL');
+        if (!$url) {
             throw new Exception('Database is not configured.');
         }
-        $db=parse_url($dburl);
+        $db=parse_url($url);
         self::$pdo=new PDO("pgsql:".sprintf(
                 "host=%s;port=%s;user=%s;password=%s;dbname=%s",
                 $db["host"], $db["port"]??5432, $db["user"], $db["pass"], ltrim($db["path"], "/")));
@@ -41,7 +41,7 @@ class DB {
         $keys=array_keys($values);
         $stmt=self::prepare('INSERT INTO '.$table.' ('.join(',', $keys).') VALUES (:'.join(',:', $keys).') RETURNING '.$index);
         $stmt->execute($values);
-        return $stmt->fetch(PDO::FETCH_COLUMN);
+        return $stmt->fetchColumn();
     }
 
     public static function update($table, $values, $index='id') {
