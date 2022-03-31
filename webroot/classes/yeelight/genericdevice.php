@@ -466,16 +466,28 @@ class GenericDevice implements \SmartHome\DeviceInterface, \SmartHome\Device\Cap
         }
     }
 
-    public function setPower(bool $value) {
-        $this->sendSetPower($value, 300);
+    public function setPower(bool $value, $line=0) {
+        if($line==0) {
+            $this->sendSetPower($value, 300);
+        } else {
+            $this->sendBgSetPower($value, 300);
+        }
     }
 
-    public function setPowerOff() {
-        $this->sendSetPower(false, 300);
+    public function setPowerOff($line=0) {
+        if($line==0) {
+            $this->sendSetPower(false, 300);
+        } else {
+            $this->sendBgSetPower(false, 300);
+        }
     }
 
-    public function setPowerOn() {
-        $this->sendSetPower(true, 300);
+    public function setPowerOn($line=0) {
+        if ($line == 0) {
+            $this->sendSetPower(true, 300);
+        } else {
+            $this->sendBgSetPower(true, 300);
+        }
     }
 
     public function getPower(): bool {

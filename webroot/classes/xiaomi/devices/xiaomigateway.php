@@ -195,7 +195,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
         return $this->bright!=0;
     }
 
-    public function setPower(bool $value) {
+    public function setPower(bool $value, int $line=0) {
         if($value) {
             $this->setPowerOn();
         } else {
@@ -203,11 +203,11 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
         }
     }
 
-    public function setPowerOff() {
+    public function setPowerOff(int $line=0) {
         $this->sendCommand(['rgb'=>hexdec('FFFFFF')]);
     }
 
-    public function setPowerOn() {
+    public function setPowerOn(int $line=0) {
         $this->sendCommand(['rgb'=>hexdec('64FFFFFF')]);
     }
 

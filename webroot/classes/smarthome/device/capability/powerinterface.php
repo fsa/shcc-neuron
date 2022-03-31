@@ -4,11 +4,11 @@ namespace SmartHome\Device\Capability;
 
 interface PowerInterface {
 
-    function setPowerOn();
+    function setPowerOn(int $line=0);
 
-    function setPowerOff();
+    function setPowerOff(int $line=0);
 
-    function setPower(bool $value);
+    function setPower(bool $value, int $line=0);
     
     function getPower(): bool;
 }
