@@ -11,6 +11,11 @@
             "homepage": "https://tavda.net/"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "": "classes/"
+        }
+    },
     "require": {
         "php": "^7.4||^8.0",
         "ext-curl": "*",
