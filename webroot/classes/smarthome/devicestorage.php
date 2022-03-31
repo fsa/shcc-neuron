@@ -2,7 +2,7 @@
 
 namespace SmartHome;
 
-use DBRedis;
+use FSA\Neuron\DBRedis;
 
 class DeviceStorage {
 

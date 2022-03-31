@@ -2,7 +2,9 @@
 
 namespace Templates\Settings;
 
-class Users implements \HTML\DBQueryTemplate {
+use FSA\Neuron\HTML\DBQueryTemplate;
+
+class Users implements DBQueryTemplate {
 
     public $caption;
 
@@ -23,7 +25,7 @@ class Users implements \HTML\DBQueryTemplate {
     <div class="card-body<?=$row->disabled?' bg-danger text-white':''?>">
 <?=$row->name?> &nbsp; <a href="./edit/?uuid=<?=$row->uuid?>" class="btn btn-sm btn-light">Редактировать</a><br>
 Логин: <?=$row->login?><?=$row->scope?' &nbsp; Права доступа: '.trim($row->scope,'{}'):''?><?=$row->groups?' &nbsp; Группы: '.trim($row->groups,'{}'):''?><br>
-Еmail: <?=$row->email?><br>
+Email: <?=$row->email?><br>
     </div>
     </div>
 <?php

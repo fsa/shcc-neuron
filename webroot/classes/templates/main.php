@@ -2,9 +2,10 @@
 
 namespace Templates;
 
-use Session;
+use FSA\Neuron\Session,
+    FSA\Neuron\Settings;
 
-class ContentPage {
+class Main {
 
     public $title;
     public $context;
@@ -45,7 +46,7 @@ class ContentPage {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
 <?php
-foreach(\Settings::get('dashboard', []) as $url=>$name) {
+foreach(Settings::get('dashboard', []) as $url=>$name) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/?page=<?=$url?>"><?=$name?></a>

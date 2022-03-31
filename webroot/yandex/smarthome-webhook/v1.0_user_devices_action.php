@@ -2,6 +2,7 @@
 /**
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/post-action-docpage/
  */
+use FSA\Neuron\HttpResponse;
 if (!isset($request_id)) {die;}
 OAuth\Server::grantAccess();
 $request=json_decode($request_content);
@@ -72,7 +73,7 @@ foreach ($request->payload->devices as $device) {
     }
     $devices[]=$entity;
 }
-httpResponse::json([
+HttpResponse::json([
     'request_id'=>$request_id,
     'payload'=>[
         'devices'=>$devices

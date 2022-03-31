@@ -1,6 +1,7 @@
 <?php
+use FSA\Neuron\HttpResponse;
 if(!isset($action)) {die;}
 
 SmartHome\Module\Tts\Settings::dropProvider();
-httpResponse::storeNotification('Конфигурация синтезатора голоса удалена. Синтез речи отключен.');
-httpResponse::redirection('../');
+HttpResponse::storeNotification('Конфигурация синтезатора голоса удалена. Синтез речи отключен.');
+HttpResponse::redirection('../');

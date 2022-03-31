@@ -2,7 +2,7 @@
 
 namespace SmartHome;
 
-use Settings;
+use FSA\Neuron\Settings;
 
 class Modules {
 

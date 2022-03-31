@@ -1,5 +1,7 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Settings;
+require_once __DIR__.'/../vendor/autoload.php';
 set_include_path(get_include_path().':'.__DIR__.'/classes/');
 spl_autoload_extensions('.php');
 spl_autoload_register();
@@ -8,4 +10,4 @@ openlog("shcc", LOG_PID | LOG_ODELAY, LOG_USER);
 if(getenv('TZ')) {
     date_default_timezone_set(getenv('TZ'));
 }
-httpResponse::setHtmlExceptionHandler(Settings::get('site', ['title'=>'SHCC']));
+HttpResponse::setHtmlMode(Settings::get('site', ['title'=>'SHCC']));

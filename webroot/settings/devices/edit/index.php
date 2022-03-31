@@ -1,5 +1,9 @@
 <?php
 
+use Templates\Forms,
+    FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session;
+
 require_once '../../../common.php';
 Session::grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
@@ -7,16 +11,13 @@ if ($action) {
     require 'edit.php';
     exit;
 }
-
-use Templates\Forms;
-
 $uid=filter_input(INPUT_GET, 'uid');
 $hwid=filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
     $sh=new SmartHome\DeviceStorage;
     $memdev=$sh->get($hwid);
     if (is_null($memdev)) {
-        httpResponse::showError('Что-то пошло не так. Не найдено устройство в памяти.');
+        HttpResponse::showError('Что-то пошло не так. Не найдено устройство в памяти.');
     }
     $init_data_list=$memdev->getInitDataList();
     $device=new SmartHome\Entity\Device;
@@ -29,7 +30,7 @@ if ($hwid) {
     if ($uid) {
         $device=SmartHome\Devices::getDeviceByUid($uid);
         if (!$device) {
-            httpResponse::showError('Устройство не найдено в базе данных');
+            HttpResponse::showError('Устройство не найдено в базе данных');
         }
         $entity=json_decode($device->entity);
         $memdev=new $entity->classname;
@@ -41,8 +42,8 @@ if ($hwid) {
         $classname='';
     }
 }
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader("Регистрация оборудования");
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader("Регистрация оборудования");
 if ($hwid) {
     Templates\SmartHome\DeviceInMemory::show($memdev);
 }
@@ -67,4 +68,4 @@ Forms::submitButton($uid?'Сохранить изменения':'Добавит
 ?>
 </form>
 <?php
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

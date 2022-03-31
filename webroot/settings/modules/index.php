@@ -1,5 +1,7 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session,
+    FSA\Neuron\HTML\Table;
 require_once '../../common.php';
 Session::grantAccess([]);
 $modules=new SmartHome\Modules;
@@ -7,23 +9,23 @@ $action=filter_input(INPUT_GET, 'action');
 if ($action) {
     $name=filter_input(INPUT_GET, 'name');
     if (!$name) {
-        httpResponse::showError('Не указано имя демона');
+        HttpResponse::showError('Не указано имя демона');
     }
     switch ($action) {
         case 'enable':
             $modules->enableDaemon($name);
-            httpResponse::storeNotification('Демон модуля '.$name.' будет включен при следующем запуске сервиса SHCC.');
-            httpResponse::redirection('./');
+            HttpResponse::storeNotification('Демон модуля '.$name.' будет включен при следующем запуске сервиса SHCC.');
+            HttpResponse::redirection('./');
         case 'disable':
             $modules->disableDaemon($name);
-            httpResponse::storeNotification('Демон модуля '.$name.' будет выключен при следующем запуске сервиса SHCC.');
-            httpResponse::redirection('./');
+            HttpResponse::storeNotification('Демон модуля '.$name.' будет выключен при следующем запуске сервиса SHCC.');
+            HttpResponse::redirection('./');
     }
-    httpResponse::showError('Неизвестный тип действия');
+    HttpResponse::showError('Неизвестный тип действия');
 }
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader('Модули');
-$devices=new HTML\Table;
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader('Модули');
+$devices=new Table;
 $devices->addField('name', 'Наименование');
 $devices->addField('description', 'Описание');
 $devices->addField('daemon_onoff', 'Демон');
@@ -34,4 +36,4 @@ $devices->setRowCallback(function ($row) use ($modules) {
 });
 $modules->query();
 $devices->showTable($modules);
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

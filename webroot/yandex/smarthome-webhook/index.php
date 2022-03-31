@@ -1,7 +1,8 @@
 <?php
 
+use FSA\Neuron\HttpResponse;
 require_once '../../common.php';
-httpResponse::setJsonExceptionHandler();
+HttpResponse::setJsonMode();
 $request_id=getenv('HTTP_X_REQUEST_ID');
 $request_content=file_get_contents('php://input');
 $path=getenv('PATH_INFO');
@@ -18,4 +19,4 @@ if(file_exists($filename)) {
     include $filename;
     exit;
 }
-httpResponse::error(404);
+HttpResponse::error(404);

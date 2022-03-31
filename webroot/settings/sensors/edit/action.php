@@ -1,5 +1,5 @@
 <?php
-
+use FSA\Neuron\HttpResponse;
 if(!isset($action)) {
     die;
 }
@@ -12,13 +12,13 @@ $entity->inputPostString('history');
 switch ($action) {
     case 'create':
         $entity->insert();
-        httpResponse::storeNotification('Датчик создан');
-        httpResponse::redirection('../');
+        HttpResponse::storeNotification('Датчик создан');
+        HttpResponse::redirection('../');
         break;
     case 'edit':
         $entity->update();
-        httpResponse::storeNotification('Данные о датчике обновлены');
-        httpResponse::redirection('../');
+        HttpResponse::storeNotification('Данные о датчике обновлены');
+        HttpResponse::redirection('../');
         break;
 }
-httpResponse::showError('Неизвестное действие');
+HttpResponse::showError('Неизвестное действие');

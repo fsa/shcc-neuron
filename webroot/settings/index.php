@@ -1,10 +1,11 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session;
 require_once '../common.php';
 Session::grantAccess([]);
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader('Настройки');
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader('Настройки');
 ?>
 <p>Настройки.</p>
 <?php
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

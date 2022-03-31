@@ -1,7 +1,8 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session;
 require_once '../common.php';
-httpResponse::setJsonExceptionHandler();
+HttpResponse::setJsonMode();
 Session::grantAccess(['control']);
 $request=file_get_contents('php://input');
 $json=json_decode($request);
@@ -42,9 +43,9 @@ if (isset($json->messages)) {
     }
 }
 if (count($response)>0) {
-    httpResponse::json($response);
+    HttpResponse::json($response);
 } else {
-    httpResponse::error(404);
+    HttpResponse::error(404);
 }
 
 function getState() {

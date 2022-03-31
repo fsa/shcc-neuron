@@ -2,9 +2,9 @@
 
 namespace Templates;
 
-use httpResponse;
+use FSA\Neuron\HttpResponse;
 
-class PageSettings extends ContentPage {
+class PageSettings extends Main {
 
     public function header() {
         parent::header();
@@ -15,7 +15,7 @@ class PageSettings extends ContentPage {
             'users'=>'Пользователи'
         ];
         $uri=explode('/',getenv('REQUEST_URI'));
-        httpResponse::showNavTabs('/settings/%s/', $pages, $uri[2]);
+        HttpResponse::showNavTabs('/settings/%s/', $pages, $uri[2]);
         echo "<br>";
     }
 

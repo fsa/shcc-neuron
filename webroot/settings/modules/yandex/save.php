@@ -1,4 +1,5 @@
 <?php
+use FSA\Neuron\HttpResponse;
 if(!isset($action)) {die;}
 $key=filter_input(INPUT_POST,'key');
 $speaker=filter_input(INPUT_POST,'speaker');
@@ -11,5 +12,5 @@ SmartHome\Vars::set('Yandex.TTS.Speaker', $speaker);
 $yandex->setEmotion($emotion);
 SmartHome\Vars::set('Yandex.TTS.Emotion', $emotion);
 SmartHome\Module\Tts\Settings::setProvider(Yandex\TtsApi::class, ['key'=>$key, 'speaker'=>$speaker, 'emotion'=>$emotion]);
-httpResponse::storeNotification('В качестве синтезатора речи установлен Yandex SpeechKit. Голос '.$speaker.', эмоциональная окраска голоса '.$emotion.'. Для вступления изменений в силу необходимо перезапустить демона TTS.');
-httpResponse::redirection('../');
+HttpResponse::storeNotification('В качестве синтезатора речи установлен Yandex SpeechKit. Голос '.$speaker.', эмоциональная окраска голоса '.$emotion.'. Для вступления изменений в силу необходимо перезапустить демона TTS.');
+HttpResponse::redirection('../');

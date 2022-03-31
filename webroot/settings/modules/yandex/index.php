@@ -1,5 +1,6 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session;
 require_once '../../../common.php';
 Session::grantAccess([]);
 $tts_file='../../../../config/tts.conf';
@@ -15,14 +16,14 @@ switch ($action) {
         require 'remove.php';
         break;
     default:
-        httpResponse::showError('Неверное действие');
+        HttpResponse::showError('Неверное действие');
 }
 
 $key=SmartHome\Vars::get('Yandex.TTS.Key')??'';
 $speaker=SmartHome\Vars::get('Yandex.TTS.Voice')??'oksana';
 $emotion=SmartHome\Vars::get('Yandex.TTS.Emotion')??'neutral';
 use Templates\Forms;
-httpResponse::showHtmlHeader('Яндекс');
+HttpResponse::showHtmlHeader('Яндекс');
 ?>
 <p><a href="../">Вернуться к списку модулей</a></p>
 <hr>
@@ -36,4 +37,4 @@ Forms::submitButton('Отключить синтез речи', 'remove', 'btn-d
 ?>
 </form>
 <?php
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

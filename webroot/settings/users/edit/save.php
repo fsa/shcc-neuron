@@ -1,21 +1,22 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\UserDB\UserEntity;
 if (!isset($action)) {
     die;
 }
-$user=UserDB\UserEntity::getEntity('uuid');
+$user=UserEntity::getEntity('uuid');
 $user->inputPostString('login');
 $user->inputPostString('password');
 $user->inputPostString('name');
 $user->inputPostString('email');
-$user->inputPostChecboxArray('scope');
-$user->inputPostChecboxArray('groups');
+$user->inputPostCheckboxArray('scope');
+$user->inputPostCheckboxArray('groups');
 $user->inputPostCheckbox('disabled');
 $uuid=$user->uuid;
 $user->upsert();
 if ($uuid) {
-    httpResponse::storeNotification("Пользователь $user->login изменён.");
+    HttpResponse::storeNotification("Пользователь $user->login изменён.");
 } else {
-    httpResponse::storeNotification("Пользователь $user->login создан.");
+    HttpResponse::storeNotification("Пользователь $user->login создан.");
 }
-httpResponse::redirection('../');
+HttpResponse::redirection('../');

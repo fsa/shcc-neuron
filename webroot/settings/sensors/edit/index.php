@@ -1,9 +1,7 @@
 <?php
-/**
- * SHCC 0.7.0
- * 2020-12-24
- */
-use Templates\Forms;
+use Templates\Forms,
+    FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session;
 
 require_once '../../../common.php';
 Session::grantAccess([]);
@@ -13,7 +11,7 @@ if($action) {
     exit;
 }
 $sensor=SmartHome\Entity\Sensor::getEntity('id', INPUT_GET);
-httpResponse::showHtmlHeader($sensor->id?'Редактировать датчик '.$sensor->id:'Создать новый датчик');
+HttpResponse::showHtmlHeader($sensor->id?'Редактировать датчик '.$sensor->id:'Создать новый датчик');
 Forms::formHeader('POST', './');
 Forms::inputHidden('id', $sensor->id);
 Forms::inputString('uid', $sensor->uid, 'UID - уникальный идентификатор для обращения к датчику');
@@ -27,4 +25,4 @@ Forms::inputString('device_property', $sensor->device_property, 'Связанн�
 Forms::inputString('history', $sensor->history, 'Сохранять данные с датчика в таблице БД');
 Forms::submitButton($sensor->id?'Изменить':'Создать', $sensor->id?'edit':'create');
 Forms::formFooter();
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

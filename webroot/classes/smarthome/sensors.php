@@ -2,7 +2,7 @@
 
 namespace SmartHome;
 
-use DB;
+use FSA\Neuron\DB;
 
 class Sensors {
 

@@ -2,7 +2,7 @@
 
 namespace Widgets;
 
-use httpResponse;
+use FSA\Neuron\HttpResponse;
 
 class Climate {
 
@@ -42,7 +42,7 @@ EOS;
                     break;
             }
         }
-        httpResponse::showCard('Климат', join("<br>\n", $body));
+        HttpResponse::showCard('Климат', join("<br>\n", $body));
 
     }
 }

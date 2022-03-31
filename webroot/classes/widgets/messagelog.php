@@ -2,12 +2,12 @@
 
 namespace Widgets;
 
-use httpResponse;
+use FSA\Neuron\HttpResponse;
 
 class MessageLog {
 
     public static function show() {
-        httpResponse::showCard('Последние голосовые сообщения', '<span messages="tts"></span>');
+        HttpResponse::showCard('Последние голосовые сообщения', '<span messages="tts"></span>');
     }
 
 }

@@ -2,7 +2,7 @@
 /**
  * Не редактируйте данный файл. Он может быть изменён при обновлении системы.
  */
-
+use FSA\Neuron\Settings;
 $night=boolval(getVar('System.NightMode'));
 $security=boolval(getVar('System.SecurityMode'));
 $mute=boolval($night or $security or getVar('System.SoundMute'));
@@ -25,8 +25,8 @@ function telegram($text, $priority=0) {
     if(!$telegram or !isset($telegram['log_channel'])) {
         return;
     }
-    Telegram\Query::init($telegram);
-    $api=new Telegram\SendMessage($telegram['log_channel'], $text);
+    FSA\Telegram\Query::init($telegram);
+    $api=new FSA\Telegram\SendMessage($telegram['log_channel'], $text);
     $api->disable_notification=($priority==0);
     $api->httpPostJson();
 }

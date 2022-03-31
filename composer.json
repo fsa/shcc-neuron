@@ -16,6 +16,8 @@
         "ext-curl": "*",
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "fsa/neuron-framework": "^0.1",
+        "fsa/telegram-bot-api": "^0.1"
     }
 }

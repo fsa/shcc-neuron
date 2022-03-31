@@ -2,7 +2,7 @@
 
 namespace Yandex\SmartHome;
 
-use DB;
+use FSA\Neuron\DB;
 
 class Devices {
 

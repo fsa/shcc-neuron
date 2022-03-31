@@ -1,0 +1,107 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "46652db018e81a3dbcc725cc0400efd0",
+    "packages": [
+        {
+            "name": "fsa/neuron-framework",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/php-neuron-framework.git",
+                "reference": "555a0c35c49c2c312599aec21f84570ea53356ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/555a0c35c49c2c312599aec21f84570ea53356ee",
+                "reference": "555a0c35c49c2c312599aec21f84570ea53356ee",
+                "shasum": ""
+            },
+            "require": {
+                "ext-redis": "*",
+                "php": "^7.4||^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSA\\Neuron\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Fedotov",
+                    "email": "fsa@tavda.info"
+                }
+            ],
+            "description": "Neuron PHP framework",
+            "support": {
+                "issues": "https://github.com/fsa/php-neuron-framework/issues",
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.1.0"
+            },
+            "time": "2022-03-31T07:47:51+00:00"
+        },
+        {
+            "name": "fsa/telegram-bot-api",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/php-telegram-bot-api.git",
+                "reference": "a68f6e107e2aa1c331ec06068df2a950ebaa6425"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/php-telegram-bot-api/zipball/a68f6e107e2aa1c331ec06068df2a950ebaa6425",
+                "reference": "a68f6e107e2aa1c331ec06068df2a950ebaa6425",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^7.4||^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSA\\Telegram\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Fedotov",
+                    "email": "fsa@tavda.info"
+                }
+            ],
+            "description": "Telegram Bot API",
+            "support": {
+                "issues": "https://github.com/fsa/php-telegram-bot-api/issues",
+                "source": "https://github.com/fsa/php-telegram-bot-api/tree/v0.1.0"
+            },
+            "time": "2022-03-31T15:59:59+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "^7.4||^8.0",
+        "ext-curl": "*",
+        "ext-pdo_pgsql": "*",
+        "ext-mbstring": "*",
+        "ext-redis": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}

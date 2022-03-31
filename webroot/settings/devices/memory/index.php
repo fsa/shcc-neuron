@@ -1,5 +1,8 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session,
+    FSA\Neuron\HTML\Table,
+    FSA\Neuron\HTML\ButtonLink;
 require_once '../../../common.php';
 Session::grantAccess([]);
 $hwid=filter_input(INPUT_GET, 'hwid');
@@ -7,8 +10,8 @@ if ($hwid) {
     require_once 'show.php';
     exit;
 }
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader('Список устройств в памяти');
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader('Список устройств в памяти');
 ?>
 <p><a href="../">Вернуться к списку устройств</a></p>
 <hr>
@@ -23,13 +26,13 @@ foreach ($db_devices as $db_device) {
         #unset($storage_hwids[$mem_devices[$db_device]]);
     }
 }
-$memdevitable=new HTML\Table();
+$memdevitable=new Table();
 $memdevitable->setCaption('Новые устройства в сети');
 $memdevitable->addField('hwid', 'HWID');
 $memdevitable->addField('description', 'Описание');
 $memdevitable->addField('state', 'Информация');
-$memdevitable->addField('updated', 'Было активено');
-$memdevitable->addButton(new HTML\ButtonLink('Добавить', './?hwid=%s', 'hwid'));
+$memdevitable->addField('updated', 'Было активно');
+$memdevitable->addButton(new ButtonLink('Добавить', './?hwid=%s', 'hwid'));
 $memdevitable->showTable(new class($storage_hwids) {
 
     private $list;
@@ -62,4 +65,4 @@ $memdevitable->showTable(new class($storage_hwids) {
         return $this->count;
     }
 });
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

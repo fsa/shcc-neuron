@@ -7,7 +7,9 @@
 
 namespace SmartHome\Entity;
 
-class Sensor extends \Entity {
+use FSA\Neuron\Entity;
+
+class Sensor extends Entity {
 
     const TABLENAME='sensors';
 

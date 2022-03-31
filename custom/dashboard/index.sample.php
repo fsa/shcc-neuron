@@ -4,15 +4,17 @@
  * Вы можете создать файл * index.php в этом же каталоге и он будет подключен
  * вместо данного файла. 
  */
-httpResponse::addHeader('<script src="/js/dashboard.js"></script>');
-httpResponse::showHtmlHeader('Панель управления');
-httpResponse::showCardsHeader();
-httpResponse::showCardHeader('Настройте внешний вид');
+
+use FSA\Neuron\HttpResponse;
+HttpResponse::addHeader('<script src="/js/dashboard.js"></script>');
+HttpResponse::showHtmlHeader('Панель управления');
+HttpResponse::showCardsHeader();
+HttpResponse::showCardHeader('Настройте внешний вид');
 ?>
 <p>Для настройки внешнего вида этой страницы создайте файл custom/dashboard/index.php.</p>
 <?php
-httpResponse::showCardFooter();
+HttpResponse::showCardFooter();
 Widgets\SystemState::show();
 Widgets\MessageLog::show();
-httpResponse::showCardsFooter();
-httpResponse::showHtmlFooter();
+HttpResponse::showCardsFooter();
+HttpResponse::showHtmlFooter();

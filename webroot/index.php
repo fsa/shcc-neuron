@@ -1,5 +1,5 @@
 <?php
-
+use FSA\Neuron\Session;
 require_once 'common.php';
 Session::grantAccess();
 chdir('../custom/dashboard/');

@@ -6,7 +6,7 @@
 
 namespace Auth;
 
-use httpResponse,
+use FSA\Neuron\HttpResponse,
     AppException;
 
 abstract class Client {
@@ -38,7 +38,7 @@ abstract class Client {
         if(!is_null($state)) {
             $query_data['state']=$state;
         }
-        httpResponse::redirection($this->response_code_url.'?'.http_build_query($query_data));
+        HttpResponse::redirection($this->response_code_url.'?'.http_build_query($query_data));
     }
 
     public function getToken(string $redirect_uri, string $code) {
@@ -58,23 +58,6 @@ abstract class Client {
         ]);
         $token=file_get_contents($this->response_token_url, false, $context);
         return json_decode($token);
-    }
-
-    protected function httpPost(Api\actionInterface $action): string {
-        $api_url='https://api.telegram.org/bot'.\Settings::get('telegram')->token;
-        $context=stream_context_create([
-            'http'=>array(
-                'method'=>'POST',
-                'header'=>'Content-Type: application/x-www-form-urlencoded'.PHP_EOL,
-                'content'=>http_build_query($action->buildQuery()),
-            ),
-        ]);
-        return file_get_contents($api_url.'/'.$action->getActionName(), false, $context);
-    }
-
-    protected function httpGet(Api\actionInterface $action): string {
-        $api_url='https://api.telegram.org/bot'.\Settings::get('telegram')->token;
-        return file_get_contents($api_url.'/'.$action->getActionName().'?'.http_build_query($action->buildQuery()), false);
     }
 
 }

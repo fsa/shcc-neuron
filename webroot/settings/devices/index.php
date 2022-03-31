@@ -1,16 +1,16 @@
 <?php
-/**
- * SHCC 0.7.0
- * 2020-11-29
- */
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session,
+    FSA\Neuron\HTML\Table,
+    FSA\Neuron\HTML\ButtonLink;
 require_once '../../common.php';
 Session::grantAccess([]);
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader('Устройтва');
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader('Устройства');
 ?>
 <p><a href="memory/" class="btn btn-primary">Добавить новое устройство</a></p>
 <?php
-$devices=new HTML\Table;
+$devices=new Table;
 $devices->setCaption('Устройства умного дома');
 $devices->addField('uid', 'Имя');
 $devices->addField('hwid', 'Идентификатор устройства');
@@ -19,7 +19,7 @@ $devices->addField('classname', 'Класс');
 $devices->addField('info', 'Информация об устройстве');
 $devices->addField('events', 'События');
 $devices->addField('updated', 'Было активно');
-$devices->addButton(new HTML\ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
+$devices->addButton(new ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
 $devices->setRowCallback(function ($row) {
     $entity=json_decode($row->entity);
     $row->classname=$entity->classname;
@@ -50,4 +50,4 @@ $devices->showTable(\SmartHome\Devices::getDevicesStmt());
     </tr>
 </table>
 <?php
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

@@ -2,6 +2,7 @@
 /**
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/get-devices-docpage/
  */
+use FSA\Neuron\HttpResponse;
 if(!isset($request_id)) {die;}
 OAuth\Server::grantAccess();
 $user_id='anonymous';
@@ -51,7 +52,7 @@ while ($device=$yandex_devices->fetchObject()) {
     $entity->setDeviceManufacturer('shcc');
     $devices[]=$entity;
 }
-httpResponse::json([
+HttpResponse::json([
     'request_id'=>$request_id,
     'payload'=>[
         'user_id'=>$user_id,

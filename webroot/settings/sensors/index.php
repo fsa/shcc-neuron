@@ -1,13 +1,16 @@
 <?php
-
+use FSA\Neuron\HttpResponse,
+    FSA\Neuron\Session,
+    FSA\Neuron\HTML\Table,
+    FSA\Neuron\HTML\ButtonLink;
 require_once '../../common.php';
 Session::grantAccess([]);
-httpResponse::setTemplate(new Templates\PageSettings);
-httpResponse::showHtmlHeader('Датчики');
+HttpResponse::setTemplate(new Templates\PageSettings);
+HttpResponse::showHtmlHeader('Датчики');
 ?>
 <p><a href="edit/" class="btn btn-primary">Создать новый датчик</a></p>
 <?php
-$meters=new HTML\Table;
+$meters=new Table;
 $meters->setCaption('Датчики');
 $meters->addField('uid', 'Имя');
 $meters->addField('value', 'Значение');
@@ -15,7 +18,7 @@ $meters->addField('updates', 'Обновлено');
 $meters->addField('property_name', 'Величина');
 $meters->addField('description', 'Описание');
 $meters->addField('device_property', 'Источник данных');
-$meters->addButton(new HTML\ButtonLink('Изменить', 'edit/?id=%s'));
+$meters->addButton(new ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) {
     $row->property_name=SmartHome\Sensors::getPropertyName($row->property);
     $state=SmartHome\SensorStorage::get($row->uid);
@@ -38,4 +41,4 @@ $meters->setRowCallback(function ($row) {
     }
 });
 $meters->showTable(\SmartHome\Sensors::getAll());
-httpResponse::showHtmlFooter();
+HttpResponse::showHtmlFooter();

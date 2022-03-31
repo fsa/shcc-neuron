@@ -4,7 +4,7 @@ namespace SmartHome\Module\Tts;
 
 use SmartHome\TtsInterface,
     SmartHome\TtsQueue,
-    DBRedis;
+    FSA\Neuron\DBRedis;
 
 class Daemon implements \SmartHome\DaemonInterface {
 

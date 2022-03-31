@@ -6,8 +6,8 @@
 
 namespace OAuth;
 
-use DB,
-    DBRedis;
+use FSA\Neuron\DB,
+    FSA\Neuron\DBRedis;
 
 class Server {
 
