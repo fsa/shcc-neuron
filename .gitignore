@@ -1,9 +1,7 @@
-/nbproject/private/
 /settings.php
-/config/*.conf
+/vendor/
 /node_modules/
 /package-lock.json
-/logs/
 /custom/
 !/custom/backup/
 /custom/backup/*.sql
@@ -16,4 +14,3 @@
 !/custom/dashboard/*.sample.php
 !/custom/sound/dingdong.mp3
 !/custom/sound/notification.mp3
-/vendor/
