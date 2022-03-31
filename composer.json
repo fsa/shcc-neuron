@@ -15,8 +15,6 @@
         "php": "^7.4||^8.0",
         "ext-curl": "*",
         "ext-pdo_pgsql": "*",
-        "ext-sysvsem": "*",
-        "ext-sysvshm": "*",
         "ext-mbstring": "*",
         "ext-redis": "*"
     }
