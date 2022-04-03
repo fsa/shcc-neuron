@@ -3,9 +3,7 @@
 if (sizeof($argv)!=2) {
     die('Usage: '.$argv[0].' module_name'.PHP_EOL);
 }
-set_include_path(__DIR__.'/../webroot/classes/');
-spl_autoload_extensions('.php');
-spl_autoload_register();
+require '../vendor/autoload.php';
 $module=$argv[1];
 if(!$url=getenv('SERVER_URL')) {
     $url='http://127.0.0.1';
