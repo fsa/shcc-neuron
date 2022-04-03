@@ -142,7 +142,7 @@ class Devices {
     }
 
     public static function execEventsCustomScripts($uid, $events, $ts=null) {
-        $custom_dir=__DIR__.'/../../../custom/events/';
+        $custom_dir=__DIR__.'/../../custom/events/';
         if (!file_exists($custom_dir.$uid.'.php')) {
             return;
         }
