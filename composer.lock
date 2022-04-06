@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/php-neuron-framework.git",
-                "reference": "555a0c35c49c2c312599aec21f84570ea53356ee"
+                "reference": "84b7ddfa9cb4b1d9441b924e979b9bd1af41d6d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/555a0c35c49c2c312599aec21f84570ea53356ee",
-                "reference": "555a0c35c49c2c312599aec21f84570ea53356ee",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/84b7ddfa9cb4b1d9441b924e979b9bd1af41d6d5",
+                "reference": "84b7ddfa9cb4b1d9441b924e979b9bd1af41d6d5",
                 "shasum": ""
             },
             "require": {
@@ -43,9 +43,9 @@
             "description": "Neuron PHP framework",
             "support": {
                 "issues": "https://github.com/fsa/php-neuron-framework/issues",
-                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.1.0"
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.1.1"
             },
-            "time": "2022-03-31T07:47:51+00:00"
+            "time": "2022-04-01T18:05:09+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",
