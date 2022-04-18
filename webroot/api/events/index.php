@@ -1,7 +1,7 @@
 <?php
-use FSA\Neuron\Settings;
-require_once '../../common.php';
-$host=Settings::get('daemon-ip', '127.0.0.1');
+
+require_once '../../../vendor/autoload.php';
+$host=App::getSettings('daemon-ip', '127.0.0.1');
 if (!is_null($host)) {
     if (getenv('REMOTE_ADDR')!=$host) {
         die('Wrong host');

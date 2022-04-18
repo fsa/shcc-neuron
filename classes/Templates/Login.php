@@ -2,7 +2,8 @@
 
 namespace Templates;
 
-class Login {
+class Login
+{
 
     public $title='Вход на сайт';
     public $url='./';
@@ -10,7 +11,8 @@ class Login {
     public $header;
     public $context;
 
-    public function show() {
+    public function show()
+    {
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,8 +23,8 @@ class Login {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?=$this->header?>
 </head>
-<body>
-<div class="container">
+<body class="bg-white">
+<div class="container pt-5">
 <h1><?=$this->context['title']?></h1>
 <div class="card">
 <div class="card-header"><?=$this->title?></div>
@@ -31,7 +33,7 @@ class Login {
 <input type="hidden" name="redirect_uri" value="<?=$this->redirect_uri?>">
 <div class="form-group">
 <label for="inputLogin">Логин</label>
-<input type="login" name="login" class="form-control" id="inputLogin" aria-describedby="loginHelp" placeholder="Введите имя пользователя">
+<input type="text" name="login" class="form-control" id="inputLogin" aria-describedby="loginHelp" placeholder="Введите имя пользователя">
 </div>
 <div class="form-group">
 <label for="inputPassword">Пароль</label>

@@ -2,7 +2,7 @@
 
 namespace SmartHome;
 
-use FSA\Neuron\DBRedis;
+use App;
 
 class DeviceStorage {
 
@@ -16,25 +16,25 @@ class DeviceStorage {
 
     public function init($devices) {
         foreach ($devices as $hwid=> $entity) {
-            DBRedis::hSetNx(self::REDIS_KEY_PREFIX,$hwid, serialize($entity));
+            App::redis()->hSetNx(self::REDIS_KEY_PREFIX,$hwid, serialize($entity));
         }
     }
 
     public function set(string $hwid, \SmartHome\DeviceInterface $object) {
-        DBRedis::hSet(self::REDIS_KEY_PREFIX, $hwid, serialize($object));
+        App::redis()->hSet(self::REDIS_KEY_PREFIX, $hwid, serialize($object));
     }
 
     public function get(string $hwid): ?\SmartHome\DeviceInterface {
-        $device=unserialize(DBRedis::hGet(self::REDIS_KEY_PREFIX,$hwid));
+        $device=unserialize(App::redis()->hGet(self::REDIS_KEY_PREFIX,$hwid));
         return $device?$device:null;
     }
 
     public function exists(string $hwid): bool {
-        return DBRedis::hExists(self::REDIS_KEY_PREFIX,$hwid);
+        return App::redis()->hExists(self::REDIS_KEY_PREFIX,$hwid);
     }
 
     public static function getDevicesHwids() {
-        return DBRedis::hKeys(self::REDIS_KEY_PREFIX);
+        return App::redis()->hKeys(self::REDIS_KEY_PREFIX);
     }
 
 }

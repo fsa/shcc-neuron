@@ -2,7 +2,6 @@
 /**
  * https://yandex.ru/dev/dialogs/alice/doc/smart-home/reference/post-devices-query-docpage/
  */
-use FSA\Neuron\HttpResponse;
 if(!isset($request_id)) {die;}
 OAuth\Server::grantAccess();
 $request=json_decode($request_content);
@@ -15,7 +14,7 @@ foreach ($request->devices as $device) {
     # TODO вернуть состояние устройства
     $devices[]=$entity;
 }
-HttpResponse::json([
+App::response()->json([
     'request_id'=>$request_id,
     'payload'=>[
         'devices'=>$devices

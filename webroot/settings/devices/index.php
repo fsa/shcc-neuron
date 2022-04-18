@@ -1,16 +1,16 @@
 <?php
-use FSA\Neuron\HttpResponse,
-    FSA\Neuron\Session,
-    FSA\Neuron\HTML\Table,
+
+use FSA\Neuron\HTML\Table,
     FSA\Neuron\HTML\ButtonLink;
-require_once '../../common.php';
-Session::grantAccess([]);
-HttpResponse::setTemplate(new Templates\PageSettings);
-HttpResponse::showHtmlHeader('Устройства');
+
+require_once '../../../vendor/autoload.php';
+App::initHtml(Templates\PageSettings::class);
+App::session()->grantAccess([]);
+App::response()->showHeader('Устройства');
 ?>
 <p><a href="memory/" class="btn btn-primary">Добавить новое устройство</a></p>
 <?php
-$devices=new Table;
+$devices = new Table;
 $devices->setCaption('Устройства умного дома');
 $devices->addField('uid', 'Имя');
 $devices->addField('hwid', 'Идентификатор устройства');
@@ -21,26 +21,26 @@ $devices->addField('events', 'События');
 $devices->addField('updated', 'Было активно');
 $devices->addButton(new ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
 $devices->setRowCallback(function ($row) {
-    $entity=json_decode($row->entity);
-    $row->classname=$entity->classname;
-    $dev=SmartHome\Devices::get($row->uid);
+    $entity = json_decode($row->entity);
+    $row->classname = $entity->classname;
+    $dev = SmartHome\Devices::get($row->uid);
     if (is_null($dev)) {
-        $row->info='';
-        $row->updated='';
+        $row->info = '';
+        $row->updated = '';
     } else {
         try {
-            $row->info=(string) $dev;
+            $row->info = (string) $dev;
         } catch (Exception $ex) {
-            $row->info='Программная ошибка: '.$ex->getMessage();
+            $row->info = 'Программная ошибка: ' . $ex->getMessage();
         }
         try {
-            $updated=$dev->getLastUpdate();
-            $row->updated=$updated?date('d.m.Y H:i:s', $updated):'Нет данных';
+            $updated = $dev->getLastUpdate();
+            $row->updated = $updated ? date('d.m.Y H:i:s', $updated) : 'Нет данных';
         } catch (Exception $ex) {
-            $row->updated='Ошибка: '.$ex->getMessage();
+            $row->updated = 'Ошибка: ' . $ex->getMessage();
         }
     }
-    $row->events=join(', ', $dev->getEventsList());
+    $row->events = join(', ', $dev->getEventsList());
 });
 $devices->showTable(\SmartHome\Devices::getDevicesStmt());
 ?>
@@ -50,4 +50,4 @@ $devices->showTable(\SmartHome\Devices::getDevicesStmt());
     </tr>
 </table>
 <?php
-HttpResponse::showHtmlFooter();
+App::response()->showFooter();

@@ -1,8 +1,7 @@
 <?php
 
-use FSA\Neuron\HttpResponse;
-require_once '../../common.php';
-HttpResponse::setJsonMode();
+require_once '../../../vendor/autoload.php';
+App::initJson();
 $request_id=getenv('HTTP_X_REQUEST_ID');
 $request_content=file_get_contents('php://input');
 $path=getenv('PATH_INFO');
@@ -19,4 +18,4 @@ if(file_exists($filename)) {
     include $filename;
     exit;
 }
-HttpResponse::error(404);
+App::response()->returnError(404);

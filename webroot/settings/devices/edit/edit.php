@@ -1,5 +1,5 @@
 <?php
-use FSA\Neuron\HttpResponse;
+
 if (!isset($action)) {
     die;
 }
@@ -19,13 +19,13 @@ $devices->setDevice($device);
 switch ($action) {
     case 'insert':
         $devices->insert();
-        HttpResponse::storeNotification('Устройство добавлено');
-        HttpResponse::redirection('../');
+        App::response()->storeNotification('Устройство добавлено');
+        App::response()->redirection('../');
         break;
     case 'update':
         $devices->update(filter_input(INPUT_POST,'old_uid'));
-        HttpResponse::storeNotification('Данные об устройстве обновлены');
-        HttpResponse::redirection('../');
+        App::response()->storeNotification('Данные об устройстве обновлены');
+        App::response()->redirection('../');
         break;
 }
-HttpResponse::showError('Неизвестное действие');
+App::response()->returnError(400, 'Неизвестное действие');

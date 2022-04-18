@@ -2,7 +2,8 @@
 
 namespace Templates;
 
-class Message {
+class Message
+{
 
     public $title;
     public $context;
@@ -10,7 +11,8 @@ class Message {
     public $header;
     public $message;
 
-    public function show() {
+    public function show()
+    {
         switch ($this->style) {
             case 'primary':
             case 'secondary':
@@ -20,7 +22,7 @@ class Message {
             case 'warning':
                 $style_class='bg-'.$this->style.' text-white';
                 break;
-            case 'info':
+            case 'info':            
             case 'light':
             case 'white':
             case 'transparent':
@@ -39,8 +41,8 @@ class Message {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?=$this->header?>
 </head>
-<body bgcolor="white">
-<div class="container">
+<body class="bg-white">
+<div class="container pt-5">
 <h1><?=$this->context['title']?></h1>
 <div class="card">
 <div class="card-header <?=$style_class?>"><?=$this->title?></div>

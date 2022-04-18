@@ -2,17 +2,16 @@
 
 namespace Templates;
 
-use FSA\Neuron\Session,
-    FSA\Neuron\Settings;
-
-class Main {
+class Main
+{
 
     public $title;
     public $context;
     public $header;
     public $notify;
 
-    public function header() {
+    public function showHeader()
+    {
         $title=is_null($this->title)?$this->context['title']:$this->title.' :: '.$this->context['title'];
 ?>
 <!DOCTYPE html>
@@ -32,7 +31,7 @@ class Main {
 <body>
 <?php
         if($this->notify) {
-            $this->Notify('Информация', $this->notify);
+            $this->showNotify('Информация', $this->notify);
         }
 ?>
 <header class="container-fluid p-0">
@@ -46,24 +45,24 @@ class Main {
 <div class="collapse navbar-collapse" id="navbarsDefault">
 <ul class="navbar-nav mr-auto">
 <?php
-foreach(Settings::get('dashboard', []) as $url=>$name) {
+foreach($this->context['dashboard'] as $url=>$name) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/?page=<?=$url?>"><?=$name?></a>
     </li>
 <?php
 }
-if(Session::memberOf([])) {
+if($this->context['session']->memberOf([])) {
 ?>
     <li class="nav-item">
         <a class="nav-link" href="/settings/">Настройки</a>
     </li>
 <?php
 }
-if(Session::memberOf()) {
+if($this->context['session']->memberOf()) {
 ?>
     <li class="nav-item">
-        <a class="nav-link" href="/logout/">Выход</a>
+        <a class="nav-link" href="/login/?action=logout">Выход</a>
     </li>
 <?php
 } else {
@@ -82,7 +81,8 @@ if(Session::memberOf()) {
 <?php
     }
     
-    public function NavPills(string $url, array $buttons, $current=null) {
+    public function showNavPills(string $url, array $buttons, $current=null)
+    {
 ?>
 <ul class="nav nav-pills justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
 <?php
@@ -98,7 +98,8 @@ if(Session::memberOf()) {
 <?php
     }
 
-    public function NavTabs(string $url, array $buttons, $current=null) {
+    public function showNavTabs(string $url, array $buttons, $current=null)
+    {
 ?>
 <ul class="nav nav-tabs justify-content-center" id="navpills_item_id" navpills_item_id="<?=$current?>">
 <?php
@@ -114,30 +115,34 @@ if(Session::memberOf()) {
 <?php
     }
 
-    public function CardsHeader(){
+    public function showCardsHeader()
+    {
 ?>
 <div class="row row-cols-1 row-cols-md-3 g-4">
 <?php
     }
 
-    public function CardsFooter(){
+    public function showCardsFooter()
+    {
 ?>
 </div>
 <?php
     }
     
-    public function Card($title, $text, $state=null) {
-        $this->CardHeader($title);
+    public function showCard($title, $text, $state=null)
+    {
+        $this->showCardHeader($title);
 ?>
 <p class="card-text"><?=$text?></p>
 <?php
         if(!is_null($state)) {
-            $this->CardState($state);
+            $this->showCardState($state);
         }
-        $this->CardFooter();
+        $this->showCardFooter();
     }
 
-    public function CardHeader($title) {
+    public function showCardHeader($title)
+    {
 ?>
 <div class="col">
 <div class="card h-100">
@@ -146,13 +151,15 @@ if(Session::memberOf()) {
 <?php
     }
 
-    public function CardState($state) {
+    public function showCardState($state)
+    {
 ?>
 <p class="card-text"><small class="text-muted"><?=$state?></small></p>
 <?php
         }
 
-    public function CardFooter() {
+    public function showCardFooter()
+    {
 ?>
 </div>
 </div>
@@ -160,7 +167,7 @@ if(Session::memberOf()) {
 <?php
     }
     
-    public function Popup($message, $title, $style=null) {
+    public function showPopup($message, $title, $style=null) {
         switch ($style) {
             case 'primary':
             case 'secondary':
@@ -197,7 +204,8 @@ if(Session::memberOf()) {
 <?php
     }
 
-    private function Notify(string $title, string $text) {
+    private function showNotify(string $title, string $text)
+    {
 ?>
 <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 1050">
   <div class="toast-container position-absolute top-0 end-0 p-3">
@@ -215,7 +223,8 @@ if(Session::memberOf()) {
 <?php
     }
 
-    public function Footer() {
+    public function showFooter()
+    {
 ?>
 </main>
     <footer class="footer container-fluid bg-primary p-3 text-white"><span id="page_last_update"><?=date('d.m.Y H:i:s')?></span></footer>

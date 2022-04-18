@@ -1,31 +1,33 @@
 <?php
-use FSA\Neuron\HttpResponse,
-    FSA\Neuron\Session;
-require_once '../common.php';
+
+require_once '../../vendor/autoload.php';
 $server=new OAuth\Server();
 switch (filter_input(INPUT_GET, 'response_type')) {
     case 'code':
-        Session::grantAccess();
-        HttpResponse::redirection($server->requestTypeCode(Session::getUserId(), ['email']));
+        App::initHtml();
+        App::session()->grantAccess();
+        App::response()->redirection($server->requestTypeCode(App::session()->getUserId(), ['email']));
         exit;
 #    case 'token':
-#        HttpResponse::redirection($server->requestTypeToken());
+#        App::response()->redirection($server->requestTypeToken());
 #        exit;
 }
 switch (filter_input(INPUT_POST, 'grant_type')) {
     case 'authorization_code':
-        HttpResponse::setJsonMode();
-        HttpResponse::json($server->grantTypeAuthorizationCode());
+        App::initJson();
+        App::response()->json($server->grantTypeAuthorizationCode());
         exit;
     case 'refresh_token':
-        HttpResponse::setJsonMode();
-        HttpResponse::json($server->grantTypeRefreshToken());
+        App::initJson();
+        App::response()->json($server->grantTypeRefreshToken());
         exit;
 #    case 'password':
-#        HttpResponse::json($server->grantTypePassword());
+#        App::initJson();
+#        App::response()->json($server->grantTypePassword());
 #        exit;
 #    case 'client_credentials':
-#        HttpResponse::json($server->grantTypeClientCredentials());
+#        App::initJson();
+#        App::response()->json($server->grantTypeClientCredentials());
 #        exit;
 }
-HttpResponse::error(400);
+App::response()->returnError(400);

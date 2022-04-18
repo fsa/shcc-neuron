@@ -1,7 +1,7 @@
 <?php
-use FSA\Neuron\Session;
-require_once 'common.php';
-Session::grantAccess();
+require_once '../vendor/autoload.php';
+App::initHtml();
+App::session()->grantAccess();
 chdir('../custom/dashboard/');
 include_once '../functions.php';
 $page=filter_input(INPUT_GET,'page');

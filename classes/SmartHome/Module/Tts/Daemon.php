@@ -4,9 +4,10 @@ namespace SmartHome\Module\Tts;
 
 use SmartHome\TtsInterface,
     SmartHome\TtsQueue,
-    FSA\Neuron\DBRedis;
+    App;
 
-class Daemon implements \SmartHome\DaemonInterface {
+class Daemon implements \SmartHome\DaemonInterface
+{
 
     private $tts_provider;
     private $last_message_time;
@@ -14,71 +15,76 @@ class Daemon implements \SmartHome\DaemonInterface {
     private $pre_sound_period;
     private $play_sound_cmd;
 
-    public function __construct($params) {
+    public function __construct($params)
+    {
         if (isset($params['provider'])) {
-            $class_name=$params['provider']->class;
-            $this->tts_provider=new $class_name((array) $params['provider']->properties);
+            $class_name = $params['provider']->class;
+            $this->tts_provider = new $class_name((array) $params['provider']->properties);
             if (!($this->tts_provider instanceof TtsInterface)) {
-                $this->tts_provider=null;
+                $this->tts_provider = null;
             }
         }
-        $this->pre_sound=$params['pre_sound'];
-        $this->pre_sound_period=$params['pre_sound_period'];
-        $this->play_sound_cmd=$params['play_sound_cmd'];
+        $this->pre_sound = $params['pre_sound'];
+        $this->pre_sound_period = $params['pre_sound_period'];
+        $this->play_sound_cmd = $params['play_sound_cmd'];
     }
 
-    public function getName() {
+    public function getName()
+    {
         return 'tts';
     }
 
-    public function prepare() {
-        $this->last_message_time=0;
+    public function prepare()
+    {
+        $this->last_message_time = 0;
     }
 
-    public function iteration() {
-        $json=DBRedis::brPop(TtsQueue::NAME, 30);
+    public function iteration()
+    {
+        $json = App::redis()->brPop(TtsQueue::NAME, 30);
         if (!$json) {
             return;
         }
-        $msg=json_decode($json[1]);
-        if (!isset($msg->ts) or!isset($msg->text)) {
+        $msg = json_decode($json[1]);
+        if (!isset($msg->ts) or !isset($msg->text)) {
             return;
         }
-        if ($msg->ts+60<time()) {
-            syslog(LOG_NOTICE, __FILE__.':'.__LINE__.' Droped message "'.$msg->text.'" from '.date('c', $msg->ts).', now '.date('c'));
+        if ($msg->ts + 60 < time()) {
+            syslog(LOG_NOTICE, __FILE__ . ':' . __LINE__ . ' Dropped message "' . $msg->text . '" from ' . date('c', $msg->ts) . ', now ' . date('c'));
             return;
         }
         $this->playVoice($msg->text);
     }
 
-    public function finish() {
-
+    public function finish()
+    {
     }
 
-    private function playVoice($text) {
+    private function playVoice($text)
+    {
         if (is_null($this->tts_provider)) {
             return;
         }
-        $voice_file=$this->tts_provider->getVoiceFile($text);
-        if(is_null($voice_file)) {
-            syslog(LOG_NOTICE, __FILE__.':'.__LINE__.' $voice_file is null');
+        $voice_file = $this->tts_provider->getVoiceFile($text);
+        if (is_null($voice_file)) {
+            syslog(LOG_NOTICE, __FILE__ . ':' . __LINE__ . ' $voice_file is null');
             return;
         }
-        if (time()-$this->last_message_time>$this->pre_sound_period) {
-            $this->playMp3(__DIR__.'/../../../../../custom/sound/'.$this->pre_sound);
-            #syslog(LOG_INFO, 'TTS Attension');
+        if (time() - $this->last_message_time > $this->pre_sound_period) {
+            $this->playMp3(__DIR__ . '/../../../../../custom/sound/' . $this->pre_sound);
+            #syslog(LOG_INFO, 'TTS Attention');
         }
         $this->playMp3($voice_file);
-        $this->last_message_time=time();
+        $this->last_message_time = time();
         #syslog(LOG_INFO, 'TTS: '.$text);
     }
 
-    private function playMp3(string $filename) {
+    private function playMp3(string $filename)
+    {
         system(sprintf($this->play_sound_cmd, $filename));
     }
 
-    public static function disable(): void {
-
+    public static function disable(): void
+    {
     }
-
 }

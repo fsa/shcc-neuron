@@ -2,11 +2,11 @@
 
 namespace Widgets;
 
-use FSA\Neuron\HttpResponse;
+use App;
 
 class SystemState {
 
     public static function show() {
-        HttpResponse::showCard('Состояние системы', '<span messages="state"></span>');
+        App::response()->showCard('Состояние системы', '<span messages="state"></span>');
     }
 }

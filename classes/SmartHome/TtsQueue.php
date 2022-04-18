@@ -2,38 +2,44 @@
 
 namespace SmartHome;
 
-use FSA\Neuron\DBRedis;
+use App;
 
-class TtsQueue {
+class TtsQueue
+{
 
-    const NAME='shcc:tts_queue';
-    const MAX_SIZE=10;
-    const LOG_NAME='shcc:messages';
-    const LOG_SIZE=10;
+    const NAME = 'shcc:tts_queue';
+    const MAX_SIZE = 10;
+    const LOG_NAME = 'shcc:messages';
+    const LOG_SIZE = 10;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-    public function dropQueue() {
-        DBRedis::del(self::NAME);
+    public function dropQueue()
+    {
+        App::redis()->del(self::NAME);
     }
 
-    public function addMessage($text) {
-        DBRedis::lPush(self::NAME, json_encode(['ts'=>time(), 'text'=>$text]));
-        if(DBRedis::lLen(self::NAME)>self::MAX_SIZE) {
-            $msg=DBRedis::rPop(self::NAME);
-            syslog(LOG_NOTICE, __FILE__.':'.__LINE__.' TTS Drop queue message: '.$msg[1]);
+    public function addMessage($text)
+    {
+        App::redis()->lPush(self::NAME, json_encode(['ts' => time(), 'text' => $text]));
+        if (App::redis()->lLen(self::NAME) > self::MAX_SIZE) {
+            $msg = App::redis()->rPop(self::NAME);
+            syslog(LOG_NOTICE, __FILE__ . ':' . __LINE__ . ' TTS Drop queue message: ' . $msg[1]);
         }
     }
 
-    public static function addLogMessage($message) {
-        DBRedis::lPush(self::LOG_NAME, date('H:i').' '.$message);
-        if (DBREdis::lLen(self::LOG_NAME)>self::LOG_SIZE) {
-            DBRedis::rPop(self::LOG_NAME);
+    public static function addLogMessage($message)
+    {
+        App::redis()->lPush(self::LOG_NAME, date('H:i') . ' ' . $message);
+        if (App::redis()->lLen(self::LOG_NAME) > self::LOG_SIZE) {
+            App::redis()->rPop(self::LOG_NAME);
         }
     }
 
-    public static function getLogMessages() {
-        return DBRedis::lRange(self::LOG_NAME, 0, -1);
+    public static function getLogMessages()
+    {
+        return App::redis()->lRange(self::LOG_NAME, 0, -1);
     }
 }

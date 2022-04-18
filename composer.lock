@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46652db018e81a3dbcc725cc0400efd0",
+    "content-hash": "5af939ce43b2934948fc61744ce1cd18",
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "v0.1.3",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/php-neuron-framework.git",
-                "reference": "5dcb6d49bceaf86648fb0a2f49083e1f66772536"
+                "reference": "da9063aa797acaa2dadd19abe2913a3d8ba1995b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/5dcb6d49bceaf86648fb0a2f49083e1f66772536",
-                "reference": "5dcb6d49bceaf86648fb0a2f49083e1f66772536",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/da9063aa797acaa2dadd19abe2913a3d8ba1995b",
+                "reference": "da9063aa797acaa2dadd19abe2913a3d8ba1995b",
                 "shasum": ""
             },
             "require": {
@@ -43,9 +43,9 @@
             "description": "Neuron PHP framework",
             "support": {
                 "issues": "https://github.com/fsa/php-neuron-framework/issues",
-                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.1.3"
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.0"
             },
-            "time": "2022-04-11T17:15:20+00:00"
+            "time": "2022-04-17T19:45:15+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",

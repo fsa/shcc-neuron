@@ -1,7 +1,7 @@
 <?php
 
 define('CUSTOM_DIR', '../../../custom/');
-require_once '../../common.php';
+require_once '../../../vendor/autoload.php';
 if (getenv('REMOTE_ADDR')!='127.0.0.1') {
     die('Wrong host');
 }

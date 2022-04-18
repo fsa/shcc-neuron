@@ -2,18 +2,18 @@
 
 namespace SmartHome;
 
-use FSA\Neuron\DBRedis;
+use App;
 
 class Vars {
 
     const REDIS_KEY='shcc:vars';
 
     public static function get($name) {
-        return DBRedis::hget(self::REDIS_KEY, $name);
+        return App::redis()->hget(self::REDIS_KEY, $name);
     }
 
     public static function set($name, $value) {
-        DBRedis::hset(self::REDIS_KEY, $name, $value);
+        App::redis()->hset(self::REDIS_KEY, $name, $value);
     }
 
     public static function getJson($name, $array=true) {
@@ -26,7 +26,7 @@ class Vars {
     }
 
     public static function drop($name) {
-        return DBRedis::del(self::REDIS_KEY, $name);
+        return App::redis()->del(self::REDIS_KEY, $name);
     }
 
 }

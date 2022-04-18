@@ -25,11 +25,11 @@ if (isset($state->error)) {
     exit(2);
 }
 if ($state===false) {
-    echo "Module daemon \"$module\" json responce error.".PHP_EOL;
+    echo "Module daemon \"$module\" json response error.".PHP_EOL;
     exit(3);
 }
 if (!isset($state->daemon)) {
-    echo "Responce error getting module daemon \"$module\".".PHP_EOL;
+    echo "Response error getting module daemon \"$module\".".PHP_EOL;
     exit(4);
 }
 if (!$state->daemon) {

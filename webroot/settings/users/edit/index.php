@@ -1,21 +1,20 @@
 <?php
 
-use Templates\Forms,
-    FSA\Neuron\HttpResponse,
-    FSA\Neuron\Session,
-    FSA\Neuron\UserDB\UserEntity,
-    FSA\Neuron\UserDB\GroupEntity,
-    FSA\Neuron\UserDB\ScopeEntity;
-require_once '../../../common.php';
-Session::grantAccess([]);
+use FSA\Neuron\UserDB\UserEntity,
+    FSA\Neuron\UserDB\ScopeEntity,
+    FSA\Neuron\UserDB\GroupEntity;
+use Templates\Forms;
+
+require_once '../../../../vendor/autoload.php';
+App::initHtml();
+App::session()->grantAccess([]);
 $action=filter_input(INPUT_POST, 'action');
 if ($action) {
     require 'save.php';
     exit;
 }
-$user=UserEntity::getEntity('uuid', INPUT_GET);
-HttpResponse::setTemplate(new Templates\PageSettings);
-HttpResponse::showHtmlHeader('Редактировать пользователя '.$user->login);
+$user=UserEntity::getEntity(App::sql(), 'uuid', INPUT_GET);
+App::response()->showHeader('Редактировать пользователя '.$user->login);
 Forms::formHeader('POST', './');
 if($user->uuid) {
     Forms::inputHidden('uuid', $user->uuid);
@@ -34,14 +33,14 @@ Forms::inputString('email', $user->email, 'Электронная почта');
 <div class="card">
 <div class="card-header">Права доступа:</div>
 <?php
-foreach (ScopeEntity::getScopes() as $scope=>$title) {
+foreach (ScopeEntity::getScopes(App::sql()) as $scope=>$title) {
     Forms::inputCheckbox('scope['.$scope.']', $user->memberOfScope($scope), $title);
 }
 Forms::inputCheckbox('disabled', $user->disabled, 'Пользователь заблокирован');
 ?>
 </div>
 <?php
-$groups=GroupEntity::getGroups();
+$groups=GroupEntity::getGroups(App::sql());
 if(count($groups)) {
 ?>
 <br>
@@ -60,4 +59,4 @@ foreach ($groups as $group=>$title) {
 <?php
 Forms::submitButton($user->uuid?'Сохранить':'Создать', 'save');
 Forms::formFooter();
-HttpResponse::showHtmlFooter();
+App::response()->showFooter();

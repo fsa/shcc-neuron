@@ -1,9 +1,8 @@
 <?php
-use FSA\Neuron\HttpResponse;
-if(!isset($action)) {
+if (!isset($action)) {
     die;
 }
-$entity=SmartHome\Entity\Sensor::getEntity('id');
+$entity = SmartHome\Entity\Sensor::getEntity(App::sql(), 'id');
 $entity->inputPostString('uid');
 $entity->inputPostString('description');
 $entity->inputPostString('property');
@@ -12,13 +11,13 @@ $entity->inputPostString('history');
 switch ($action) {
     case 'create':
         $entity->insert();
-        HttpResponse::storeNotification('Датчик создан');
-        HttpResponse::redirection('../');
+        App::response()->storeNotification('Датчик создан');
+        App::response()->redirection('../');
         break;
     case 'edit':
         $entity->update();
-        HttpResponse::storeNotification('Данные о датчике обновлены');
-        HttpResponse::redirection('../');
+        App::response()->storeNotification('Данные о датчике обновлены');
+        App::response()->redirection('../');
         break;
 }
-HttpResponse::showError('Неизвестное действие');
+App::response()->returnError(400, 'Неизвестное действие');

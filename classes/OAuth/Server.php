@@ -6,8 +6,7 @@
 
 namespace OAuth;
 
-use FSA\Neuron\DB,
-    FSA\Neuron\DBRedis;
+use APP;
 
 class Server {
 
@@ -219,7 +218,7 @@ class Server {
     }
 
     private function getClient($client_id) {
-        $s=DB::prepare('SELECT uuid, client_id, client_secret, array_to_json(redirect_uris) AS redirect_uris FROM oauth_clients WHERE client_id=?');
+        $s=App::sql()->prepare('SELECT uuid, client_id, client_secret, array_to_json(redirect_uris) AS redirect_uris FROM oauth_clients WHERE client_id=?');
         $s->execute([$client_id]);
         return $s->fetchObject();
     }
@@ -233,31 +232,31 @@ class Server {
             }
 
             public function setCode($code, $data) {
-                DBRedis::setEx($this->name.':oauth:code:'.$code, Server::CODE_EXPIRED_IN, json_encode($data));
+                App::redis()->setEx($this->name.':oauth:code:'.$code, Server::CODE_EXPIRED_IN, json_encode($data));
             }
 
             public function getCode($code) {
-                $code_info=json_decode(DBRedis::get($this->name.':oauth:code:'.$code));
-                DBRedis::del($this->name.':oauth:code:'.$code);
+                $code_info=json_decode(App::redis()->get($this->name.':oauth:code:'.$code));
+                App::redis()->del($this->name.':oauth:code:'.$code);
                 return $code_info?$code_info:null;
             }
 
             public function setAccessToken($token, $data) {
-                DBRedis::setEx($this->name.':oauth:access_token:'.$token, Server::ACCESS_TOKEN_EXPIRED_IN, json_encode($data));
+                App::redis()->setEx($this->name.':oauth:access_token:'.$token, Server::ACCESS_TOKEN_EXPIRED_IN, json_encode($data));
             }
 
             public function getAccessToken($token) {
-                $token_info=json_decode(DBRedis::get($this->name.':oauth:access_token:'.$token));
+                $token_info=json_decode(App::redis()->get($this->name.':oauth:access_token:'.$token));
                 return $token_info?$token_info:null;
             }
 
 
             public function setRefreshToken($token, $data) {
-                DBRedis::setEx($this->name.':oauth:refresh_token:'.$token, Server::REFRESH_TOKEN_EXPIRED_IN, json_encode($data));
+                App::redis()->setEx($this->name.':oauth:refresh_token:'.$token, Server::REFRESH_TOKEN_EXPIRED_IN, json_encode($data));
             }
 
             public function getRefreshToken($token) {
-                $token_info=json_decode(DBRedis::get($this->name.':oauth:refresh_token:'.$token));
+                $token_info=json_decode(App::redis()->get($this->name.':oauth:refresh_token:'.$token));
                 return $token_info?$token_info:null;
             }
 

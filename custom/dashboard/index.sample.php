@@ -5,16 +5,15 @@
  * вместо данного файла. 
  */
 
-use FSA\Neuron\HttpResponse;
-HttpResponse::addHeader('<script src="/js/dashboard.js"></script>');
-HttpResponse::showHtmlHeader('Панель управления');
-HttpResponse::showCardsHeader();
-HttpResponse::showCardHeader('Настройте внешний вид');
+App::response()->addHeader('<script src="/js/dashboard.js"></script>');
+App::response()->showHeader('Панель управления');
+App::response()->showCardsHeader();
+App::response()->showCardHeader('Настройте внешний вид');
 ?>
 <p>Для настройки внешнего вида этой страницы создайте файл custom/dashboard/index.php.</p>
 <?php
-HttpResponse::showCardFooter();
+App::response()->showCardFooter();
 Widgets\SystemState::show();
 Widgets\MessageLog::show();
-HttpResponse::showCardsFooter();
-HttpResponse::showHtmlFooter();
+App::response()->showCardsFooter();
+App::response()->showFooter();
