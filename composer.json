@@ -16,6 +16,14 @@
             "": "classes/"
         }
     },
+    "scripts": {
+        "post-package-install": [
+            "SmartHome\\Plugins::postPackageInstall"
+        ],
+        "pre-package-uninstall": [
+            "SmartHome\\Plugins::prePackageUninstall"
+        ]
+    },
     "require": {
         "php": "^7.4||^8.0",
         "ext-curl": "*",
