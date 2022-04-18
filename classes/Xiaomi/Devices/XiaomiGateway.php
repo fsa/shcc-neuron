@@ -179,7 +179,7 @@ class XiaomiGateway extends AbstractDevice implements \SmartHome\Device\Capabili
     public function __toString(): string {
         $result=[];
         if(!is_null($this->bright)) {
-            $result[]=$this->bright==0?"Подсветка выключена":"Яркоть подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';
+            $result[]=$this->bright==0?"Подсветка выключена":"Яркость подсветки ".$this->bright.'%, цвет #'.$this->rgb.'.';
         }
         if($this->illumination) {
             $result[]='Датчик света: '.$this->illumination.'.';
