@@ -6,8 +6,6 @@
 
 ## Установка PostgreSQL
 
-При установке системы рекомендуется выбрать локаль с кодировкой UTF-8 (например, ru_RU.UTF-8 или en_US.UTF-8), т.к. это повлияет на инициализацию кластера БД PostgreSQL.
-
 Для установки сервер PostgreSQL выполните:
 
 ```bash
@@ -93,7 +91,7 @@ server {
 ```nginx
 fastcgi_param DATABASE_URL "postgres://shcc:PASSWORD@localhost/shcc";
 fastcgi_param SESSION_NAME shcc;
-fastcgi_param SITE_ADMINS my_user;
+fastcgi_param APP_ADMINS my_user;
 fastcgi_param TZ Asia/Yekaterinburg;
 ```
 
@@ -142,26 +140,13 @@ location /.well-known/acme-challenge {
 
 ## Получение SHCC
 
-SHCC рекомендуется размещать в папке `/var/www/shcc`. Имеется два способа получения текущей версии SHCC.
-
-### Получение через git
+SHCC рекомендуется размещать в папке `/var/www/shcc`.
 
 Перейдите в папку установки (рекомендуется `/var/www`) и клонируйте репозиторий shcc с github:
 
 ```bash
 cd /var/www
 git clone https://github.com/fsa/shcc
-```
-
-При этом будет создана папка shcc.
-
-### Получение через composer
-
-Перейдите в папку установки (рекомендуется `/var/www`) и запустите команду создания проекта:
-
-```bash
-cd /var/www
-composer create-project fsa/shcc
 ```
 
 При этом будет создана папка shcc.
@@ -175,6 +160,12 @@ cp settings.sample.php settings.php
 ```
 
 Отредактируйте полученный файл указав желаемые настройки.
+
+Для установки всех необходимых пакетов выполните в папке `shcc`
+
+```bash
+composer install
+```
 
 ## Создание базы данных
 
