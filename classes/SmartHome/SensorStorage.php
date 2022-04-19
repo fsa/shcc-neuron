@@ -11,12 +11,12 @@ class SensorStorage
 
     public static function set(string $uid, $value, $ts = null)
     {
-        App::redis()->hSet(self::STORAGE_NAME, $uid, json_encode(["value" => $value, "ts" => is_null($ts) ? time() : $ts]));
+        App::redis()->set(self::STORAGE_NAME . ':' . $uid, json_encode(["value" => $value, "ts" => is_null($ts) ? time() : $ts]));
     }
 
     public static function get(string $uid)
     {
-        $sensor = App::redis()->hGet(self::STORAGE_NAME, $uid);
+        $sensor = App::redis()->get(self::STORAGE_NAME . ':' . $uid);
         return $sensor ? json_decode($sensor) : null;
     }
 }
