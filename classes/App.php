@@ -9,6 +9,8 @@ use FSA\Neuron\SessionStorageRedis;
 
 class App
 {
+    const REDIS_PREFIX = 'shcc';
+
     private static $db;
     private static $redis;
     private static $response;
@@ -74,7 +76,7 @@ class App
     public static function session(): Session
     {
         if (is_null(self::$session)) {
-            $storage = new SessionStorageRedis(getenv('APP_NAME') ?: getenv('HTTP_HOST') ?: 'neuron', self::redis());
+            $storage = new SessionStorageRedis(self::REDIS_PREFIX, self::redis());
             self::$session = new Session(getenv('SESSION_NAME') ?: 'shcc', $storage);
             self::$session->setCookieOptions([
                 'path' => getenv('SESSION_PATH'),
@@ -103,6 +105,32 @@ class App
     public static function logout()
     {
         self::session()->logout();
+    }
+
+    public static function getVar($name)
+    {
+        return self::redis()->get(self::REDIS_PREFIX . ':vars:' . $name);
+    }
+
+    public static function setVar($name, $value)
+    {
+        App::redis()->set(self::REDIS_PREFIX . ':vars:' . $name, $value);
+    }
+
+    public static function getVarJson($name, $array = true)
+    {
+        $val = self::getVar($name);
+        return json_decode($val, $array);
+    }
+
+    public static function setVarJson($name, $object)
+    {
+        self::setVar($name, json_encode($object));
+    }
+
+    public static function dropVar($name)
+    {
+        return App::redis()->del(self::REDIS_PREFIX . ':vars:' . $name);
     }
 
     public static function exceptionHandler($ex)

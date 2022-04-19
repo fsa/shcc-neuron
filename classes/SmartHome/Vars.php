@@ -9,24 +9,23 @@ class Vars {
     const REDIS_KEY='shcc:vars';
 
     public static function get($name) {
-        return App::redis()->hget(self::REDIS_KEY, $name);
+        return App::getVar($name);
     }
 
     public static function set($name, $value) {
-        App::redis()->hset(self::REDIS_KEY, $name, $value);
+        App::setVar($name, $value);
     }
 
     public static function getJson($name, $array=true) {
-        $val=self::get($name);
-        return json_decode($val, $array);
+        return App::getVarJson($name, $array);
     }
 
     public static function setJson($name, $object) {
-        self::set($name, json_encode($object));
+        App::setVarJson($name, $object);
     }
 
     public static function drop($name) {
-        return App::redis()->del(self::REDIS_KEY, $name);
+        return App::dropVar($name);
     }
 
 }
