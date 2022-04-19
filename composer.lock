@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5af939ce43b2934948fc61744ce1cd18",
+    "content-hash": "a3948eeea8a3190cf4d8b1e685350adf",
     "packages": [
         {
             "name": "fsa/neuron-framework",
@@ -46,6 +46,91 @@
                 "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.0"
             },
             "time": "2022-04-17T19:45:15+00:00"
+        },
+        {
+            "name": "fsa/openweathermap-api",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/php-openweathermap-api.git",
+                "reference": "d6c923c9a81d5f8b2b0e3bb85f6e71f529eb269f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/php-openweathermap-api/zipball/d6c923c9a81d5f8b2b0e3bb85f6e71f529eb269f",
+                "reference": "d6c923c9a81d5f8b2b0e3bb85f6e71f529eb269f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^7.4||^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSA\\OpenWeatherMap\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Fedotov",
+                    "email": "fsa@tavda.info"
+                }
+            ],
+            "description": "OpenWeatherMap.org API",
+            "support": {
+                "issues": "https://github.com/fsa/php-openweathermap-api/issues",
+                "source": "https://github.com/fsa/php-openweathermap-api/tree/v0.1.0"
+            },
+            "time": "2022-04-09T11:39:00+00:00"
+        },
+        {
+            "name": "fsa/shcc-openweathermap",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/shcc-openweathermap.git",
+                "reference": "bbc614b43daf58e0acbd03fb5458462e77127f8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/shcc-openweathermap/zipball/bbc614b43daf58e0acbd03fb5458462e77127f8e",
+                "reference": "bbc614b43daf58e0acbd03fb5458462e77127f8e",
+                "shasum": ""
+            },
+            "require": {
+                "fsa/openweathermap-api": "^0.1",
+                "php": "^7.4||^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSA\\OpenWeatherPlugin\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Fedotov",
+                    "email": "fsa@tavda.info"
+                }
+            ],
+            "description": "SHCC OpenWeatherMap plugin",
+            "keywords": [
+                "shcc"
+            ],
+            "support": {
+                "issues": "https://github.com/fsa/shcc-openweathermap/issues",
+                "source": "https://github.com/fsa/shcc-openweathermap/tree/v0.1.0"
+            },
+            "time": "2022-04-19T08:00:19+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",

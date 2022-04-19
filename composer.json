@@ -31,6 +31,7 @@
         "ext-mbstring": "*",
         "ext-redis": "*",
         "fsa/neuron-framework": "^0.2",
-        "fsa/telegram-bot-api": "^0.1"
+        "fsa/telegram-bot-api": "^0.1",
+        "fsa/shcc-openweathermap": "^0.1.0"
     }
 }
