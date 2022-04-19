@@ -11,6 +11,16 @@
             "homepage": "https://tavda.net/"
         }
     ],
+    "funding": [
+        {
+            "type": "qiwi",
+            "url": "https://qiwi.com/n/TAVDA"
+        },
+        {
+            "type": "boosty",
+            "url": "https://boosty.to/tavdainfo"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "": "classes/"
