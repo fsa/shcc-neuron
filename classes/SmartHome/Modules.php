@@ -86,7 +86,7 @@ class Modules
 
     private function getActiveDaemonVar()
     {
-        $daemons = Vars::getJson('System.Daemons', true);
+        $daemons = Vars::getJson('System:Daemons', true);
         if (is_array($daemons)) {
             return $daemons;
         }
@@ -95,7 +95,7 @@ class Modules
 
     private function setActiveDaemonVar(array $value)
     {
-        Vars::setJson('System.Daemons', $value);
+        Vars::setJson('System:Daemons', $value);
     }
 
     public function query()

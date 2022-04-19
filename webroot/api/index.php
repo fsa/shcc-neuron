@@ -50,10 +50,10 @@ if (count($response) > 0) {
 function getState()
 {
     $state = [];
-    if (SmartHome\Vars::get('System.NightMode')) {
+    if (SmartHome\Vars::get('System:NightMode')) {
         $state[] = 'Включен ночной режим.';
     }
-    if (SmartHome\Vars::get('System.SecurityMode')) {
+    if (SmartHome\Vars::get('System:SecurityMode')) {
         $state[] = 'Включен режим охраны.';
     }
     if (sizeof($state) == 0) {

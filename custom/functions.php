@@ -2,10 +2,9 @@
 /**
  * Не редактируйте данный файл. Он может быть изменён при обновлении системы.
  */
-use FSA\Neuron\Settings;
-$night=boolval(getVar('System.NightMode'));
-$security=boolval(getVar('System.SecurityMode'));
-$mute=boolval($night or $security or getVar('System.SoundMute'));
+$night=boolval(getVar('System:NightMode'));
+$security=boolval(getVar('System:SecurityMode'));
+$mute=boolval($night or $security or getVar('System:SoundMute'));
 $minute=date('i');
 $hour=date('H');
 $time=date('H:i');
@@ -21,7 +20,7 @@ function say($text, $priority=0) {
 }
 
 function telegram($text, $priority=0) {
-    $telegram=Settings::get('telegram');
+    $telegram=App::getSettings('telegram');
     if(!$telegram or !isset($telegram['log_channel'])) {
         return;
     }
