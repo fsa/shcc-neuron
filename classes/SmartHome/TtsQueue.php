@@ -33,9 +33,9 @@ class TtsQueue
     public static function addLogMessage($message)
     {
         $log=['message'=>$message, 'ts'=>time()];
-        App::redis()->lPush(self::LOG_NAME, json_encode($log, JSON_UNESCAPED_UNICODE));
+        App::redis()->rPush(self::LOG_NAME, json_encode($log, JSON_UNESCAPED_UNICODE));
         if (App::redis()->lLen(self::LOG_NAME) > self::LOG_SIZE) {
-            App::redis()->rPop(self::LOG_NAME);
+            App::redis()->lPop(self::LOG_NAME);
         }
     }
 
