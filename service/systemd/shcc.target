@@ -2,4 +2,4 @@
 Wants=shcc-minutely.timer shcc@xiaomi.service shcc@yeelight.service shcc@miio.service shcc@tts.service
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
