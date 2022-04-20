@@ -64,7 +64,7 @@ function updatePage() {
         if (response.status === 200) {
             return response.json();
         }
-        return {error: 'Сервер некорректно ответиз на запрос, код состояния HTTP ' + response.status + '.'};
+        return {error: 'Сервер некорректно ответил на запрос, код состояния HTTP ' + response.status + '.'};
     }).then(result => {
         if(result.error) {
             showRequestError(result.error);
