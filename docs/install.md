@@ -242,50 +242,34 @@ cp minutely.sample.php minutely.php
 
 ## Обеспечение автоматического запуска необходимых процессов на системе с systemd
 
-Для запуска демонов и ежеминутного скрипта имеются готовые юниты для systemd. При стандартном расположении в папке /var/www/shcc необходимости настраивать сервисы нет. Создайте символические ссылки на файлы service и timer в каталог /lib/systemd/system/.
+Для запуска демонов и ежеминутного скрипта имеются готовые юнит-файлы для systemd. При стандартном расположении в папке `/var/www/shcc` необходимости настраивать файлы нет. Создайте символические ссылки на файлы service и timer в каталоге пользователя, от которого работает система `~/.config/systemd/user/`.
 
 ``` bash
 cd /var/www/shcc/service/systemd
-ln -s shcc.target /lib/systemd/system/
-ln -s shcc@.service /lib/systemd/system/
-ln -s shcc-minutely.service /lib/systemd/system/
-ln -s shcc-minutely.timer /lib/systemd/system/
+mkdir -p ~/.config/systemd/user/
+ln -s shcc.target ~/.config/systemd/user/
+ln -s shcc@.service ~/.config/systemd/user/
+ln -s shcc-minutely.service ~/.config/systemd/user/
+ln -s shcc-minutely.timer ~/.config/systemd/user/
 ```
 
-Если вы используете иной путь расположения shcc или используете своего пользователя для запуска скриптов, то выполните настройку:
+Теперь можно активировать и запустить требуемые сервисы. Используя учётную запись пользователя выполните:
 
 ```bash
-systemctrl edit shcc@.service
-systemctrt edit shcc-minutely.service
+systemctl enable --now --user shcc.target
 ```
 
-В открывшемся редакторе создайте секцию [Service] и укажите рабочий каталог, а также пользователя и группу, от имени которых необходимо запускать сервисы. Например, код для shcc@.service:
-
-```systemd
-[Service]
-WorkingDirectory=/home/my_user/www/shcc/service
-User=my_user
-Group=my_user
-```
-
-Для shcc-minutely.service:
-
-```systemd
-[Service]
-WorkingDirectory=/home/my_user/www/shcc/custom
-User=my_user
-Group=my_user
-```
-
-Теперь можно активировать и запустить требуемые сервисы:
+Активируйте автоматический запуск юнитов systemd от имени пользователя при старте системы:
 
 ```bash
-systemctl enable --now shcc.target
+loginctl enable-linger username
 ```
+
+Если пользователь, который используется для запуска юнитов, никогда не входит в систему (вы переключить на него с использованием su), возможны ошибки при попытки активации автоматического запуска юнитов. Активируйте юниты после использования данной команды.
 
 ## Включение голосовых оповещений
 
-Для работы голосовых оповещений необходимо установить проигрыватель. По умолчанию используется mpg123. Указать другой проигрыватель возможно через файл настроек settings.php.
+Для работы голосовых оповещений необходимо установить проигрыватель. По умолчанию используется mpg123. Указать другой проигрыватель возможно через файл настроек `settings.php`.
 
 ```bash
 apt install mpg123
