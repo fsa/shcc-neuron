@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../../vendor/autoload.php';
+App::init();
 $host=App::getSettings('daemon-ip', '127.0.0.1');
 if (!is_null($host)) {
     if (getenv('REMOTE_ADDR')!=$host) {
