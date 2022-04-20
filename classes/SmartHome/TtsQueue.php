@@ -23,7 +23,7 @@ class TtsQueue
 
     public function addMessage($text)
     {
-        App::redis()->lPush(self::NAME, json_encode(['ts' => time(), 'text' => $text]));
+        App::redis()->lPush(self::NAME, json_encode(['ts' => time(), 'text' => $text]), JSON_UNESCAPED_UNICODE);
         if (App::redis()->lLen(self::NAME) > self::MAX_SIZE) {
             $msg = App::redis()->rPop(self::NAME);
             syslog(LOG_NOTICE, __FILE__ . ':' . __LINE__ . ' TTS Drop queue message: ' . $msg[1]);
@@ -32,7 +32,8 @@ class TtsQueue
 
     public static function addLogMessage($message)
     {
-        App::redis()->lPush(self::LOG_NAME, date('H:i') . ' ' . $message);
+        $log=['message'=>$message, 'ts'=>time()];
+        App::redis()->lPush(self::LOG_NAME, json_encode($log, JSON_UNESCAPED_UNICODE));
         if (App::redis()->lLen(self::LOG_NAME) > self::LOG_SIZE) {
             App::redis()->rPop(self::LOG_NAME);
         }

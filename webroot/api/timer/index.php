@@ -1,8 +1,8 @@
 <?php
 
 define('CUSTOM_DIR', '../../../custom/');
-App::init();
 require_once '../../../vendor/autoload.php';
+App::init();
 if (getenv('REMOTE_ADDR')!='127.0.0.1') {
     die('Wrong host');
 }
