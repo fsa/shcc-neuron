@@ -71,7 +71,7 @@ class Daemon implements \SmartHome\DaemonInterface
             return;
         }
         if (time() - $this->last_message_time > $this->pre_sound_period) {
-            $this->playMp3(__DIR__ . '/../../../../../custom/sound/' . $this->pre_sound);
+            $this->playMp3(__DIR__ . '/../../../../custom/sound/' . $this->pre_sound);
             #syslog(LOG_INFO, 'TTS Attention');
         }
         $this->playMp3($voice_file);
