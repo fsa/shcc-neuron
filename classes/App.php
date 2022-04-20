@@ -17,10 +17,10 @@ class App
     private static $settings;
     private static $session;
 
-    public static function init()
+    public static function init($log_tag='shcc')
     {
         ini_set('syslog.filter', 'raw');
-        openlog("shcc", LOG_PID | LOG_ODELAY, LOG_USER);
+        openlog($log_tag, LOG_PID | LOG_ODELAY, LOG_USER);
         if ($tz = getenv('TZ')) {
             date_default_timezone_set($tz);
         }

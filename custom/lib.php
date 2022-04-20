@@ -5,7 +5,6 @@
  */
 if (!spl_autoload_functions()) {
     require_once '../vendor/autoload.php';
-    ini_set('syslog.filter', 'raw');
-    openlog("shcc@cli", LOG_PID | LOG_ODELAY, LOG_USER);
+    App::init('shcc@cli');
 }
 require_once 'functions.php';
