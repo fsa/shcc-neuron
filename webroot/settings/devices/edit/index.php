@@ -32,9 +32,15 @@ if ($hwid) {
             App::response()->returnError(500, 'Устройство не найдено в базе данных');
         }
         $entity=json_decode($device->entity);
-        $memdev=new $entity->classname;
-        $init_data_list=$memdev->getInitDataList();
-        $classname=$entity->classname;
+        $classname = $entity->classname;
+        if(class_exists($classname)) {
+            $memdev=new $classname;
+            $init_data_list=$memdev->getInitDataList();
+            
+        } else {
+            $memdev=null;
+            $init_data_list = [];
+        }
     } else {
         $device=new SmartHome\Entity\Device;
         $init_data_list=[];
