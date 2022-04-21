@@ -19,4 +19,12 @@ class SensorStorage
         $sensor = App::redis()->get(self::STORAGE_NAME . ':' . $uid);
         return $sensor ? json_decode($sensor) : null;
     }
+
+    public static function rename(string $old, string $new)
+    {
+        if (!App::redis()->exists(self::STORAGE_NAME.':'.$old)) {
+            return;
+        }
+        App::redis()->rename(self::STORAGE_NAME . ':' . $old, self::STORAGE_NAME . ':' . $new);
+    }
 }
