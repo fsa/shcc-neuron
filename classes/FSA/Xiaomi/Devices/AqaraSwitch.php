@@ -1,28 +1,29 @@
 <?php
 
 /**
- * SHCC 0.7.0
- * 2020-11-29
  * Беспроводная кнопка Aqara
  * Код не тестировался
  */
 
-namespace Xiaomi\Devices;
+namespace FSA\Xiaomi\Devices;
 
-class AqaraSwitch extends AbstractDevice {
+class AqaraSwitch extends AbstractDevice
+{
 
-    protected function updateParam($param,$value) {
+    protected function updateParam($param, $value)
+    {
         switch ($param) {
             case "status":
-                $this->events[$this->buttonClicks($value)]=true;
-                $this->events['status']=$value;
+                $this->events[$this->buttonClicks($value)] = true;
+                $this->events['status'] = $value;
                 break;
             default:
                 $this->showUnknownParam($param, $value);
         }
     }
 
-    private function buttonClicks($value) {
+    private function buttonClicks($value)
+    {
         switch ($value) {
             case 'click':
             case 'double_click':
@@ -35,27 +36,30 @@ class AqaraSwitch extends AbstractDevice {
         return $value;
     }
 
-    public function getDescription(): string {
+    public function getDescription(): string
+    {
         return "Aqara Smart Wireless Switch";
     }
 
-    public function getState(): array {
-        return ['voltage'=>$this->voltage];
+    public function getState(): array
+    {
+        return ['voltage' => $this->voltage];
     }
 
-    public function getEventsList(): array {
+    public function getEventsList(): array
+    {
         return ['click', 'double_click', 'long_press', 'long_press_release', 'voltage'];
     }
 
-    public function __toString(): string {
-        $result=[];
-        if($this->updated) {
-            $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);
+    public function __toString(): string
+    {
+        $result = [];
+        if ($this->updated) {
+            $result[] = "Была онлайн " . date('d.m.Y H:i:s', $this->updated);
         }
         if ($this->voltage) {
-            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+            $result[] = sprintf('Батарея CR2032: %.3f В.', $this->voltage);
         }
-        return join(' ',$result);
+        return join(' ', $result);
     }
-
 }

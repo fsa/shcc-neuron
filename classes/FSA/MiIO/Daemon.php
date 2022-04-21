@@ -1,6 +1,6 @@
 <?php
 
-namespace SmartHome\Module\miIO;
+namespace FSA\miIOPlugin;
 
 use SmartHome\DeviceStorage,
     miIO\SocketServer,
@@ -8,18 +8,18 @@ use SmartHome\DeviceStorage,
 
 class Daemon implements \SmartHome\DaemonInterface {
 
-    const DAEMON_NAME='miio';
+    const DAEMON_NAME='miIO';
 
     /**
      *  @var \SmartHome\DeviceStorage
      */
     private $storage;
-    private $socketserver;
-    private $process_url;
+    private $socket;
+    private $events_callback;
     private $tokens=[];
 
-    public function __construct($params) {
-        $this->process_url=$params['events_url'];
+    public function __construct($events, $params) {
+        $this->events_callback = $events;
         $this->tokens=$params['tokens'];
     }
 
@@ -29,13 +29,13 @@ class Daemon implements \SmartHome\DaemonInterface {
 
     public function prepare() {
         $this->storage=new DeviceStorage;
-        $this->socketserver=new SocketServer();
-        $this->socketserver->setBroadcastSocket();
+        $this->socket=new SocketServer();
+        $this->socket->setBroadcastSocket();
         SocketServer::sendDiscovery();
     }
 
     public function iteration() {
-        $pkt=$this->socketserver->getPacket();
+        $pkt=$this->socket->getPacket();
         if (!$pkt->isMiIOPacket()) {
             return;
         }
@@ -43,22 +43,22 @@ class Daemon implements \SmartHome\DaemonInterface {
         if ($uid=='ffffffffffffffff') {
             return;
         }
-        #TODO добавить блокировки
-        $device=$this->storage->get(self::DAEMON_NAME.'_'.$uid);
+        $hwid= self::DAEMON_NAME . ':' . $uid;
+        $device=$this->storage->get($hwid);
         if (is_null($device)) {
             $device=new GenericDevice;
             if (isset($this->tokens[$uid])) {
                 $device->setDeviceToken($this->tokens[$uid]);
                 $device->update($pkt);
             }
-            $this->storage->set(self::DAEMON_NAME.'_'.$uid, $device);
+            $this->storage->set($hwid, $device);
         } else {
             $device->update($pkt);
-            $this->storage->set(self::DAEMON_NAME.'_'.$uid, $device);
-            $this->storage->releaseMemory();
-            if (!is_null($actions)) {
-                $data=['uid'=>self::DAEMON_NAME.'_'.$uid, 'data'=>$actions];
-                file_get_contents($this->process_url.'?'.http_build_query($data));
+            $this->storage->set($hwid, $device);
+            $events = $device->getEvents();
+            if (!is_null($events)) {
+                $callback = $this->events_callback;
+                $callback($hwid, $events);
             }
         }
     }

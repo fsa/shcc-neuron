@@ -1,38 +1,40 @@
 <?php
 
 /**
- * SHCC 0.7.0
- * 2020-11-29
+ * Беспроводный выключатель Aqara
  */
 
-namespace Xiaomi\Devices;
+namespace FSA\Xiaomi\Devices;
 
-class AqaraWirelessRemoteSwitch extends AbstractDevice {
-
-    protected function updateParam($param,$value) {
+class AqaraWirelessRemoteSwitch extends AbstractDevice
+{
+    protected function updateParam($param, $value)
+    {
         switch ($param) {
             case "channel_0":
-                $this->events[$this->oneButtonEvent($value).'@left']=true;
+                $this->events[$this->oneButtonEvent($value) . '@left'] = true;
                 break;
             case "channel_1":
-                $this->events[$this->oneButtonEvent($value).'@right']=true;
+                $this->events[$this->oneButtonEvent($value) . '@right'] = true;
                 break;
             case "dual_channel":
-                $this->events[$this->doubleButtonsEvent($value).'@both']=true;
+                $this->events[$this->doubleButtonsEvent($value) . '@both'] = true;
                 break;
             default:
                 $this->showUnknownParam($param, $value);
         }
     }
 
-    private function oneButtonEvent($value) {
-        if($value=='long_click') {
+    private function oneButtonEvent($value)
+    {
+        if ($value == 'long_click') {
             return 'long_press';
         }
         return $value;
     }
 
-    private function doubleButtonsEvent($value) {
+    private function doubleButtonsEvent($value)
+    {
         switch ($value) {
             case 'both_click':
                 return 'click';
@@ -43,28 +45,32 @@ class AqaraWirelessRemoteSwitch extends AbstractDevice {
         }
         return $value;
     }
-    public function getDescription(): string {
+    public function getDescription(): string
+    {
         return "Aqara Wireless Remote Switch";
     }
 
-    public function getState(): array {
+    public function getState(): array
+    {
         return [
-            'voltage'=>$this->voltage
-                ];
+            'voltage' => $this->voltage
+        ];
     }
 
-    public function __toString(): string {
-        $result=[];
-        if($this->updated) {
-            $result[]="Была онлайн ".date('d.m.Y H:i:s',$this->updated);
+    public function __toString(): string
+    {
+        $result = [];
+        if ($this->updated) {
+            $result[] = "Была онлайн " . date('d.m.Y H:i:s', $this->updated);
         }
         if ($this->voltage) {
-            $result[]=sprintf('Батарея CR2032: %.3f В.',$this->voltage);
+            $result[] = sprintf('Батарея CR2032: %.3f В.', $this->voltage);
         }
-        return join(' ',$result);
+        return join(' ', $result);
     }
 
-    public function getEventsList(): array {
+    public function getEventsList(): array
+    {
         return [
             'click@left',
             'double_click@left',
@@ -78,5 +84,4 @@ class AqaraWirelessRemoteSwitch extends AbstractDevice {
             'voltage'
         ];
     }
-
 }

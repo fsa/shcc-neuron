@@ -27,7 +27,7 @@ interface DeviceInterface {
     function getInitDataList(): array;
 
     /**
-     * Возвращает текущеие свойства объекта, которые нужны при инициализации
+     * Возвращает текущие свойства объекта, которые нужны при инициализации
      */
     function getInitDataValues(): array;
 

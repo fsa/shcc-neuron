@@ -46,8 +46,15 @@ if (isset($state->timezone)) {
     date_default_timezone_set($state->timezone);
 }
 $params=(array)$state->settings;
-$params['events_url']=$url.'/api/events/';
-$daemon=new $daemon_class($params);
+$daemon=new $daemon_class(function($hwid, $events) use ($url) {
+    file_get_contents($url . '/api/events/', 0, stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/json; charset=utf-8",
+            'content' => json_encode(['hwid' => $hwid, 'events' => $events])
+        ]
+    ]));
+}, $params);
 $daemon_name=$daemon->getName();
 echo "Starting '$module' module daemon.".PHP_EOL;
 $daemon->prepare();
