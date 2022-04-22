@@ -15,7 +15,7 @@ class Daemon implements \SmartHome\DaemonInterface
     private $pre_sound_period;
     private $play_sound_cmd;
 
-    public function __construct($params)
+    public function __construct($callback, $params)
     {
         if (isset($params['provider'])) {
             $class_name = $params['provider']->class;
