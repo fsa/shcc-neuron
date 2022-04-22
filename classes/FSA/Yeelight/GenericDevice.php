@@ -42,7 +42,7 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
 
     public function init($device_id, $init_data): void
     {
-        $parts = explode('_', $device_id, 2);
+        $parts = explode(':', $device_id, 2);
         #TODO: теперь информации о модели в uid устройства нет
         $this->model = $parts[0];
         $this->id = $parts[1];
