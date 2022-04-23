@@ -35,6 +35,18 @@ class Devices
         return $device;
     }
 
+    public static function set($uid, $device)
+    {
+        $s = App::sql()->prepare('SELECT hwid FROM devices WHERE uid=?');
+        $s->execute([$uid]);
+        $db_dev = $s->fetchObject();
+        if (!$db_dev) {
+            return null;
+        }
+        $storage = new DeviceStorage;
+        $storage->set($device->getHwid(), $device);
+    }
+
     public function create()
     {
         $this->device = new Entity\Device;
@@ -180,7 +192,7 @@ class Devices
 
     public static function processEvents($hwid, $events, $ts = null)
     {
-        $uid = self::getDeviceByHwid($hwid);
+        $uid = self::getUidByHwid($hwid);
         if (!$uid) {
             return;
         }
