@@ -178,8 +178,12 @@ class Devices
         }
     }
 
-    public static function processEvents($uid, $events, $ts = null)
+    public static function processEvents($hwid, $events, $ts = null)
     {
+        $uid = self::getDeviceByHwid($hwid);
+        if (!$uid) {
+            return;
+        }
         try {
             self::storeEvents($uid, $events, $ts);
         } catch (\Exception $ex) {
@@ -191,4 +195,5 @@ class Devices
             syslog(LOG_ERR, 'Ошибка при выполнении пользовательского скрипта events/' . $uid . '.php:' . PHP_EOL . $ex);
         }
     }
+
 }

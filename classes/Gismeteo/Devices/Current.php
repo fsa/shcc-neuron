@@ -102,8 +102,7 @@ class Current implements \SmartHome\DeviceInterface {
         $storage=new DeviceStorage;
         $storage->set($this->hwid, $this);
         $events=['temperature'=>$weather->response->temperature->air->C, 'humidity'=>$weather->response->humidity->percent, 'pressure'=>round($weather->response->pressure->h_pa*76000/101325, 2), 'wind_speed'=>$weather->response->wind->speed->m_s, 'wind_direction'=>$weather->response->wind->direction->degree, 'weather'=>json_encode($weather, JSON_UNESCAPED_UNICODE)];
-        $uid=Devices::getUidByHwid($this->hwid);
-        Devices::processEvents($uid, $events, $weather->response->date->unix);
+        Devices::processEvents($this->hwid, $events, $weather->response->date->unix);
         return true;
     }
 

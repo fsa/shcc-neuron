@@ -21,10 +21,6 @@ if (!isset($json->events)) {
     die('Wrong format');
 }
 fastcgi_finish_request();
-$uid=SmartHome\Devices::getUidByHwid($json->hwid);
-if (!$uid) {
-    exit;
-}
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
-SmartHome\Devices::processEvents($uid, $events, $ts);
+SmartHome\Devices::processEvents($json->hwid, $events, $ts);
