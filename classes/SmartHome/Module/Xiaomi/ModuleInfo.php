@@ -1,6 +1,6 @@
 <?php
 
-use FSA\Xiaomi\Socket;
+use FSA\XiaomiPlugin\Socket;
 use FSA\XiaomiPlugin\Daemon;
 
 return [

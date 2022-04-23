@@ -3,8 +3,7 @@
 namespace FSA\XiaomiPlugin;
 
 use SmartHome\DaemonInterface,
-    SmartHome\DeviceStorage,
-    FSA\Xiaomi\Socket;
+    SmartHome\DeviceStorage;
 
 class Daemon implements DaemonInterface
 {
