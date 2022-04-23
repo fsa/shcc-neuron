@@ -1,6 +1,6 @@
 <?php
 
-namespace FSA\Xiaomi;
+namespace FSA\XiaomiPlugin;
 
 class XiaomiPacket
 {
@@ -88,17 +88,11 @@ class XiaomiPacket
             case "sensor_switch.aq2":
             case "sensor_switch.aq3":
                 return new Devices\AqaraSwitch;
-                #            case "sensor_wleak.aq1":
-                #                return new Devices\AqaraWleakSensor;
-                #            case "86sw1":
-                #                return new Devices\AqaraWleakSensor;
-                #            case "86sw2":
-                #                return new Devices\AqaraWleakSensor;
-                #            case "sensor_wleak.aq1":
-                #                return new Devices\AqaraWleakSensor;
-                #            case "ctrl_86plug.aq1":
-                #stdClass Object ( [status] => stdClass Object ( [on] => action ) [inuse] => stdClass Object ( [1] => action ) [power_consumed] => stdClass Object ( [4124] => action ) [load_power] => stdClass Object ( [0.78] => action ) )
-                #                 return new Devices\AqaraWleakSensor;
+                # case "sensor_wleak.aq1":
+                # case "86sw1":
+                # case "86sw2":
+                # case "sensor_wleak.aq1":
+                # case "ctrl_86plug.aq1":
             default:
                 return new Devices\Unknown();
         }

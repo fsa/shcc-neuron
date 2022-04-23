@@ -4,7 +4,7 @@
  * Датчик движения Xiaomi
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class MotionSensor extends AbstractDevice
 {

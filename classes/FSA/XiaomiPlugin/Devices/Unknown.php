@@ -4,7 +4,7 @@
  * Устройство не поддерживаемого типа
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class Unknown extends AbstractDevice
 {

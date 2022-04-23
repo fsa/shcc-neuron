@@ -1,8 +1,8 @@
 <?php
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
-use FSA\Xiaomi\XiaomiPacket,
+use FSA\XiaomiPlugin\XiaomiPacket,
     SmartHome\DeviceInterface;
 
 abstract class AbstractDevice implements DeviceInterface

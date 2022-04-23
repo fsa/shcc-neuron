@@ -1,15 +1,13 @@
 <?php
 
 /**
- * Беспроводная кнопка Aqara
- * Код не тестировался
+ * Беспроводная кнопка Xiaomi
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
-class AqaraSwitch extends AbstractDevice
+class XiaomiSwitch extends AbstractDevice
 {
-
     protected function updateParam($param, $value)
     {
         switch ($param) {
@@ -38,7 +36,7 @@ class AqaraSwitch extends AbstractDevice
 
     public function getDescription(): string
     {
-        return "Aqara Smart Wireless Switch";
+        return "Xiaomi Smart Wireless Switch";
     }
 
     public function getState(): array
@@ -48,7 +46,7 @@ class AqaraSwitch extends AbstractDevice
 
     public function getEventsList(): array
     {
-        return ['click', 'double_click', 'long_press', 'long_press_release', 'voltage'];
+        return ['click', 'double_click', 'long_press', 'long_press_release'];
     }
 
     public function __toString(): string

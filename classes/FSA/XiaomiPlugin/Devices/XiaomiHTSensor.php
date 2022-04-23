@@ -4,7 +4,7 @@
  * Датчик температуры и влажности Xiaomi
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class XiaomiHTSensor extends AbstractDevice
 {

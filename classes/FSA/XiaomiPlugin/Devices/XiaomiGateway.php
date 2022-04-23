@@ -4,9 +4,9 @@
  * Шлюз Xiaomi
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
-use FSA\Xiaomi\{XiaomiPacket, Socket};
+use FSA\XiaomiPlugin\{XiaomiPacket, Socket};
 use SmartHome\Device\Capability\PowerInterface;
 
 class XiaomiGateway extends AbstractDevice implements PowerInterface

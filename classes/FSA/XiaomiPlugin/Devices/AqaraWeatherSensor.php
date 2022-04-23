@@ -4,7 +4,7 @@
  * Датчик температуры, влажности и давления Aqara
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class AqaraWeatherSensor extends AbstractDevice
 {

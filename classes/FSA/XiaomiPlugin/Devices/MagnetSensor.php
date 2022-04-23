@@ -4,7 +4,7 @@
  * Датчик двери/окна Xiaomi
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class MagnetSensor extends AbstractDevice
 {

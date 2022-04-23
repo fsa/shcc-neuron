@@ -1,6 +1,6 @@
 <?php
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class Exception extends \Exception
 {

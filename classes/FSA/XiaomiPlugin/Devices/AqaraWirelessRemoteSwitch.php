@@ -4,7 +4,7 @@
  * Беспроводный выключатель Aqara
  */
 
-namespace FSA\Xiaomi\Devices;
+namespace FSA\XiaomiPlugin\Devices;
 
 class AqaraWirelessRemoteSwitch extends AbstractDevice
 {
