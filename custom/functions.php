@@ -38,9 +38,9 @@ function getDevice($name)
     return SmartHome\Devices::get($name);
 }
 
-function setDevice($device)
+function setDevice($name, $device)
 {
-    return SmartHome\Devices::set($device->getHwid(), $device);
+    return SmartHome\Devices::set($name, $device);
 }
 
 function getVar($name)
