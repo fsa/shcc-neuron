@@ -28,7 +28,7 @@
     },
     "scripts": {
         "post-package-install": [
-            "SmartHome\\Plugins::postPackageInstall"
+            "SmartHome\\Plugins::prePackageInstall"
         ],
         "pre-package-uninstall": [
             "SmartHome\\Plugins::prePackageUninstall"
@@ -42,6 +42,6 @@
         "ext-redis": "*",
         "fsa/neuron-framework": "^0.2",
         "fsa/telegram-bot-api": "^0.1",
-        "fsa/shcc-openweathermap": "^0.1"
+        "fsa/shcc-openweather": "^0.2"
     }
 }

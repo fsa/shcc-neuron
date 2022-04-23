@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "909e24382494c7d43ecc7f441473847f",
+    "content-hash": "99054d8cca6a0802844eb9b8c54f2860",
     "packages": [
         {
             "name": "fsa/neuron-framework",
@@ -48,65 +48,29 @@
             "time": "2022-04-17T19:45:15+00:00"
         },
         {
-            "name": "fsa/openweathermap-api",
+            "name": "fsa/shcc-openweather",
             "version": "v0.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fsa/php-openweathermap-api.git",
-                "reference": "e6a8c869d3b8328356d734e1c15842d07a78171e"
+                "url": "https://github.com/fsa/shcc-openweather.git",
+                "reference": "e8d3a6345ec667fa6eaea79535013061e3e771ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-openweathermap-api/zipball/e6a8c869d3b8328356d734e1c15842d07a78171e",
-                "reference": "e6a8c869d3b8328356d734e1c15842d07a78171e",
+                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/e8d3a6345ec667fa6eaea79535013061e3e771ef",
+                "reference": "e8d3a6345ec667fa6eaea79535013061e3e771ef",
                 "shasum": ""
             },
             "require": {
-                "ext-curl": "*",
                 "php": "^7.4||^8.0"
             },
             "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "FSA\\OpenWeatherMap\\": "classes/"
+            "extra": {
+                "shcc-plugin": {
+                    "name": "OpenWeather",
+                    "namespace": "FSA\\OpenWeatherPlugin\\"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Sergei Fedotov",
-                    "email": "fsa@tavda.info"
-                }
-            ],
-            "description": "OpenWeatherMap.org API",
-            "support": {
-                "issues": "https://github.com/fsa/php-openweathermap-api/issues",
-                "source": "https://github.com/fsa/php-openweathermap-api/tree/v0.2.0"
-            },
-            "time": "2022-04-23T13:39:47+00:00"
-        },
-        {
-            "name": "fsa/shcc-openweathermap",
-            "version": "v0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fsa/shcc-openweathermap.git",
-                "reference": "d764d1ad53eea4d763ed25526e7b60dc5ee12200"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fsa/shcc-openweathermap/zipball/d764d1ad53eea4d763ed25526e7b60dc5ee12200",
-                "reference": "d764d1ad53eea4d763ed25526e7b60dc5ee12200",
-                "shasum": ""
-            },
-            "require": {
-                "fsa/openweathermap-api": "^0.2",
-                "php": "^7.4||^8.0"
-            },
-            "type": "library",
             "autoload": {
                 "psr-4": {
                     "FSA\\OpenWeatherPlugin\\": "classes/"
@@ -122,15 +86,15 @@
                     "email": "fsa@tavda.info"
                 }
             ],
-            "description": "SHCC OpenWeatherMap plugin",
+            "description": "SHCC OpenWeather plugin",
             "keywords": [
                 "shcc"
             ],
             "support": {
-                "issues": "https://github.com/fsa/shcc-openweathermap/issues",
-                "source": "https://github.com/fsa/shcc-openweathermap/tree/v0.1.1"
+                "issues": "https://github.com/fsa/shcc-openweather/issues",
+                "source": "https://github.com/fsa/shcc-openweather/tree/v0.2.0"
             },
-            "time": "2022-04-23T14:42:08+00:00"
+            "time": "2022-04-23T19:18:25+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",

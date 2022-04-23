@@ -6,7 +6,7 @@ use Composer\Installer\PackageEvent;
 
 class Plugins
 {
-    public static function postPackageInstall(PackageEvent $event)
+    public static function prePackageInstall(PackageEvent $event)
     {
         $plugin = self::searchPlugin($event);
         if (is_null($plugin)) {
@@ -26,15 +26,16 @@ class Plugins
 
     private static function searchPlugin($event)
     {
-        $package = $event->getOperation()->getPackage();
-        if (array_search('shcc', $package->getKeywords()) === false) {
+        $extra = $event->getOperation()->getPackage()->getExtra();
+        if (!isset($extra['shcc-plugin'])) {
             return null;
         }
-        $autoload = $package->getAutoload();
-        if (!isset($autoload['psr-4'])) {
+        $plugin = $extra['shcc-plugin'];
+        if (!(isset($plugin['name']) and isset($plugin['namespace']))) {
             return null;
         }
-        return ['namespace' => array_key_first($autoload['psr-4']), 'config' => $event->getComposer()->getConfig()->get('vendor-dir') . '/../shcc-plugins.json'];
+        $plugin['config'] = $event->getComposer()->getConfig()->get('vendor-dir') . '/../shcc-plugins.json';
+        return $plugin;
     }
 
     private static function addPlugin($data)
@@ -43,9 +44,7 @@ class Plugins
         if (!is_array($config)) {
             $config = [];
         }
-        if (array_search($data['namespace'], $config) === false) {
-            $config[] = $data['namespace'];
-        }
+        $config[$data['name']] = $data['namespace'];
         file_put_contents($data['config'], json_encode($config));
     }
 
