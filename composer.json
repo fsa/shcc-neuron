@@ -28,10 +28,10 @@
     },
     "scripts": {
         "post-package-install": [
-            "SmartHome\\Plugins::prePackageInstall"
+            "Plugins::prePackageInstall"
         ],
         "pre-package-uninstall": [
-            "SmartHome\\Plugins::prePackageUninstall"
+            "Plugins::prePackageUninstall"
         ]
     },
     "require": {

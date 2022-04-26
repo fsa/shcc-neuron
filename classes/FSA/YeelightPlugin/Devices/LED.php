@@ -3,8 +3,8 @@
 namespace FSA\YeelightPlugin\Devices;
 
 use FSA\YeelightPlugin\Socket;
-use SmartHome\DeviceInterface;
-use SmartHome\Capability\{PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface};
+use FSA\SmartHome\DeviceInterface;
+use FSA\SmartHome\Capability\{PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface};
 
 class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface
 {
@@ -169,16 +169,6 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
         }
         $this->sat = $value;
         $this->events['sat'] = $value;
-    }
-
-    public function getActions()
-    {
-        if (sizeof($this->events) == 0) {
-            return null;
-        }
-        $actions = json_encode($this->events);
-        $this->events = [];
-        return $actions;
     }
 
     private function getSocket()
@@ -435,7 +425,7 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
 
     public function getHwid(): string
     {
-        return 'yeelight_' . $this->id;
+        return $this->id;
     }
 
     public function getDescription(): string
@@ -562,54 +552,74 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
         }
     }
 
-    public function getPower(): bool
+    public function getPower(int $line = 0): bool
     {
         return $this->getPowerValue();
     }
 
-    public function setCT(int $ct_value)
+    public function setCT(int $ct_value, int $line = 0)
     {
-        $this->sendSetCtAbx($ct_value);
+        if ($line == 0) {
+            $this->sendSetCtAbx($ct_value);
+        } else {
+            $this->sendBgSetCtAbx($ct_value);
+        }
     }
 
-    public function getCT(): int
+    public function getCT(int $line = 0): int
     {
         return $this->getCTValue();
     }
 
-    public function setHSV($hue, $sat, $value)
+    public function setHSV($hue, $sat, $value, int $line = 0)
     {
-        $this->sendSetHSV($hue, $sat);
-        $this->sendSetBright($value);
+        if ($line == 0) {
+            $this->sendSetHSV($hue, $sat);
+        } else {
+            $this->sendSetBright($value);
+        }
     }
 
-    public function getHSV(): array
+    public function getHSV(int $line = 0): array
     {
         return [$this->getHueValue(), $this->getSatValue(), $this->getBrightValue()];
     }
 
-    public function setRGB(int $rgb)
+    public function setRGB(int $rgb, int $line = 0)
     {
-        $this->sendSetRGB(dechex($rgb));
+        if ($line == 0) {
+            $this->sendSetRGB(dechex($rgb));
+        } else {
+            $this->sendBgSetRGB(dechex($rgb));
+        }
     }
 
-    public function getRGB(): int
+    public function getRGB(int $line = 0): int
     {
         return $this->getRGBValue();
     }
 
-    public function setBrightness(int $brightness): void
+    public function setBrightness(int $brightness, int $line = 0): void
     {
-        $this->sendSetBright($brightness);
+        if ($line == 0) {
+            $this->sendSetBright($brightness);
+        } else {
+            $this->sendBgSetBright($brightness);
+        }
     }
 
-    public function getBrightness(): int
+    public function getBrightness(int $line = 0): int
     {
         return $this->getBrightValue();
     }
 
     public function getEventsList(): array
     {
-        return [];
+        if (sizeof($this->events) == 0) {
+            return null;
+        }
+        $events = $this->events;
+        $this->events = [];
+        return $events;
     }
 }
