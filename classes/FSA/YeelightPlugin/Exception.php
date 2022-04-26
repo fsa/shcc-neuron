@@ -1,6 +1,6 @@
 <?php
 
-namespace FSA\Yeelight;
+namespace FSA\YeelightPlugin;
 
 class Exception extends \Exception
 {

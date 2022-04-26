@@ -1,11 +1,12 @@
 <?php
 
-namespace FSA\Yeelight;
+namespace FSA\YeelightPlugin\Devices;
 
+use FSA\YeelightPlugin\Socket;
 use SmartHome\DeviceInterface;
 use SmartHome\Device\Capability\{PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface};
 
-class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface
+class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface
 {
     private $location;
     private $id;
@@ -42,10 +43,7 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
 
     public function init($device_id, $init_data): void
     {
-        $parts = explode(':', $device_id, 2);
-        #TODO: теперь информации о модели в uid устройства нет
-        $this->model = $parts[0];
-        $this->id = $parts[1];
+        $this->id = $device_id;
         foreach ($init_data as $key => $value) {
             $this->$key = $value;
         }
@@ -53,7 +51,7 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
 
     public function getInitDataList(): array
     {
-        return ['location' => 'IP адрес', 'model' => 'Тип устройства'];
+        return ['id', 'location' => 'IP адрес', 'model' => 'Тип устройства'];
     }
 
     public function getInitDataValues(): array
@@ -193,7 +191,7 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
         if (!$socket) {
             switch ($errno) {
                 case 113:
-                    throw new AppException("Устройство недоступно.");
+                    throw new Exception("Устройство недоступно.");
                 default:
                     throw new Exception($errstr, $errno);
             }
@@ -206,7 +204,7 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
     public function getEffect(int $duration)
     {
         if ($duration > 0 and $duration < 30) {
-            throw new AppException('Длительность эффекта должна быть больше 30.');
+            throw new Exception('Длительность эффекта должна быть больше 30.');
         }
         return ($duration == 0) ? 'sudden' : 'smooth';
     }
@@ -524,6 +522,10 @@ class GenericDevice implements DeviceInterface, PowerInterface, ColorHsvInterfac
 
     public function refreshState(): void
     {
+        if (is_null($this->location)) {
+            # Не инициализирован IP адрес устройства
+            return;
+        }
         $ip = parse_url($this->location, PHP_URL_HOST);
         $yeelight = new Socket();
         $yeelight->sendDiscover($ip);
