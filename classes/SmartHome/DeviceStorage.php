@@ -16,12 +16,12 @@ class DeviceStorage
         }
     }
 
-    public function set(string $hwid, \SmartHome\DeviceInterface $object)
+    public function set(string $hwid, DeviceInterface $object)
     {
         App::redis()->set(self::REDIS_KEY_PREFIX . ':' . $hwid, serialize($object));
     }
 
-    public function get(string $hwid): ?\SmartHome\DeviceInterface
+    public function get(string $hwid): ?DeviceInterface
     {
         $device = unserialize(App::redis()->get(self::REDIS_KEY_PREFIX . ':' . $hwid));
         return $device ? $device : null;

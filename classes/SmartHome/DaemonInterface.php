@@ -2,10 +2,12 @@
 
 namespace SmartHome;
 
-interface DaemonInterface {
+interface DaemonInterface
+{
     /**
      * Конструктор класса
-     * @param string $process_url URL для обработки событий
+     * @param callable $event 
+     * @param array $params массив параметров настроек демона
      */
     function __construct(callable $event, array $params);
     /**
@@ -25,4 +27,3 @@ interface DaemonInterface {
      */
     function finish();
 }
-
