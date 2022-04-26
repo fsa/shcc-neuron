@@ -15,7 +15,7 @@ class App
     private static $redis;
     private static $response;
     private static $settings;
-    private static $session;
+    private static ?Session $session;
 
     public static function init($log_tag='shcc')
     {
@@ -26,19 +26,21 @@ class App
         }
     }
 
-    public static function initHtml($main_template = Templates\Main::class)
+    public static function initHtml($main_template = Templates\Main::class): ResponseHtml
     {
         self::init();
         self::$response = new ResponseHtml($main_template, Templates\Login::class, Templates\Message::class);
         self::$response->setContext(['title' => 'SHCC', 'dashboard' => self::getSettings('dashboard'), 'session' => self::session()]);
         set_exception_handler([__CLASS__, 'exceptionHandler']);
+        return self::$response;
     }
 
-    public static function initJson()
+    public static function initJson(): ResponseJson
     {
         self::init();
         self::$response = new ResponseJson;
         set_exception_handler([__CLASS__, 'exceptionHandler']);
+        return self::$response;
     }
 
     public static function response()
