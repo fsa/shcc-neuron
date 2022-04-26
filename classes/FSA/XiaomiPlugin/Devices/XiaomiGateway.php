@@ -7,7 +7,7 @@
 namespace FSA\XiaomiPlugin\Devices;
 
 use FSA\XiaomiPlugin\{XiaomiPacket, Socket};
-use SmartHome\Device\Capability\PowerInterface;
+use SmartHome\Capability\PowerInterface;
 
 class XiaomiGateway extends AbstractDevice implements PowerInterface
 {

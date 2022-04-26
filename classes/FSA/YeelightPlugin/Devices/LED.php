@@ -4,7 +4,7 @@ namespace FSA\YeelightPlugin\Devices;
 
 use FSA\YeelightPlugin\Socket;
 use SmartHome\DeviceInterface;
-use SmartHome\Device\Capability\{PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface};
+use SmartHome\Capability\{PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface};
 
 class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRgbInterface, ColorTInterface, BrightnessInterface
 {

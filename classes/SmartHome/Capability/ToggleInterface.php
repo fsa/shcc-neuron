@@ -1,6 +1,6 @@
 <?php
 
-namespace SmartHome\Device\Capability;
+namespace SmartHome\Capability;
 
 interface ToggleInterface {
 
