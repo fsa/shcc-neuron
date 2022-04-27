@@ -1,33 +1,35 @@
 <?php
 
 require_once '../../../vendor/autoload.php';
-App::initJson();
-$host = App::getSettings('daemon-ip', '127.0.0.1');
-if (!is_null($host)) {
-    if (getenv('REMOTE_ADDR') != $host) {
-        die('Wrong host');
-    }
+$response = App::initJson();
+$daemon_host = App::getSettings('daemon-ip', '127.0.0.1');
+if ($daemon_host != getenv('REMOTE_ADDR')) {
+    $response->returnError(403);
 }
 $request = file_get_contents('php://input');
 $json = json_decode($request);
 if (!$json) {
-    App::response()->returnError(400, 'Неверный JSON');
+    $response->returnError(400);
 }
-if (!isset($json->module)) {
-    App::response()->returnError(500, 'Неверное имя модуля');
+if (!isset($json->plugin)) {
+    $response->returnError(400, 'Plugin name required');
 }
-$redis = new SmartHome\DeviceStorage;
-$redis->init(\SmartHome\Devices::getAllDevicesEntity());
-$modules = new SmartHome\Modules;
-if (!$modules->isModuleExists($json->module)) {
-    App::response()->json(['daemon' => null]);
+$plugin_info = Plugins::getPluginInfo($json->plugin);
+if (!$plugin_info) {
+    $response->returnError(400, 'Plugin not found');
 }
-if (!$modules->isDaemonActive($json->module)) {
-    App::response()->json(['daemon' => false]);
+$daemon_info = $plugin_info->getDaemonInfo();
+if (!$daemon_info) {
+    $response->returnError(400, 'Plugin Daemon not found');
 }
-$response = ['daemon' => true, 'class' => $modules->getDaemonClass($json->module), 'settings' => $modules->getDaemonSettings($json->module)];
-$tz = getenv('TZ');
-if ($tz) {
-    $response['timezone'] = $tz;
+$db = SmartHome::deviceDatabase();
+$fabric = SmartHome::device();
+$storage = SmartHome::deviceStorage();
+$devices = $db->getAll($json->plugin)->fetchAll();
+foreach ($devices as $item) {
+    $device = $fabric->create($json->plugin, $item->hwid, $item->class, $item->properties);
+    if ($device) {
+        $storage->setNx($json->plugin, $item->hwid, $device);
+    }
 }
-App::response()->json($response);
+$response->json(['daemon' => $daemon_info['class'], 'settings' => array_merge($daemon_info['settings'], App::getSettings($json->plugin, []))]);

@@ -7,7 +7,7 @@
 namespace FSA\XiaomiPlugin\Devices;
 
 use FSA\XiaomiPlugin\{XiaomiPacket, Socket};
-use SmartHome\Capability\PowerInterface;
+use FSA\SmartHome\Capability\PowerInterface;
 
 class XiaomiGateway extends AbstractDevice implements PowerInterface
 {
@@ -210,7 +210,7 @@ class XiaomiGateway extends AbstractDevice implements PowerInterface
         return ['illumination'];
     }
 
-    public function getPower(): bool
+    public function getPower($line = 0): bool
     {
         return $this->bright != 0;
     }

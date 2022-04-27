@@ -20,7 +20,7 @@ if (isset($json->sensors)) {
 if (isset($json->devices)) {
     $response['devices'] = [];
     foreach ($json->devices as $device_name) {
-        $device = SmartHome\Devices::get($device_name);
+        $device = SmartHome::getDevice($device_name);
         if ($device) {
             $response['devices'][] = ['name' => $device_name, 'state' => $device->getState(), 'last_update' => $device->getLastUpdate()];
         } else {

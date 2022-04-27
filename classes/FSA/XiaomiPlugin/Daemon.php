@@ -2,8 +2,8 @@
 
 namespace FSA\XiaomiPlugin;
 
-use SmartHome\DaemonInterface,
-    SmartHome\DeviceStorage;
+use SmartHome;
+use SmartHome\DaemonInterface;
 
 class Daemon implements DaemonInterface
 {
@@ -33,7 +33,7 @@ class Daemon implements DaemonInterface
 
     public function prepare()
     {
-        $this->storage = new DeviceStorage;
+        $this->storage = SmartHome::deviceStorage();
         $this->socket = new Socket($this->ip, $this->port);
         $this->socket->run();
     }
@@ -45,19 +45,19 @@ class Daemon implements DaemonInterface
         if (is_null($sid)) {
             return;
         }
-        $hwid = self::DAEMON_NAME . ':' . $sid;
-        $device = $this->storage->get($hwid);
+        /** @var FSA\SmartHome\DeviceInterface $device */
+        $device = $this->storage->get(self::DAEMON_NAME, $sid);
         if (is_null($device)) {
             $device = $pkt->getDeviceObject();
             $device->update($pkt);
-            $this->storage->set($hwid, $device);
+            $this->storage->set(self::DAEMON_NAME, $sid, $device);
         } else {
             $device->update($pkt);
-            $this->storage->set($hwid, $device);
+            $this->storage->set(self::DAEMON_NAME, $sid, $device);
             $events = $device->getEvents();
             if ($events) {
                 $callback = $this->events_callback;
-                $callback($hwid, $events);
+                $callback($sid, $events);
             }
         }
     }

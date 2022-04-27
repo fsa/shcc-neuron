@@ -1,69 +1,59 @@
 <?php
 
-if (sizeof($argv)!=2) {
-    die('Usage: '.$argv[0].' module_name'.PHP_EOL);
+if (sizeof($argv) != 2) {
+    die('Usage: ' . $argv[0] . ' plugin_name' . PHP_EOL);
 }
 require '../vendor/autoload.php';
-$module=$argv[1];
-if(!$url=getenv('SERVER_URL')) {
-    $url='http://127.0.0.1';
+$plugin = $argv[1];
+if (!$url = getenv('SERVER_URL')) {
+    $url = 'http://127.0.0.1';
 }
-$response=file_get_contents($url.'/api/daemon/', 0, stream_context_create([
-    'http'=>[
-        'method'=>'POST',
-        'header'=>"Content-Type: application/json; charset=utf-8\r\n",
-        'content'=>json_encode(['module'=>$module])
+$response = file_get_contents($url . '/api/daemon/', false, stream_context_create([
+    'http' => [
+        'method' => 'POST',
+        'header' => "Content-Type: application/json; charset=utf-8",
+        'content' => json_encode(['plugin' => $plugin]),
+        'ignore_errors' => true
     ]
-        ]));
-if ($response===false) {
-    echo "Error getting module daemon \"$module\" state.".PHP_EOL;
+]));
+$state = json_decode($response);
+if (is_null($state)) {
+    echo "$plugin: Error getting plugin info " . PHP_EOL;
     exit(1);
 }
-$state=json_decode($response);
 if (isset($state->error)) {
-    echo $state->error.PHP_EOL;
+    echo "$plugin: " . $state->error . PHP_EOL;
     exit(2);
 }
-if ($state===false) {
-    echo "Module daemon \"$module\" json response error.".PHP_EOL;
+if (!(isset($state->daemon) and isset($state->settings))) {
+    echo "$plugin: Plugin configuration error" . PHP_EOL;
     exit(3);
 }
-if (!isset($state->daemon)) {
-    echo "Response error getting module daemon \"$module\".".PHP_EOL;
+$daemon_class = $state->daemon;
+if (!class_exists($daemon_class)) {
+    echo "Daemon class \"$daemon_class\" not exists." . PHP_EOL;
     exit(4);
 }
-if (!$state->daemon) {
-    echo "Module daemon \"$module\" is disabled.".PHP_EOL;
-    exit(0);
-}
-openlog("shcc@$module", LOG_PID|LOG_ODELAY, LOG_USER);
-$daemon_class=$state->class;
-if (!class_exists($daemon_class)) {
-    echo "Daemon class \"$daemon_class\" not exists.".PHP_EOL;
-    exit(0);
-}
-if (isset($state->timezone)) {
-    date_default_timezone_set($state->timezone);
-}
-$params=(array)$state->settings;
-$daemon=new $daemon_class(function($hwid, $events) use ($url) {
-    file_get_contents($url . '/api/events/', 0, stream_context_create([
+$daemon = new $daemon_class(function ($hwid, $events) use ($url, $plugin) {
+    file_get_contents($url . '/api/events/', false, stream_context_create([
         'http' => [
             'method' => 'POST',
             'header' => "Content-Type: application/json; charset=utf-8",
-            'content' => json_encode(['hwid' => $hwid, 'events' => $events])
+            'content' => json_encode(['plugin' => $plugin, 'hwid' => $hwid, 'events' => $events]),
+            'ignore_errors' => true
         ]
     ]));
-}, $params);
-$daemon_name=$daemon->getName();
-echo "Starting '$module' module daemon.".PHP_EOL;
+}, (array)$state->settings);
+echo "Starting '$plugin' plugin daemon." . PHP_EOL;
 $daemon->prepare();
 while (1) {
     try {
         $daemon->iteration();
     } catch (Exception $ex) {
-        syslog(LOG_ERR, print_r($ex, true));
+        print_r($ex);
+        echo PHP_EOL;
         break;
     }
 }
 $daemon->finish();
+exit(0);

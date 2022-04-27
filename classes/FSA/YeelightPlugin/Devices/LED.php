@@ -613,7 +613,7 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
         return $this->getBrightValue();
     }
 
-    public function getEventsList(): array
+    public function getEvents(): ?array
     {
         if (sizeof($this->events) == 0) {
             return null;
@@ -621,5 +621,10 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
         $events = $this->events;
         $this->events = [];
         return $events;
+    }
+
+    public function getEventsList(): array
+    {
+        return [];
     }
 }

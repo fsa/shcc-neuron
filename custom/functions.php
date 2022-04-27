@@ -35,32 +35,32 @@ function telegram($text, $priority = 0)
 
 function getDevice($name)
 {
-    return SmartHome\Devices::get($name);
+    return SmartHome::getDevice($name);
 }
 
 function setDevice($name, $device)
 {
-    return SmartHome\Devices::set($name, $device);
+    SmartHome::setDevice($name, $device);
 }
 
 function getVar($name)
 {
-    return SmartHome\Vars::get($name);
+    return App::getVar($name);
 }
 
 function setVar($name, $value)
 {
-    SmartHome\Vars::set($name, $value);
+    App::setVar($name, $value);
 }
 
 function getJson($name)
 {
-    return SmartHome\Vars::getJson($name);
+    return App::getVarJson($name);
 }
 
 function setJson($name, $object)
 {
-    SmartHome\Vars::setJson($name, $object);
+    App::setVarJson($name, $object);
 }
 
 function log_info($message)

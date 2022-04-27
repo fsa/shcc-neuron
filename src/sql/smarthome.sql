@@ -1,8 +1,10 @@
 CREATE TABLE devices (
     uid varchar NOT NULL UNIQUE,
-    hwid varchar NOT NULL UNIQUE,
     description text,
-    entity jsonb
+    plugin varchar NOT NULL,
+    hwid varchar NOT NULL,
+    class varchar NOT NULL,
+    properties jsonb,
 );
 COMMENT ON TABLE devices IS 'Физические устройства';
 

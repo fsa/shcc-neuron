@@ -15,32 +15,30 @@ class DeviceStorage
         $this->key_prefix = $key_prefix;
     }
 
-    public function init($devices)
+    public function set(string $plugin, string $hwid, DeviceInterface $object)
     {
-        foreach ($devices as $hwid => $object) {
-            $this->redis->setNx($this->key_prefix . ':' . $hwid, serialize($object));
-        }
+        $this->redis->set($this->key_prefix . ':' . $plugin . ':' . $hwid, serialize($object));
     }
 
-    public function set(string $hwid, DeviceInterface $object)
+    public function setNx(string $plugin, string $hwid, DeviceInterface $object)
     {
-        $this->redis->set($this->key_prefix . ':' . $hwid, serialize($object));
+        $this->redis->setNx($this->key_prefix . ':' . $plugin . ':' . $hwid, serialize($object));
     }
 
-    public function get(string $hwid): ?DeviceInterface
+    public function get(string $plugin, string $hwid): ?DeviceInterface
     {
-        $device = unserialize($this->redis->get($this->key_prefix . ':' . $hwid));
+        $device = unserialize($this->redis->get($this->key_prefix . ':' . $plugin . ':' . $hwid));
         return $device ? $device : null;
     }
 
-    public function exists(string $hwid): bool
+    public function exists(string $plugin, string $hwid): bool
     {
-        return $this->redis->exists($this->key_prefix . ':' . $hwid);
+        return $this->redis->exists($this->key_prefix . ':' . $plugin . ':' . $hwid);
     }
 
     public function getDevicesHwids($plugin = null)
     {
-        $search_key = $this->key_prefix . (empty($plugin) ? '*' : ($plugin . ':' . '*'));
+        $search_key = $this->key_prefix . ':' . (empty($plugin) ? '*' : ($plugin . ':' . '*'));
         $this->redis->setOption(Redis::OPT_SCAN, Redis::SCAN_RETRY);
         $it = NULL;
         $result = [];

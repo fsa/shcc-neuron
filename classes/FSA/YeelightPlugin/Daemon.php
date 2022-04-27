@@ -2,8 +2,7 @@
 
 namespace FSA\YeelightPlugin;
 
-use FSA\Yeelight\{Socket, GenericDevice};
-use SmartHome\DeviceStorage;
+use SmartHome;
 
 class Daemon implements \SmartHome\DaemonInterface
 {
@@ -29,7 +28,7 @@ class Daemon implements \SmartHome\DaemonInterface
 
     public function prepare()
     {
-        $this->storage = new DeviceStorage;
+        $this->storage = SmartHome::deviceStorage();
         $this->socket = new Socket();
         $this->socket->run();
         $this->socket->sendDiscover();
@@ -40,14 +39,15 @@ class Daemon implements \SmartHome\DaemonInterface
         $pkt = $this->socket->getPacket();
         $p = $pkt->getParams();
         if (isset($p['id'])) {
-            $hwid = self::DAEMON_NAME . ':' . $p['id'];
-            $device = $this->storage->get($hwid);
+            $hwid = $p['id'];
+            /** @var FSA\SmartHome\DeviceInterface $device */
+            $device = $this->storage->get(self::DAEMON_NAME, $hwid);
             if (is_null($device)) {
-                $device = new GenericDevice();
+                $device = new Devices\LED();
             }
             $device->updateState($p);
-            $this->storage->set($hwid, $device);
-            $events = $device->getActions();
+            $this->storage->set(self::DAEMON_NAME, $hwid, $device);
+            $events = $device->getEvents();
             if (!is_null($events)) {
                 $callback = $this->events_callback;
                 $callback($hwid, $events);

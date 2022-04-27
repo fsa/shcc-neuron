@@ -67,6 +67,18 @@ class Plugins
         return self::$plugins;
     }
 
+    public static function getPluginInfo($plugin_name) {
+        $plugins = self::get();
+        if (!key_exists($plugin_name, $plugins)) {
+            return null;
+        }
+        $class_name = $plugins[$plugin_name].'PluginInfo';
+        if (!class_exists($class_name)) {
+            return null;
+        }
+        return new $class_name;
+    }
+
     private static function set()
     {
         file_put_contents(__DIR__ . self::CONFIG_PATH, json_encode(self::$plugins));

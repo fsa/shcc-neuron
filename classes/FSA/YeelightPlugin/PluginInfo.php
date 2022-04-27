@@ -2,7 +2,7 @@
 
 namespace FSA\YeelightPlugin;
 
-class PluginInfo
+class PluginInfo 
 {
     public function getName()
     {
@@ -14,8 +14,11 @@ class PluginInfo
         return 'Обеспечивает поддержку светильников Yeelight при включении на этом оборудовании режима &laquo;Управление по локальной сети&raquo;.';
     }
 
-    public function getDaemon()
+    public function getDaemonInfo()
     {
-        return Daemon::class;
+        return [
+            "class" => Daemon::class,
+            "settings" => []
+        ];
     }
 }

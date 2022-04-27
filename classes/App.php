@@ -15,7 +15,7 @@ class App
     private static $redis;
     private static $response;
     private static $settings;
-    private static ?Session $session;
+    private static $session;
 
     public static function init($log_tag='shcc')
     {

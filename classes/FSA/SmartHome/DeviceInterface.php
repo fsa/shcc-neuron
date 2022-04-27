@@ -46,5 +46,10 @@ interface DeviceInterface
      */
     function getEventsList(): array;
 
+    /**
+     * Возвращает текущие события
+     */
+    function getEvents(): ?array;
+
     function __toString(): string;
 }

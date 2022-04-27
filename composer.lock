@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99054d8cca6a0802844eb9b8c54f2860",
+    "content-hash": "2b14aef4b858c9173e944028b4f8846f",
     "packages": [
         {
             "name": "fsa/neuron-framework",
@@ -49,16 +49,16 @@
         },
         {
             "name": "fsa/shcc-openweather",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/shcc-openweather.git",
-                "reference": "e8d3a6345ec667fa6eaea79535013061e3e771ef"
+                "reference": "e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/e8d3a6345ec667fa6eaea79535013061e3e771ef",
-                "reference": "e8d3a6345ec667fa6eaea79535013061e3e771ef",
+                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e",
+                "reference": "e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e",
                 "shasum": ""
             },
             "require": {
@@ -92,9 +92,9 @@
             ],
             "support": {
                 "issues": "https://github.com/fsa/shcc-openweather/issues",
-                "source": "https://github.com/fsa/shcc-openweather/tree/v0.2.0"
+                "source": "https://github.com/fsa/shcc-openweather/tree/v0.3.0"
             },
-            "time": "2022-04-23T19:18:25+00:00"
+            "time": "2022-04-27T18:58:38+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",

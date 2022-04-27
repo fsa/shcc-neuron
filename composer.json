@@ -42,6 +42,6 @@
         "ext-redis": "*",
         "fsa/neuron-framework": "^0.2",
         "fsa/telegram-bot-api": "^0.1",
-        "fsa/shcc-openweather": "^0.2"
+        "fsa/shcc-openweather": "^0.3"
     }
 }

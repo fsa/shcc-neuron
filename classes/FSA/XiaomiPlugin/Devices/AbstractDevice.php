@@ -3,7 +3,7 @@
 namespace FSA\XiaomiPlugin\Devices;
 
 use FSA\XiaomiPlugin\XiaomiPacket,
-    SmartHome\DeviceInterface;
+    FSA\SmartHome\DeviceInterface;
 
 abstract class AbstractDevice implements DeviceInterface
 {
@@ -65,7 +65,7 @@ abstract class AbstractDevice implements DeviceInterface
         }
     }
 
-    public function getEvents()
+    public function getEvents(): ?array
     {
         if (sizeof($this->events) == 0) {
             return null;
