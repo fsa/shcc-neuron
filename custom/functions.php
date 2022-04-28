@@ -5,18 +5,12 @@
  */
 $night = boolval(getVar('System:NightMode'));
 $security = boolval(getVar('System:SecurityMode'));
-$mute = boolval($night or $security or getVar('System:SoundMute'));
 $minute = date('i');
 $hour = date('H');
 $time = date('H:i');
 
 function say($text, $priority = 0)
 {
-    global $mute;
-    if ($mute) {
-        SmartHome::tts()->addLogMessage($text);
-        return;
-    }
     SmartHome::tts()->addMessage($text);
 }
 
