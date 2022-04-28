@@ -2,16 +2,13 @@
 
 namespace FSA\YeelightPlugin;
 
+use FSA\SmartHome\DaemonInterface;
 use SmartHome;
 
-class Daemon implements \SmartHome\DaemonInterface
+class Daemon implements DaemonInterface
 {
-
     const DAEMON_NAME = 'Yeelight';
 
-    /**
-     *  @var \SmartHome\DeviceStorage
-     */
     private $storage;
     private $socket;
     private $events_callback;

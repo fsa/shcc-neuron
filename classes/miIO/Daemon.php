@@ -1,18 +1,14 @@
 <?php
 
-namespace FSA\miIOPlugin;
+namespace miIO;
 
-use SmartHome\DeviceStorage,
-    miIO\SocketServer,
-    miIO\GenericDevice;
+use FSA\SmartHome\DaemonInterface;
+use SmartHome;
 
-class Daemon implements \SmartHome\DaemonInterface {
+class Daemon implements DaemonInterface {
 
     const DAEMON_NAME='miIO';
 
-    /**
-     *  @var \SmartHome\DeviceStorage
-     */
     private $storage;
     private $socket;
     private $events_callback;
@@ -28,7 +24,7 @@ class Daemon implements \SmartHome\DaemonInterface {
     }
 
     public function prepare() {
-        $this->storage=new DeviceStorage;
+        $this->storage = SmartHome::deviceStorage();
         $this->socket=new SocketServer();
         $this->socket->setBroadcastSocket();
         SocketServer::sendDiscovery();

@@ -2,6 +2,8 @@
 
 namespace Yandex;
 
+use FSA\SmartHome\TTS\ProviderInterface;
+
 /**
  * https://tts.voicetech.yandex.net/generate? 
   key=<API‑ключ>
@@ -13,7 +15,7 @@ namespace Yandex;
   & [speed=<скорость речи>]
   & [emotion=<good|neutral|evil>]
  */
-class TtsApi implements \SmartHome\TtsInterface {
+class TtsApi implements ProviderInterface {
 
     const YANDEX_TTS_API_URL='https://tts.voicetech.yandex.net/generate';
     const CHMOD=0750;

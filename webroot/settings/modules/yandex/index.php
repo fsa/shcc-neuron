@@ -21,9 +21,9 @@ switch ($action) {
         App::response()->returnError(400, 'Неверное действие');
 }
 
-$key = SmartHome\Vars::get('.Key') ?? '';
-$speaker = SmartHome\Vars::get('Yandex:TTS:Voice') ?? 'oksana';
-$emotion = SmartHome\Vars::get('Yandex:TTS:Emotion') ?? 'neutral';
+$key = App::getVar('Yandex:TTS:Key') ?? '';
+$speaker = App::getVar('Yandex:TTS:Voice') ?? 'oksana';
+$emotion = App::getVar('Yandex:TTS:Emotion') ?? 'neutral';
 
 App::response()->showHeader('Яндекс');
 ?>

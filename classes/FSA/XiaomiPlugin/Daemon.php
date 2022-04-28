@@ -3,16 +3,12 @@
 namespace FSA\XiaomiPlugin;
 
 use SmartHome;
-use SmartHome\DaemonInterface;
+use FSA\SmartHome\DaemonInterface;
 
 class Daemon implements DaemonInterface
 {
-
     const DAEMON_NAME = 'Xiaomi';
 
-    /**
-     *  @var \SmartHome\DeviceStorage
-     */
     private $storage;
     private $socket;
     private $ip;
