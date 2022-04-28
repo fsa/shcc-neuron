@@ -1,6 +1,7 @@
 <?php
 
 use Composer\Installer\PackageEvent;
+use SmartHome\Module\Tts\Daemon as TTSDaemon;
 
 class Plugins
 {
@@ -63,6 +64,7 @@ class Plugins
             if (!is_array(self::$plugins)) {
                 throw new \Exception('Plugins config file format error');
             }
+            self::$plugins['TTS'] = 'FSA\\SmartHome\\TTS\\';
         }
         return self::$plugins;
     }

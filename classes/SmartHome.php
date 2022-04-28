@@ -1,14 +1,13 @@
 <?php
 
-use FSA\SmartHome\DeviceFactory;
-use FSA\SmartHome\DeviceStorage;
-use FSA\SmartHome\DeviceDatabase;
+use FSA\SmartHome\{DeviceFactory, DeviceStorage, DeviceDatabase, TTS\Queue};
 
 class SmartHome
 {
     private static $device_factory;
     private static $device_storage;
     private static $device_database;
+    private static $tts;
 
     public static function device(): DeviceFactory
     {
@@ -50,5 +49,13 @@ class SmartHome
             return self::deviceStorage()->set($device->plugin, $device->hwid, $object);
         }
         return null;
+    }
+
+    public static function tts(): Queue
+    {
+        if (is_null(self::$tts)) {
+            self::$tts = new Queue(App::redis(), App::REDIS_PREFIX . ':TTS');
+        }
+        return self::$tts;
     }
 }

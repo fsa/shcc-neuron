@@ -12,13 +12,12 @@ $time = date('H:i');
 
 function say($text, $priority = 0)
 {
-    \SmartHome\TtsQueue::addLogMessage($text);
     global $mute;
     if ($mute) {
+        SmartHome::tts()->addLogMessage($text);
         return;
     }
-    $tts = new \SmartHome\TtsQueue();
-    $tts->addMessage($text);
+    SmartHome::tts()->addMessage($text);
 }
 
 function telegram($text, $priority = 0)
