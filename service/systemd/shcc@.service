@@ -1,14 +1,16 @@
 [Unit]
 Description=SHCC module daemon "%I"
 After=nginx.service php-fpm.service postgresql.service sound.target
-PartOf=shcc.target
 
 [Service]
 Type=simple
 WorkingDirectory=/var/www/shcc/service
 CacheDirectory=shcc
-ExecStart=/usr/bin/php -f daemon.php %I
+ExecStart=/usr/bin/php daemon.php %I
 Restart=on-failure
 RestartSec=30s
 SyslogIdentifier=shcc@%I
 EnvironmentFile=-/etc/sysconfig/shcc
+
+[Install]
+WantedBy=shcc.target

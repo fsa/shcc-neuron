@@ -1,5 +1,5 @@
 [Unit]
-Wants=shcc-minutely.timer shcc@xiaomi.service shcc@yeelight.service shcc@miio.service shcc@tts.service
+Wants=shcc-minutely.timer
 
 [Install]
 WantedBy=default.target
