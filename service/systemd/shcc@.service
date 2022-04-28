@@ -1,6 +1,7 @@
 [Unit]
 Description=SHCC module daemon "%I"
 After=nginx.service php-fpm.service postgresql.service sound.target
+StopWhenUnneeded=yes
 
 [Service]
 Type=simple

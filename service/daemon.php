@@ -44,7 +44,6 @@ $daemon = new $daemon_class(function ($hwid, $events) use ($url, $plugin) {
         ]
     ]));
 }, (array)$state->settings);
-echo "Starting '$plugin' plugin daemon." . PHP_EOL;
 $daemon->prepare();
 while (1) {
     try {
