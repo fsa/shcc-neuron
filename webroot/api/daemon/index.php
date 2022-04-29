@@ -23,11 +23,11 @@ if (!$daemon_info) {
     $response->returnError(400, 'Plugin Daemon not found');
 }
 $db = SmartHome::deviceDatabase();
-$fabric = SmartHome::device();
+$factory = SmartHome::deviceFactory();
 $storage = SmartHome::deviceStorage();
 $devices = $db->getAll($json->plugin)->fetchAll();
 foreach ($devices as $item) {
-    $device = $fabric->create($json->plugin, $item->hwid, $item->class, $item->properties);
+    $device = $factory->create($json->plugin, $item->hwid, $item->class, $item->properties);
     if ($device) {
         $storage->setNx($json->plugin, $item->hwid, $device);
     }

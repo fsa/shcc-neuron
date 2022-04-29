@@ -19,23 +19,21 @@ class DeviceDatabase
         $s->execute([$uid]);
         return $s->fetchObject(Entity\Device::class);
     }
-/*
+
     public function search($plugin, $hwid)
     {
         $s = $this->pdo->prepare('SELECT * FROM devices WHERE plugin=? AND hwid=?');
         $s->execute([$plugin, $hwid]);
         return $s->fetchObject(Entity\Device::class);
-        $this->device = $s->fetch();
     }
-*/
-/*
+
     public function searchUid($plugin, $hwid)
     {
         $s = $this->pdo->prepare('SELECT uid FROM devices WHERE plugin=? AND hwid=?');
         $s->execute([$plugin, $hwid]);
         return $s->fetchColumn();
     }
-*/
+
     public function getAll($plugin = null)
     {
         if (is_null($plugin)) {

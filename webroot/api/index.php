@@ -9,7 +9,7 @@ $response = [];
 if (isset($json->sensors)) {
     $response['sensors'] = [];
     foreach ($json->sensors as $uid) {
-        $sensor = SmartHome\SensorStorage::get($uid);
+        $sensor = SmartHome::sensorStorage()->get($uid);
         if (is_null($sensor)) {
             continue;
         }

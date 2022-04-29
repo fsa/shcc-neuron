@@ -3,6 +3,7 @@
 namespace SmartHome;
 
 use App;
+use SmartHome;
 
 class Devices
 {
@@ -153,23 +154,11 @@ class Devices
         return $s->fetchColumn();
     }
 
-    public static function getAllDevicesEntity()
-    {
-        $stmt = App::sql()->query('SELECT hwid, entity FROM devices ORDER BY hwid');
-        $devices = [];
-        while ($device = $stmt->fetchObject()) {
-            $entity = json_decode($device->entity);
-            $device_obj = new $entity->classname;
-            $device_obj->init($device->hwid, $entity->properties ?? []);
-            $devices[$device->hwid] = $device_obj;
-        }
-        return $devices;
-    }
-
     public static function storeEvents($uid, $events, $ts = null)
     {
+        $sensor = SmartHome::sensorDatabase();
         foreach ($events as $property => $value) {
-            Sensors::storeEvent($uid, $property, $value, $ts);
+            $sensor->storeEvent($uid, $property, $value, $ts);
         }
     }
 

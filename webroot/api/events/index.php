@@ -14,7 +14,7 @@ $json=json_decode($request);
 if (!$json) {
     die('Wrong JSON');
 }
-if (!isset($json->hwid)) {
+if (!isset($json->plugin) or !isset($json->hwid)) {
     die('Wrong HWID');
 }
 if (!isset($json->events)) {
@@ -23,4 +23,4 @@ if (!isset($json->events)) {
 fastcgi_finish_request();
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
-SmartHome\Devices::processEvents($json->hwid, $events, $ts);
+SmartHome::processEvents($json->plugin, $json->hwid, $events, $ts);

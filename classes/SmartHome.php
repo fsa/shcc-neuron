@@ -1,15 +1,17 @@
 <?php
 
-use FSA\SmartHome\{DeviceFactory, DeviceStorage, DeviceDatabase, TTS\Queue};
+use FSA\SmartHome\{DeviceFactory, DeviceStorage, DeviceDatabase, SensorDatabase, SensorStorage, TTS\Queue};
 
 class SmartHome
 {
     private static $device_factory;
     private static $device_storage;
     private static $device_database;
+    private static $sensor_storage;
+    private static $sensor_database;
     private static $tts;
 
-    public static function device(): DeviceFactory
+    public static function deviceFactory(): DeviceFactory
     {
         if (is_null(self::$device_factory)) {
             self::$device_factory = new DeviceFactory(Plugins::get());
@@ -51,6 +53,22 @@ class SmartHome
         return null;
     }
 
+    public static function sensorStorage(): SensorStorage
+    {
+        if (is_null(self::$sensor_storage)) {
+            self::$sensor_storage = new SensorStorage(App::redis(), App::REDIS_PREFIX . ':sensors');
+        }
+        return self::$sensor_storage;
+    }
+
+    public static function sensorDatabase(): SensorDatabase
+    {
+        if (is_null(self::$sensor_database)) {
+            self::$sensor_database = new SensorDatabase(App::sql());
+        }
+        return self::$sensor_database;
+    }
+
     public static function tts(): Queue
     {
         if (is_null(self::$tts)) {
@@ -58,4 +76,48 @@ class SmartHome
         }
         return self::$tts;
     }
+
+    public static function storeEvents($uid, $events, $ts = null)
+    {
+        $sensor = self::sensorDatabase();
+        foreach ($events as $property => $value) {
+            $sensor->storeEvent($uid, $property, $value, $ts);
+        }
+    }
+
+    public static function execEventsCustomScripts($uid, $events, $ts = null)
+    {
+        $custom_dir = __DIR__ . '/../custom/events/';
+        if (!file_exists($custom_dir . $uid . '.php')) {
+            return;
+        }
+        chdir($custom_dir);
+        $eventsListener = require $uid . '.php';
+        $eventsListener->uid = $uid;
+        foreach ($events as $event => $value) {
+            $method = 'on_event_' . str_replace('@', '_', $event);
+            if (method_exists($eventsListener, $method)) {
+                $eventsListener->$method($value, $ts);
+            }
+        }
+    }
+
+    public static function processEvents($plugin, $hwid, $events, $ts = null)
+    {
+        $uid = self::deviceDatabase()->searchUid($plugin, $hwid);
+        if (!$uid) {
+            return;
+        }
+        try {
+            self::storeEvents($uid, $events, $ts);
+        } catch (Exception $ex) {
+            syslog(LOG_ERR, 'Ошибка при сохранении данных с датчиков:' . PHP_EOL . $ex);
+        }
+        try {
+            self::execEventsCustomScripts($uid, $events, $ts);
+        } catch (Exception $ex) {
+            syslog(LOG_ERR, 'Ошибка при выполнении пользовательского скрипта events/' . $uid . '.php:' . PHP_EOL . $ex);
+        }
+    }
+
 }

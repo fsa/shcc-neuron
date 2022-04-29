@@ -2,6 +2,7 @@
 
 use FSA\Neuron\HTML\Table,
     FSA\Neuron\HTML\ButtonLink;
+use FSA\SmartHome\Sensor;
 
 require_once '../../../vendor/autoload.php';
 App::initHtml(Templates\PageSettings::class);
@@ -20,8 +21,8 @@ $meters->addField('description', 'Описание');
 $meters->addField('device_property', 'Источник данных');
 $meters->addButton(new ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) {
-    $row->property_name = SmartHome\Sensors::getPropertyName($row->property);
-    $state = SmartHome\SensorStorage::get($row->uid);
+    $row->property_name = Sensor::getPropertyName($row->property);
+    $state = SmartHome::sensorStorage()->get($row->uid);
     if ($state) {
         if (is_bool($state->value)) {
             $state->value = $state->value ? 'да' : 'нет';
@@ -32,7 +33,7 @@ $meters->setRowCallback(function ($row) {
                 $state->value = htmlspecialchars($state->value);
             }
         }
-        $unit = SmartHome\Sensors::getPropertyUnit($row->property);
+        $unit = Sensor::getPropertyUnit($row->property);
         $row->value = $unit ? $state->value . ' ' . $unit : $state->value;
         $row->updates = date('d.m.Y H:i:s', $state->ts);
     } else {
@@ -40,5 +41,5 @@ $meters->setRowCallback(function ($row) {
         $row->updates = 'Нет данных';
     }
 });
-$meters->showTable(\SmartHome\Sensors::getAll());
+$meters->showTable(SmartHome::sensorDatabase()->getAll());
 App::response()->showFooter();

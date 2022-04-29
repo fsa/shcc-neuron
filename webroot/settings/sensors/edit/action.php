@@ -1,7 +1,5 @@
 <?php
 
-use SmartHome\SensorStorage;
-
 if (!isset($action)) {
     die;
 }
@@ -21,7 +19,7 @@ switch ($action) {
     case 'edit':
         $entity->update();
         if ($old_uid) {
-            SensorStorage::rename($old_uid, $entity->uid);
+            SmartHome::sensorStorage()->rename($old_uid, $entity->uid);
         }
         App::response()->storeNotification('Данные о датчике обновлены');
         App::response()->redirection('../');
