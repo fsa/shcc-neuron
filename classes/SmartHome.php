@@ -39,7 +39,7 @@ class SmartHome
     {
         $device = self::deviceDatabase()->get($uid);
         if ($device) {
-            return self::deviceStorage()->get($device->plugin, $device->hwid);
+            return self::deviceStorage()->get($device->plugin . ':' . $device->hwid);
         }
         return null;
     }
@@ -48,7 +48,7 @@ class SmartHome
     {
         $device = self::deviceDatabase()->get($uid);
         if ($device) {
-            return self::deviceStorage()->set($device->plugin, $device->hwid, $object);
+            return self::deviceStorage()->set($device->plugin . ':' . $device->hwid, $object);
         }
         return null;
     }
@@ -119,5 +119,4 @@ class SmartHome
             syslog(LOG_ERR, 'Ошибка при выполнении пользовательского скрипта events/' . $uid . '.php:' . PHP_EOL . $ex);
         }
     }
-
 }

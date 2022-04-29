@@ -29,7 +29,7 @@ $devices = $db->getAll($json->plugin)->fetchAll();
 foreach ($devices as $item) {
     $device = $factory->create($json->plugin, $item->hwid, $item->class, $item->properties);
     if ($device) {
-        $storage->setNx($json->plugin, $item->hwid, $device);
+        $storage->setNx($json->plugin . ':' . $item->hwid, $device);
     }
 }
 $response->json(['daemon' => $daemon_info['class'], 'settings' => array_merge($daemon_info['settings'], App::getSettings($json->plugin, []))]);

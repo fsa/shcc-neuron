@@ -51,7 +51,7 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
 
     public function getInitDataList(): array
     {
-        return ['id', 'location' => 'IP адрес', 'model' => 'Тип устройства'];
+        return ['location' => 'IP адрес', 'model' => 'Тип устройства'];
     }
 
     public function getInitDataValues(): array

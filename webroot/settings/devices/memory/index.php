@@ -4,36 +4,36 @@ use FSA\Neuron\HTML\Table,
     FSA\Neuron\HTML\ButtonLink;
 
 require_once '../../../../vendor/autoload.php';
-App::initHtml(Templates\PageSettings::class);
+$response = App::initHtml(Templates\PageSettings::class);
 App::session()->grantAccess([]);
 $hwid = filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
     require_once 'show.php';
     exit;
 }
-App::response()->showHeader('Список устройств в памяти');
+$response->showHeader('Список устройств в памяти');
 ?>
 <p><a href="../">Вернуться к списку устройств</a></p>
 <hr>
 <p><a href='../edit/'>Добавить вручную</a></p>
 <?php
 
-$db_devices = SmartHome\Devices::getDevicesHwids();
-$storage_hwids = SmartHome\DeviceStorage::getDevicesHwids();
-$mem_devices = array_flip($storage_hwids);
+$db_devices = SmartHome::deviceDatabase()->getAllHwid();
+$storage_hwid = SmartHome::deviceStorage()->getAllHwid();
+$mem_devices = array_flip($storage_hwid);
 foreach ($db_devices as $db_device) {
     if (isset($mem_devices[$db_device])) {
-        #unset($storage_hwids[$mem_devices[$db_device]]);
+        unset($storage_hwid[$mem_devices[$db_device]]);
     }
 }
-$memdevitable = new Table();
-$memdevitable->setCaption('Новые устройства в сети');
-$memdevitable->addField('hwid', 'HWID');
-$memdevitable->addField('description', 'Описание');
-$memdevitable->addField('state', 'Информация');
-$memdevitable->addField('updated', 'Было активно');
-$memdevitable->addButton(new ButtonLink('Добавить', './?hwid=%s', 'hwid'));
-$memdevitable->showTable(new class($storage_hwids)
+$table = new Table();
+$table->setCaption('Новые устройства в сети');
+$table->addField('hwid', 'HWID');
+$table->addField('description', 'Описание');
+$table->addField('state', 'Информация');
+$table->addField('updated', 'Было активно');
+$table->addButton(new ButtonLink('Добавить', './?hwid=%s', 'hwid'));
+$table->showTable(new class($storage_hwid)
 {
 
     private $list;
@@ -44,7 +44,7 @@ $memdevitable->showTable(new class($storage_hwids)
     {
         $this->list = $list;
         $this->count = count($list);
-        $this->mem = new \SmartHome\DeviceStorage;
+        $this->mem = SmartHome::deviceStorage();
     }
 
     public function fetchObject()
@@ -69,4 +69,4 @@ $memdevitable->showTable(new class($storage_hwids)
         return $this->count;
     }
 });
-App::response()->showFooter();
+$response->showFooter();

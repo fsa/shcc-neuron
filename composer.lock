@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/php-neuron-framework.git",
-                "reference": "da9063aa797acaa2dadd19abe2913a3d8ba1995b"
+                "reference": "3d132a5762306f9ed9bc6ead984b8ac4063dfeda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/da9063aa797acaa2dadd19abe2913a3d8ba1995b",
-                "reference": "da9063aa797acaa2dadd19abe2913a3d8ba1995b",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/3d132a5762306f9ed9bc6ead984b8ac4063dfeda",
+                "reference": "3d132a5762306f9ed9bc6ead984b8ac4063dfeda",
                 "shasum": ""
             },
             "require": {
@@ -43,9 +43,9 @@
             "description": "Neuron PHP framework",
             "support": {
                 "issues": "https://github.com/fsa/php-neuron-framework/issues",
-                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.0"
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.1"
             },
-            "time": "2022-04-17T19:45:15+00:00"
+            "time": "2022-04-29T20:53:22+00:00"
         },
         {
             "name": "fsa/shcc-openweather",

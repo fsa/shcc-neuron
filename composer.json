@@ -40,7 +40,7 @@
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
         "ext-redis": "*",
-        "fsa/neuron-framework": "^0.2",
+        "fsa/neuron-framework": "^0.2.1",
         "fsa/telegram-bot-api": "^0.1",
         "fsa/shcc-openweather": "^0.3"
     }

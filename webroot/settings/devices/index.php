@@ -13,17 +13,16 @@ $response->showHeader('Устройства');
 $devices = new Table;
 $devices->setCaption('Устройства умного дома');
 $devices->addField('uid', 'Имя');
+$devices->addField('description', 'Описание');
 $devices->addField('plugin', 'Плагин');
 $devices->addField('hwid', 'Идентификатор устройства');
-$devices->addField('description', 'Описание');
 $devices->addField('class', 'Класс');
-$devices->addField('info', 'Информация об устройстве');
-$devices->addField('events', 'События');
+$devices->addField('info', 'Состояние устройства');
 $devices->addField('updated', 'Было активно');
 $devices->addButton(new ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
 $device_storage = SmartHome::deviceStorage();
 $devices->setRowCallback(function ($row) use ($device_storage) {
-    $dev = $device_storage->get($row->plugin, $row->hwid);
+    $dev = $device_storage->get($row->plugin . ':' . $row->hwid);
     if (is_null($dev)) {
         $row->info = '';
         $row->updated = '';
@@ -40,7 +39,7 @@ $devices->setRowCallback(function ($row) use ($device_storage) {
         } catch (Exception $ex) {
             $row->updated = 'Ошибка: ' . $ex->getMessage();
         }
-        $row->events = join(', ', $dev->getEventsList());
+        $row->class .= '<br>События: ' . join(', ', $dev->getEventsList());
     }
 });
 $devices->showTable(SmartHome::deviceDatabase()->getAll());
