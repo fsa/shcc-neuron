@@ -18,18 +18,29 @@ if ($hwid) {
         $response->returnError(404, 'Информация об устройстве в памяти не найдена.');
     }
     $hwid_parts = explode(':', $hwid, 2);
-    if (sizeof($hwid_parts)!=2) {
+    if (sizeof($hwid_parts) != 2) {
         $response->returnError(400, 'Неверный аппаратный идентификатор устройства');
     }
     $init_data_list = $mem_dev->getInitDataList();
+    $init_data_values = $mem_dev->getInitDataValues();
     $device = new FSA\SmartHome\Entity\Device;
     $device->uid = $hwid;
     $device->plugin = $hwid_parts[0];
     $device->hwid = $hwid_parts[1];
     $device->description = $mem_dev->getDescription();
-    $device->properties = json_encode($mem_dev->getInitDataValues());
-    $full_class_name = get_class($mem_dev);
-    die('Не выполнена проверка является ли класс устройством плагина');
+    $device->properties = json_encode($init_data_values);
+    $full_class_name = explode('\\', get_class($mem_dev));
+    $device->class = array_pop($full_class_name);
+    if (array_pop($full_class_name) != 'Devices') {
+        $response->returnError(500, 'Класс PHP используемый устройством, не соответствует требованиям системы');
+    }
+    $plugins = Plugins::get();
+    if (!isset($plugins[$device->plugin])) {
+        $response->returnError(500, 'Не найден плагин, которому принадлежит устройство.');
+    }
+    if (join('\\', $full_class_name) . '\\' != $plugins[$device->plugin]) {
+        $response->returnError(500, 'Класс PHP для устройства не принадлежит плагину.');
+    }
 } else {
     if ($uid) {
         $device = SmartHome::deviceDatabase()->get($uid);
@@ -44,12 +55,15 @@ if ($hwid) {
         $class = $device->class;
         if ($mem_dev) {
             $init_data_list = $mem_dev->getInitDataList();
+            $init_data_values = $mem_dev->getInitDataValues();
         } else {
             $init_data_list = [];
+            $init_data_values = [];
         }
     } else {
         $device = new FSA\SmartHome\Entity\Device;
         $init_data_list = [];
+        $init_data_values = [];
         $class = '';
     }
 }
@@ -59,7 +73,7 @@ if ($hwid) {
 }
 ?>
 <form method="POST" action="./">
-<?php
+    <?php
     if ($uid) {
         Forms::inputHidden('old_uid', $device->uid);
     }
@@ -67,17 +81,17 @@ if ($hwid) {
     Forms::inputString('description', $device->description, 'Описание:');
     Forms::inputString('plugin', $device->plugin, 'Плагин устройства*:');
     Forms::inputString('hwid', $device->hwid, 'Уникальный идентификатор устройства*:');
-    Forms::inputString('class', $device->class, 'Класс устройства*:');
-    foreach ($mem_dev->getInitDataValues() as $param => $value) {
+    Forms::inputString('class', $device->class, 'Тип устройства:');
+    foreach ($init_data_values as $param => $value) {
         if (isset($init_data_list[$param])) {
             Forms::inputString('properties[' . $param . ']', isset($value) ? $value : '', $init_data_list[$param]);
         } else {
             Forms::inputHidden('properties[' . $param . ']', isset($value) ? $value : '');
         }
     }
-?>
-<p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
-<?php
+    ?>
+    <p>Параметры, отмеченные * не следует изменять для автоматически обнаруженных устройств, т.к. это может повлиять на их доступность.</p>
+    <?php
     Forms::submitButton($uid ? 'Сохранить изменения' : 'Добавить новое устройство', $uid ? 'update' : 'insert');
     ?>
 </form>

@@ -42,14 +42,14 @@ class Daemon implements DaemonInterface
             return;
         }
         /** @var FSA\SmartHome\DeviceInterface $device */
-        $device = $this->storage->get(self::DAEMON_NAME, $sid);
+        $device = $this->storage->get(self::DAEMON_NAME . ':' . $sid);
         if (is_null($device)) {
             $device = $pkt->getDeviceObject();
             $device->update($pkt);
-            $this->storage->set(self::DAEMON_NAME, $sid, $device);
+            $this->storage->set(self::DAEMON_NAME . ':' . $sid, $device);
         } else {
             $device->update($pkt);
-            $this->storage->set(self::DAEMON_NAME, $sid, $device);
+            $this->storage->set(self::DAEMON_NAME . ':' . $sid, $device);
             $events = $device->getEvents();
             if ($events) {
                 $callback = $this->events_callback;

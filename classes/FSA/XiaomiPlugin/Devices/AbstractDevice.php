@@ -41,7 +41,7 @@ abstract class AbstractDevice implements DeviceInterface
     public function update(XiaomiPacket $pkt)
     {
         $this->events = [];
-        $this->sid = 'xiaomi_' . $pkt->getSid();
+        $this->sid = $pkt->getSid();
         $this->cmd = $pkt->getCmd();
         $this->model = $pkt->getModel();
         foreach ($pkt->getData() as $param => $value) {

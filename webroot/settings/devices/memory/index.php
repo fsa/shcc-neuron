@@ -13,9 +13,8 @@ if ($hwid) {
 }
 $response->showHeader('Список устройств в памяти');
 ?>
-<p><a href="../">Вернуться к списку устройств</a></p>
-<hr>
-<p><a href='../edit/'>Добавить вручную</a></p>
+<p><a href="../" class="btn btn-primary">Вернуться к списку устройств</a></p>
+<p><a href="../edit/" class="btn btn-primary">Добавить вручную</a></p>
 <?php
 
 $db_devices = SmartHome::deviceDatabase()->getAllHwid();
@@ -27,7 +26,7 @@ foreach ($db_devices as $db_device) {
     }
 }
 $table = new Table();
-$table->setCaption('Новые устройства в сети');
+$table->setCaption('Обнаруженные устройства');
 $table->addField('hwid', 'HWID');
 $table->addField('description', 'Описание');
 $table->addField('state', 'Информация');

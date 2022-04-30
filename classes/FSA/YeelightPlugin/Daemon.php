@@ -38,12 +38,12 @@ class Daemon implements DaemonInterface
         if (isset($p['id'])) {
             $hwid = $p['id'];
             /** @var FSA\SmartHome\DeviceInterface $device */
-            $device = $this->storage->get(self::DAEMON_NAME, $hwid);
+            $device = $this->storage->get(self::DAEMON_NAME . ':' . $hwid);
             if (is_null($device)) {
                 $device = new Devices\LED();
             }
             $device->updateState($p);
-            $this->storage->set(self::DAEMON_NAME, $hwid, $device);
+            $this->storage->set(self::DAEMON_NAME . ':' . $hwid, $device);
             $events = $device->getEvents();
             if (!is_null($events)) {
                 $callback = $this->events_callback;
