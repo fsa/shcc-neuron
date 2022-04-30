@@ -23,3 +23,5 @@
 [API](api/index.md)
 
 [Системные переменные](variables.md)
+
+[Система плагинов](plugins.md)
