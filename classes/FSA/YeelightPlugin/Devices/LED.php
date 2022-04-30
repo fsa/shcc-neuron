@@ -462,7 +462,8 @@ class LED implements DeviceInterface, PowerInterface, ColorHsvInterface, ColorRg
 
     public function __toString(): string
     {
-        return 'Состояние: ' . is_null($this->power) ? 'Нет данных' : $this->power;
+        $state = $this->getState();
+        return 'Состояние: ' . ($state['power'] ? 'включено, яркость ' . $state['bright'] . '%' : 'выключено');
     }
 
     public function getSupportValue(): array
