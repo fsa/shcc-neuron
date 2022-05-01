@@ -2,6 +2,8 @@
 
 namespace FSA\SmartHome;
 
+use FSA\SmartHome\Entity\Sensor;
+use FSA\SmartHome\Sensors;
 use PDO;
 use SmartHome;
 
@@ -12,6 +14,27 @@ class SensorDatabase
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
+    }
+
+    public function get($id)
+    {
+        $s = $this->pdo->prepare('SELECT * FROM sensors WHERE id=?');
+        $s->execute([$id]);
+        return $s->fetchObject(Sensor::class);
+    }
+
+    public function set($id, Entity\Sensor $sensor)
+    {
+        $entity = get_object_vars($sensor);
+        if ($id) {
+            return $this->pdo->update($sensor::TABLE_NAME, $entity);
+        } else {
+            if ($sensor->id) {
+                return false;
+            }
+            unset($entity['id']);
+            return $this->pdo->insert($sensor::TABLE_NAME, $entity);
+        }
     }
 
     public function storeEvent($device_uid, $property, $value, $ts = null): bool
@@ -61,7 +84,7 @@ class SensorDatabase
         }
         $stmt = $this->pdo->prepare('SELECT ROUND(EXTRACT(EPOCH FROM timestamp)*1000) AS ts,value FROM ' . $sensor->history . ' WHERE sensor_id=:sensor_id' . $period . ' ORDER BY timestamp');
         $stmt->execute($params);
-        return ['name' => $sensor->description, 'unit' => Sensor::getPropertyUnit($sensor->property), 'data' => $stmt->fetchAll(PDO::FETCH_NUM)];
+        return ['name' => $sensor->description, 'unit' => Sensors::getPropertyUnit($sensor->property), 'data' => $stmt->fetchAll(PDO::FETCH_NUM)];
     }
 
     public function getHistoryJson(string $uid, $from = null, $to = null)
@@ -84,7 +107,7 @@ class SensorDatabase
         } else {
             $period = '';
         }
-        $stmt = $this->pdo->prepare('SELECT json_build_object(\'name\', \'' . $sensor->description . '\',\'unit\', \'' . Sensor::getPropertyUnit($sensor->property) . '\',\'data\', (SELECT array_agg(array[ts, value]) FROM (SELECT ROUND(EXTRACT(EPOCH FROM timestamp)*1000) AS ts, value FROM ' . $sensor->history . ' WHERE sensor_id=:sensor_id' . $period . ' ORDER BY timestamp) AS data))');
+        $stmt = $this->pdo->prepare('SELECT json_build_object(\'name\', \'' . $sensor->description . '\',\'unit\', \'' . Sensors::getPropertyUnit($sensor->property) . '\',\'data\', (SELECT array_agg(array[ts, value]) FROM (SELECT ROUND(EXTRACT(EPOCH FROM timestamp)*1000) AS ts, value FROM ' . $sensor->history . ' WHERE sensor_id=:sensor_id' . $period . ' ORDER BY timestamp) AS data))');
         $stmt->execute($params);
         return $stmt->fetchColumn();
     }

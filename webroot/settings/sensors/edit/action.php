@@ -1,28 +1,32 @@
 <?php
 
+use FSA\SmartHome\Entity\Sensor;
+
 if (!isset($action)) {
     die;
 }
-$entity = SmartHome\Entity\Sensor::getEntity(App::sql(), 'id');
-$old_uid=$entity->uid;
-$entity->inputPostString('uid');
-$entity->inputPostString('description');
-$entity->inputPostString('property');
-$entity->inputPostString('device_property');
-$entity->inputPostString('history');
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+if ($id) {
+    $entity = SmartHome::sensorDatabase()->get($id);
+} else {
+    $entity = new Sensor;
+}
+$old_uid = $entity->uid;
+$entity->uid = filter_input(INPUT_POST, 'uid');
+$entity->description = filter_input(INPUT_POST, 'description');
+$entity->property = filter_input(INPUT_POST, 'property');
+$entity->device_property = filter_input(INPUT_POST, 'device_property');
+$entity->history = filter_input(INPUT_POST, 'history');
 switch ($action) {
     case 'create':
-        $entity->insert();
-        App::response()->storeNotification('Датчик создан');
-        App::response()->redirection('../');
+        SmartHome::sensorDatabase()->set(null, $entity);
+        $response->storeNotification('Датчик создан');
+        $response->redirection('../');
         break;
     case 'edit':
-        $entity->update();
-        if ($old_uid) {
-            SmartHome::sensorStorage()->rename($old_uid, $entity->uid);
-        }
-        App::response()->storeNotification('Данные о датчике обновлены');
-        App::response()->redirection('../');
+        SmartHome::sensorDatabase()->set($entity->id, $entity);
+        $response->storeNotification('Данные о датчике обновлены');
+        $response->redirection('../');
         break;
 }
-App::response()->returnError(400, 'Неизвестное действие');
+$response->returnError(400, 'Неизвестное действие');

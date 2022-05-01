@@ -4,7 +4,7 @@ namespace FSA\SmartHome\Entity;
 
 class Sensor
 {
-    const TABLENAME = 'sensors';
+    const TABLE_NAME = 'sensors';
     public $id;
     public $uid;
     public $description;

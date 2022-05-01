@@ -2,7 +2,7 @@
 
 namespace FSA\SmartHome;
 
-class Sensor
+class Sensors
 {
     private const PROPERTIES = [
         'temperature' => ['Температура воздуха', '&deg;C'],

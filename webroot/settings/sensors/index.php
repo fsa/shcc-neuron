@@ -2,7 +2,7 @@
 
 use FSA\Neuron\HTML\Table,
     FSA\Neuron\HTML\ButtonLink;
-use FSA\SmartHome\Sensor;
+use FSA\SmartHome\Sensors;
 
 require_once '../../../vendor/autoload.php';
 App::initHtml(Templates\PageSettings::class);
@@ -21,7 +21,7 @@ $meters->addField('description', 'Описание');
 $meters->addField('device_property', 'Источник данных');
 $meters->addButton(new ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) {
-    $row->property_name = Sensor::getPropertyName($row->property);
+    $row->property_name = Sensors::getPropertyName($row->property);
     $state = SmartHome::sensorStorage()->get($row->uid);
     if ($state) {
         if (is_bool($state->value)) {
@@ -33,7 +33,7 @@ $meters->setRowCallback(function ($row) {
                 $state->value = htmlspecialchars($state->value);
             }
         }
-        $unit = Sensor::getPropertyUnit($row->property);
+        $unit = Sensors::getPropertyUnit($row->property);
         $row->value = $unit ? $state->value . ' ' . $unit : $state->value;
         $row->updates = date('d.m.Y H:i:s', $state->ts);
     } else {
