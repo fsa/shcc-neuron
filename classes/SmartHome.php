@@ -43,7 +43,7 @@ class SmartHome
             if ($object) {
                 return $object;
             }
-            return self::$device_factory->create($device->plugin, $device->hwid, $device->class, $device->properties);
+            return self::deviceFactory()->create($device->plugin, $device->hwid, $device->class, $device->properties);
         }
         return null;
     }
