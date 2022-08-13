@@ -19,12 +19,12 @@ class DeviceFactory
         }
         $class_name = $this->plugins[$plugin] . 'Devices\\' . $class;
         if (!class_exists($class_name)) {
-            syslog(LOG_ERR, 'Не существует класс устройства');
+            syslog(LOG_ERR, 'Не существует класс устройства '.$class_name);
             return null;
         }
         $device = new $class_name;
         if (!($device instanceof DeviceInterface)) {
-            syslog(LOG_ERR, 'Класс не обладает интерфейсом DeviceInterface');
+            syslog(LOG_ERR, 'Класс ' . $class_name . ' не обладает интерфейсом DeviceInterface');
             return null;
         }
         if ($properties) {
