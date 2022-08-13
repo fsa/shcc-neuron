@@ -14,20 +14,17 @@ class DeviceFactory
     public function create(string $plugin, string $hwid, string $class, ?array $properties)
     {
         if (!isset($this->plugins[$plugin])) {
-            # Не существующий плагин
-            echo "1";
+            syslog(LOG_ERR, 'Не существующий плагин');
             return null;
         }
         $class_name = $this->plugins[$plugin] . 'Devices\\' . $class;
         if (!class_exists($class_name)) {
-            # Не существует класс устройства
-            echo "2";
+            syslog(LOG_ERR, 'Не существует класс устройства');
             return null;
         }
         $device = new $class_name;
         if (!($device instanceof DeviceInterface)) {
-            # Класс не обладает интерфейсом DeviceInterface
-            echo "3";
+            syslog(LOG_ERR, 'Класс не обладает интерфейсом DeviceInterface');
             return null;
         }
         if ($properties) {
