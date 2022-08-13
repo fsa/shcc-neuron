@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "647a7c4dadded17912c71b39ef9fe928",
+    "content-hash": "8ec12c98a562bcd804d3070aae5265e9",
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "v0.2.2",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/php-neuron-framework.git",
-                "reference": "c76261ede9e7b7e7c24df4bd933791473bb92443"
+                "reference": "c35a68b2fa16a8a05e5fb9fa2f2d321c33b73d2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/c76261ede9e7b7e7c24df4bd933791473bb92443",
-                "reference": "c76261ede9e7b7e7c24df4bd933791473bb92443",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/c35a68b2fa16a8a05e5fb9fa2f2d321c33b73d2d",
+                "reference": "c35a68b2fa16a8a05e5fb9fa2f2d321c33b73d2d",
                 "shasum": ""
             },
             "require": {
@@ -43,26 +43,26 @@
             "description": "Neuron PHP framework",
             "support": {
                 "issues": "https://github.com/fsa/php-neuron-framework/issues",
-                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.2"
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.2.3"
             },
-            "time": "2022-05-02T16:26:17+00:00"
+            "time": "2022-05-04T07:24:31+00:00"
         },
         {
             "name": "fsa/shcc-openweather",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/shcc-openweather.git",
-                "reference": "e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e"
+                "reference": "bcfe3fe78488c5f3876bd5663b4d06c353887100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e",
-                "reference": "e74f8bd4bb9e609161ce1c0b934b51e6837b6a2e",
+                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/bcfe3fe78488c5f3876bd5663b4d06c353887100",
+                "reference": "bcfe3fe78488c5f3876bd5663b4d06c353887100",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.4||^8.0"
+                "php": "^8.1"
             },
             "type": "library",
             "extra": {
@@ -92,9 +92,9 @@
             ],
             "support": {
                 "issues": "https://github.com/fsa/shcc-openweather/issues",
-                "source": "https://github.com/fsa/shcc-openweather/tree/v0.3.0"
+                "source": "https://github.com/fsa/shcc-openweather/tree/v0.3.1"
             },
-            "time": "2022-04-27T18:58:38+00:00"
+            "time": "2022-08-13T13:24:58+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",
@@ -145,7 +145,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4||^8.0",
+        "php": "^8.1",
         "ext-curl": "*",
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
