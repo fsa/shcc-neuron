@@ -126,9 +126,7 @@ function updateTextMessages(messages) {
             msg = [];
         message.content.forEach(function (row) {
             try {
-                console.log(row);
                 json = JSON.parse(row);
-                console.log("test2");
                 var date = new Date(json.ts * 1000);
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
@@ -139,7 +137,6 @@ function updateTextMessages(messages) {
 
                 msg.push(formattedTime + " " + json.message);
             } catch (e) {
-                console.log(e);
                 msg.push(row);
             }
         });
