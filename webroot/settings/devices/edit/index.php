@@ -47,10 +47,9 @@ if ($hwid) {
         if (!$device) {
             $response->returnError(404, 'Устройство не найдено в базе данных');
         }
-        $properties = json_decode($device->properties);
         $mem_dev = SmartHome::deviceStorage()->get($device->plugin . ':' . $device->hwid);
         if (!$mem_dev) {
-            $mem_dev = SmartHome::deviceFactory()->create($device->plugin, '', $device->class, '{}');
+            $mem_dev = SmartHome::deviceFactory()->create($device->plugin, '', $device->class, $device->properties);
         }
         $class = $device->class;
         if ($mem_dev) {

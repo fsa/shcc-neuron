@@ -11,7 +11,7 @@ class DeviceFactory
         $this->plugins = $plugins;
     }
 
-    public function create(string $plugin, string $hwid, string $class, ?string $properties_json)
+    public function create(string $plugin, string $hwid, string $class, ?array $properties)
     {
         if (!isset($this->plugins[$plugin])) {
             # Не существующий плагин
@@ -30,13 +30,9 @@ class DeviceFactory
             echo "3";
             return null;
         }
-        if ($properties_json) {
-            $properties = json_decode($properties_json, true);
-            if ($properties) {
-                $device->init($hwid, $properties);
-            }
+        if ($properties) {
+            $device->init($hwid, $properties);
         }
         return $device;
-
     }
 }

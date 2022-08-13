@@ -35,12 +35,12 @@
         ]
     },
     "require": {
-        "php": "^7.4||^8.0",
+        "php": "^8.1",
         "ext-curl": "*",
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
         "ext-redis": "*",
-        "fsa/neuron-framework": "^0.2.1",
+        "fsa/neuron-framework": "^0.2.2",
         "fsa/telegram-bot-api": "^0.1",
         "fsa/shcc-openweather": "^0.3"
     }

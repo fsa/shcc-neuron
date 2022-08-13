@@ -1,11 +1,6 @@
 <?php
 
-use FSA\Neuron\PostgreSQL;
-use FSA\Neuron\RedisDB;
-use FSA\Neuron\ResponseHtml;
-use FSA\Neuron\ResponseJson;
-use FSA\Neuron\Session;
-use FSA\Neuron\SessionStorageRedis;
+use FSA\Neuron\{PostgreSQL, RedisDB, ResponseHtml, ResponseJson, Session, SessionStorageRedis};
 
 class App
 {
@@ -17,7 +12,7 @@ class App
     private static $settings;
     private static $session;
 
-    public static function init($log_tag='shcc')
+    public static function init($log_tag = 'shcc')
     {
         ini_set('syslog.filter', 'raw');
         openlog($log_tag, LOG_PID | LOG_ODELAY, LOG_USER);
