@@ -39,7 +39,11 @@ class SmartHome
     {
         $device = self::deviceDatabase()->get($uid);
         if ($device) {
-            return self::deviceStorage()->get($device->plugin . ':' . $device->hwid);
+            $object = self::deviceStorage()->get($device->plugin . ':' . $device->hwid);
+            if ($object) {
+                return $object;
+            }
+            return self::$device_factory->create($device->plugin, $device->hwid, $device->class, $device->properties);
         }
         return null;
     }
