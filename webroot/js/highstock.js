@@ -144,6 +144,10 @@ function createChart(config) {
                 }
             }).then(sensor => {
                 if (sensor.data && sensor.data.length > 0) {
+                    sensor.data = sensor.data.map((item) => [
+                        item[0] * 1000,
+                        item[1],
+                    ]);
                     sensor.color = colors[i];
                     chart.addSeries(sensor);
                 }
