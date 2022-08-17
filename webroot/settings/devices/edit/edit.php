@@ -16,15 +16,24 @@ if (is_array($properties)) {
 switch ($action) {
     case 'insert':
         SmartHome::deviceDatabase()->set(null, $device);
-        #TODO: Обновить устройство в памяти, если сменились properties
+        updateDevice($device->uid, $device->properties);
         $response->storeNotification('Устройство добавлено');
         $response->redirection('../');
         break;
     case 'update':
         SmartHome::deviceDatabase()->set(filter_input(INPUT_POST, 'old_uid'), $device);
-        #TODO: Обновить устройство в памяти, если сменились properties
+        updateDevice($device->uid, $device->properties);
         $response->storeNotification('Данные об устройстве обновлены');
         $response->redirection('../');
         break;
 }
 App::response()->returnError(400, 'Неизвестное действие');
+
+function updateDevice($uid, $properties) {
+    if (!$properties) {
+        return;
+    }
+    $device = SmartHome::getDevice($uid);
+    $device->init($device->getHwid(), $properties);
+    SmartHome::setDevice($uid, $device);
+}
