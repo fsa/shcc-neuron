@@ -9,7 +9,7 @@ $response = [];
 if (isset($json->sensors)) {
     $response['sensors'] = [];
     foreach ($json->sensors as $uid) {
-        $sensor = SmartHome::sensorStorage()->get($uid);
+        $sensor = App::sensorStorage()->get($uid);
         if (is_null($sensor)) {
             continue;
         }
@@ -20,7 +20,7 @@ if (isset($json->sensors)) {
 if (isset($json->devices)) {
     $response['devices'] = [];
     foreach ($json->devices as $device_name) {
-        $device = SmartHome::getDevice($device_name);
+        $device = App::getDevice($device_name);
         if ($device) {
             $response['devices'][] = ['name' => $device_name, 'state' => $device->getState(), 'last_update' => $device->getLastUpdate()];
         } else {
@@ -36,7 +36,7 @@ if (isset($json->messages)) {
                 $response['messages'][] = ['name' => 'state', 'content' => getState()];
                 break;
             case 'tts':
-                $response['messages'][] = ['name' => 'tts', 'content' => SmartHome::tts()->getLogMessages()];
+                $response['messages'][] = ['name' => 'tts', 'content' => App::tts()->getLogMessages()];
                 break;
         }
     }

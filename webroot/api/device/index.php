@@ -19,7 +19,7 @@ if (file_exists($device_name . '.php')) {
         $response->returnError(500, $ex->getMessage());
     }
 }
-$device = SmartHome::getDevice($device_name);
+$device = App::getDevice($device_name);
 if (is_null($device)) {
     $response->returnError(400);
 }

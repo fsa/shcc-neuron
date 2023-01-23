@@ -15,7 +15,7 @@ if($action) {
 
 $id = filter_input(INPUT_GET, 'id');
 if ($id) {
-    $sensor=SmartHome::sensorDatabase()->get($id);
+    $sensor=App::sensorDatabase()->get($id);
     if (!$sensor) {
         $response->returnError(404, 'Датчик не найден');
     }

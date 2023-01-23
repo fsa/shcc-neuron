@@ -17,8 +17,8 @@ $response->showHeader('Список устройств в памяти');
 <p><a href="../edit/" class="btn btn-primary">Добавить вручную</a></p>
 <?php
 
-$db_devices = SmartHome::deviceDatabase()->getAllHwid();
-$storage_hwid = SmartHome::deviceStorage()->getAllHwid();
+$db_devices = App::deviceDatabase()->getAllHwid();
+$storage_hwid = App::deviceStorage()->getAllHwid();
 $mem_devices = array_flip($storage_hwid);
 foreach ($db_devices as $db_device) {
     if (isset($mem_devices[$db_device])) {
@@ -43,7 +43,7 @@ $table->showTable(new class($storage_hwid)
     {
         $this->list = $list;
         $this->count = count($list);
-        $this->mem = SmartHome::deviceStorage();
+        $this->mem = App::deviceStorage();
     }
 
     public function fetchObject()

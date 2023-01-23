@@ -22,9 +22,9 @@ $daemon_info = $plugin_info->getDaemonInfo();
 if (!$daemon_info) {
     $response->returnError(400, 'Plugin Daemon not found');
 }
-$db = SmartHome::deviceDatabase();
-$factory = SmartHome::deviceFactory();
-$storage = SmartHome::deviceStorage();
+$db = App::deviceDatabase();
+$factory = App::deviceFactory();
+$storage = App::deviceStorage();
 $devices = $db->getAll($json->plugin)->fetchAll();
 foreach ($devices as $item) {
     $device = $factory->create($json->plugin, $item->hwid, $item->class, $item->properties);

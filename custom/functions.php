@@ -11,7 +11,7 @@ $time = date('H:i');
 
 function say($text, $priority = 0)
 {
-    SmartHome::tts()->addMessage($text);
+    App::tts()->addMessage($text);
 }
 
 function telegram($text, $priority = 0)
@@ -28,12 +28,12 @@ function telegram($text, $priority = 0)
 
 function getDevice($name)
 {
-    return SmartHome::getDevice($name);
+    return App::getDevice($name);
 }
 
 function setDevice($name, $device)
 {
-    SmartHome::setDevice($name, $device);
+    App::setDevice($name, $device);
 }
 
 function getVar($name)

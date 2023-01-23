@@ -15,13 +15,13 @@ if (is_array($properties)) {
 }
 switch ($action) {
     case 'insert':
-        SmartHome::deviceDatabase()->set(null, $device);
+        App::deviceDatabase()->set(null, $device);
         updateDevice($device->uid, $device->properties);
         $response->storeNotification('Устройство добавлено');
         $response->redirection('../');
         break;
     case 'update':
-        SmartHome::deviceDatabase()->set(filter_input(INPUT_POST, 'old_uid'), $device);
+        App::deviceDatabase()->set(filter_input(INPUT_POST, 'old_uid'), $device);
         updateDevice($device->uid, $device->properties);
         $response->storeNotification('Данные об устройстве обновлены');
         $response->redirection('../');
@@ -33,7 +33,7 @@ function updateDevice($uid, $properties) {
     if (!$properties) {
         return;
     }
-    $device = SmartHome::getDevice($uid);
+    $device = App::getDevice($uid);
     $device->init($device->getHwid(), $properties);
-    SmartHome::setDevice($uid, $device);
+    App::setDevice($uid, $device);
 }

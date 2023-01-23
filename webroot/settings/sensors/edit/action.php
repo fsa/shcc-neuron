@@ -7,7 +7,7 @@ if (!isset($action)) {
 }
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 if ($id) {
-    $entity = SmartHome::sensorDatabase()->get($id);
+    $entity = App::sensorDatabase()->get($id);
 } else {
     $entity = new Sensor;
 }
@@ -19,12 +19,12 @@ $entity->device_property = filter_input(INPUT_POST, 'device_property');
 $entity->history = filter_input(INPUT_POST, 'history');
 switch ($action) {
     case 'create':
-        SmartHome::sensorDatabase()->set(null, $entity);
+        App::sensorDatabase()->set(null, $entity);
         $response->storeNotification('Датчик создан');
         $response->redirection('../');
         break;
     case 'edit':
-        SmartHome::sensorDatabase()->set($entity->id, $entity);
+        App::sensorDatabase()->set($entity->id, $entity);
         $response->storeNotification('Данные о датчике обновлены');
         $response->redirection('../');
         break;

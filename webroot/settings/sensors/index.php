@@ -22,7 +22,7 @@ $meters->addField('device_property', 'Источник данных');
 $meters->addButton(new ButtonLink('Изменить', 'edit/?id=%s'));
 $meters->setRowCallback(function ($row) {
     $row->property_name = Sensors::getPropertyName($row->property);
-    $state = SmartHome::sensorStorage()->get($row->uid);
+    $state = App::sensorStorage()->get($row->uid);
     if ($state) {
         if (is_bool($state->value)) {
             $state->value = $state->value ? 'да' : 'нет';
@@ -41,5 +41,5 @@ $meters->setRowCallback(function ($row) {
         $row->updates = 'Нет данных';
     }
 });
-$meters->showTable(SmartHome::sensorDatabase()->getAll());
+$meters->showTable(App::sensorDatabase()->getAll());
 App::response()->showFooter();

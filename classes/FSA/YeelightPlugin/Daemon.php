@@ -3,7 +3,7 @@
 namespace FSA\YeelightPlugin;
 
 use FSA\SmartHome\DaemonInterface;
-use SmartHome;
+use App;
 
 class Daemon implements DaemonInterface
 {
@@ -25,7 +25,7 @@ class Daemon implements DaemonInterface
 
     public function prepare()
     {
-        $this->storage = SmartHome::deviceStorage();
+        $this->storage = App::deviceStorage();
         $this->socket = new Socket();
         $this->socket->run();
         $this->socket->sendDiscover();

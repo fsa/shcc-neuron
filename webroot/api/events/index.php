@@ -20,7 +20,7 @@ if (!isset($json->plugin) or !isset($json->hwid)) {
 if (!isset($json->events)) {
     die('Wrong format');
 }
-fastcgi_finish_request();
+#fastcgi_finish_request();
 $events=$json->events;
 $ts=isset($json->ts)?$json->ts:null;
-SmartHome::processEvents($json->plugin, $json->hwid, $events, $ts);
+App::processEvents($json->plugin, $json->hwid, $events, $ts);

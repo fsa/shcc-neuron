@@ -2,7 +2,7 @@
 
 namespace FSA\XiaomiPlugin;
 
-use SmartHome;
+use App;
 use FSA\SmartHome\DaemonInterface;
 
 class Daemon implements DaemonInterface
@@ -29,7 +29,7 @@ class Daemon implements DaemonInterface
 
     public function prepare()
     {
-        $this->storage = SmartHome::deviceStorage();
+        $this->storage = App::deviceStorage();
         $this->socket = new Socket($this->ip, $this->port);
         $this->socket->run();
     }

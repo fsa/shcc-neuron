@@ -3,7 +3,7 @@
 if (!isset($hwid)) {
     die;
 }
-$mem_device=SmartHome::deviceStorage()->get($hwid);
+$mem_device=App::deviceStorage()->get($hwid);
 if($mem_device) {
     $response->redirection("../edit/?hwid=$hwid");
 } else {

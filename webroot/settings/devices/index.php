@@ -20,7 +20,7 @@ $devices->addField('class', 'Описание устройства');
 $devices->addField('info', 'Состояние устройства');
 $devices->addField('updated', 'Было активно');
 $devices->addButton(new ButtonLink('Изменить', 'edit/?uid=%s', 'uid'));
-$device_storage = SmartHome::deviceStorage();
+$device_storage = App::deviceStorage();
 $devices->setRowCallback(function ($row) use ($device_storage) {
     $dev = $device_storage->get($row->plugin . ':' . $row->hwid);
     if (is_null($dev)) {
@@ -42,7 +42,7 @@ $devices->setRowCallback(function ($row) use ($device_storage) {
         $row->class = 'Тип устройства: '. $row->class. '<br>События: ' . join(', ', $dev->getEventsList());
     }
 });
-$devices->showTable(SmartHome::deviceDatabase()->getAll());
+$devices->showTable(App::deviceDatabase()->getAll());
 ?>
 <table>
     <tr class="table-danger">

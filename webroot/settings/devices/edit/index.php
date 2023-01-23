@@ -13,7 +13,7 @@ if ($action) {
 $uid = filter_input(INPUT_GET, 'uid');
 $hwid = filter_input(INPUT_GET, 'hwid');
 if ($hwid) {
-    $mem_dev = SmartHome::deviceStorage()->get($hwid);
+    $mem_dev = App::deviceStorage()->get($hwid);
     if (is_null($mem_dev)) {
         $response->returnError(404, 'Информация об устройстве в памяти не найдена.');
     }
@@ -43,13 +43,13 @@ if ($hwid) {
     }
 } else {
     if ($uid) {
-        $device = SmartHome::deviceDatabase()->get($uid);
+        $device = App::deviceDatabase()->get($uid);
         if (!$device) {
             $response->returnError(404, 'Устройство не найдено в базе данных');
         }
-        $mem_dev = SmartHome::deviceStorage()->get($device->plugin . ':' . $device->hwid);
+        $mem_dev = App::deviceStorage()->get($device->plugin . ':' . $device->hwid);
         if (!$mem_dev) {
-            $mem_dev = SmartHome::deviceFactory()->create($device->plugin, '', $device->class, $device->properties);
+            $mem_dev = App::deviceFactory()->create($device->plugin, '', $device->class, $device->properties);
         }
         $class = $device->class;
         if ($mem_dev) {

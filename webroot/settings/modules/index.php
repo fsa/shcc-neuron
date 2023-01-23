@@ -5,6 +5,8 @@ use FSA\Neuron\HTML\Table;
 require_once '../../../vendor/autoload.php';
 App::initHtml(Templates\PageSettings::class);
 App::session()->grantAccess([]);
+$modules = Plugins::getPluginsInfo();
+var_dump($modules);
 $modules = new SmartHome\Modules;
 $action = filter_input(INPUT_GET, 'action');
 if ($action) {
