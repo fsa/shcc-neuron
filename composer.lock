@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a63796952ac75dfffcf475d649288e3",
+    "content-hash": "11494280bee2e9cb4e2f1e5eb35f0928",
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "dev-main",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/php-neuron-framework.git",
+                "reference": "def7cb007de3a4adb7f8d349718d198cd6441c55"
+            },
             "dist": {
-                "type": "path",
-                "url": "/home/fsa/Projects/php-neuron-framework",
-                "reference": "b838defc30812c7b35aaa97b2e94c9ac13936cc1"
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/def7cb007de3a4adb7f8d349718d198cd6441c55",
+                "reference": "def7cb007de3a4adb7f8d349718d198cd6441c55",
+                "shasum": ""
             },
             "require": {
                 "ext-redis": "*",
@@ -24,6 +30,7 @@
                     "FSA\\Neuron\\": "classes/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -34,22 +41,28 @@
                 }
             ],
             "description": "Neuron PHP framework",
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/fsa/php-neuron-framework/issues",
+                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.5.0"
+            },
+            "time": "2023-01-23T20:43:22+00:00"
         },
         {
             "name": "fsa/shcc-framework",
-            "version": "dev-main",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/shcc-framework.git",
+                "reference": "0a9da64720f38326249c1a170ef28b99d5c1bb35"
+            },
             "dist": {
-                "type": "path",
-                "url": "/home/fsa/Projects/shcc-framework",
-                "reference": "aa760429b1846f3a1a8dcf6fc18b081d62979ebe"
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/shcc-framework/zipball/0a9da64720f38326249c1a170ef28b99d5c1bb35",
+                "reference": "0a9da64720f38326249c1a170ef28b99d5c1bb35",
+                "shasum": ""
             },
             "require": {
-                "fsa/neuron-framework": "dev-main",
-                "php": "^8.1"
+                "fsa/neuron-framework": "^0.5"
             },
             "type": "library",
             "autoload": {
@@ -57,6 +70,7 @@
                     "FSA\\SmartHome\\": "classes/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -67,21 +81,28 @@
                 }
             ],
             "description": "Smart Home Framework",
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/fsa/shcc-framework/issues",
+                "source": "https://github.com/fsa/shcc-framework/tree/v0.1.0"
+            },
+            "time": "2023-01-23T21:05:38+00:00"
         },
         {
             "name": "fsa/shcc-openweather",
-            "version": "dev-main",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/shcc-openweather.git",
+                "reference": "41501d79a477cd6894fa3648fb1e1c8facf61953"
+            },
             "dist": {
-                "type": "path",
-                "url": "/home/fsa/Projects/shcc-plugins/openweather",
-                "reference": "4401882aed5d70b85553f9efcf595c01f7df2c98"
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/shcc-openweather/zipball/41501d79a477cd6894fa3648fb1e1c8facf61953",
+                "reference": "41501d79a477cd6894fa3648fb1e1c8facf61953",
+                "shasum": ""
             },
             "require": {
-                "fsa/shcc-framework": "dev-main"
+                "fsa/shcc-framework": "^0.1"
             },
             "type": "library",
             "autoload": {
@@ -89,6 +110,7 @@
                     "FSA\\OpenWeatherPlugin\\": "classes/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -102,29 +124,29 @@
             "keywords": [
                 "shcc"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/fsa/shcc-openweather/issues",
+                "source": "https://github.com/fsa/shcc-openweather/tree/v0.4.0"
+            },
+            "time": "2023-01-23T21:23:23+00:00"
         },
         {
             "name": "fsa/shcc-sysfs",
-            "version": "dev-main",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fsa/shcc-sysfs.git",
-                "reference": "e32a7d2368cf76c61e103200aacd2a2bceca99ed"
+                "reference": "a1127f88e887233312f1462f998be169dae4ccfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fsa/shcc-sysfs/zipball/e32a7d2368cf76c61e103200aacd2a2bceca99ed",
-                "reference": "e32a7d2368cf76c61e103200aacd2a2bceca99ed",
+                "url": "https://api.github.com/repos/fsa/shcc-sysfs/zipball/a1127f88e887233312f1462f998be169dae4ccfd",
+                "reference": "a1127f88e887233312f1462f998be169dae4ccfd",
                 "shasum": ""
             },
             "require": {
-                "fsa/shcc-framework": "dev-main"
+                "fsa/shcc-framework": "^0.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -147,9 +169,9 @@
             ],
             "support": {
                 "issues": "https://github.com/fsa/shcc-sysfs/issues",
-                "source": "https://github.com/fsa/shcc-sysfs/tree/main"
+                "source": "https://github.com/fsa/shcc-sysfs/tree/v0.1.0"
             },
-            "time": "2023-01-23T20:17:04+00:00"
+            "time": "2023-01-23T21:21:25+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",
@@ -196,10 +218,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "fsa/shcc-framework": 20,
-        "fsa/shcc-openweather": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

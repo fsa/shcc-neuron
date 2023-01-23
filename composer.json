@@ -32,10 +32,10 @@
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
         "ext-redis": "*",
-        "fsa/shcc-framework": "dev-main",
+        "fsa/shcc-framework": "^0.1",
         "fsa/telegram-bot-api": "^0.1",
-        "fsa/shcc-openweather": "dev-main",
-        "fsa/shcc-sysfs": "dev-main"
+        "fsa/shcc-openweather": "^0.4",
+        "fsa/shcc-sysfs": "^0.1"
     },
     "minimum-stability": "dev"
 }
