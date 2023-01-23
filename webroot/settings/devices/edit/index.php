@@ -34,7 +34,7 @@ if ($hwid) {
     if (array_pop($full_class_name) != 'Devices') {
         $response->returnError(500, 'Класс PHP используемый устройством, не соответствует требованиям системы');
     }
-    $plugins = Plugins::get();
+    $plugins = App::plugins()->get();
     if (!isset($plugins[$device->plugin])) {
         $response->returnError(500, 'Не найден плагин, которому принадлежит устройство.');
     }

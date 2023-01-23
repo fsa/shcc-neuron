@@ -1,7 +1,5 @@
 <?php
 
-use FSA\SmartHome\SensorDatabase;
-
 require_once '../../../vendor/autoload.php';
 App::initJson();
 App::session()->grantAccess();

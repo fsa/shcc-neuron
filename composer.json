@@ -26,14 +26,6 @@
             "": "classes/"
         }
     },
-    "scripts": {
-        "post-package-install": [
-            "Plugins::prePackageInstall"
-        ],
-        "pre-package-uninstall": [
-            "Plugins::prePackageUninstall"
-        ]
-    },
     "require": {
         "php": "^8.1",
         "ext-curl": "*",
@@ -43,5 +35,6 @@
         "fsa/shcc-framework": "dev-main",
         "fsa/telegram-bot-api": "^0.1",
         "fsa/shcc-openweather": "dev-main"
-    }
+    },
+    "minimum-stability": "dev"
 }

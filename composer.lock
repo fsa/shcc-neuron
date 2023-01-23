@@ -4,21 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0b8276f78c8b3e061db0cb471fba1f4",
+    "content-hash": "0d7016ab8c7db14bc20ee4827bcb4565",
     "packages": [
         {
             "name": "fsa/neuron-framework",
-            "version": "v0.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fsa/php-neuron-framework.git",
-                "reference": "807e15d5cfa42b640ec48b97c7d0d1a8b08bc995"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fsa/php-neuron-framework/zipball/807e15d5cfa42b640ec48b97c7d0d1a8b08bc995",
-                "reference": "807e15d5cfa42b640ec48b97c7d0d1a8b08bc995",
-                "shasum": ""
+                "type": "path",
+                "url": "/home/fsa/Projects/php-neuron-framework",
+                "reference": "b838defc30812c7b35aaa97b2e94c9ac13936cc1"
             },
             "require": {
                 "ext-redis": "*",
@@ -30,7 +24,6 @@
                     "FSA\\Neuron\\": "classes/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -41,38 +34,29 @@
                 }
             ],
             "description": "Neuron PHP framework",
-            "support": {
-                "issues": "https://github.com/fsa/php-neuron-framework/issues",
-                "source": "https://github.com/fsa/php-neuron-framework/tree/v0.4.1"
-            },
-            "time": "2022-11-16T18:43:55+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": false
+            }
         },
         {
             "name": "fsa/shcc-framework",
             "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fsa/shcc-framework.git",
-                "reference": "ad5810c34815969917eafd870530a85151d07b5f"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fsa/shcc-framework/zipball/ad5810c34815969917eafd870530a85151d07b5f",
-                "reference": "ad5810c34815969917eafd870530a85151d07b5f",
-                "shasum": ""
+                "type": "path",
+                "url": "/home/fsa/Projects/shcc-framework",
+                "reference": "aa760429b1846f3a1a8dcf6fc18b081d62979ebe"
             },
             "require": {
-                "fsa/neuron-framework": "^0.4.1",
+                "fsa/neuron-framework": "dev-main",
                 "php": "^8.1"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "FSA\\SmartHome\\": "classes/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0-or-later"
             ],
@@ -83,11 +67,10 @@
                 }
             ],
             "description": "Smart Home Framework",
-            "support": {
-                "issues": "https://github.com/fsa/shcc-framework/issues",
-                "source": "https://github.com/fsa/shcc-framework/tree/main"
-            },
-            "time": "2022-11-30T07:10:22+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": false
+            }
         },
         {
             "name": "fsa/shcc-openweather",
@@ -95,18 +78,12 @@
             "dist": {
                 "type": "path",
                 "url": "/home/fsa/Projects/shcc-plugins/openweather",
-                "reference": "bcfe3fe78488c5f3876bd5663b4d06c353887100"
+                "reference": "4401882aed5d70b85553f9efcf595c01f7df2c98"
             },
             "require": {
                 "fsa/shcc-framework": "dev-main"
             },
             "type": "library",
-            "extra": {
-                "shcc-plugin": {
-                    "name": "OpenWeather",
-                    "namespace": "FSA\\OpenWeatherPlugin\\"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "FSA\\OpenWeatherPlugin\\": "classes/"
@@ -174,7 +151,7 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "fsa/shcc-framework": 20,
         "fsa/shcc-openweather": 20

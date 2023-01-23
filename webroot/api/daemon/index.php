@@ -14,12 +14,11 @@ if (!$json) {
 if (!isset($json->plugin)) {
     $response->returnError(400, 'Plugin name required');
 }
-$plugin_info = Plugins::getPluginInfo($json->plugin);
+$plugin_info = App::plugins()->getPlugin($json->plugin);
 if (!$plugin_info) {
     $response->returnError(400, 'Plugin not found');
 }
-$daemon_info = $plugin_info->getDaemonInfo();
-if (!$daemon_info) {
+if (!isset($plugin_info->daemon)) {
     $response->returnError(400, 'Plugin Daemon not found');
 }
 $db = App::deviceDatabase();
@@ -32,4 +31,4 @@ foreach ($devices as $item) {
         $storage->setNx($json->plugin . ':' . $item->hwid, $device);
     }
 }
-$response->json(['daemon' => $daemon_info['class'], 'settings' => array_merge($daemon_info['settings'], App::getSettings($json->plugin, []))]);
+$response->json(['daemon' => $plugin_info->daemon, 'settings' => array_merge($plugin_info->settings, App::getSettings($json->plugin, []))]);
