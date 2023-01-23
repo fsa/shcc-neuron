@@ -34,7 +34,8 @@
         "ext-redis": "*",
         "fsa/shcc-framework": "dev-main",
         "fsa/telegram-bot-api": "^0.1",
-        "fsa/shcc-openweather": "dev-main"
+        "fsa/shcc-openweather": "dev-main",
+        "fsa/shcc-sysfs": "dev-main"
     },
     "minimum-stability": "dev"
 }

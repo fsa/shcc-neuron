@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d7016ab8c7db14bc20ee4827bcb4565",
+    "content-hash": "5a63796952ac75dfffcf475d649288e3",
     "packages": [
         {
             "name": "fsa/neuron-framework",
@@ -106,6 +106,50 @@
                 "symlink": true,
                 "relative": false
             }
+        },
+        {
+            "name": "fsa/shcc-sysfs",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fsa/shcc-sysfs.git",
+                "reference": "e32a7d2368cf76c61e103200aacd2a2bceca99ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fsa/shcc-sysfs/zipball/e32a7d2368cf76c61e103200aacd2a2bceca99ed",
+                "reference": "e32a7d2368cf76c61e103200aacd2a2bceca99ed",
+                "shasum": ""
+            },
+            "require": {
+                "fsa/shcc-framework": "dev-main"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FSA\\SysFSPlugin\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Sergei Fedotov",
+                    "email": "fsa@tavda.info"
+                }
+            ],
+            "description": "Получение данных из SysFS.",
+            "keywords": [
+                "shcc"
+            ],
+            "support": {
+                "issues": "https://github.com/fsa/shcc-sysfs/issues",
+                "source": "https://github.com/fsa/shcc-sysfs/tree/main"
+            },
+            "time": "2023-01-23T20:17:04+00:00"
         },
         {
             "name": "fsa/telegram-bot-api",
