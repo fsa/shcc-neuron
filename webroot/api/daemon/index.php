@@ -31,4 +31,4 @@ foreach ($devices as $item) {
         $storage->setNx($json->plugin . ':' . $item->hwid, $device);
     }
 }
-$response->json(['daemon' => $plugin_info->daemon, 'settings' => array_merge($plugin_info->settings, App::getSettings($json->plugin, []))]);
+$response->json(['daemon' => $plugin_info->daemon, 'settings' => array_merge((array)$plugin_info->settings, App::getSettings($json->plugin, []))]);
